@@ -1,0 +1,30 @@
+// -=-=-=-=-= Bamboo Section =-=-=-=-=-
+def buildAliases = [
+'stageClean'          : ['clean'],
+
+'stageStaticAnalysis' : ['lint', 'ktlintCheck', 'detekt'],
+
+'stageBuild'          : ['assemble'],
+
+'stageJvmTest'        : ['clean', 'test'],
+
+'stageTagRepository'  : ['tagRepository'],
+
+'static'          : ['clean', 'lint', 'ktlintCheck', 'detekt', 'test'],
+
+'bamboo'          : ['clean', 'lint', 'ktlintCheck', 'detekt', 'test', 'assemble'],
+
+'reinstall'          : ['clean', 'uninstallDebug', 'installDebug'],
+
+''                    : ['', ''],
+]
+
+def expandedTaskList = []
+
+gradle.startParameter.taskNames.each
+{
+    expandedTaskList << (buildAliases[it] ? buildAliases[it] : it)
+}
+
+gradle.startParameter.taskNames = expandedTaskList.flatten()
+// -=-=-=-=-= End Bamboo =-=-=-=-=-

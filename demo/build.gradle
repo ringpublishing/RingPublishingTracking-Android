@@ -1,0 +1,93 @@
+plugins
+{
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+
+apply from: '../bamboo.gradle'
+
+android
+{
+    compileSdk COMPILE_SDK_VERSION
+    buildToolsVersion BUILD_TOOLS_VERSION
+
+    defaultConfig
+    {
+        applicationId "com.ringpublishing.tracking.demo"
+        minSdk MIN_SDK_VERSION
+        targetSdk TARGET_SDK_VERSION
+        versionCode Integer.parseInt(lib_version_code)
+        versionName lib_version_name
+        multiDexEnabled true
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes
+    {
+        debug
+        {
+            minifyEnabled false
+        }
+        release
+        {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions
+    {
+        sourceCompatibility JAVA_VERSION
+        targetCompatibility JAVA_VERSION
+    }
+
+    kotlinOptions
+    {
+        jvmTarget = JVM_TARGET
+    }
+
+    buildFeatures
+    {
+        viewBinding true
+    }
+
+    lintOptions
+    {
+        checkReleaseBuilds true
+        ignoreWarnings false
+        checkAllWarnings true
+        warningsAsErrors false
+    }
+
+    detekt
+    {
+        config = files("../detekt-config.yml")
+    }
+}
+
+dependencies
+{
+    //For demo we include sdk from sources
+    implementation project(path: ':RingPublishingTracking')
+
+    // For your project you can use  artifact from GitGub packages
+    //In main build.gradle add Github repository (See in this demo)
+
+    //In this demo you can auth to GitHub packages adding two system environment variables:
+    //export GITHUB_USER=your_github_user
+    //export GITHUB_PERSONAL_ACCESS_TOKEN=your_github_auth_token
+    //Call printenv to see variables are set correctly
+    //Then comment 'implementation project(path: ':RingPublishingTracking')' and uncomment:
+    //implementation("com.ringpublishing:tracking:x.x.x")
+
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+
+    implementation "androidx.databinding:databinding-ktx:7.0.2"
+    implementation "androidx.multidex:multidex:2.0.1"
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+}
