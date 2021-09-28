@@ -1,0 +1,187 @@
+package com.ringpublishing.tracking.internal.service
+
+import com.ringpublishing.tracking.data.Event
+import com.ringpublishing.tracking.internal.delegate.ConfigurationDelegate
+import com.ringpublishing.tracking.internal.log.Logger
+import com.ringpublishing.tracking.internal.service.queue.EventsQueue
+import com.ringpublishing.tracking.internal.service.result.ReportEventResult
+import com.ringpublishing.tracking.internal.service.result.ReportEventStatus
+import com.ringpublishing.tracking.internal.service.timer.EventsServiceTimer
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.verify
+import org.junit.Before
+import org.junit.Test
+
+class EventsServiceTest
+{
+
+	@MockK
+	internal lateinit var apiService: ApiService
+
+	@MockK
+	internal lateinit var eventsQueue: EventsQueue
+
+	@MockK
+	internal lateinit var eventsServiceTimer: EventsServiceTimer
+
+	@MockK
+	internal lateinit var configurationDelegate: ConfigurationDelegate
+
+	@MockK
+	lateinit var event: Event
+
+	@MockK
+	lateinit var event2: Event
+
+	@Before
+	fun before()
+	{
+		MockKAnnotations.init(this, relaxUnitFun = true)
+		Logger.debugLogEnabled(true)
+	}
+
+	@Test
+	fun addEvent_WhenDefault_ThenCanAddEvent()
+	{
+		every { configurationDelegate.isOptOutModeEnabled() } returns false
+		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationDelegate)
+
+		eventService.addEvent(event)
+
+		verify { eventsQueue.add(event) }
+		verify { eventsServiceTimer.scheduleFlush()}
+	}
+
+	@Test
+	fun addEvent_WhenOptOutEnabled_ThenEventNotAdded()
+	{
+		every { configurationDelegate.isOptOutModeEnabled() } returns true
+		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationDelegate)
+
+		eventService.addEvent(event)
+
+		verify(exactly = 0) { eventsQueue.add(event) }
+		verify(exactly = 0) { eventsServiceTimer.scheduleFlush()}
+	}
+
+	@Test
+	fun addEvents_WhenDefault_ThenCanAddEvents()
+	{
+		every { configurationDelegate.isOptOutModeEnabled() } returns false
+
+		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationDelegate)
+		val list = mutableListOf<Event>()
+		list.add(event)
+		list.add(event2)
+
+		eventService.addEvents(list)
+
+		verify { eventsQueue.addAll(list) }
+		verify { eventsServiceTimer.scheduleFlush()}
+	}
+
+	@Test
+	fun addEvents_WhenOptOutEnabled_ThenEventsNotAdded()
+	{
+		every { configurationDelegate.isOptOutModeEnabled() } returns true
+		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationDelegate)
+		val list = mutableListOf<Event>()
+		list.add(event)
+		list.add(event2)
+
+		eventService.addEvents(list)
+
+		verify(exactly = 0) { eventsQueue.addAll(list) }
+		verify(exactly = 0) { eventsServiceTimer.scheduleFlush()}
+	}
+
+	@Test
+	fun readyToFlush_WhenFLushOneEvent_ThenApiServiceReportOneEvent()
+	{
+		coEvery { configurationDelegate.isOptOutModeEnabled() } returns false
+		val list = mutableListOf<Event>()
+		list.add(event)
+		coEvery { eventsQueue.getMaximumEventsToSend() } returns list
+		coEvery { eventsQueue.hasEventsToSend() } returns false
+		coEvery { apiService.reportEvents(any()) } returns ReportEventResult(ReportEventStatus.SUCCESS, 500)
+		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationDelegate)
+		eventService.addEvent(event)
+
+		eventService.readyToFlush()
+
+		coVerify(exactly = 1) { apiService.reportEvents(any()) }
+	}
+
+	@Test
+	fun readyToFlush_WhenFLushMOreEvents_ThenApiServiceReportEvents()
+	{
+		val list = mutableListOf<Event>()
+		list.add(event)
+		list.add(event2)
+		coEvery { configurationDelegate.isOptOutModeEnabled() } returns false
+		coEvery { eventsQueue.getMaximumEventsToSend() } returns list
+		coEvery { eventsQueue.hasEventsToSend() } returns false
+		coEvery { apiService.reportEvents(any()) } returns ReportEventResult(ReportEventStatus.SUCCESS, 500)
+		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationDelegate)
+		eventService.addEvents(list)
+
+		eventService.readyToFlush()
+
+		coVerify(exactly = 1) { apiService.reportEvents(list) }
+	}
+
+	@Test
+	fun readyToFlush_WhenFLushEventsSuccess_ThenEventsQueueCleared()
+	{
+		val list = mutableListOf<Event>()
+		list.add(event)
+		coEvery { configurationDelegate.isOptOutModeEnabled() } returns false
+		coEvery { eventsQueue.getMaximumEventsToSend() } returns list
+		coEvery { eventsQueue.hasEventsToSend() } returns false
+		coEvery { apiService.reportEvents(any()) } returns ReportEventResult(ReportEventStatus.SUCCESS, 500)
+		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationDelegate)
+		eventService.addEvent(event)
+
+		eventService.readyToFlush()
+
+		coVerify(exactly = 1) { eventsQueue.removeAll(any())}
+	}
+
+	@Test
+	fun readyToFlush_WhenFlushAndNoNetwork_ThenEventsQueueNotCleared()
+	{
+		val list = mutableListOf<Event>()
+		list.add(event)
+		coEvery { configurationDelegate.isOptOutModeEnabled() } returns false
+		coEvery { eventsQueue.getMaximumEventsToSend() } returns list
+		coEvery { eventsQueue.hasEventsToSend() } returns false
+		coEvery { apiService.reportEvents(any()) } returns ReportEventResult(ReportEventStatus.ERROR_NETWORK, 500)
+		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationDelegate)
+		eventService.addEvent(event)
+
+		eventService.readyToFlush()
+
+		coVerify(exactly = 0) { eventsQueue.removeAll(any())}
+	}
+
+	@Test
+	fun readyToFlush_WhenFLushEventsNoNetwork_ThenEventsQueueNotEmpty()
+	{
+		val list = mutableListOf<Event>()
+		list.add(event)
+		coEvery { configurationDelegate.isOptOutModeEnabled() } returns false
+		coEvery { eventsQueue.getMaximumEventsToSend() } returns list
+		coEvery { eventsQueue.hasEventsToSend() } returns false
+		coEvery { apiService.reportEvents(any()) } returns ReportEventResult(ReportEventStatus.ERROR_BAD_REQUEST, 500)
+		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationDelegate)
+		eventService.addEvent(event)
+
+		eventService.readyToFlush()
+
+		coVerify(exactly = 1) { eventsQueue.removeAll(any())}
+	}
+}

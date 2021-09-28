@@ -1,0 +1,2 @@
+[*.{kt,kts}]
+disabled_rules=indent,curly-spacing,import-ordering

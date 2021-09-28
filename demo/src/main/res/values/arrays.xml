@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer-array name="articles_paid">
+        <item>0</item>
+        <item>0</item>
+        <item>1</item>
+    </integer-array>
+
+    <string-array name="articles_titles">
+        <item>Making Ratings and Reviews better for users and developers</item>
+        <item>The Firebase guide to building stable, high-performing apps</item>
+        <item>Android 12 Beta: Designed for you</item>
+    </string-array>
+
+    <string-array name="articles_url">
+        <item>https://android-developers.googleblog.com/2021/08/making-ratings-and-reviews-better-for.html</item>
+        <item>https://firebase.googleblog.com/2021/07/the-firebase-guide-to-building-stable-high-performing-apps.html</item>
+        <item>https://blog.google/products/android/android-12-beta/</item>
+    </string-array>
+
+
+    <string-array name="articles_text">
+        <item>Ratings and reviews are important.
+            They provide valuable quantitative and qualitative feedback on your users’ reported experience of your app or game, and the broader service that you offer.
+            That’s why they’re one of the signals people use when deciding what to download on Google Play.\n\n
+            We’ve heard from both Play Store users and developers that ratings and reviews could be more helpful.
+            This is especially true when ratings from one area unfairly impact another —
+            like when a bug that only impacted a single country negatively affects the app’s rating everywhere;
+            or when positive improvements in a tablet experience are overlooked because of the number of users on phones.\n\n
+            So we’re starting a multi-quarter program of improvements to make ratings more personalized and indicative of the experience each individual user can expect,
+            and to make them easier to navigate and use for developers:
+            We understand that many developers closely monitor the ratings that their potential users see,
+            so we’re making sure you have plenty of notice about these upcoming changes.
+            We’ve also made enhancements to Play Console to help you understand your ratings and reviews - especially across form-factors.\n\n
+            Expanding your support for different device types is one of the most important and impactful changes you can make to your user interfaces.
+            Adding tablet-optimized layouts or better mouse and keyboard support for Chrome OS can result in a step-change in the quality of your users’ experience,
+            which in turn influences their ratings and reviews.
+            To make it easier to spot opportunities across various device types and track the impact of enhanced experiences,
+            we’ve added new Device Type dimensions to the ratings page.
+            We’ve also added a Device Type filter to your reviews so you can easily see how your tablet users are rating you,
+            or what your users on Chrome OS say in their reviews.
+            Many of you have told us that you want to access more granular data than our selectors allowed.\n\n
+            So, we’ve broken down your segmentation options and made them easier to use.
+            You can now independently select the time period you want to plot (from the last 28 days through to your app’s complete lifetime),
+            and how you want your ratings data to be aggregated (daily, weekly, or every 28 days). This allows you to access more granular data over longer periods of time.\n\n
+        </item>
+
+        <item>This is an introduction to a three part blog post series on app quality exploring how to unlock app stability and app performance for the optimal app experience.
+            Find links to the other articles at the end of this blog post.
+            Stability and performance are the core of every successful app. Fast, crash-free experiences encourage users to stay engaged and drive positive reviews.
+            That’s why keeping a close eye on your app’s stability is crucial for competing in today’s thriving app marketplace.\n\n
+            Why quality matters
+            Users expect the best experience every time they interact with an app. And if bugs or latency issues get in the way, they’ll be quick to find a better option.
+            Research has shown 88% of app users will abandon apps based on bugs and glitches.
+            And within that group, 51% of users said they’d abandon an app completely if they experienced one or more bugs per day.\n\n
+            Not only is quality important to retaining users, but it’s important for attracting new users as well.
+            If a large percentage of users are frustrated and your app store listing is filled with negative feedback about performance issues,
+            you might have trouble acquiring new users.
+            In fact, 54% of users who left a 1-star review in the Play Store mentioned app stability and bugs
+            A large portion of the pre-launch development for a new app is spent squashing bugs and testing for potential issues.\n\n
+            But getting your app ready for launch is just the first step —
+            once it’s out in the world, maintaining your app’s health becomes an ongoing process as you create new features and iterate on previous versions.\n\n
+            </item>
+
+        <item>From the beginning, Android has always been about personalization and allowing you to select the device, service and experience that’s right for you.
+            By providing an open ecosystem that gives you choice, Android has grown to more than 3 billion active devices around the world.\n\n
+            Android 12 builds on everything you love about Android, and focuses on building a deeply personal phone that adapts to you,
+            developing an operating system that is secure by default and private by design, and making all your devices work better together.\n\n
+            Today, we’re releasing the first beta of Android 12, and giving you a look into some of the features that will be available in future releases.\n\n
+        </item>
+    </string-array>
+
+</resources>
