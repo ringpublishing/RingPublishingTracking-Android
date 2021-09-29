@@ -1,5 +1,5 @@
-def LIB_GROUP_ID = 'com.ringpublishing.tracking'
-def LIB_ARTIFACT_ID = 'lib'
+def LIB_GROUP_ID = 'com.ringpublishing'
+def LIB_ARTIFACT_ID = 'tracking'
 def LIB_VERSION = "$sdk_version_name"
 
 task sourceJar(type: Jar) {
