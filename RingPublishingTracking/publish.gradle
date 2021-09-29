@@ -1,6 +1,6 @@
 def LIB_GROUP_ID = 'com.ringpublishing.tracking'
 def LIB_ARTIFACT_ID = 'lib'
-def LIB_VERSION = "$lib_version_name"
+def LIB_VERSION = "$sdk_version_name"
 
 task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
