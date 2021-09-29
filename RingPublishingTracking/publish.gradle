@@ -19,7 +19,7 @@ publishing {
         }
     }
     publications {
-        RingPublishingGDPR(MavenPublication) {
+        RingPublishing(MavenPublication) {
             groupId LIB_GROUP_ID
             artifactId LIB_ARTIFACT_ID
             version LIB_VERSION
