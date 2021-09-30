@@ -5,12 +5,27 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: import_from_git" time="1.118334">
+      <testcase classname="fastlane.lanes" name="0: import_from_git" time="0.5823">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: cd .. &amp;&amp; git archive --remote=ssh://git@stash.grupa.onet:7999/dep/bamboo-mobile-ios.git HEAD fastlane/.env.default | tar -xO &gt; fastlane/.env.default" time="0.268599">
+      <testcase classname="fastlane.lanes" name="1: rbenv local 2.7.3 || echo 'Ruby version does not exist'" time="0.037754">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: xcode_select" time="0.000587">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="3: rm .env.default" time="0.004251">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: cd .. &amp;&amp; git archive --remote=ssh://git@stash.grupa.onet:7999/dep/bamboo-mobile-ios.git HEAD fastlane/.env.default | tar -xO &gt; fastlane/.env.default" time="0.203318">
         
       </testcase>
     

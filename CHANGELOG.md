@@ -6,3 +6,11 @@ First 'RingPublishingTracking' module setup
 ### Features
 
 * Initial project setup
+0.1.0 Release notes (2021-09-07)
+=============================================================
+
+First 'RingPublishingTracking' module setup
+
+### Features
+
+* Initial project setup
