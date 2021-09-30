@@ -8,15 +8,15 @@ Module for tracking events within an application.
 
 The documentation can be found at:
 
-[https://developer.ringpublishing.com/howto/tracking-mobile/index.html](https://developer.ringpublishing.com/howto/tracking-mobile/index.html)
+[https://developer.ringpublishing.com/docs/TrackingEngine/index.html](https://developer.ringpublishing.com/docs/TrackingEngine/index.html)
 
 Integration tutorial:
 
-[https://developer.ringpublishing.com/howto/tracking-mobile/integrate-android-sdk.html](https://developer.ringpublishing.com/howto/tracking-mobile/integrate-android-sdk.html)
+[https://developer.ringpublishing.com/docs/TrackingEngine/getting-started/mobile/integrate-android-app.html](https://developer.ringpublishing.com/docs/TrackingEngine/getting-started/mobile/integrate-android-app.html)
 
 Reference guide:
 
-[https://developer.ringpublishing.com/howto/tracking-mobile/tracking-android-sdk.html](https://developer.ringpublishing.com/howto/tracking-mobile/tracking-android-sdk.html)
+[https://developer.ringpublishing.com/docs/TrackingEngine/reference/mobile/tracking-android-sdk.html](https://developer.ringpublishing.com/docs/TrackingEngine/reference/mobile/tracking-android-sdk.html)
 
 ## Demo
 
@@ -69,7 +69,7 @@ maven {
 2. Add to your application project module dependencies section
 
 ```ruby
-implementation("com.ringpublishing.tracking:lib:0.1.+")
+implementation("com.ringpublishing:tracking:0.1.+")
 ```
 
 
