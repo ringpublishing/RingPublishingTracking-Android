@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+    
+    
+      
+      <testcase classname="fastlane.lanes" name="0: import_from_git" time="1.118334">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: cd .. &amp;&amp; git archive --remote=ssh://git@stash.grupa.onet:7999/dep/bamboo-mobile-ios.git HEAD fastlane/.env.default | tar -xO &gt; fastlane/.env.default" time="0.268599">
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>
