@@ -16,7 +16,7 @@ android
         applicationId "com.ringpublishing.tracking.demo"
         minSdk MIN_SDK_VERSION
         targetSdk TARGET_SDK_VERSION
-        versionCode Integer.parseInt(lib_version_code)
+        versionCode Integer.parseInt(sdk_version_code)
         versionName sdk_version_name
         multiDexEnabled true
 
