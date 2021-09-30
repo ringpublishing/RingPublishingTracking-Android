@@ -23,7 +23,7 @@ dependencyResolutionManagement
         maven
         {
             name = "RingPublishingTracking-Android"
-            url = uri("https://maven.pkg.github.com/company/RingPublishingTracking-Android")
+            url = uri("https://maven.pkg.github.com/ringpublishing/RingPublishingTracking-Android")
             credentials
             {
                 username = System.getenv('GITHUB_USER') ?: ""
