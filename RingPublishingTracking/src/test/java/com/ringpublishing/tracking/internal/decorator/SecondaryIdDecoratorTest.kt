@@ -7,7 +7,7 @@
 package com.ringpublishing.tracking.internal.decorator
 
 import com.ringpublishing.tracking.data.Event
-import com.ringpublishing.tracking.internal.delegate.ConfigurationDelegate
+import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 import com.ringpublishing.tracking.internal.log.Logger
 import io.mockk.MockKAnnotations
 import org.junit.Assert
@@ -27,7 +27,7 @@ class SecondaryIdDecoratorTest
 	@Test
 	fun decorate_WhenSecondaryIdIsNotSet_ThenUseValueFromPrimaryId()
 	{
-		val configurationDelegate = ConfigurationDelegate()
+		val configurationDelegate = ConfigurationManager()
 		configurationDelegate.primaryId = "100"
 		val secondaryIdDecorator = SecondaryIdDecorator(configurationDelegate)
 
@@ -43,7 +43,7 @@ class SecondaryIdDecoratorTest
 	@Test
 	fun decorate_WhenPrimaryIdIsSetAndFullView_ThenResultSameLikePrimaryId()
 	{
-		val configurationDelegate = ConfigurationDelegate()
+		val configurationDelegate = ConfigurationManager()
 		configurationDelegate.primaryId = "100"
 		configurationDelegate.secondaryId = null
 		configurationDelegate.currentIsPartialView = false
@@ -61,7 +61,7 @@ class SecondaryIdDecoratorTest
 	@Test
 	fun decorate_WhenPrimaryIdIsSetAndPartialView_ThenResultHaveNewValue()
 	{
-		val configurationDelegate = ConfigurationDelegate()
+		val configurationDelegate = ConfigurationManager()
 		configurationDelegate.primaryId = "100"
 		configurationDelegate.secondaryId = null
 		configurationDelegate.currentIsPartialView = true

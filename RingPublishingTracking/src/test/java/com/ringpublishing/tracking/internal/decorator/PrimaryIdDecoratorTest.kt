@@ -7,7 +7,7 @@
 package com.ringpublishing.tracking.internal.decorator
 
 import com.ringpublishing.tracking.data.Event
-import com.ringpublishing.tracking.internal.delegate.ConfigurationDelegate
+import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 import com.ringpublishing.tracking.internal.log.Logger
 import io.mockk.MockKAnnotations
 import org.junit.Assert
@@ -27,7 +27,7 @@ class PrimaryIdDecoratorTest
 	@Test
 	fun decorate_WhenPrimaryIdIsNotSet_ThenGenerateNewValue()
 	{
-		val primaryIdDecorator = PrimaryIdDecorator(ConfigurationDelegate())
+		val primaryIdDecorator = PrimaryIdDecorator(ConfigurationManager())
 
 		val event = Event("", "")
 		primaryIdDecorator.decorate(event)
@@ -40,7 +40,7 @@ class PrimaryIdDecoratorTest
 	@Test
 	fun decorate_WhenPrimaryIdIsSet_ThenUseConfigurationValue()
 	{
-		val configurationDelegate = ConfigurationDelegate()
+		val configurationDelegate = ConfigurationManager()
 		configurationDelegate.primaryId = "100"
 
 		val primaryIdDecorator = PrimaryIdDecorator(configurationDelegate)
@@ -57,7 +57,7 @@ class PrimaryIdDecoratorTest
 	@Test
 	fun decorate_WhenPrimaryIdIsReset_ThenGenerateNewValue()
 	{
-		val configurationDelegate = ConfigurationDelegate()
+		val configurationDelegate = ConfigurationManager()
 		configurationDelegate.primaryId = "100"
 
 		val primaryIdDecorator = PrimaryIdDecorator(configurationDelegate)

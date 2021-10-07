@@ -17,7 +17,7 @@ package com.ringpublishing.tracking
 @Suppress("unused", "unused_parameter")
 fun RingPublishingTracking.updateUserData(ssoSystemName: String, userId: String?)
 {
-	configurationDelegate.updateUserData(ssoSystemName, userId)
+	configurationManager.updateUserData(ssoSystemName, userId)
 }
 
 /**
@@ -27,5 +27,5 @@ fun RingPublishingTracking.updateUserData(ssoSystemName: String, userId: String?
  */
 fun RingPublishingTracking.updateApplicationAdvertisementArea(currentAdvertisementArea: String)
 {
-	configurationDelegate.updateAdvertisementArea(currentAdvertisementArea)
+	configurationManager.updateAdvertisementArea(currentAdvertisementArea)
 }

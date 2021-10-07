@@ -9,10 +9,10 @@ package com.ringpublishing.tracking.internal.decorator
 import android.content.Context
 import com.google.gson.Gson
 import com.ringpublishing.tracking.data.Event
-import com.ringpublishing.tracking.internal.delegate.ConfigurationDelegate
+import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 import com.ringpublishing.tracking.internal.log.Logger
 
-internal class EventDecorator(configurationDelegate: ConfigurationDelegate, context: Context, gson: Gson)
+internal class EventDecorator(configurationDelegate: ConfigurationManager, context: Context, gson: Gson)
 {
 	private val decorators = mutableListOf<Decorator>()
 

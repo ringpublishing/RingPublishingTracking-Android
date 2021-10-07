@@ -8,7 +8,7 @@ package com.ringpublishing.tracking.internal.decorator
 
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
-import com.ringpublishing.tracking.internal.delegate.ConfigurationDelegate
+import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 import org.junit.Assert
 import org.junit.Test
 import java.net.URL
@@ -19,7 +19,7 @@ class SiteAreaDecoratorTest
 	@Test
 	fun decorate_WhenSetArea_ThenIsInResult()
 	{
-		val configurationDelegate = ConfigurationDelegate()
+		val configurationDelegate = ConfigurationManager()
 		configurationDelegate.updateAdvertisementArea("area")
 		val decorator = SiteAreaDecorator(configurationDelegate)
 
@@ -34,7 +34,7 @@ class SiteAreaDecoratorTest
 	@Test
 	fun decorate_WhenDefaultArea_ThenIsInResult()
 	{
-		val configurationDelegate = ConfigurationDelegate()
+		val configurationDelegate = ConfigurationManager()
 		configurationDelegate.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",
@@ -57,7 +57,7 @@ class SiteAreaDecoratorTest
 	@Test
 	fun decorate_WhenDefaultAreaAndAreaSet_ThenLocalArea()
 	{
-		val configurationDelegate = ConfigurationDelegate()
+		val configurationDelegate = ConfigurationManager()
 		configurationDelegate.updateAdvertisementArea("area")
 		configurationDelegate.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",

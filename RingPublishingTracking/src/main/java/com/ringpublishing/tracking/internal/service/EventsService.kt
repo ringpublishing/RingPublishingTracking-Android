@@ -1,7 +1,7 @@
 package com.ringpublishing.tracking.internal.service
 
 import com.ringpublishing.tracking.data.Event
-import com.ringpublishing.tracking.internal.delegate.ConfigurationDelegate
+import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.service.queue.EventsQueue
 import com.ringpublishing.tracking.internal.service.result.ReportEventStatus
@@ -19,7 +19,7 @@ internal class EventsService(
     private val apiService: ApiService,
     private val eventsQueue: EventsQueue,
     private val eventsServiceTimer: EventsServiceTimer,
-    private val configurationDelegate: ConfigurationDelegate
+    private val configurationDelegate: ConfigurationManager
 ) : EventServiceTimerCallback
 {
 

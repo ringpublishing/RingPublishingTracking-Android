@@ -7,9 +7,9 @@
 package com.ringpublishing.tracking.internal.decorator
 
 import com.ringpublishing.tracking.data.Event
-import com.ringpublishing.tracking.internal.delegate.ConfigurationDelegate
+import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 
-internal class SecondaryIdDecorator(private val configuration: ConfigurationDelegate) : PrimaryIdDecorator(configuration)
+internal class SecondaryIdDecorator(private val configuration: ConfigurationManager) : PrimaryIdDecorator(configuration)
 {
 
 	override fun decorate(event: Event)

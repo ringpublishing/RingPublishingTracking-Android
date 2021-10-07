@@ -8,7 +8,7 @@ package com.ringpublishing.tracking.internal.decorator
 
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
-import com.ringpublishing.tracking.internal.delegate.ConfigurationDelegate
+import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 import org.junit.Assert
 import org.junit.Test
 import java.net.URL
@@ -19,7 +19,7 @@ class StructurePathDecoratorTest
 	@Test
 	fun decorate_WhenCurrentStructurePathUpdated_ThenUseUpdatedValue()
 	{
-		val configurationDelegate = ConfigurationDelegate()
+		val configurationDelegate = ConfigurationManager()
 		configurationDelegate.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",
@@ -44,7 +44,7 @@ class StructurePathDecoratorTest
 	@Test
 	fun decorate_WhenCurrentStructurePathDefault_ThenUseDefaultValue()
 	{
-		val configurationDelegate = ConfigurationDelegate()
+		val configurationDelegate = ConfigurationManager()
 		configurationDelegate.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",
@@ -67,7 +67,7 @@ class StructurePathDecoratorTest
 	@Test
 	fun decorate_WhenRootPathEndsWithSlash_ThenResultIsCorrect()
 	{
-		val configurationDelegate = ConfigurationDelegate()
+		val configurationDelegate = ConfigurationManager()
 		configurationDelegate.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",

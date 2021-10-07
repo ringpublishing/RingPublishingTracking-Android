@@ -9,7 +9,7 @@ package com.ringpublishing.tracking.internal.decorator
 import android.util.Base64
 import com.google.gson.GsonBuilder
 import com.ringpublishing.tracking.data.Event
-import com.ringpublishing.tracking.internal.delegate.ConfigurationDelegate
+import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 import org.junit.Assert
 import org.junit.Test
 
@@ -19,7 +19,7 @@ class UserSsoDataDecoratorTest
 	@Test
 	fun decorate_WhenUserUpdated_Then_CorrectParameterResult()
 	{
-		val configurationDelegate = ConfigurationDelegate()
+		val configurationDelegate = ConfigurationManager()
 
 		configurationDelegate.updateUserData("ssoValue", "userIdValue")
 

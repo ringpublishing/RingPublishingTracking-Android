@@ -8,7 +8,7 @@ package com.ringpublishing.tracking.internal.decorator
 
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
-import com.ringpublishing.tracking.internal.delegate.ConfigurationDelegate
+import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 import com.ringpublishing.tracking.internal.log.Logger
 import io.mockk.MockKAnnotations
 import org.junit.Assert
@@ -29,7 +29,7 @@ class ContentUrlDecoratorTest
 	@Test
 	fun decorate_WhenNormalConfiguration_ThenCorrectContentUrl()
 	{
-		val configurationDelegate = ConfigurationDelegate()
+		val configurationDelegate = ConfigurationManager()
 		configurationDelegate.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",
@@ -52,7 +52,7 @@ class ContentUrlDecoratorTest
 	@Test
 	fun decorate_WhenLongerPath_ThenCorrectContentUrl()
 	{
-		val configurationDelegate = ConfigurationDelegate()
+		val configurationDelegate = ConfigurationManager()
 		configurationDelegate.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",
@@ -75,7 +75,7 @@ class ContentUrlDecoratorTest
 	@Test
 	fun decorate_WhenRootPathWithEndChar_ThenCorrectContentUrl()
 	{
-		val configurationDelegate = ConfigurationDelegate()
+		val configurationDelegate = ConfigurationManager()
 		configurationDelegate.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",
@@ -98,7 +98,7 @@ class ContentUrlDecoratorTest
 	@Test
 	fun decorate_WhenPublicationUrlIsSet_ThenPublicationUriIsInResult()
 	{
-		val configurationDelegate = ConfigurationDelegate()
+		val configurationDelegate = ConfigurationManager()
 		configurationDelegate.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",

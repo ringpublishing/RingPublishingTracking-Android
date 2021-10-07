@@ -9,8 +9,8 @@ import android.content.Context
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingDelegate
-import com.ringpublishing.tracking.internal.delegate.ConfigurationDelegate
-import com.ringpublishing.tracking.internal.delegate.ReportDelegate
+import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
+import com.ringpublishing.tracking.internal.delegate.EventsReporter
 import com.ringpublishing.tracking.internal.di.Component
 import com.ringpublishing.tracking.internal.di.provideEventDecorator
 import com.ringpublishing.tracking.internal.di.provideEventsService
@@ -57,12 +57,12 @@ object RingPublishingTracking
 	fun initialize(context: Context, ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration, ringPublishingTrackingDelegate: RingPublishingTrackingDelegate?)
 	{
 		Component.initComponent(context)
-		configurationDelegate.initializeConfiguration(ringPublishingTrackingConfiguration)
-		reportDelegate = ReportDelegate(
-			Component.provideEventsService(configurationDelegate),
+		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
+		eventsReporter = EventsReporter(
+			Component.provideEventsService(configurationManager),
 			ringPublishingTrackingDelegate,
-			Component.provideEventDecorator(configurationDelegate),
-			configurationDelegate
+			Component.provideEventDecorator(configurationManager),
+			configurationManager
 		)
 	}
 
@@ -75,7 +75,7 @@ object RingPublishingTracking
 	 */
 	fun setDebugMode(enabled: Boolean)
 	{
-		configurationDelegate.setDebugMode(enabled)
+		configurationManager.setDebugMode(enabled)
 	}
 
 	/**
@@ -86,7 +86,7 @@ object RingPublishingTracking
 	 */
 	fun setOptOutMode(enabled: Boolean)
 	{
-		configurationDelegate.setOptOutMode(enabled)
+		configurationManager.setOptOutMode(enabled)
 	}
 
 	/**
@@ -117,7 +117,7 @@ object RingPublishingTracking
 	 */
 	fun reportEvent(event: Event)
 	{
-		reportDelegate.reportEvent(event)
+		eventsReporter.reportEvent(event)
 	}
 
 	/**
@@ -128,9 +128,9 @@ object RingPublishingTracking
 	 */
 	fun reportEvents(events: List<Event>)
 	{
-		reportDelegate.reportEvents(events)
+		eventsReporter.reportEvents(events)
 	}
 
-	internal val configurationDelegate = ConfigurationDelegate()
-	internal lateinit var reportDelegate: ReportDelegate
+	internal val configurationManager = ConfigurationManager()
+	internal lateinit var eventsReporter: EventsReporter
 }

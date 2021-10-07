@@ -1,7 +1,7 @@
 package com.ringpublishing.tracking.internal.service
 
 import com.ringpublishing.tracking.data.Event
-import com.ringpublishing.tracking.internal.delegate.ConfigurationDelegate
+import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.service.queue.EventsQueue
 import com.ringpublishing.tracking.internal.service.result.ReportEventResult
@@ -29,7 +29,7 @@ class EventsServiceTest
 	internal lateinit var eventsServiceTimer: EventsServiceTimer
 
 	@MockK
-	internal lateinit var configurationDelegate: ConfigurationDelegate
+	internal lateinit var configurationDelegate: ConfigurationManager
 
 	@MockK
 	lateinit var event: Event

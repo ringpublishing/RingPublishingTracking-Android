@@ -7,9 +7,9 @@
 package com.ringpublishing.tracking.internal.decorator
 
 import com.ringpublishing.tracking.data.Event
-import com.ringpublishing.tracking.internal.delegate.ConfigurationDelegate
+import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 
-internal class ContentUrlDecorator(private val configurationDelegate: ConfigurationDelegate) : BaseDecorator()
+internal class ContentUrlDecorator(private val configurationDelegate: ConfigurationManager) : BaseDecorator()
 {
 
 	private val applicationRootPath get() = configurationDelegate.ringPublishingTrackingConfiguration.applicationRootPath
