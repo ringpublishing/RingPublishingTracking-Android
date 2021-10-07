@@ -8,6 +8,6 @@ package com.ringpublishing.tracking.internal.data
 
 enum class EventName(val text: String)
 {
-	PAGE_VIEW("pageView"),
-	CONTENT_PAGE_VIEW("contentPageView"),
+	PAGE_VIEW("PageView"),
+	CONTENT_PAGE_VIEW("ContentPageView"),
 }
