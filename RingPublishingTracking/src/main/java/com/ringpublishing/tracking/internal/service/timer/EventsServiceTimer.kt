@@ -45,7 +45,7 @@ internal class EventsServiceTimer
         )
     }
 
-    private fun readyToFlush()
+    fun readyToFlush()
     {
         Logger.debug("EventsServiceTimer readyToFlush")
         flushCallback?.readyToFlush()

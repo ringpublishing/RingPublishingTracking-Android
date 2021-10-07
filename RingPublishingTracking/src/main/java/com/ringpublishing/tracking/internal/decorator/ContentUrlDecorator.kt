@@ -14,8 +14,6 @@ internal class ContentUrlDecorator(private val configurationDelegate: Configurat
 
 	private val applicationRootPath get() = configurationDelegate.ringPublishingTrackingConfiguration.applicationRootPath
 
-	private val publicationUrl get() = configurationDelegate.currentPublicationUrl?.toString()
-
 	private val structurePath get() = configurationDelegate.getStructurePath()
 
 	override fun decorate(event: Event)
@@ -25,6 +23,7 @@ internal class ContentUrlDecorator(private val configurationDelegate: Configurat
 
 	private fun buildContentUrlDU(): String
 	{
-		return if (!publicationUrl.isNullOrEmpty()) publicationUrl!! else parameterGenerator.buildRootUrl(applicationRootPath, structurePath)
+		val url = configurationDelegate.currentPublicationUrl?.toString()
+		return if (!url.isNullOrEmpty()) url else parameterGenerator.buildRootUrl(applicationRootPath, structurePath)
 	}
 }

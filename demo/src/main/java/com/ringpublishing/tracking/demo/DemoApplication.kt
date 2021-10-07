@@ -16,7 +16,7 @@ class DemoApplication : MultiDexApplication()
 	{
 		override fun ringPublishingTrackingDidAssignTrackingIdentifier(ringPublishingTracking: RingPublishingTracking, identifier: String)
 		{
-			Log.i("DemoApplication", "RingPublishingTracking: received tracking identifier:$identifier")
+			Log.i("Demo", "RingPublishingTracking: received tracking identifier:$identifier")
 		}
 	}
 

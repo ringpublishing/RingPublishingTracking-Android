@@ -13,7 +13,7 @@ import com.ringpublishing.tracking.internal.delegate.ConfigurationDelegate
 import com.ringpublishing.tracking.internal.log.Logger
 import java.io.UnsupportedEncodingException
 
-internal class UserSsoDataDecorator(private val configurationDelegate: ConfigurationDelegate, val gson: Gson) : BaseDecorator()
+internal class UserSsoDataDecorator(private val configurationDelegate: ConfigurationDelegate, private val gson: Gson) : BaseDecorator()
 {
 	private val userId get() = configurationDelegate.getUserData().userId
 	private val ssoName get() = configurationDelegate.getUserData().ssoName ?: ""
@@ -22,11 +22,11 @@ internal class UserSsoDataDecorator(private val configurationDelegate: Configura
 	{
 		if (userId.isNullOrEmpty()) return
 
-		val encodedUserData = userSsoData(userId, ssoName)
+		val encodedUserData = encodeUserSsoData(userId, ssoName)
 		encodedUserData?.let { event.add(EventParam.USER_SSO_DATA, it) }
 	}
 
-	private fun userSsoData(userId: String?, ssoName: String): String?
+	private fun encodeUserSsoData(userId: String?, ssoName: String): String?
 	{
 		val jsonUser = gson.toJson(User(Sso(Logged(userId)), ssoName))
 
@@ -40,9 +40,9 @@ internal class UserSsoDataDecorator(private val configurationDelegate: Configura
 			Logger.warn("Parse user sso data UnsupportedEncodingException $e")
 			return null
 		}
-
-		return Base64.encodeToString(data, Base64.NO_WRAP)
+		return Base64.encodeToString(data, Base64.DEFAULT)
 	}
+
 	private class Logged(val id: String?)
 
 	private class Sso(val logged: Logged)

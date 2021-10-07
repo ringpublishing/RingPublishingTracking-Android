@@ -13,7 +13,7 @@ import java.util.Random
 internal class ParameterGenerator
 {
 
-	fun generatePrimaryId(): Long
+	fun generatePrimaryId(): String
 	{
 		with(Calendar.getInstance())
 		{
@@ -25,7 +25,7 @@ internal class ParameterGenerator
 			iv = iv * 100 + get(Calendar.SECOND)
 			iv = iv * 1000 + get(Calendar.MILLISECOND)
 			iv += ("" + ((1 + Random().nextInt()) * 10000000)).substring(0, 8).toLong()
-			return iv
+			return iv.toString()
 		}
 	}
 

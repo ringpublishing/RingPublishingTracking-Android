@@ -12,7 +12,7 @@ import com.ringpublishing.tracking.internal.log.Logger
 internal open class BaseDecorator : Decorator
 {
 
-	val parameterGenerator = ParameterGenerator()
+	protected val parameterGenerator = ParameterGenerator()
 
 	fun Event.add(eventParam: EventParam, value: Any?)
 	{

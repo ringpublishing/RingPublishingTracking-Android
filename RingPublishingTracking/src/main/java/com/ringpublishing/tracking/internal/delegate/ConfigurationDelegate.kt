@@ -25,9 +25,9 @@ internal class ConfigurationDelegate
 
 	var currentIsPartialView = false
 
-	var primaryId = 0L
+	var primaryId: String? = null
 
-	var secondaryId = 0L
+	var secondaryId: String? = null
 
 	fun initializeConfiguration(ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration)
 	{
@@ -88,12 +88,12 @@ internal class ConfigurationDelegate
 
 	fun newPrimaryId()
 	{
-		primaryId = 0L
-		secondaryId = 0L
+		primaryId = null
+		secondaryId = null
 	}
 
 	fun newSecondaryId()
 	{
-		secondaryId = 0L
+		secondaryId = null
 	}
 }

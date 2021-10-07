@@ -79,18 +79,14 @@ internal class ReportDelegate(
 				"contentMetadata=$contentMetadata " +
 				"contentPageViewSource=$contentPageViewSource " +
 				"currentStructurePath=$currentStructurePath" +
-				"partialReload=$partiallyReloaded ")
+				"partialReload=$partiallyReloaded " +
+				"contentKeepAliveDataSource=$contentKeepAliveDataSource")
 
 		configurationDelegate.updateCurrentPublicationUrl(contentMetadata.publicationUrl)
 		configurationDelegate.updateCurrentStructurePath(currentStructurePath)
 		configurationDelegate.currentIsPartialView = partiallyReloaded
 
-		configurationDelegate.newPrimaryId()
-
-		if (partiallyReloaded)
-		{
-			configurationDelegate.newSecondaryId()
-		}
+		if (partiallyReloaded) configurationDelegate.newSecondaryId() else configurationDelegate.newPrimaryId()
 
 		val event = Event(contentMetadata.sourceSystemName, EventName.CONTENT_PAGE_VIEW.text)
 		// todo: append parameters to this event

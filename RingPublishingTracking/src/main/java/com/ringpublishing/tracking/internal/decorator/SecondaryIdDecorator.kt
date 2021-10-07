@@ -17,13 +17,14 @@ internal class SecondaryIdDecorator(private val configuration: ConfigurationDele
 		event.add(EventParam.SECONDARY_ID, getSecondaryId())
 	}
 
-	private fun getSecondaryId(): Long
+	private fun getSecondaryId(): String
 	{
 		with(configuration)
 		{
-			val generateNew = secondaryId == 0L && currentIsPartialView
-			secondaryId = if (generateNew) parameterGenerator.generatePrimaryId() else primaryId
-			return secondaryId
+			val generateNew = secondaryId == null && currentIsPartialView
+			val newId = if (generateNew) parameterGenerator.generatePrimaryId() else primaryId ?: parameterGenerator.generatePrimaryId()
+			secondaryId = newId
+			return newId
 		}
 	}
 }

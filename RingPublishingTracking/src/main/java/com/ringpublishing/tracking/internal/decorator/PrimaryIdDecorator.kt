@@ -17,12 +17,15 @@ internal open class PrimaryIdDecorator(private val configurationDelegate: Config
 		event.add(EventParam.PRIMARY_ID, getPrimaryId())
 	}
 
-	private fun getPrimaryId(): Long
+	private fun getPrimaryId(): String
 	{
-		if (configurationDelegate.primaryId == 0L)
+		var primaryId = configurationDelegate.primaryId
+
+		if (primaryId == null)
 		{
-			configurationDelegate.primaryId = parameterGenerator.generatePrimaryId()
+			primaryId = parameterGenerator.generatePrimaryId()
+			configurationDelegate.primaryId = primaryId
 		}
-		return configurationDelegate.primaryId
+		return primaryId
 	}
 }
