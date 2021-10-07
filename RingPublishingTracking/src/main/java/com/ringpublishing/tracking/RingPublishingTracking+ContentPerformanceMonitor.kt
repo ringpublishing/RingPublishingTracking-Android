@@ -8,6 +8,9 @@ package com.ringpublishing.tracking
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.ContentPageViewSource
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingKeepAliveDataSource
+import com.ringpublishing.tracking.internal.data.EventName
+import com.ringpublishing.tracking.internal.delegate.updateContentPageViewConfiguration
+import com.ringpublishing.tracking.internal.delegate.updatePageViewConfiguration
 import java.net.URL
 
 /**
@@ -89,7 +92,10 @@ fun RingPublishingTracking.reportUserAction(actionName: String, actionSubtypeNam
 @Suppress("unused", "unused_parameter")
 fun RingPublishingTracking.reportPageView(currentStructurePath: List<String>, partiallyReloaded: Boolean)
 {
-	eventsReporter.reportPageView(currentStructurePath, partiallyReloaded)
+	configurationManager.updatePageViewConfiguration(currentStructurePath, partiallyReloaded)
+
+	val event = userEventsFactory.create(EventName.PAGE_VIEW)
+	eventsReporter.reportEvent(event)
 }
 
 /**
@@ -118,13 +124,10 @@ fun RingPublishingTracking.reportContentPageView(
     contentKeepAliveDataSource: RingPublishingTrackingKeepAliveDataSource,
 )
 {
- 	eventsReporter.reportContentPageView(
- 		contentMetadata,
- 		contentPageViewSource,
-        currentStructurePath,
-        partiallyReloaded,
-        contentKeepAliveDataSource
- 	)
+	configurationManager.updateContentPageViewConfiguration(contentMetadata, currentStructurePath, partiallyReloaded)
+
+	val event = userEventsFactory.create(EventName.CONTENT_PAGE_VIEW)
+ 	eventsReporter.reportEvent(event)
 }
 
 /**
