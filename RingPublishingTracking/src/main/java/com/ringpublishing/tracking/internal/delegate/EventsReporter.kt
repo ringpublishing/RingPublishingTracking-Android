@@ -11,11 +11,11 @@ import com.ringpublishing.tracking.internal.decorator.EventDecorator
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.service.EventsService
 
-internal class ReportDelegate(
-    private val eventsService: EventsService,
-    private val ringPublishingTrackingDelegate: RingPublishingTrackingDelegate?,
-    private val eventDecorator: EventDecorator,
-    private val configurationDelegate: ConfigurationDelegate,
+internal class EventsReporter(
+	private val eventsService: EventsService,
+	private val ringPublishingTrackingDelegate: RingPublishingTrackingDelegate?,
+	private val eventDecorator: EventDecorator,
+	private val configurationDelegate: ConfigurationManager,
 )
 {
 

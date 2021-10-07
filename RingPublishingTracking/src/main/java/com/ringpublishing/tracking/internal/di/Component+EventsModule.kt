@@ -1,7 +1,7 @@
 package com.ringpublishing.tracking.internal.di
 
 import com.ringpublishing.tracking.internal.decorator.EventDecorator
-import com.ringpublishing.tracking.internal.delegate.ConfigurationDelegate
+import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 import com.ringpublishing.tracking.internal.service.EventsService
 import com.ringpublishing.tracking.internal.service.queue.EventSizeCalculator
 import com.ringpublishing.tracking.internal.service.queue.EventsQueue
@@ -27,7 +27,7 @@ internal fun Component.provideEventsServiceTimer() = eventsServiceTimer
 
 private var eventsService: EventsService? = null
 
-internal fun Component.provideEventsService(configurationDelegate: ConfigurationDelegate): EventsService
+internal fun Component.provideEventsService(configurationDelegate: ConfigurationManager): EventsService
 {
 	if (eventsService == null)
 	{
@@ -44,7 +44,7 @@ internal fun Component.provideEventsService(configurationDelegate: Configuration
 
 private var eventDecorator: EventDecorator? = null
 
-internal fun Component.provideEventDecorator(configurationDelegate: ConfigurationDelegate): EventDecorator
+internal fun Component.provideEventDecorator(configurationDelegate: ConfigurationManager): EventDecorator
 {
 	if (eventDecorator == null)
 	{

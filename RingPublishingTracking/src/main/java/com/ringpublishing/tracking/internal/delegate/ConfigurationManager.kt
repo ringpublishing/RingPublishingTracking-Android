@@ -6,7 +6,7 @@ import com.ringpublishing.tracking.internal.data.UserData
 import com.ringpublishing.tracking.internal.log.Logger
 import java.net.URL
 
-internal class ConfigurationDelegate
+internal class ConfigurationManager
 {
 
 	internal lateinit var ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration
