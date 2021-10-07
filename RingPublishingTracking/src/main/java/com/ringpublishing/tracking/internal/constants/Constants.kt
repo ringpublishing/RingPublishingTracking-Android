@@ -5,13 +5,18 @@ import java.net.URL
 
 internal object Constants
 {
-    val apiUrl = URL(BuildConfig.API_URL)
+
+	val apiUrl = URL(BuildConfig.API_URL)
     const val apiVersion = "v3"
 
     const val maxEventSize = 16384L // 16 KB
     const val maxRequestBodySize = 1048576L // 1 MB
     const val maxRequestBodySizeBuffer = 5120L // 5KB
 
-    const val eventDefaultAnalyticsSystemName = "_GENERIC" // todo: set
-    const val eventDefaultName = "Event" // todo: set
+    const val eventDefaultAnalyticsSystemName = "_GENERIC"
+
+    const val defaultRootPathSuffix = ".app.android"
+
+	const val consentStringPreferenceName = "IABTCF_TCString"
+	const val mobileDepth = 24
 }

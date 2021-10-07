@@ -88,7 +88,7 @@ class ActionsController : ScreenController()
 		// If you have the need to report custom event (which is not defined in module interface) you can
 		// always do that using generic 'reportEvent' method, but you must construct Event yourself and know
 		// it's parameters
-		val customEvent = Event("GENERIC", "DemoCustomEvent", mapOf("myParam" to "myValue"))
+		val customEvent = Event("GENERIC", "DemoCustomEvent", mutableMapOf("myParam" to "myValue"))
 		RingPublishingTracking.reportEvent(customEvent)
 	}
 

@@ -12,6 +12,7 @@ import com.ringpublishing.tracking.delegate.RingPublishingTrackingDelegate
 import com.ringpublishing.tracking.internal.delegate.ConfigurationDelegate
 import com.ringpublishing.tracking.internal.delegate.ReportDelegate
 import com.ringpublishing.tracking.internal.di.Component
+import com.ringpublishing.tracking.internal.di.provideEventDecorator
 import com.ringpublishing.tracking.internal.di.provideEventsService
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.listener.LogListener
@@ -51,13 +52,18 @@ object RingPublishingTracking
 	 * Should be called once in main point of application.
 	 *
 	 * @param context is Application context
-	 * @param RingPublishingTrackingConfiguration is tenant for this application
+	 * @param ringPublishingTrackingConfiguration is tenant for this application
 	 */
 	fun initialize(context: Context, ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration, ringPublishingTrackingDelegate: RingPublishingTrackingDelegate?)
 	{
 		Component.initComponent(context)
 		configurationDelegate.initializeConfiguration(ringPublishingTrackingConfiguration)
-		reportDelegate = ReportDelegate(Component.provideEventsService(configurationDelegate), ringPublishingTrackingDelegate)
+		reportDelegate = ReportDelegate(
+			Component.provideEventsService(configurationDelegate),
+			ringPublishingTrackingDelegate,
+			Component.provideEventDecorator(configurationDelegate),
+			configurationDelegate
+		)
 	}
 
 	/**
@@ -125,6 +131,6 @@ object RingPublishingTracking
 		reportDelegate.reportEvents(events)
 	}
 
-	private val configurationDelegate = ConfigurationDelegate()
+	internal val configurationDelegate = ConfigurationDelegate()
 	internal lateinit var reportDelegate: ReportDelegate
 }

@@ -21,6 +21,4 @@ internal object Component
     }
 
     fun provideContext() = context
-
-    fun provideResources() = context.resources!!
 }

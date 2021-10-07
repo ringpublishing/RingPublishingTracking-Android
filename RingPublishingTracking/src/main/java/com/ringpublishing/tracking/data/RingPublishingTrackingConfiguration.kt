@@ -23,6 +23,6 @@ data class RingPublishingTrackingConfiguration(
     val apiKey: String,
     val apiUrl: URL? = null,
     val applicationRootPath: String,
-    val applicationDefaultStructurePath: String,
+    val applicationDefaultStructurePath: List<String>,
     val applicationDefaultAdvertisementArea: String,
 )

@@ -8,5 +8,5 @@ package com.ringpublishing.tracking.data
 data class Event(
     val analyticsSystemName: String,
     val name: String,
-    val parameters: Map<String, Any>,
+    val parameters: MutableMap<String, Any> = mutableMapOf(),
 )

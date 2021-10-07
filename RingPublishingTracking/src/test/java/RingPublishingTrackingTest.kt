@@ -4,11 +4,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-
 import android.content.res.Resources
+import android.util.DisplayMetrics
+import android.view.WindowManager
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingDelegate
-
 import com.ringpublishing.tracking.internal.log.Logger
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -36,13 +36,19 @@ class RingPublishingTrackingTest
 	lateinit var sharedPreferences: SharedPreferences
 
 	@MockK
-	lateinit var RingPublishingTrackingConfiguration: RingPublishingTrackingConfiguration
+	lateinit var ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration
 
 	@MockK
-	lateinit var RingPublishingTrackingDelegate: RingPublishingTrackingDelegate
+	lateinit var ringPublishingTrackingDelegate: RingPublishingTrackingDelegate
 
 	@MockK
 	lateinit var apiUrl: URL
+
+	@MockK
+	lateinit var displayMetrics: DisplayMetrics
+
+	@MockK
+	lateinit var windowManager: WindowManager
 
 	@Before
 	fun before()
@@ -57,13 +63,20 @@ class RingPublishingTrackingTest
 		every { context.applicationContext } returns context
 		every { context.packageManager } returns packageManager
 		every { packageManager.queryIntentServices(any(), any()) } returns emptyList()
-		every { context.resources } returns resources
 		every { resources.configuration } returns configuration
+		every { context.resources } returns resources
+		every { context.resources.configuration } returns configuration
+
+		every { context.resources.displayMetrics } returns displayMetrics
 		every { context.getSharedPreferences(any(), any()) } returns sharedPreferences
 
-		every { RingPublishingTrackingConfiguration.apiKey } returns ""
-		every { RingPublishingTrackingConfiguration.apiUrl } returns apiUrl
+		every { context.getSystemService(any()) } returns windowManager
+		every { context.packageName } returns "com.ringpublishing"
 
-		RingPublishingTracking.initialize(context, RingPublishingTrackingConfiguration, RingPublishingTrackingDelegate)
+		every { ringPublishingTrackingConfiguration.apiKey } returns ""
+		every { ringPublishingTrackingConfiguration.apiUrl } returns apiUrl
+		every { ringPublishingTrackingConfiguration.applicationRootPath } returns ""
+
+		RingPublishingTracking.initialize(context, ringPublishingTrackingConfiguration, ringPublishingTrackingDelegate)
 	}
 }

@@ -18,7 +18,6 @@ internal class EventRequestBuilder(
     {
         val apiEvents = mutableListOf<ApiEvent>()
 
-        // todo check event.analyticsSystemName
         events.forEach { apiEvents.add(ApiEvent(it.analyticsSystemName, it.name, it.parameters)) }
 
         val ids = Ids(identifyResponse.ids)

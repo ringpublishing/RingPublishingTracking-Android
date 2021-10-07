@@ -89,8 +89,7 @@ fun RingPublishingTracking.reportUserAction(actionName: String, actionSubtypeNam
 @Suppress("unused", "unused_parameter")
 fun RingPublishingTracking.reportPageView(currentStructurePath: List<String>, partiallyReloaded: Boolean)
 {
-	// todo: Implement
-	// reportDelegate.reportPageView(partiallyReloaded)
+	reportDelegate.reportPageView(currentStructurePath, partiallyReloaded)
 }
 
 /**
@@ -119,13 +118,13 @@ fun RingPublishingTracking.reportContentPageView(
     contentKeepAliveDataSource: RingPublishingTrackingKeepAliveDataSource,
 )
 {
-	// todo: Implement
-// 	reportDelegate.reportContentPageView(
-// 		contentMetadata,
-// 		contentPageViewSource,
-// 		partiallyReloaded,
-// 		contentKeepAliveDataSource
-// 	)
+ 	reportDelegate.reportContentPageView(
+ 		contentMetadata,
+ 		contentPageViewSource,
+        currentStructurePath,
+        partiallyReloaded,
+        contentKeepAliveDataSource
+ 	)
 }
 
 /**

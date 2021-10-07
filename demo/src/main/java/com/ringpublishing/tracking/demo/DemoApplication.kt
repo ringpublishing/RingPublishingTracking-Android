@@ -32,7 +32,7 @@ class DemoApplication : MultiDexApplication()
 		val apiKey = "" // <YOUR_API_KEY>
 		// val apiUrl = URL("http://website.com") optional parameter to change api endpoint
 		val applicationRootPath = "RingPublishingTrackingDemo"
-		val applicationDefaultStructurePath = "Default"
+		val applicationDefaultStructurePath = listOf("Default")
 		val applicationDefaultAdvertisementArea = "DemoAdvertisementArea"
 
 		val ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
