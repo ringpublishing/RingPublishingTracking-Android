@@ -29,8 +29,8 @@ class ContentUrlDecoratorTest
 	@Test
 	fun decorate_WhenNormalConfiguration_ThenCorrectContentUrl()
 	{
-		val configurationDelegate = ConfigurationManager()
-		configurationDelegate.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+		val configurationManager = ConfigurationManager()
+		configurationManager.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",
 			URL("https://domain.com"),
@@ -38,7 +38,7 @@ class ContentUrlDecoratorTest
 			listOf("path1", "path2"),
 			"area"
 		)
-		val contentUrlDecorator = ContentUrlDecorator(configurationDelegate)
+		val contentUrlDecorator = ContentUrlDecorator(configurationManager)
 
 		val event = Event("", "")
 		contentUrlDecorator.decorate(event)
@@ -52,8 +52,8 @@ class ContentUrlDecoratorTest
 	@Test
 	fun decorate_WhenLongerPath_ThenCorrectContentUrl()
 	{
-		val configurationDelegate = ConfigurationManager()
-		configurationDelegate.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+		val configurationManager = ConfigurationManager()
+		configurationManager.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",
 			URL("https://domain.com"),
@@ -61,7 +61,7 @@ class ContentUrlDecoratorTest
 			listOf("path1", "path2", "path3", "path4", "path5"),
 			"area"
 		)
-		val contentUrlDecorator = ContentUrlDecorator(configurationDelegate)
+		val contentUrlDecorator = ContentUrlDecorator(configurationManager)
 
 		val event = Event("", "")
 		contentUrlDecorator.decorate(event)
@@ -75,8 +75,8 @@ class ContentUrlDecoratorTest
 	@Test
 	fun decorate_WhenRootPathWithEndChar_ThenCorrectContentUrl()
 	{
-		val configurationDelegate = ConfigurationManager()
-		configurationDelegate.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+		val configurationManager = ConfigurationManager()
+		configurationManager.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",
 			URL("https://domain.com"),
@@ -84,7 +84,7 @@ class ContentUrlDecoratorTest
 			listOf("path1", "path2"),
 			"area"
 		)
-		val contentUrlDecorator = ContentUrlDecorator(configurationDelegate)
+		val contentUrlDecorator = ContentUrlDecorator(configurationManager)
 
 		val event = Event("", "")
 		contentUrlDecorator.decorate(event)
@@ -98,8 +98,8 @@ class ContentUrlDecoratorTest
 	@Test
 	fun decorate_WhenPublicationUrlIsSet_ThenPublicationUriIsInResult()
 	{
-		val configurationDelegate = ConfigurationManager()
-		configurationDelegate.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+		val configurationManager = ConfigurationManager()
+		configurationManager.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",
 			URL("https://domain.com"),
@@ -107,9 +107,9 @@ class ContentUrlDecoratorTest
 			listOf("path1", "path2"),
 			"area"
 		)
-		configurationDelegate.currentPublicationUrl = URL("https://publicationurl.com")
+		configurationManager.currentPublicationUrl = URL("https://publicationurl.com")
 
-		val contentUrlDecorator = ContentUrlDecorator(configurationDelegate)
+		val contentUrlDecorator = ContentUrlDecorator(configurationManager)
 
 		val event = Event("", "")
 		contentUrlDecorator.decorate(event)

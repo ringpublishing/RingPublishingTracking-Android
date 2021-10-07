@@ -40,10 +40,10 @@ class PrimaryIdDecoratorTest
 	@Test
 	fun decorate_WhenPrimaryIdIsSet_ThenUseConfigurationValue()
 	{
-		val configurationDelegate = ConfigurationManager()
-		configurationDelegate.primaryId = "100"
+		val configurationManager = ConfigurationManager()
+		configurationManager.primaryId = "100"
 
-		val primaryIdDecorator = PrimaryIdDecorator(configurationDelegate)
+		val primaryIdDecorator = PrimaryIdDecorator(configurationManager)
 
 		val event = Event("", "")
 		primaryIdDecorator.decorate(event)
@@ -57,12 +57,12 @@ class PrimaryIdDecoratorTest
 	@Test
 	fun decorate_WhenPrimaryIdIsReset_ThenGenerateNewValue()
 	{
-		val configurationDelegate = ConfigurationManager()
-		configurationDelegate.primaryId = "100"
+		val configurationManager = ConfigurationManager()
+		configurationManager.primaryId = "100"
 
-		val primaryIdDecorator = PrimaryIdDecorator(configurationDelegate)
+		val primaryIdDecorator = PrimaryIdDecorator(configurationManager)
 
-		configurationDelegate.newPrimaryId()
+		configurationManager.newPrimaryId()
 
 		val event = Event("", "")
 		primaryIdDecorator.decorate(event)

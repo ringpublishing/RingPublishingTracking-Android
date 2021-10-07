@@ -19,12 +19,12 @@ class UserSsoDataDecoratorTest
 	@Test
 	fun decorate_WhenUserUpdated_Then_CorrectParameterResult()
 	{
-		val configurationDelegate = ConfigurationManager()
+		val configurationManager = ConfigurationManager()
 
-		configurationDelegate.updateUserData("ssoValue", "userIdValue")
+		configurationManager.updateUserData("ssoValue", "userIdValue")
 
 		val gson = GsonBuilder().create()
-		val userSsoDataDecorator = UserSsoDataDecorator(configurationDelegate, gson)
+		val userSsoDataDecorator = UserSsoDataDecorator(configurationManager, gson)
 
 		val event = Event("", "")
 		userSsoDataDecorator.decorate(event)

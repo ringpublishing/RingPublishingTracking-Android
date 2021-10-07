@@ -13,10 +13,10 @@ import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 import com.ringpublishing.tracking.internal.log.Logger
 import java.io.UnsupportedEncodingException
 
-internal class UserSsoDataDecorator(private val configurationDelegate: ConfigurationManager, private val gson: Gson) : BaseDecorator()
+internal class UserSsoDataDecorator(private val configurationManager: ConfigurationManager, private val gson: Gson) : BaseDecorator()
 {
-	private val userId get() = configurationDelegate.getUserData().userId
-	private val ssoName get() = configurationDelegate.getUserData().ssoName ?: ""
+	private val userId get() = configurationManager.getUserData().userId
+	private val ssoName get() = configurationManager.getUserData().ssoName ?: ""
 
 	override fun decorate(event: Event)
 	{

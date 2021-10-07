@@ -29,7 +29,7 @@ class EventsServiceTest
 	internal lateinit var eventsServiceTimer: EventsServiceTimer
 
 	@MockK
-	internal lateinit var configurationDelegate: ConfigurationManager
+	internal lateinit var configurationManager: ConfigurationManager
 
 	@MockK
 	lateinit var event: Event
@@ -47,8 +47,8 @@ class EventsServiceTest
 	@Test
 	fun addEvent_WhenDefault_ThenCanAddEvent()
 	{
-		every { configurationDelegate.isOptOutModeEnabled() } returns false
-		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationDelegate)
+		every { configurationManager.isOptOutModeEnabled() } returns false
+		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationManager)
 
 		eventService.addEvent(event)
 
@@ -59,8 +59,8 @@ class EventsServiceTest
 	@Test
 	fun addEvent_WhenOptOutEnabled_ThenEventNotAdded()
 	{
-		every { configurationDelegate.isOptOutModeEnabled() } returns true
-		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationDelegate)
+		every { configurationManager.isOptOutModeEnabled() } returns true
+		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationManager)
 
 		eventService.addEvent(event)
 
@@ -71,9 +71,9 @@ class EventsServiceTest
 	@Test
 	fun addEvents_WhenDefault_ThenCanAddEvents()
 	{
-		every { configurationDelegate.isOptOutModeEnabled() } returns false
+		every { configurationManager.isOptOutModeEnabled() } returns false
 
-		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationDelegate)
+		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationManager)
 		val list = mutableListOf<Event>()
 		list.add(event)
 		list.add(event2)
@@ -87,8 +87,8 @@ class EventsServiceTest
 	@Test
 	fun addEvents_WhenOptOutEnabled_ThenEventsNotAdded()
 	{
-		every { configurationDelegate.isOptOutModeEnabled() } returns true
-		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationDelegate)
+		every { configurationManager.isOptOutModeEnabled() } returns true
+		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationManager)
 		val list = mutableListOf<Event>()
 		list.add(event)
 		list.add(event2)
@@ -102,13 +102,13 @@ class EventsServiceTest
 	@Test
 	fun readyToFlush_WhenFLushOneEvent_ThenApiServiceReportOneEvent()
 	{
-		coEvery { configurationDelegate.isOptOutModeEnabled() } returns false
+		coEvery { configurationManager.isOptOutModeEnabled() } returns false
 		val list = mutableListOf<Event>()
 		list.add(event)
 		coEvery { eventsQueue.getMaximumEventsToSend() } returns list
 		coEvery { eventsQueue.hasEventsToSend() } returns false
 		coEvery { apiService.reportEvents(any()) } returns ReportEventResult(ReportEventStatus.SUCCESS, 500)
-		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationDelegate)
+		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationManager)
 		eventService.addEvent(event)
 
 		eventService.readyToFlush()
@@ -122,11 +122,11 @@ class EventsServiceTest
 		val list = mutableListOf<Event>()
 		list.add(event)
 		list.add(event2)
-		coEvery { configurationDelegate.isOptOutModeEnabled() } returns false
+		coEvery { configurationManager.isOptOutModeEnabled() } returns false
 		coEvery { eventsQueue.getMaximumEventsToSend() } returns list
 		coEvery { eventsQueue.hasEventsToSend() } returns false
 		coEvery { apiService.reportEvents(any()) } returns ReportEventResult(ReportEventStatus.SUCCESS, 500)
-		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationDelegate)
+		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationManager)
 		eventService.addEvents(list)
 
 		eventService.readyToFlush()
@@ -139,11 +139,11 @@ class EventsServiceTest
 	{
 		val list = mutableListOf<Event>()
 		list.add(event)
-		coEvery { configurationDelegate.isOptOutModeEnabled() } returns false
+		coEvery { configurationManager.isOptOutModeEnabled() } returns false
 		coEvery { eventsQueue.getMaximumEventsToSend() } returns list
 		coEvery { eventsQueue.hasEventsToSend() } returns false
 		coEvery { apiService.reportEvents(any()) } returns ReportEventResult(ReportEventStatus.SUCCESS, 500)
-		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationDelegate)
+		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationManager)
 		eventService.addEvent(event)
 
 		eventService.readyToFlush()
@@ -156,11 +156,11 @@ class EventsServiceTest
 	{
 		val list = mutableListOf<Event>()
 		list.add(event)
-		coEvery { configurationDelegate.isOptOutModeEnabled() } returns false
+		coEvery { configurationManager.isOptOutModeEnabled() } returns false
 		coEvery { eventsQueue.getMaximumEventsToSend() } returns list
 		coEvery { eventsQueue.hasEventsToSend() } returns false
 		coEvery { apiService.reportEvents(any()) } returns ReportEventResult(ReportEventStatus.ERROR_NETWORK, 500)
-		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationDelegate)
+		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationManager)
 		eventService.addEvent(event)
 
 		eventService.readyToFlush()
@@ -173,11 +173,11 @@ class EventsServiceTest
 	{
 		val list = mutableListOf<Event>()
 		list.add(event)
-		coEvery { configurationDelegate.isOptOutModeEnabled() } returns false
+		coEvery { configurationManager.isOptOutModeEnabled() } returns false
 		coEvery { eventsQueue.getMaximumEventsToSend() } returns list
 		coEvery { eventsQueue.hasEventsToSend() } returns false
 		coEvery { apiService.reportEvents(any()) } returns ReportEventResult(ReportEventStatus.ERROR_BAD_REQUEST, 500)
-		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationDelegate)
+		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationManager)
 		eventService.addEvent(event)
 
 		eventService.readyToFlush()

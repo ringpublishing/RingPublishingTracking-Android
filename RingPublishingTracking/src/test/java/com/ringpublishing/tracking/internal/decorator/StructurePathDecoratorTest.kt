@@ -19,8 +19,8 @@ class StructurePathDecoratorTest
 	@Test
 	fun decorate_WhenCurrentStructurePathUpdated_ThenUseUpdatedValue()
 	{
-		val configurationDelegate = ConfigurationManager()
-		configurationDelegate.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+		val configurationManager = ConfigurationManager()
+		configurationManager.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",
 			URL("https://domain.com"),
@@ -28,9 +28,9 @@ class StructurePathDecoratorTest
 			listOf("path1", "path2"),
 			"area"
 		)
-		configurationDelegate.updateCurrentStructurePath(listOf("path3", "path4"))
+		configurationManager.updateCurrentStructurePath(listOf("path3", "path4"))
 
-		val decorator = StructurePathDecorator(configurationDelegate)
+		val decorator = StructurePathDecorator(configurationManager)
 
 		val event = Event("", "")
 
@@ -44,8 +44,8 @@ class StructurePathDecoratorTest
 	@Test
 	fun decorate_WhenCurrentStructurePathDefault_ThenUseDefaultValue()
 	{
-		val configurationDelegate = ConfigurationManager()
-		configurationDelegate.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+		val configurationManager = ConfigurationManager()
+		configurationManager.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",
 			URL("https://domain.com"),
@@ -53,7 +53,7 @@ class StructurePathDecoratorTest
 			listOf("path1", "path2"),
 			"area"
 		)
-		val decorator = StructurePathDecorator(configurationDelegate)
+		val decorator = StructurePathDecorator(configurationManager)
 
 		val event = Event("", "")
 
@@ -67,8 +67,8 @@ class StructurePathDecoratorTest
 	@Test
 	fun decorate_WhenRootPathEndsWithSlash_ThenResultIsCorrect()
 	{
-		val configurationDelegate = ConfigurationManager()
-		configurationDelegate.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+		val configurationManager = ConfigurationManager()
+		configurationManager.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",
 			URL("https://domain.com"),
@@ -76,7 +76,7 @@ class StructurePathDecoratorTest
 			listOf("path1", "path2"),
 			"area"
 		)
-		val decorator = StructurePathDecorator(configurationDelegate)
+		val decorator = StructurePathDecorator(configurationManager)
 
 		val event = Event("", "")
 

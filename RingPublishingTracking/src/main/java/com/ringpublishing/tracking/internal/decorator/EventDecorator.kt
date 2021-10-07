@@ -12,7 +12,7 @@ import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 import com.ringpublishing.tracking.internal.log.Logger
 
-internal class EventDecorator(configurationDelegate: ConfigurationManager, context: Context, gson: Gson)
+internal class EventDecorator(configurationManager: ConfigurationManager, context: Context, gson: Gson)
 {
 	private val decorators = mutableListOf<Decorator>()
 
@@ -20,17 +20,17 @@ internal class EventDecorator(configurationDelegate: ConfigurationManager, conte
 	{
 		with(decorators)
 		{
-			add(PrimaryIdDecorator(configurationDelegate))
-			add(SecondaryIdDecorator(configurationDelegate))
-			add(UserSsoDataDecorator(configurationDelegate, gson))
-			add(TenantIdDecorator(configurationDelegate))
-			add(SiteAreaDecorator(configurationDelegate))
+			add(PrimaryIdDecorator(configurationManager))
+			add(SecondaryIdDecorator(configurationManager))
+			add(UserSsoDataDecorator(configurationManager, gson))
+			add(TenantIdDecorator(configurationManager))
+			add(SiteAreaDecorator(configurationManager))
 			add(DeviceScreenDecorator(context))
 			add(WindowSizeDecorator(context))
 			add(ConsentsDecorator(context))
-			add(ContentUrlDecorator(configurationDelegate))
-			add(StructurePathDecorator(configurationDelegate))
-			add(ReferrerDecorator(configurationDelegate))
+			add(ContentUrlDecorator(configurationManager))
+			add(StructurePathDecorator(configurationManager))
+			add(ReferrerDecorator(configurationManager))
 		}
 
 		Logger.debug("Decorators for event: $decorators")

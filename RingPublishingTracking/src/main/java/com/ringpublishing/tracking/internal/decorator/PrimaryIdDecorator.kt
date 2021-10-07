@@ -9,7 +9,7 @@ package com.ringpublishing.tracking.internal.decorator
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 
-internal open class PrimaryIdDecorator(private val configurationDelegate: ConfigurationManager) : BaseDecorator()
+internal open class PrimaryIdDecorator(private val configurationManager: ConfigurationManager) : BaseDecorator()
 {
 
 	override fun decorate(event: Event)
@@ -19,12 +19,12 @@ internal open class PrimaryIdDecorator(private val configurationDelegate: Config
 
 	private fun getPrimaryId(): String
 	{
-		var primaryId = configurationDelegate.primaryId
+		var primaryId = configurationManager.primaryId
 
 		if (primaryId == null)
 		{
 			primaryId = parameterGenerator.generatePrimaryId()
-			configurationDelegate.primaryId = primaryId
+			configurationManager.primaryId = primaryId
 		}
 		return primaryId
 	}

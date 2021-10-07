@@ -23,7 +23,7 @@ import java.net.URL
 fun RingPublishingTracking.reportClick(selectedElementName: String?)
 {
 	// todo: Implement
-	// reportDelegate.reportClick(selectedElementName)
+	// eventReporter.reportClick(selectedElementName)
 }
 
 /**
@@ -40,7 +40,7 @@ fun RingPublishingTracking.reportClick(selectedElementName: String?)
 fun RingPublishingTracking.reportContentClick(selectedElementName: String, publicationUrl: URL)
 {
 	// todo: Implement
-	// reportDelegate.reportClick(selectedElementName)
+	// eventReporter.reportClick(selectedElementName)
 }
 
 /**
@@ -55,7 +55,7 @@ fun RingPublishingTracking.reportContentClick(selectedElementName: String, publi
 fun RingPublishingTracking.reportUserAction(actionName: String, actionSubtypeName: String, parameters: Map<String, Any>)
 {
 	// todo: Implement
-	// reportDelegate.reportUserAction(actionName, actionSubtypeName, parameters)
+	// eventReporter.reportUserAction(actionName, actionSubtypeName, parameters)
 }
 
 /**
@@ -70,7 +70,7 @@ fun RingPublishingTracking.reportUserAction(actionName: String, actionSubtypeNam
 fun RingPublishingTracking.reportUserAction(actionName: String, actionSubtypeName: String, parameters: String)
 {
 	// todo: Implement
-	// reportDelegate.reportUserAction(actionName, actionSubtypeName, parameters)
+	// eventReporter.reportUserAction(actionName, actionSubtypeName, parameters)
 }
 
 /**

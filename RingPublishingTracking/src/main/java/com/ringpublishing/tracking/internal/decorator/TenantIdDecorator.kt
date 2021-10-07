@@ -9,11 +9,11 @@ package com.ringpublishing.tracking.internal.decorator
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 
-internal class TenantIdDecorator(private val configurationDelegate: ConfigurationManager) : BaseDecorator()
+internal class TenantIdDecorator(private val configurationManager: ConfigurationManager) : BaseDecorator()
 {
 
 	override fun decorate(event: Event)
 	{
-		event.add(EventParam.TENANT_ID, configurationDelegate.getTenantId())
+		event.add(EventParam.TENANT_ID, configurationManager.getTenantId())
 	}
 }

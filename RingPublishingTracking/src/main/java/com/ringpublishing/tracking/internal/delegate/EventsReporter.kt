@@ -15,7 +15,7 @@ internal class EventsReporter(
 	private val eventsService: EventsService,
 	private val ringPublishingTrackingDelegate: RingPublishingTrackingDelegate?,
 	private val eventDecorator: EventDecorator,
-	private val configurationDelegate: ConfigurationManager,
+	private val configurationManager: ConfigurationManager,
 )
 {
 
@@ -51,12 +51,12 @@ internal class EventsReporter(
 	{
 		Logger.debug("App report PageView event currentStructurePath=$currentStructurePath partialReload=$partiallyReloaded")
 
-		configurationDelegate.updateCurrentStructurePath(currentStructurePath)
-		configurationDelegate.currentIsPartialView = partiallyReloaded
+		configurationManager.updateCurrentStructurePath(currentStructurePath)
+		configurationManager.currentIsPartialView = partiallyReloaded
 
 		if (partiallyReloaded)
 		{
-			configurationDelegate.newSecondaryId()
+			configurationManager.newSecondaryId()
 		}
 
 		// todo: should be eventDefaultAnalyticsSystemName ?
@@ -82,11 +82,11 @@ internal class EventsReporter(
 				"partialReload=$partiallyReloaded " +
 				"contentKeepAliveDataSource=$contentKeepAliveDataSource")
 
-		configurationDelegate.updateCurrentPublicationUrl(contentMetadata.publicationUrl)
-		configurationDelegate.updateCurrentStructurePath(currentStructurePath)
-		configurationDelegate.currentIsPartialView = partiallyReloaded
+		configurationManager.updateCurrentPublicationUrl(contentMetadata.publicationUrl)
+		configurationManager.updateCurrentStructurePath(currentStructurePath)
+		configurationManager.currentIsPartialView = partiallyReloaded
 
-		if (partiallyReloaded) configurationDelegate.newSecondaryId() else configurationDelegate.newPrimaryId()
+		if (partiallyReloaded) configurationManager.newSecondaryId() else configurationManager.newPrimaryId()
 
 		val event = Event(contentMetadata.sourceSystemName, EventName.CONTENT_PAGE_VIEW.text)
 		// todo: append parameters to this event

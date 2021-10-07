@@ -9,12 +9,12 @@ package com.ringpublishing.tracking.internal.decorator
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 
-internal class ContentUrlDecorator(private val configurationDelegate: ConfigurationManager) : BaseDecorator()
+internal class ContentUrlDecorator(private val configurationManager: ConfigurationManager) : BaseDecorator()
 {
 
-	private val applicationRootPath get() = configurationDelegate.ringPublishingTrackingConfiguration.applicationRootPath
+	private val applicationRootPath get() = configurationManager.ringPublishingTrackingConfiguration.applicationRootPath
 
-	private val structurePath get() = configurationDelegate.getStructurePath()
+	private val structurePath get() = configurationManager.getStructurePath()
 
 	override fun decorate(event: Event)
 	{
@@ -23,7 +23,7 @@ internal class ContentUrlDecorator(private val configurationDelegate: Configurat
 
 	private fun buildContentUrlDU(): String
 	{
-		val url = configurationDelegate.currentPublicationUrl?.toString()
+		val url = configurationManager.currentPublicationUrl?.toString()
 		return if (!url.isNullOrEmpty()) url else parameterGenerator.buildRootUrl(applicationRootPath, structurePath)
 	}
 }

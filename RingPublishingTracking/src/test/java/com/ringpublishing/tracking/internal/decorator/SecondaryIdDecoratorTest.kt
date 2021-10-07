@@ -27,9 +27,9 @@ class SecondaryIdDecoratorTest
 	@Test
 	fun decorate_WhenSecondaryIdIsNotSet_ThenUseValueFromPrimaryId()
 	{
-		val configurationDelegate = ConfigurationManager()
-		configurationDelegate.primaryId = "100"
-		val secondaryIdDecorator = SecondaryIdDecorator(configurationDelegate)
+		val configurationManager = ConfigurationManager()
+		configurationManager.primaryId = "100"
+		val secondaryIdDecorator = SecondaryIdDecorator(configurationManager)
 
 		val event = Event("", "")
 		secondaryIdDecorator.decorate(event)
@@ -43,11 +43,11 @@ class SecondaryIdDecoratorTest
 	@Test
 	fun decorate_WhenPrimaryIdIsSetAndFullView_ThenResultSameLikePrimaryId()
 	{
-		val configurationDelegate = ConfigurationManager()
-		configurationDelegate.primaryId = "100"
-		configurationDelegate.secondaryId = null
-		configurationDelegate.currentIsPartialView = false
-		val secondaryIdDecorator = SecondaryIdDecorator(configurationDelegate)
+		val configurationManager = ConfigurationManager()
+		configurationManager.primaryId = "100"
+		configurationManager.secondaryId = null
+		configurationManager.currentIsPartialView = false
+		val secondaryIdDecorator = SecondaryIdDecorator(configurationManager)
 
 		val event = Event("", "")
 		secondaryIdDecorator.decorate(event)
@@ -61,11 +61,11 @@ class SecondaryIdDecoratorTest
 	@Test
 	fun decorate_WhenPrimaryIdIsSetAndPartialView_ThenResultHaveNewValue()
 	{
-		val configurationDelegate = ConfigurationManager()
-		configurationDelegate.primaryId = "100"
-		configurationDelegate.secondaryId = null
-		configurationDelegate.currentIsPartialView = true
-		val secondaryIdDecorator = SecondaryIdDecorator(configurationDelegate)
+		val configurationManager = ConfigurationManager()
+		configurationManager.primaryId = "100"
+		configurationManager.secondaryId = null
+		configurationManager.currentIsPartialView = true
+		val secondaryIdDecorator = SecondaryIdDecorator(configurationManager)
 
 		val event = Event("", "")
 		secondaryIdDecorator.decorate(event)

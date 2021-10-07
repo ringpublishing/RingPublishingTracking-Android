@@ -27,15 +27,15 @@ internal fun Component.provideEventsServiceTimer() = eventsServiceTimer
 
 private var eventsService: EventsService? = null
 
-internal fun Component.provideEventsService(configurationDelegate: ConfigurationManager): EventsService
+internal fun Component.provideEventsService(configurationManager: ConfigurationManager): EventsService
 {
 	if (eventsService == null)
 	{
 		eventsService = EventsService(
-			Component.provideApiService(configurationDelegate.ringPublishingTrackingConfiguration),
+			Component.provideApiService(configurationManager.ringPublishingTrackingConfiguration),
 			Component.provideEventsQueue(),
 			Component.provideEventsServiceTimer(),
-			configurationDelegate
+			configurationManager
 		)
 	}
 
@@ -44,11 +44,11 @@ internal fun Component.provideEventsService(configurationDelegate: Configuration
 
 private var eventDecorator: EventDecorator? = null
 
-internal fun Component.provideEventDecorator(configurationDelegate: ConfigurationManager): EventDecorator
+internal fun Component.provideEventDecorator(configurationManager: ConfigurationManager): EventDecorator
 {
 	if (eventDecorator == null)
 	{
-		eventDecorator = EventDecorator(configurationDelegate, provideContext(), Component.provideGson())
+		eventDecorator = EventDecorator(configurationManager, provideContext(), Component.provideGson())
 	}
 
 	return eventDecorator!!

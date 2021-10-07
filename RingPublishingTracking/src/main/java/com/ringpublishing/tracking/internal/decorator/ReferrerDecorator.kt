@@ -9,9 +9,9 @@ package com.ringpublishing.tracking.internal.decorator
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 
-internal class ReferrerDecorator(private val configurationDelegate: ConfigurationManager) : BaseDecorator()
+internal class ReferrerDecorator(private val configurationManager: ConfigurationManager) : BaseDecorator()
 {
-	private val contentReferrer get() = configurationDelegate.currentReferrer
+	private val contentReferrer get() = configurationManager.currentReferrer
 
 	override fun decorate(event: Event)
 	{

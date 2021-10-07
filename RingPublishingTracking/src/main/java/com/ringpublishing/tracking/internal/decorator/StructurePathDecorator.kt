@@ -10,9 +10,9 @@ import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.constants.Constants
 import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 
-internal class StructurePathDecorator(private val configurationDelegate: ConfigurationManager) : BaseDecorator()
+internal class StructurePathDecorator(private val configurationManager: ConfigurationManager) : BaseDecorator()
 {
-	private val applicationRootPath get() = configurationDelegate.ringPublishingTrackingConfiguration.applicationRootPath
+	private val applicationRootPath get() = configurationManager.ringPublishingTrackingConfiguration.applicationRootPath
 
 	override fun decorate(event: Event)
 	{
@@ -22,6 +22,6 @@ internal class StructurePathDecorator(private val configurationDelegate: Configu
 	private fun buildStructurePathDV(): String
 	{
 		val rootPath = if (applicationRootPath.endsWith("/")) applicationRootPath.removeSuffix("/") else applicationRootPath
-		return configurationDelegate.getStructurePath().joinToString("/", "$rootPath${Constants.defaultRootPathSuffix}/")
+		return configurationManager.getStructurePath().joinToString("/", "$rootPath${Constants.defaultRootPathSuffix}/")
 	}
 }

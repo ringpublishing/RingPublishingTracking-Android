@@ -9,11 +9,11 @@ package com.ringpublishing.tracking.internal.decorator
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 
-internal class SiteAreaDecorator(private val configurationDelegate: ConfigurationManager) : BaseDecorator()
+internal class SiteAreaDecorator(private val configurationManager: ConfigurationManager) : BaseDecorator()
 {
 
 	override fun decorate(event: Event)
 	{
-		event.add(EventParam.SITE_AREA, configurationDelegate.getSiteArea())
+		event.add(EventParam.SITE_AREA, configurationManager.getSiteArea())
 	}
 }

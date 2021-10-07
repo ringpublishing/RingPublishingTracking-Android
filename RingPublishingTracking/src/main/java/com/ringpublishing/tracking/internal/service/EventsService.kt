@@ -19,7 +19,7 @@ internal class EventsService(
     private val apiService: ApiService,
     private val eventsQueue: EventsQueue,
     private val eventsServiceTimer: EventsServiceTimer,
-    private val configurationDelegate: ConfigurationManager
+    private val configurationManager: ConfigurationManager
 ) : EventServiceTimerCallback
 {
 
@@ -30,7 +30,7 @@ internal class EventsService(
 
     fun addEvent(event: Event)
     {
-        if (configurationDelegate.isOptOutModeEnabled())
+        if (configurationManager.isOptOutModeEnabled())
         {
             Logger.info("EventsService: OptOut mode enabled. Ignore new event")
             return
@@ -43,7 +43,7 @@ internal class EventsService(
 
     fun addEvents(events: List<Event>)
     {
-        if (configurationDelegate.isOptOutModeEnabled())
+        if (configurationManager.isOptOutModeEnabled())
         {
             Logger.info("EventsService: OptOut mode enabled. Ignore new events")
             return
