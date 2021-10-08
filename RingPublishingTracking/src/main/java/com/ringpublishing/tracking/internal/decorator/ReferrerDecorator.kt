@@ -15,8 +15,6 @@ internal class ReferrerDecorator(private val configurationManager: Configuration
 
 	override fun decorate(event: Event)
 	{
-		contentReferrer?.let {
-			event.add(EventParam.CONTENT_REFERER, contentReferrer)
-		}
+		contentReferrer?.let { event.add(EventParam.CONTENT_REFERER, contentReferrer) }
 	}
 }

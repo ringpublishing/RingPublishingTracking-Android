@@ -48,7 +48,7 @@ class DeviceScreenDecoratorTest
 
 		val deviceScreenDecorator = DeviceScreenDecorator(context)
 
-		val event = Event("", "")
+		val event = Event()
 		deviceScreenDecorator.decorate(event)
 
 		val result = event.parameters[EventParam.SCREEN_SIZE.paramName] as String?
@@ -67,7 +67,7 @@ class DeviceScreenDecoratorTest
 
 		val deviceScreenDecorator = DeviceScreenDecorator(context)
 
-		val event = Event("", "")
+		val event = Event()
 		deviceScreenDecorator.decorate(event)
 
 		val result = event.parameters[EventParam.SCREEN_SIZE.paramName] as String?

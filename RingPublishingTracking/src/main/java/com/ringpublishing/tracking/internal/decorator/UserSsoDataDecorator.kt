@@ -15,18 +15,19 @@ import java.io.UnsupportedEncodingException
 
 internal class UserSsoDataDecorator(private val configurationManager: ConfigurationManager, private val gson: Gson) : BaseDecorator()
 {
-	private val userId get() = configurationManager.getUserData().userId
-	private val ssoName get() = configurationManager.getUserData().ssoName ?: ""
 
 	override fun decorate(event: Event)
 	{
+		val userId = configurationManager.getUserData().userId
+		val ssoName = configurationManager.getUserData().ssoName ?: ""
+
 		if (userId.isNullOrEmpty()) return
 
-		val encodedUserData = encodeUserSsoData(userId, ssoName)
+		val encodedUserData = encodeUserData(userId, ssoName)
 		encodedUserData?.let { event.add(EventParam.USER_SSO_DATA, it) }
 	}
 
-	private fun encodeUserSsoData(userId: String?, ssoName: String): String?
+	private fun encodeUserData(userId: String, ssoName: String): String?
 	{
 		val jsonUser = gson.toJson(User(Sso(Logged(userId)), ssoName))
 

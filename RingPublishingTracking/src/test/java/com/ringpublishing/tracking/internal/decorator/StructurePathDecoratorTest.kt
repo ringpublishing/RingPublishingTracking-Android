@@ -32,7 +32,7 @@ class StructurePathDecoratorTest
 
 		val decorator = StructurePathDecorator(configurationManager)
 
-		val event = Event("", "")
+		val event = Event()
 
 		decorator.decorate(event)
 
@@ -55,7 +55,7 @@ class StructurePathDecoratorTest
 		)
 		val decorator = StructurePathDecorator(configurationManager)
 
-		val event = Event("", "")
+		val event = Event()
 
 		decorator.decorate(event)
 
@@ -78,7 +78,7 @@ class StructurePathDecoratorTest
 		)
 		val decorator = StructurePathDecorator(configurationManager)
 
-		val event = Event("", "")
+		val event = Event()
 
 		decorator.decorate(event)
 

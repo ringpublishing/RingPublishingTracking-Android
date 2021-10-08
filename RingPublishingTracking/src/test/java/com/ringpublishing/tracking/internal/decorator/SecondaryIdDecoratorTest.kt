@@ -31,7 +31,7 @@ class SecondaryIdDecoratorTest
 		configurationManager.primaryId = "100"
 		val secondaryIdDecorator = SecondaryIdDecorator(configurationManager)
 
-		val event = Event("", "")
+		val event = Event()
 		secondaryIdDecorator.decorate(event)
 
 		val result = event.parameters[EventParam.SECONDARY_ID.paramName] as String?
@@ -49,7 +49,7 @@ class SecondaryIdDecoratorTest
 		configurationManager.currentIsPartialView = false
 		val secondaryIdDecorator = SecondaryIdDecorator(configurationManager)
 
-		val event = Event("", "")
+		val event = Event()
 		secondaryIdDecorator.decorate(event)
 
 		val result = event.parameters[EventParam.SECONDARY_ID.paramName] as String?
@@ -67,7 +67,7 @@ class SecondaryIdDecoratorTest
 		configurationManager.currentIsPartialView = true
 		val secondaryIdDecorator = SecondaryIdDecorator(configurationManager)
 
-		val event = Event("", "")
+		val event = Event()
 		secondaryIdDecorator.decorate(event)
 
 		val result = event.parameters[EventParam.SECONDARY_ID.paramName] as String?

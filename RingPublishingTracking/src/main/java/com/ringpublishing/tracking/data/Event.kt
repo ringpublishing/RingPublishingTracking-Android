@@ -5,8 +5,10 @@
  */
 package com.ringpublishing.tracking.data
 
+import com.ringpublishing.tracking.internal.constants.Constants
+
 data class Event(
-    val analyticsSystemName: String,
-    val name: String,
+    val analyticsSystemName: String = Constants.eventDefaultAnalyticsSystemName,
+    val name: String = Constants.eventDefaultName,
     val parameters: MutableMap<String, Any> = mutableMapOf(),
 )

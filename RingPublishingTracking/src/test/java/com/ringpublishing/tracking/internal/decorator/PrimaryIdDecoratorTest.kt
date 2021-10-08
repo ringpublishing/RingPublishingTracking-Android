@@ -29,7 +29,7 @@ class PrimaryIdDecoratorTest
 	{
 		val primaryIdDecorator = PrimaryIdDecorator(ConfigurationManager())
 
-		val event = Event("", "")
+		val event = Event()
 		primaryIdDecorator.decorate(event)
 
 		val result = event.parameters[EventParam.PRIMARY_ID.paramName] as String?
@@ -45,7 +45,7 @@ class PrimaryIdDecoratorTest
 
 		val primaryIdDecorator = PrimaryIdDecorator(configurationManager)
 
-		val event = Event("", "")
+		val event = Event()
 		primaryIdDecorator.decorate(event)
 
 		val result = event.parameters[EventParam.PRIMARY_ID.paramName] as String?
@@ -64,7 +64,7 @@ class PrimaryIdDecoratorTest
 
 		configurationManager.newPrimaryId()
 
-		val event = Event("", "")
+		val event = Event()
 		primaryIdDecorator.decorate(event)
 
 		val result = event.parameters[EventParam.PRIMARY_ID.paramName] as String?

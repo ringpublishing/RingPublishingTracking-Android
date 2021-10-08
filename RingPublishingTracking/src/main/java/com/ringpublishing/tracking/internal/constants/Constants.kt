@@ -13,6 +13,7 @@ internal object Constants
     const val maxRequestBodySize = 1048576L // 1 MB
     const val maxRequestBodySizeBuffer = 5120L // 5KB
 
+	const val eventDefaultName = "Event"
     const val eventDefaultAnalyticsSystemName = "_GENERIC"
 
     const val defaultRootPathSuffix = ".app.android"

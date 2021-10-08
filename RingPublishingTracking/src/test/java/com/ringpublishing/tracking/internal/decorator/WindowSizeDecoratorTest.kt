@@ -54,7 +54,7 @@ class WindowSizeDecoratorTest
 
 		val decorator = WindowSizeDecorator(context)
 
-		val event = Event("", "")
+		val event = Event()
 		decorator.decorate(event)
 
 		val result = event.parameters[EventParam.WINDOW_SIZE.paramName] as String?

@@ -40,7 +40,7 @@ class ContentUrlDecoratorTest
 		)
 		val contentUrlDecorator = ContentUrlDecorator(configurationManager)
 
-		val event = Event("", "")
+		val event = Event()
 		contentUrlDecorator.decorate(event)
 
 		val result = event.parameters[EventParam.CONTENT_URL.paramName] as String?
@@ -63,7 +63,7 @@ class ContentUrlDecoratorTest
 		)
 		val contentUrlDecorator = ContentUrlDecorator(configurationManager)
 
-		val event = Event("", "")
+		val event = Event()
 		contentUrlDecorator.decorate(event)
 
 		val result = event.parameters[EventParam.CONTENT_URL.paramName] as String?
@@ -86,7 +86,7 @@ class ContentUrlDecoratorTest
 		)
 		val contentUrlDecorator = ContentUrlDecorator(configurationManager)
 
-		val event = Event("", "")
+		val event = Event()
 		contentUrlDecorator.decorate(event)
 
 		val result = event.parameters[EventParam.CONTENT_URL.paramName] as String?
@@ -111,7 +111,7 @@ class ContentUrlDecoratorTest
 
 		val contentUrlDecorator = ContentUrlDecorator(configurationManager)
 
-		val event = Event("", "")
+		val event = Event()
 		contentUrlDecorator.decorate(event)
 
 		val result = event.parameters[EventParam.CONTENT_URL.paramName] as String?

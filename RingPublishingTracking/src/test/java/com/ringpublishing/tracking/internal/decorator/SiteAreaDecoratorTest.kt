@@ -23,7 +23,7 @@ class SiteAreaDecoratorTest
 		configurationManager.updateAdvertisementArea("area")
 		val decorator = SiteAreaDecorator(configurationManager)
 
-		val event = Event("", "")
+		val event = Event()
 		decorator.decorate(event)
 
 		val result = event.parameters[EventParam.SITE_AREA.paramName] as String?
@@ -46,7 +46,7 @@ class SiteAreaDecoratorTest
 
 		val decorator = SiteAreaDecorator(configurationManager)
 
-		val event = Event("", "")
+		val event = Event()
 		decorator.decorate(event)
 
 		val result = event.parameters[EventParam.SITE_AREA.paramName] as String?
@@ -70,7 +70,7 @@ class SiteAreaDecoratorTest
 
 		val decorator = SiteAreaDecorator(configurationManager)
 
-		val event = Event("", "")
+		val event = Event()
 		decorator.decorate(event)
 
 		val result = event.parameters[EventParam.SITE_AREA.paramName] as String?

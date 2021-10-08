@@ -26,7 +26,7 @@ class UserSsoDataDecoratorTest
 		val gson = GsonBuilder().create()
 		val userSsoDataDecorator = UserSsoDataDecorator(configurationManager, gson)
 
-		val event = Event("", "")
+		val event = Event()
 		userSsoDataDecorator.decorate(event)
 
 		val result = event.parameters[EventParam.USER_SSO_DATA.paramName] as String?
