@@ -1,3 +1,9 @@
 formatting:
   MaximumLineLength:
     maxLineLength: 180
+  SpacingAroundKeyword:
+      active: false
+      autoCorrect: false
+  NoLineBreakAfterElse:
+      active: false
+      autoCorrect: false

@@ -6,13 +6,13 @@
 
 package com.ringpublishing.tracking.internal.decorator
 
-import android.content.Context
+import android.app.Application
 import com.google.gson.Gson
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 import com.ringpublishing.tracking.internal.log.Logger
 
-internal class EventDecorator(configurationManager: ConfigurationManager, context: Context, gson: Gson)
+internal class EventDecorator(configurationManager: ConfigurationManager, application: Application, gson: Gson)
 {
 	private val decorators = mutableListOf<Decorator>()
 
@@ -25,9 +25,9 @@ internal class EventDecorator(configurationManager: ConfigurationManager, contex
 			add(UserSsoDataDecorator(configurationManager, gson))
 			add(TenantIdDecorator(configurationManager))
 			add(SiteAreaDecorator(configurationManager))
-			add(DeviceScreenDecorator(context))
-			add(WindowSizeDecorator(context))
-			add(ConsentsDecorator(context))
+			add(DeviceScreenDecorator(application))
+			add(WindowSizeDecorator(application))
+			add(ConsentsDecorator(application))
 			add(ContentUrlDecorator(configurationManager))
 			add(StructurePathDecorator(configurationManager))
 			add(ReferrerDecorator(configurationManager))

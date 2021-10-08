@@ -5,7 +5,7 @@
  */
 package com.ringpublishing.tracking
 
-import android.content.Context
+import android.app.Application
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingDelegate
@@ -51,12 +51,12 @@ object RingPublishingTracking
 	 * Initialize all needed parameters needed to report events.
 	 * Should be called once in main point of application.
 	 *
-	 * @param context is Application context
+	 * @param application is Android Application
 	 * @param ringPublishingTrackingConfiguration is tenant for this application
 	 */
-	fun initialize(context: Context, ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration, ringPublishingTrackingDelegate: RingPublishingTrackingDelegate?)
+	fun initialize(application: Application, ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration, ringPublishingTrackingDelegate: RingPublishingTrackingDelegate?)
 	{
-		Component.initComponent(context)
+		Component.initComponent(application)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		eventsReporter = EventsReporter(Component.provideEventsService(configurationManager), Component.provideEventDecorator(configurationManager), configurationManager)
 	}

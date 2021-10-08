@@ -6,7 +6,7 @@
 
 package com.ringpublishing.tracking.internal.decorator
 
-import android.content.Context
+import android.app.Application
 import android.content.res.Resources
 import android.util.DisplayMetrics
 import android.view.WindowManager
@@ -23,7 +23,7 @@ class WindowSizeDecoratorTest
 {
 
 	@MockK
-	lateinit var context: Context
+	lateinit var context: Application
 
 	@MockK
 	lateinit var resources: Resources

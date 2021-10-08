@@ -1,6 +1,6 @@
 package com.ringpublishing.tracking
 
-import android.content.Context
+import android.app.Application
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -21,7 +21,7 @@ class RingPublishingTrackingTest
 {
 
 	@MockK
-	lateinit var context: Context
+	lateinit var context: Application
 
 	@MockK
 	lateinit var resources: Resources
