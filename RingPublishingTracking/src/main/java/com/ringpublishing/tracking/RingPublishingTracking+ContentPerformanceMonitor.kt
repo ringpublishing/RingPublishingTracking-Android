@@ -8,9 +8,6 @@ package com.ringpublishing.tracking
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.ContentPageViewSource
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingKeepAliveDataSource
-import com.ringpublishing.tracking.internal.data.EventName
-import com.ringpublishing.tracking.internal.delegate.updateContentPageViewConfiguration
-import com.ringpublishing.tracking.internal.delegate.updatePageViewConfiguration
 import java.net.URL
 
 /**
@@ -26,7 +23,6 @@ import java.net.URL
 fun RingPublishingTracking.reportClick(selectedElementName: String?)
 {
 	// todo: Implement
-	// eventReporter.reportClick(selectedElementName)
 }
 
 /**
@@ -43,7 +39,6 @@ fun RingPublishingTracking.reportClick(selectedElementName: String?)
 fun RingPublishingTracking.reportContentClick(selectedElementName: String, publicationUrl: URL)
 {
 	// todo: Implement
-	// eventReporter.reportClick(selectedElementName)
 }
 
 /**
@@ -58,7 +53,6 @@ fun RingPublishingTracking.reportContentClick(selectedElementName: String, publi
 fun RingPublishingTracking.reportUserAction(actionName: String, actionSubtypeName: String, parameters: Map<String, Any>)
 {
 	// todo: Implement
-	// eventReporter.reportUserAction(actionName, actionSubtypeName, parameters)
 }
 
 /**
@@ -73,7 +67,6 @@ fun RingPublishingTracking.reportUserAction(actionName: String, actionSubtypeNam
 fun RingPublishingTracking.reportUserAction(actionName: String, actionSubtypeName: String, parameters: String)
 {
 	// todo: Implement
-	// eventReporter.reportUserAction(actionName, actionSubtypeName, parameters)
 }
 
 /**
@@ -92,10 +85,16 @@ fun RingPublishingTracking.reportUserAction(actionName: String, actionSubtypeNam
 @Suppress("unused", "unused_parameter")
 fun RingPublishingTracking.reportPageView(currentStructurePath: List<String>, partiallyReloaded: Boolean)
 {
-	configurationManager.updatePageViewConfiguration(currentStructurePath, partiallyReloaded)
+	with(eventsReporter)
+	{
+		updatePartiallyReloaded(partiallyReloaded)
+		updateStructurePath(currentStructurePath)
 
-	val event = userEventsFactory.create(EventName.PAGE_VIEW)
-	eventsReporter.reportEvent(event)
+		if (partiallyReloaded)
+		{
+			newSecondaryId()
+		}
+	}
 }
 
 /**
@@ -124,10 +123,14 @@ fun RingPublishingTracking.reportContentPageView(
     contentKeepAliveDataSource: RingPublishingTrackingKeepAliveDataSource,
 )
 {
-	configurationManager.updateContentPageViewConfiguration(contentMetadata, currentStructurePath, partiallyReloaded)
+	with(eventsReporter)
+	{
+		updatePartiallyReloaded(partiallyReloaded)
+		updateStructurePath(currentStructurePath)
+		updatePublicationUrl(contentMetadata.publicationUrl)
 
-	val event = userEventsFactory.create(EventName.CONTENT_PAGE_VIEW)
- 	eventsReporter.reportEvent(event)
+		if (partiallyReloaded) newSecondaryId() else newPrimaryId()
+	}
 }
 
 /**
