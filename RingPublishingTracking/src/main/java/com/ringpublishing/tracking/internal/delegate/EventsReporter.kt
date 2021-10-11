@@ -34,6 +34,7 @@ internal class EventsReporter(private val eventsService: EventsService, private 
 
 	fun updatePublicationUrl(publicationUrl: URL)
 	{
+		configurationManager.updateReferrer()
 		configurationManager.currentPublicationUrl = publicationUrl
 	}
 

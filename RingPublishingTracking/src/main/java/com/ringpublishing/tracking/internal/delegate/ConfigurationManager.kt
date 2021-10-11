@@ -32,6 +32,8 @@ internal class ConfigurationManager
 	fun initializeConfiguration(ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration)
 	{
 		this.ringPublishingTrackingConfiguration = ringPublishingTrackingConfiguration
+		currentAdvertisementArea = ringPublishingTrackingConfiguration.applicationDefaultAdvertisementArea
+		currentStructurePath = ringPublishingTrackingConfiguration.applicationDefaultStructurePath.toMutableList()
 		Logger.debug("Initialize configuration $ringPublishingTrackingConfiguration")
 	}
 
@@ -71,17 +73,11 @@ internal class ConfigurationManager
 
 	fun getTenantId() = ringPublishingTrackingConfiguration.tenantId
 
-	fun getSiteArea() = if (currentAdvertisementArea.isNullOrEmpty()) ringPublishingTrackingConfiguration.applicationDefaultAdvertisementArea else currentAdvertisementArea
+	fun getSiteArea() = currentAdvertisementArea
 
-	fun getStructurePath() = if (currentStructurePath.isEmpty()) ringPublishingTrackingConfiguration.applicationDefaultStructurePath else currentStructurePath
+	fun getStructurePath() = currentStructurePath
 
-	fun updateCurrentPublicationUrl(publicationUrl: URL)
-	{
-		updateReferrer()
-		currentPublicationUrl = publicationUrl
-	}
-
-	private fun updateReferrer()
+	internal fun updateReferrer()
 	{
 		currentReferrer = currentPublicationUrl
 	}

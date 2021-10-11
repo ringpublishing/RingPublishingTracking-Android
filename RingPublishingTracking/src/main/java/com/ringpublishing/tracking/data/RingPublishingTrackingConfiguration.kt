@@ -5,6 +5,7 @@
  */
 package com.ringpublishing.tracking.data
 
+import com.ringpublishing.tracking.internal.constants.Constants
 import java.net.URL
 
 /**
@@ -23,6 +24,6 @@ data class RingPublishingTrackingConfiguration(
     val apiKey: String,
     val apiUrl: URL? = null,
     val applicationRootPath: String,
-    val applicationDefaultStructurePath: List<String>,
-    val applicationDefaultAdvertisementArea: String,
+    val applicationDefaultStructurePath: List<String> = Constants.applicationDefaultStructurePath,
+    val applicationDefaultAdvertisementArea: String = Constants.applicationDefaultAdvertisementArea,
 )

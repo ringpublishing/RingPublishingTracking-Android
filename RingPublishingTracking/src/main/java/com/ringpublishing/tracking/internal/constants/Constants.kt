@@ -18,6 +18,9 @@ internal object Constants
 
     const val defaultRootPathSuffix = ".app.android"
 
+	const val applicationDefaultAdvertisementArea = "undefined"
+	val applicationDefaultStructurePath = listOf("undefined")
+
 	const val consentStringPreferenceName = "IABTCF_TCString"
 	const val mobileDepth = 24
 }
