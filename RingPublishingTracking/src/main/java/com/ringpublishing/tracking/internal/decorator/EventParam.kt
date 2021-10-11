@@ -18,5 +18,7 @@ enum class EventParam(val paramName: String)
 	PUBLICATION_STRUCTURE_PATH("DV"),
 	SCREEN_SIZE("CS"),
 	WINDOW_SIZE("CV"),
-	CONSENT("_adpc")
+	CONSENT("_adpc"),
+	SELECTED_ELEMENT_NAME("VE"),
+	TARGET_URL("VU")
 }
