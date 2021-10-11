@@ -6,14 +6,13 @@
 
 package com.ringpublishing.tracking.internal.decorator
 
-import com.ringpublishing.tracking.internal.constants.Constants
 import java.util.Calendar
 import java.util.Random
 
-internal class ParameterGenerator
+internal class IdGenerator
 {
 
-	fun generatePrimaryId(): String
+	fun newId(): String
 	{
 		with(Calendar.getInstance())
 		{
@@ -27,22 +26,5 @@ internal class ParameterGenerator
 			iv += ("" + ((1 + Random().nextInt()) * 10000000)).substring(0, 8).toLong()
 			return iv.toString()
 		}
-	}
-
-	fun buildRootUrl(applicationRootPath: String, applicationStructurePath: List<String>): String
-	{
-		var path = applicationRootPath.lowercase()
-
-		if (!path.startsWith("http"))
-		{
-			path = "https://$path"
-		}
-
-		if (path.endsWith("/"))
-		{
-			path = path.substringBeforeLast("/")
-		}
-
-		return applicationStructurePath.joinToString("/", "${path}${Constants.defaultRootPathSuffix}/")
 	}
 }

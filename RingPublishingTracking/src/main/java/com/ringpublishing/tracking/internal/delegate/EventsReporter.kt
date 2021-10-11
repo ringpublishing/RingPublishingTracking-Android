@@ -4,9 +4,8 @@ import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.decorator.EventDecorator
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.service.EventsService
-import java.net.URL
 
-internal class EventsReporter(private val eventsService: EventsService, private val eventDecorator: EventDecorator, private val configurationManager: ConfigurationManager)
+internal class EventsReporter(private val eventsService: EventsService, private val eventDecorator: EventDecorator)
 {
 
 	fun reportEvent(event: Event)
@@ -20,31 +19,5 @@ internal class EventsReporter(private val eventsService: EventsService, private 
 	{
 		Logger.debug("App reported events $events")
 		eventsService.addEvents(events.map { eventDecorator.decorate(it) })
-	}
-
-	fun updatePartiallyReloaded(partiallyReloaded: Boolean)
-	{
-		configurationManager.currentIsPartialView = partiallyReloaded
-	}
-
-	fun updateStructurePath(currentStructurePath: List<String>)
-	{
-		configurationManager.updateCurrentStructurePath(currentStructurePath)
-	}
-
-	fun updatePublicationUrl(publicationUrl: URL)
-	{
-		configurationManager.updateReferrer()
-		configurationManager.currentPublicationUrl = publicationUrl
-	}
-
-	fun newSecondaryId()
-	{
-		configurationManager.newSecondaryId()
-	}
-
-	fun newPrimaryId()
-	{
-		configurationManager.newPrimaryId()
 	}
 }

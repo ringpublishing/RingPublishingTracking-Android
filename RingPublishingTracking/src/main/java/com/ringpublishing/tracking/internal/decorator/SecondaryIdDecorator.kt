@@ -14,17 +14,6 @@ internal class SecondaryIdDecorator(private val configuration: ConfigurationMana
 
 	override fun decorate(event: Event)
 	{
-		event.add(EventParam.SECONDARY_ID, getSecondaryId())
-	}
-
-	private fun getSecondaryId(): String
-	{
-		with(configuration)
-		{
-			val generateNew = secondaryId == null && currentIsPartialView
-			val newId = if (generateNew) parameterGenerator.generatePrimaryId() else primaryId ?: parameterGenerator.generatePrimaryId()
-			secondaryId = newId
-			return newId
-		}
+		event.add(EventParam.SECONDARY_ID, configuration.secondaryId)
 	}
 }

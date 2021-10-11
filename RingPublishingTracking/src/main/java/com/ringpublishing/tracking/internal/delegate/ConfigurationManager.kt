@@ -3,6 +3,7 @@ package com.ringpublishing.tracking.internal.delegate
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.internal.config.OperationMode
 import com.ringpublishing.tracking.internal.data.UserData
+import com.ringpublishing.tracking.internal.decorator.IdGenerator
 import com.ringpublishing.tracking.internal.log.Logger
 import java.net.URL
 
@@ -11,6 +12,8 @@ internal class ConfigurationManager
 
 	internal lateinit var ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration
 		private set
+
+	private val idGenerator = IdGenerator()
 
 	private val operationMode = OperationMode()
 
@@ -35,6 +38,7 @@ internal class ConfigurationManager
 		this.ringPublishingTrackingConfiguration = ringPublishingTrackingConfiguration
 		currentAdvertisementArea = ringPublishingTrackingConfiguration.applicationDefaultAdvertisementArea
 		currentStructurePath = ringPublishingTrackingConfiguration.applicationDefaultStructurePath.toMutableList()
+		newPrimaryId()
 		Logger.debug("Initialize configuration $ringPublishingTrackingConfiguration")
 	}
 
@@ -78,19 +82,36 @@ internal class ConfigurationManager
 
 	fun getStructurePath() = currentStructurePath
 
-	internal fun updateReferrer()
+	private fun updateReferrer()
 	{
 		currentReferrer = currentPublicationUrl
 	}
 
-	fun newPrimaryId()
+	private fun newPrimaryId()
 	{
-		primaryId = null
-		secondaryId = null
+		primaryId = idGenerator.newId()
+		secondaryId = primaryId
 	}
 
-	fun newSecondaryId()
+	private fun newSecondaryId()
 	{
-		secondaryId = null
+		secondaryId = idGenerator.newId()
+	}
+
+	fun updatePartiallyReloaded(partiallyReloaded: Boolean)
+	{
+		currentIsPartialView = partiallyReloaded
+		if (partiallyReloaded) newSecondaryId() else newPrimaryId()
+	}
+
+	fun updateStructurePath(currentStructurePath: List<String>)
+	{
+		updateCurrentStructurePath(currentStructurePath)
+	}
+
+	fun updatePublicationUrl(publicationUrl: URL)
+	{
+		updateReferrer()
+		currentPublicationUrl = publicationUrl
 	}
 }

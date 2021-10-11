@@ -58,7 +58,7 @@ object RingPublishingTracking
 	{
 		Component.initComponent(application)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
-		eventsReporter = EventsReporter(Component.provideEventsService(configurationManager), Component.provideEventDecorator(configurationManager), configurationManager)
+		eventsReporter = EventsReporter(Component.provideEventsService(configurationManager), Component.provideEventDecorator(configurationManager))
 	}
 
 	/**

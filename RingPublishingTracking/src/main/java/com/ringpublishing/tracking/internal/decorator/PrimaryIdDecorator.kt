@@ -14,18 +14,6 @@ internal open class PrimaryIdDecorator(private val configurationManager: Configu
 
 	override fun decorate(event: Event)
 	{
-		event.add(EventParam.PRIMARY_ID, getPrimaryId())
-	}
-
-	private fun getPrimaryId(): String
-	{
-		var primaryId = configurationManager.primaryId
-
-		if (primaryId == null)
-		{
-			primaryId = parameterGenerator.generatePrimaryId()
-			configurationManager.primaryId = primaryId
-		}
-		return primaryId
+		event.add(EventParam.PRIMARY_ID, configurationManager.primaryId)
 	}
 }

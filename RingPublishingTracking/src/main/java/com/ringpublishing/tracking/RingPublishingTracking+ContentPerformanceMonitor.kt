@@ -85,15 +85,10 @@ fun RingPublishingTracking.reportUserAction(actionName: String, actionSubtypeNam
 @Suppress("unused", "unused_parameter")
 fun RingPublishingTracking.reportPageView(currentStructurePath: List<String>, partiallyReloaded: Boolean)
 {
-	with(eventsReporter)
+	with(configurationManager)
 	{
-		updatePartiallyReloaded(partiallyReloaded)
 		updateStructurePath(currentStructurePath)
-
-		if (partiallyReloaded)
-		{
-			newSecondaryId()
-		}
+		updatePartiallyReloaded(partiallyReloaded)
 	}
 }
 
@@ -123,13 +118,11 @@ fun RingPublishingTracking.reportContentPageView(
     contentKeepAliveDataSource: RingPublishingTrackingKeepAliveDataSource,
 )
 {
-	with(eventsReporter)
+	with(configurationManager)
 	{
-		updatePartiallyReloaded(partiallyReloaded)
-		updateStructurePath(currentStructurePath)
 		updatePublicationUrl(contentMetadata.publicationUrl)
-
-		if (partiallyReloaded) newSecondaryId() else newPrimaryId()
+		updateStructurePath(currentStructurePath)
+		updatePartiallyReloaded(partiallyReloaded)
 	}
 }
 

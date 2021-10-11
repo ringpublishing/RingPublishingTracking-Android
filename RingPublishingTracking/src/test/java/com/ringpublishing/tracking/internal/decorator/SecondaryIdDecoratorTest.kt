@@ -7,12 +7,14 @@
 package com.ringpublishing.tracking.internal.decorator
 
 import com.ringpublishing.tracking.data.Event
+import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 import com.ringpublishing.tracking.internal.log.Logger
 import io.mockk.MockKAnnotations
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import java.net.URL
 
 class SecondaryIdDecoratorTest
 {
@@ -25,55 +27,69 @@ class SecondaryIdDecoratorTest
 	}
 
 	@Test
-	fun decorate_WhenSecondaryIdIsNotSet_ThenUseValueFromPrimaryId()
+	fun decorate_WhenSecondaryIdIsNotUpdated_ThenUseValueFromPrimaryId()
 	{
 		val configurationManager = ConfigurationManager()
-		configurationManager.primaryId = "100"
+		val ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+			"",
+			"",
+			URL("https://domain.com"),
+			"rootPath",
+		)
+		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		val secondaryIdDecorator = SecondaryIdDecorator(configurationManager)
-
 		val event = Event()
+
 		secondaryIdDecorator.decorate(event)
 
 		val result = event.parameters[EventParam.SECONDARY_ID.paramName] as String?
-
 		Assert.assertTrue(result != null)
-		Assert.assertTrue(result!! == "100")
 	}
 
 	@Test
 	fun decorate_WhenPrimaryIdIsSetAndFullView_ThenResultSameLikePrimaryId()
 	{
 		val configurationManager = ConfigurationManager()
-		configurationManager.primaryId = "100"
-		configurationManager.secondaryId = null
-		configurationManager.currentIsPartialView = false
+		val ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+			"",
+			"",
+			URL("https://domain.com"),
+			"rootPath",
+		)
+		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		val secondaryIdDecorator = SecondaryIdDecorator(configurationManager)
-
 		val event = Event()
+
+		configurationManager.updatePartiallyReloaded(false)
 		secondaryIdDecorator.decorate(event)
 
 		val result = event.parameters[EventParam.SECONDARY_ID.paramName] as String?
 
 		Assert.assertTrue(result != null)
-		Assert.assertTrue(result!! == "100")
+		Assert.assertTrue(result!! == configurationManager.primaryId)
 	}
 
 	@Test
 	fun decorate_WhenPrimaryIdIsSetAndPartialView_ThenResultHaveNewValue()
 	{
 		val configurationManager = ConfigurationManager()
-		configurationManager.primaryId = "100"
-		configurationManager.secondaryId = null
-		configurationManager.currentIsPartialView = true
+		val ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+			"",
+			"",
+			URL("https://domain.com"),
+			"rootPath",
+		)
+		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		val secondaryIdDecorator = SecondaryIdDecorator(configurationManager)
-
 		val event = Event()
+
+		configurationManager.updatePartiallyReloaded(true)
 		secondaryIdDecorator.decorate(event)
 
 		val result = event.parameters[EventParam.SECONDARY_ID.paramName] as String?
 
 		Assert.assertTrue(result != null)
-		Assert.assertTrue(result!! != "100")
+		Assert.assertTrue(result!! != configurationManager.primaryId)
 		Assert.assertFalse(result.isEmpty())
 	}
 }

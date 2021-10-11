@@ -7,6 +7,7 @@
 package com.ringpublishing.tracking.internal.decorator
 
 import com.ringpublishing.tracking.data.Event
+import com.ringpublishing.tracking.internal.constants.Constants
 import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
 
 internal class ContentUrlDecorator(private val configurationManager: ConfigurationManager) : BaseDecorator()
@@ -24,6 +25,23 @@ internal class ContentUrlDecorator(private val configurationManager: Configurati
 	private fun buildContentUrlDU(): String
 	{
 		val url = configurationManager.currentPublicationUrl?.toString()
-		return if (!url.isNullOrEmpty()) url else parameterGenerator.buildRootUrl(applicationRootPath, structurePath)
+		return if (!url.isNullOrEmpty()) url else buildRootUrl(applicationRootPath, structurePath)
+	}
+
+	private fun buildRootUrl(applicationRootPath: String, applicationStructurePath: List<String>): String
+	{
+		var path = applicationRootPath.lowercase()
+
+		if (!path.startsWith("http"))
+		{
+			path = "https://$path"
+		}
+
+		if (path.endsWith("/"))
+		{
+			path = path.substringBeforeLast("/")
+		}
+
+		return applicationStructurePath.joinToString("/", "${path}${Constants.defaultRootPathSuffix}/")
 	}
 }

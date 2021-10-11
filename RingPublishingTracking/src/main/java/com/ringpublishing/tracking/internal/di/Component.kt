@@ -2,6 +2,7 @@ package com.ringpublishing.tracking.internal.di
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.content.Context
 
 @SuppressLint("StaticFieldLeak")
 internal object Component
@@ -20,7 +21,7 @@ internal object Component
         provideAdvertisingInfo().obtainAdvertisingId()
     }
 
-    fun provideContext() = appApplication.applicationContext
+    fun provideContext(): Context = appApplication.applicationContext
 
 	fun provideApplication() = appApplication
 }
