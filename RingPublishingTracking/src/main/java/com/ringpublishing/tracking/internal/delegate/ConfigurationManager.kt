@@ -10,6 +10,7 @@ internal class ConfigurationManager
 {
 
 	internal lateinit var ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration
+		private set
 
 	private val operationMode = OperationMode()
 

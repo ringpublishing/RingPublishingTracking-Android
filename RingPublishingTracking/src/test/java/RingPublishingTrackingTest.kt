@@ -76,6 +76,8 @@ class RingPublishingTrackingTest
 		every { ringPublishingTrackingConfiguration.apiKey } returns ""
 		every { ringPublishingTrackingConfiguration.apiUrl } returns apiUrl
 		every { ringPublishingTrackingConfiguration.applicationRootPath } returns ""
+		every { ringPublishingTrackingConfiguration.applicationDefaultAdvertisementArea } returns ""
+		every { ringPublishingTrackingConfiguration.applicationDefaultStructurePath } returns emptyList()
 
 		RingPublishingTracking.initialize(context, ringPublishingTrackingConfiguration, ringPublishingTrackingDelegate)
 	}

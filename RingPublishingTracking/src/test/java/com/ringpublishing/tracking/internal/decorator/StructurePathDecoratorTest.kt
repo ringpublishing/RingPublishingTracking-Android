@@ -20,7 +20,7 @@ class StructurePathDecoratorTest
 	fun decorate_WhenCurrentStructurePathUpdated_ThenUseUpdatedValue()
 	{
 		val configurationManager = ConfigurationManager()
-		configurationManager.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+		val ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",
 			URL("https://domain.com"),
@@ -28,6 +28,7 @@ class StructurePathDecoratorTest
 			listOf("path1", "path2"),
 			"area"
 		)
+		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		configurationManager.updateCurrentStructurePath(listOf("path3", "path4"))
 
 		val decorator = StructurePathDecorator(configurationManager)
@@ -45,7 +46,7 @@ class StructurePathDecoratorTest
 	fun decorate_WhenCurrentStructurePathDefault_ThenUseDefaultValue()
 	{
 		val configurationManager = ConfigurationManager()
-		configurationManager.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+		val ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",
 			URL("https://domain.com"),
@@ -53,6 +54,8 @@ class StructurePathDecoratorTest
 			listOf("path1", "path2"),
 			"area"
 		)
+		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
+
 		val decorator = StructurePathDecorator(configurationManager)
 
 		val event = Event()
@@ -68,7 +71,8 @@ class StructurePathDecoratorTest
 	fun decorate_WhenRootPathEndsWithSlash_ThenResultIsCorrect()
 	{
 		val configurationManager = ConfigurationManager()
-		configurationManager.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+
+		val ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",
 			URL("https://domain.com"),
@@ -76,6 +80,7 @@ class StructurePathDecoratorTest
 			listOf("path1", "path2"),
 			"area"
 		)
+		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		val decorator = StructurePathDecorator(configurationManager)
 
 		val event = Event()

@@ -35,7 +35,7 @@ class SiteAreaDecoratorTest
 	fun decorate_WhenDefaultArea_ThenIsInResult()
 	{
 		val configurationManager = ConfigurationManager()
-		configurationManager.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+		val ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",
 			URL("https://domain.com"),
@@ -43,7 +43,7 @@ class SiteAreaDecoratorTest
 			emptyList<String>(),
 			"defaultArea"
 		)
-
+		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		val decorator = SiteAreaDecorator(configurationManager)
 
 		val event = Event()
@@ -58,8 +58,7 @@ class SiteAreaDecoratorTest
 	fun decorate_WhenDefaultAreaAndAreaSet_ThenLocalArea()
 	{
 		val configurationManager = ConfigurationManager()
-		configurationManager.updateAdvertisementArea("area")
-		configurationManager.ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+		val ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
 			"",
 			"",
 			URL("https://domain.com"),
@@ -67,6 +66,8 @@ class SiteAreaDecoratorTest
 			emptyList<String>(),
 			"defaultArea"
 		)
+		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
+		configurationManager.updateAdvertisementArea("area")
 
 		val decorator = SiteAreaDecorator(configurationManager)
 
