@@ -27,8 +27,6 @@ internal class ConfigurationManager
 
 	private var currentStructurePath = mutableListOf<String>()
 
-	var currentIsPartialView = false
-
 	var primaryId: String? = null
 
 	var secondaryId: String? = null
@@ -100,7 +98,6 @@ internal class ConfigurationManager
 
 	fun updatePartiallyReloaded(partiallyReloaded: Boolean)
 	{
-		currentIsPartialView = partiallyReloaded
 		if (partiallyReloaded) newSecondaryId() else newPrimaryId()
 	}
 
