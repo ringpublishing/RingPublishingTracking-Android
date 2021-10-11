@@ -16,7 +16,7 @@ import com.ringpublishing.tracking.reportContentPageView
 class ArticleController : ScreenController()
 {
 
-	private val article: SampleArticle? = null
+	private var article: SampleArticle? = null
 
 	init
 	{
@@ -54,5 +54,10 @@ class ArticleController : ScreenController()
 			partiallyReloaded,
 			contentKeepAliveDataSource
 		)
+	}
+
+	fun loadArticle(newArticle: SampleArticle)
+	{
+		article = newArticle
 	}
 }

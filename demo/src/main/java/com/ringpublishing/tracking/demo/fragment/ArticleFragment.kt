@@ -21,6 +21,7 @@ import com.ringpublishing.tracking.data.ContentSize
 import com.ringpublishing.tracking.data.KeepAliveContentStatus
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingKeepAliveDataSource
 import com.ringpublishing.tracking.demo.R
+import com.ringpublishing.tracking.demo.builder.SampleArticleBuilder
 import com.ringpublishing.tracking.demo.controller.ArticleController
 import com.ringpublishing.tracking.demo.extension.isFromPush
 import com.ringpublishing.tracking.demo.extension.readArticlePosition
@@ -75,7 +76,7 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 		val view = super.onCreateView(inflater, container, savedInstanceState)
 		articleTitle = view?.findViewById(R.id.articleTitle)
 		articleText = view?.findViewById(R.id.articleText)
-		swipeRefreshLayout = view?.findViewById(R.id.swiperefreshlayout)
+		swipeRefreshLayout = view?.findViewById(R.id.swipe_refresh_layout)
 		scrollView = view?.findViewById(R.id.scrollView)
 
 		swipeRefreshLayout?.setOnRefreshListener {
@@ -91,7 +92,8 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 			val articleTitle = resources.getStringArray(R.array.articles_titles)[it]
 			val articleText = resources.getStringArray(R.array.articles_text)[it]
 			data = Pair(articleTitle, articleText)
-			swipeRefreshLayout?.setRefreshing(false)
+			swipeRefreshLayout?.isRefreshing = false
+			articleController.loadArticle(SampleArticleBuilder(resources).build(it))
 		}
 		articleTitle?.text = String.format(getString(R.string.list_is_from_push), isFromPush, data?.first)
 		articleText?.text = data?.second

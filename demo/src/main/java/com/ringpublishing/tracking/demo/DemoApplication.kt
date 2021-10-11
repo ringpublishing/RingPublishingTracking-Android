@@ -16,7 +16,7 @@ class DemoApplication : MultiDexApplication()
 	{
 		override fun ringPublishingTrackingDidAssignTrackingIdentifier(ringPublishingTracking: RingPublishingTracking, identifier: String)
 		{
-			Log.i("DemoApplication", "RingPublishingTracking: received tracking identifier:$identifier")
+			Log.i("Demo", "RingPublishingTracking: received tracking identifier:$identifier")
 		}
 	}
 
@@ -32,7 +32,7 @@ class DemoApplication : MultiDexApplication()
 		val apiKey = "" // <YOUR_API_KEY>
 		// val apiUrl = URL("http://website.com") optional parameter to change api endpoint
 		val applicationRootPath = "RingPublishingTrackingDemo"
-		val applicationDefaultStructurePath = "Default"
+		val applicationDefaultStructurePath = listOf("Default")
 		val applicationDefaultAdvertisementArea = "DemoAdvertisementArea"
 
 		val ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(

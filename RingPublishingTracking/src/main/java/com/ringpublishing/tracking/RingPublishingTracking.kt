@@ -5,13 +5,14 @@
  */
 package com.ringpublishing.tracking
 
-import android.content.Context
+import android.app.Application
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingDelegate
-import com.ringpublishing.tracking.internal.delegate.ConfigurationDelegate
-import com.ringpublishing.tracking.internal.delegate.ReportDelegate
+import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
+import com.ringpublishing.tracking.internal.delegate.EventsReporter
 import com.ringpublishing.tracking.internal.di.Component
+import com.ringpublishing.tracking.internal.di.provideEventDecorator
 import com.ringpublishing.tracking.internal.di.provideEventsService
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.listener.LogListener
@@ -50,14 +51,14 @@ object RingPublishingTracking
 	 * Initialize all needed parameters needed to report events.
 	 * Should be called once in main point of application.
 	 *
-	 * @param context is Application context
-	 * @param RingPublishingTrackingConfiguration is tenant for this application
+	 * @param application is Android Application
+	 * @param ringPublishingTrackingConfiguration is tenant for this application
 	 */
-	fun initialize(context: Context, ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration, ringPublishingTrackingDelegate: RingPublishingTrackingDelegate?)
+	fun initialize(application: Application, ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration, ringPublishingTrackingDelegate: RingPublishingTrackingDelegate?)
 	{
-		Component.initComponent(context)
-		configurationDelegate.initializeConfiguration(ringPublishingTrackingConfiguration)
-		reportDelegate = ReportDelegate(Component.provideEventsService(configurationDelegate), ringPublishingTrackingDelegate)
+		Component.initComponent(application)
+		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
+		eventsReporter = EventsReporter(Component.provideEventsService(configurationManager), Component.provideEventDecorator(configurationManager))
 	}
 
 	/**
@@ -69,7 +70,7 @@ object RingPublishingTracking
 	 */
 	fun setDebugMode(enabled: Boolean)
 	{
-		configurationDelegate.setDebugMode(enabled)
+		configurationManager.setDebugMode(enabled)
 	}
 
 	/**
@@ -80,7 +81,7 @@ object RingPublishingTracking
 	 */
 	fun setOptOutMode(enabled: Boolean)
 	{
-		configurationDelegate.setOptOutMode(enabled)
+		configurationManager.setOptOutMode(enabled)
 	}
 
 	/**
@@ -111,7 +112,7 @@ object RingPublishingTracking
 	 */
 	fun reportEvent(event: Event)
 	{
-		reportDelegate.reportEvent(event)
+		eventsReporter.reportEvent(event)
 	}
 
 	/**
@@ -122,9 +123,9 @@ object RingPublishingTracking
 	 */
 	fun reportEvents(events: List<Event>)
 	{
-		reportDelegate.reportEvents(events)
+		eventsReporter.reportEvents(events)
 	}
 
-	private val configurationDelegate = ConfigurationDelegate()
-	internal lateinit var reportDelegate: ReportDelegate
+	internal val configurationManager = ConfigurationManager()
+	internal lateinit var eventsReporter: EventsReporter
 }
