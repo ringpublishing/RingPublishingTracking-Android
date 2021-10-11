@@ -26,7 +26,7 @@ class SiteAreaDecoratorTest
 		val event = Event()
 		decorator.decorate(event)
 
-		val result = event.parameters[EventParam.SITE_AREA.paramName] as String?
+		val result = event.parameters[EventParam.SITE_AREA.text] as String?
 
 		Assert.assertSame("area", result)
 	}
@@ -49,7 +49,7 @@ class SiteAreaDecoratorTest
 		val event = Event()
 		decorator.decorate(event)
 
-		val result = event.parameters[EventParam.SITE_AREA.paramName] as String?
+		val result = event.parameters[EventParam.SITE_AREA.text] as String?
 
 		Assert.assertSame("defaultArea", result)
 	}
@@ -74,7 +74,7 @@ class SiteAreaDecoratorTest
 		val event = Event()
 		decorator.decorate(event)
 
-		val result = event.parameters[EventParam.SITE_AREA.paramName] as String?
+		val result = event.parameters[EventParam.SITE_AREA.text] as String?
 
 		Assert.assertSame("area", result)
 	}

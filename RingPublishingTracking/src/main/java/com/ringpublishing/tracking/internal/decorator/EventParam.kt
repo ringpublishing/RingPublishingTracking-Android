@@ -6,7 +6,7 @@
 
 package com.ringpublishing.tracking.internal.decorator
 
-enum class EventParam(val paramName: String)
+internal enum class EventParam(val text: String)
 {
 	PRIMARY_ID("IP"),
 	SECONDARY_ID("IV"),
@@ -19,6 +19,4 @@ enum class EventParam(val paramName: String)
 	SCREEN_SIZE("CS"),
 	WINDOW_SIZE("CV"),
 	CONSENT("_adpc"),
-	SELECTED_ELEMENT_NAME("VE"),
-	TARGET_URL("VU")
 }

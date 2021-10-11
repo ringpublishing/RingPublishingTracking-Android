@@ -4,7 +4,7 @@
  *
  */
 
-package com.ringpublishing.tracking.internal.constants
+package com.ringpublishing.tracking.internal.factory
 
 enum class EventType(val text: String)
 {

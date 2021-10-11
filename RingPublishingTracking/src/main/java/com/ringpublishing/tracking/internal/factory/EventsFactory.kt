@@ -8,8 +8,6 @@ package com.ringpublishing.tracking.internal.factory
 
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
-import com.ringpublishing.tracking.internal.constants.EventType
-import com.ringpublishing.tracking.internal.decorator.EventParam
 import java.net.URL
 
 class EventsFactory
@@ -19,9 +17,9 @@ class EventsFactory
 	{
 		val parameters = mutableMapOf<String, Any>()
 
-		selectedEventName?.let { parameters[EventParam.SELECTED_ELEMENT_NAME.paramName] = it }
+		selectedEventName?.let { parameters[UserEventParam.SELECTED_ELEMENT_NAME.text] = it }
 
-		publicationUrl?.let { parameters[EventParam.TARGET_URL.paramName] = it.toString() }
+		publicationUrl?.let { parameters[UserEventParam.TARGET_URL.text] = it.toString() }
 
 		return Event(AnalyticsSystem.KROPKA_EVENTS.text, EventType.CLICK.text, parameters)
 	}

@@ -7,8 +7,6 @@
 package com.ringpublishing.tracking.internal.factory
 
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
-import com.ringpublishing.tracking.internal.constants.EventType
-import com.ringpublishing.tracking.internal.decorator.EventParam
 import org.junit.Assert
 import org.junit.Test
 import java.net.URL
@@ -37,8 +35,8 @@ class EventsFactoryTest
 
 		Assert.assertEquals(AnalyticsSystem.KROPKA_EVENTS.text, event.analyticsSystemName)
 		Assert.assertEquals(EventType.CLICK.text, event.name)
-		Assert.assertEquals("eventName", event.parameters[EventParam.SELECTED_ELEMENT_NAME.paramName])
-		Assert.assertTrue(event.parameters[EventParam.TARGET_URL.paramName] == null)
+		Assert.assertEquals("eventName", event.parameters[UserEventParam.SELECTED_ELEMENT_NAME.text])
+		Assert.assertTrue(event.parameters[UserEventParam.TARGET_URL.text] == null)
 	}
 
 	@Test
@@ -51,8 +49,8 @@ class EventsFactoryTest
 		Assert.assertEquals(AnalyticsSystem.KROPKA_EVENTS.text, event.analyticsSystemName)
 		Assert.assertEquals(EventType.CLICK.text, event.name)
 
-		Assert.assertTrue(event.parameters[EventParam.SELECTED_ELEMENT_NAME.paramName] == null)
-		Assert.assertEquals("https://domain.com", event.parameters[EventParam.TARGET_URL.paramName])
+		Assert.assertTrue(event.parameters[UserEventParam.SELECTED_ELEMENT_NAME.text] == null)
+		Assert.assertEquals("https://domain.com", event.parameters[UserEventParam.TARGET_URL.text])
 	}
 
 	@Test
@@ -64,7 +62,7 @@ class EventsFactoryTest
 
 		Assert.assertEquals(AnalyticsSystem.KROPKA_EVENTS.text, event.analyticsSystemName)
 		Assert.assertEquals(EventType.CLICK.text, event.name)
-		Assert.assertEquals("eventName", event.parameters[EventParam.SELECTED_ELEMENT_NAME.paramName])
-		Assert.assertEquals("https://domain.com", event.parameters[EventParam.TARGET_URL.paramName])
+		Assert.assertEquals("eventName", event.parameters[UserEventParam.SELECTED_ELEMENT_NAME.text])
+		Assert.assertEquals("https://domain.com", event.parameters[UserEventParam.TARGET_URL.text])
 	}
 }
