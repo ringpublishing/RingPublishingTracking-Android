@@ -19,7 +19,7 @@ internal class ContentUrlDecorator(private val configurationManager: Configurati
 
 	override fun decorate(event: Event)
 	{
-		event.add(EventParam.CONTENT_URL, buildContentUrlDU())
+		event.add(EventParam.CONTENT_URL, buildContentUrlDU().lowercase())
 	}
 
 	private fun buildContentUrlDU(): String
