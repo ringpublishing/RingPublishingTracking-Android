@@ -6,6 +6,8 @@
 
 package com.ringpublishing.tracking.internal.factory
 
+import com.google.gson.GsonBuilder
+import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
 import org.junit.Assert
 import org.junit.Test
@@ -14,10 +16,12 @@ import java.net.URL
 class EventsFactoryTest
 {
 
+	private val gson = GsonBuilder().create()
+
 	@Test
 	fun createClickEvent_WhenNoParameters_ThenResultWithoutParameters()
 	{
-		val eventsFactory = EventsFactory()
+		val eventsFactory = EventsFactory(gson)
 
 		val event = eventsFactory.createClickEvent()
 
@@ -29,7 +33,7 @@ class EventsFactoryTest
 	@Test
 	fun createClickEvent_WhenNoDomainParameter_ThenNoDomainInParameters()
 	{
-		val eventsFactory = EventsFactory()
+		val eventsFactory = EventsFactory(gson)
 
 		val event = eventsFactory.createClickEvent("eventName")
 
@@ -42,7 +46,7 @@ class EventsFactoryTest
 	@Test
 	fun createClickEvent_WhenOnlyDomain_ThenResultWithOneParameter()
 	{
-		val eventsFactory = EventsFactory()
+		val eventsFactory = EventsFactory(gson)
 
 		val event = eventsFactory.createClickEvent(publicationUrl = URL("https://domain.com"))
 
@@ -56,7 +60,7 @@ class EventsFactoryTest
 	@Test
 	fun createClickEvent_WhenAllParameters_ThenCorrectResult()
 	{
-		val eventsFactory = EventsFactory()
+		val eventsFactory = EventsFactory(gson)
 
 		val event = eventsFactory.createClickEvent("eventName", URL("https://domain.com"))
 
@@ -64,5 +68,74 @@ class EventsFactoryTest
 		Assert.assertEquals(EventType.CLICK.text, event.name)
 		Assert.assertEquals("eventName", event.parameters[UserEventParam.SELECTED_ELEMENT_NAME.text])
 		Assert.assertEquals("https://domain.com", event.parameters[UserEventParam.TARGET_URL.text])
+	}
+
+	@Test
+	fun createUserActionEvent_WhenNoParameters_ThenActionAndSubtypeInEvent()
+	{
+		val eventsFactory = EventsFactory(gson)
+
+		val event = eventsFactory.createUserActionEvent("eventName", "actionSubtypeName")
+
+		Assert.assertEquals(AnalyticsSystem.KROPKA_EVENTS.text, event.analyticsSystemName)
+		Assert.assertEquals(EventType.USER_ACTION.text, event.name)
+		Assert.assertEquals("eventName", event.parameters[UserEventParam.USER_ACTION_CATEGORY_NAME.text])
+		Assert.assertEquals("actionSubtypeName", event.parameters[UserEventParam.USER_ACTION_SUBTYPE_NAME.text])
+	}
+
+	@Test
+	fun createUserActionEvent_Parameters_ThenParametersInEvent()
+	{
+		val eventsFactory = EventsFactory(gson)
+		val parameters = mutableMapOf("param1" to "vale1", "param2" to "value2")
+
+		val event = eventsFactory.createUserActionEvent("eventName", "actionSubtypeName", parametersMap = parameters)
+
+		Assert.assertEquals("{\"param1\":\"vale1\",\"param2\":\"value2\"}", event.parameters[UserEventParam.USER_ACTION_PAYLOAD.text])
+	}
+
+	@Test
+	fun createUserActionEvent_StringParameters_ThenParametersInEvent()
+	{
+		val eventsFactory = EventsFactory(gson)
+		val parameters = "{\"param1\":\"vale1\",\"param2\":\"value2\"}"
+
+		val event = eventsFactory.createUserActionEvent("eventName", "actionSubtypeName", parameters)
+
+		Assert.assertEquals(parameters, event.parameters[UserEventParam.USER_ACTION_PAYLOAD.text])
+	}
+
+	@Test
+	fun createPageViewEvent_StringParameters_ThenParametersInEvent()
+	{
+		val eventsFactory = EventsFactory(gson)
+		val contentMetadata = ContentMetadata(
+			"publicationId",
+			URL("https://domain.com"),
+			"sourceSystemName",
+			1,
+			false
+		)
+
+		val event = eventsFactory.createPageViewEvent("publicationId", contentMetadata)
+
+		Assert.assertEquals("PV_4,sourceSystemName,publicationId,1,f", event.parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text])
+	}
+
+	@Test
+	fun createPageViewEvent_StringParametersPaidFor_ThenParametersInEvent()
+	{
+		val eventsFactory = EventsFactory(gson)
+		val contentMetadata = ContentMetadata(
+			"publicationId",
+			URL("https://domain.com"),
+			"sourceSystemName",
+			1,
+			true
+		)
+
+		val event = eventsFactory.createPageViewEvent("publicationId", contentMetadata)
+
+		Assert.assertEquals("PV_4,sourceSystemName,publicationId,1,t", event.parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text])
 	}
 }

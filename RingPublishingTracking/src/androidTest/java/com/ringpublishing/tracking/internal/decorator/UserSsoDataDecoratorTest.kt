@@ -31,7 +31,7 @@ class UserSsoDataDecoratorTest
 
 		val result = event.parameters[EventParam.USER_SSO_DATA.text] as String?
 
-		val decodedResult = String(Base64.decode(result, Base64.DEFAULT))
+		val decodedResult = String(Base64.decode(result, Base64.NO_WRAP))
 
 		Assert.assertEquals("{\"name\":\"ssoValue\",\"sso\":{\"logged\":{\"id\":\"userIdValue\"}}}", decodedResult)
 	}

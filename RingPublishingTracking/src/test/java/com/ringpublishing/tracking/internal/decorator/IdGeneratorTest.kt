@@ -27,7 +27,10 @@ class IdGeneratorTest
 	{
 		val idGenerator = IdGenerator()
 
-		val id = idGenerator.newId()
-		Assert.assertTrue(id.length > 7)
+		repeat(9999)
+		{
+			val id = idGenerator.newId()
+			Assert.assertTrue(id.length > 7)
+		}
 	}
 }

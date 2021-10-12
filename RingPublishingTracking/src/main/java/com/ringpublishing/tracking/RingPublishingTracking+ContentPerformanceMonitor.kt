@@ -54,7 +54,8 @@ fun RingPublishingTracking.reportContentClick(selectedElementName: String, publi
 @Suppress("unused", "unused_parameter")
 fun RingPublishingTracking.reportUserAction(actionName: String, actionSubtypeName: String, parameters: Map<String, Any>)
 {
-	// todo: Implement
+	val event = eventsFactory.createUserActionEvent(actionName, actionSubtypeName, parametersMap = parameters)
+	reportEvent(event)
 }
 
 /**
@@ -68,7 +69,8 @@ fun RingPublishingTracking.reportUserAction(actionName: String, actionSubtypeNam
 @Suppress("unused", "unused_parameter")
 fun RingPublishingTracking.reportUserAction(actionName: String, actionSubtypeName: String, parameters: String)
 {
-	// todo: Implement
+	val event = eventsFactory.createUserActionEvent(actionName, actionSubtypeName, parametersString = parameters)
+	reportEvent(event)
 }
 
 /**
@@ -92,6 +94,9 @@ fun RingPublishingTracking.reportPageView(currentStructurePath: List<String>, pa
 		updateStructurePath(currentStructurePath)
 		updatePartiallyReloaded(partiallyReloaded)
 	}
+
+	val event = eventsFactory.createPageViewEvent()
+	reportEvent(event)
 }
 
 /**
@@ -126,6 +131,9 @@ fun RingPublishingTracking.reportContentPageView(
 		updateStructurePath(currentStructurePath)
 		updatePartiallyReloaded(partiallyReloaded)
 	}
+
+	val event = eventsFactory.createPageViewEvent(contentMetadata.publicationId, contentMetadata)
+	reportEvent(event)
 }
 
 /**
