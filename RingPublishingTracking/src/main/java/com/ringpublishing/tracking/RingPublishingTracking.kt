@@ -14,6 +14,7 @@ import com.ringpublishing.tracking.internal.delegate.EventsReporter
 import com.ringpublishing.tracking.internal.di.Component
 import com.ringpublishing.tracking.internal.di.provideEventDecorator
 import com.ringpublishing.tracking.internal.di.provideEventsService
+import com.ringpublishing.tracking.internal.factory.EventsFactory
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.listener.LogListener
 
@@ -127,5 +128,6 @@ object RingPublishingTracking
 	}
 
 	internal val configurationManager = ConfigurationManager()
-	internal lateinit var eventsReporter: EventsReporter
+	private lateinit var eventsReporter: EventsReporter
+	internal val eventsFactory = EventsFactory()
 }

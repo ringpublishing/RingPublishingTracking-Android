@@ -22,7 +22,8 @@ import java.net.URL
 @Suppress("unused", "unused_parameter")
 fun RingPublishingTracking.reportClick(selectedElementName: String?)
 {
-	// todo: Implement
+	val event = eventsFactory.createClickEvent(selectedElementName)
+	reportEvent(event)
 }
 
 /**
@@ -38,7 +39,8 @@ fun RingPublishingTracking.reportClick(selectedElementName: String?)
 @Suppress("unused", "unused_parameter")
 fun RingPublishingTracking.reportContentClick(selectedElementName: String, publicationUrl: URL)
 {
-	// todo: Implement
+	val event = eventsFactory.createClickEvent(selectedElementName, publicationUrl)
+	reportEvent(event)
 }
 
 /**

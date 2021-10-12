@@ -16,7 +16,7 @@ internal open class BaseDecorator : Decorator
 
 	fun Event.add(eventParam: EventParam, value: Any?)
 	{
-		value?.let { parameters[eventParam.paramName] = it }
+		value?.let { parameters[eventParam.text] = it }
 	}
 
 	override fun decorate(event: Event) { Logger.warn("Missing decoration in class ${this.javaClass.canonicalName}") }

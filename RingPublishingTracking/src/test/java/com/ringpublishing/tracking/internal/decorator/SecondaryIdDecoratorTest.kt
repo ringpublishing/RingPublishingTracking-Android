@@ -42,7 +42,7 @@ class SecondaryIdDecoratorTest
 
 		secondaryIdDecorator.decorate(event)
 
-		val result = event.parameters[EventParam.SECONDARY_ID.paramName] as String?
+		val result = event.parameters[EventParam.SECONDARY_ID.text] as String?
 		Assert.assertTrue(result != null)
 	}
 
@@ -63,7 +63,7 @@ class SecondaryIdDecoratorTest
 		configurationManager.updatePartiallyReloaded(false)
 		secondaryIdDecorator.decorate(event)
 
-		val result = event.parameters[EventParam.SECONDARY_ID.paramName] as String?
+		val result = event.parameters[EventParam.SECONDARY_ID.text] as String?
 
 		Assert.assertTrue(result != null)
 		Assert.assertTrue(result!! == configurationManager.primaryId)
@@ -86,7 +86,7 @@ class SecondaryIdDecoratorTest
 		configurationManager.updatePartiallyReloaded(true)
 		secondaryIdDecorator.decorate(event)
 
-		val result = event.parameters[EventParam.SECONDARY_ID.paramName] as String?
+		val result = event.parameters[EventParam.SECONDARY_ID.text] as String?
 
 		Assert.assertTrue(result != null)
 		Assert.assertTrue(result!! != configurationManager.primaryId)

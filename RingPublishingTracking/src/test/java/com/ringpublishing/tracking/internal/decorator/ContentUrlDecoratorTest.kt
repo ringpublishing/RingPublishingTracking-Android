@@ -46,7 +46,7 @@ class ContentUrlDecoratorTest
 		val event = Event()
 		contentUrlDecorator.decorate(event)
 
-		val result = event.parameters[EventParam.CONTENT_URL.paramName] as String?
+		val result = event.parameters[EventParam.CONTENT_URL.text] as String?
 
 		Assert.assertNotNull(result)
 		Assert.assertEquals("https://rootpath.app.android/path1/path2", result)
@@ -72,7 +72,7 @@ class ContentUrlDecoratorTest
 		val event = Event()
 		contentUrlDecorator.decorate(event)
 
-		val result = event.parameters[EventParam.CONTENT_URL.paramName] as String?
+		val result = event.parameters[EventParam.CONTENT_URL.text] as String?
 
 		Assert.assertNotNull(result)
 		Assert.assertEquals("https://rootpath.app.android/path1/path2/path3/path4/path5", result)
@@ -96,7 +96,7 @@ class ContentUrlDecoratorTest
 		val event = Event()
 		contentUrlDecorator.decorate(event)
 
-		val result = event.parameters[EventParam.CONTENT_URL.paramName] as String?
+		val result = event.parameters[EventParam.CONTENT_URL.text] as String?
 
 		Assert.assertNotNull(result)
 		Assert.assertEquals("https://rootpath.app.android/path1/path2", result)
@@ -122,7 +122,7 @@ class ContentUrlDecoratorTest
 		val event = Event()
 		contentUrlDecorator.decorate(event)
 
-		val result = event.parameters[EventParam.CONTENT_URL.paramName] as String?
+		val result = event.parameters[EventParam.CONTENT_URL.text] as String?
 
 		Assert.assertNotNull(result)
 		Assert.assertEquals("https://publicationurl.com", result)

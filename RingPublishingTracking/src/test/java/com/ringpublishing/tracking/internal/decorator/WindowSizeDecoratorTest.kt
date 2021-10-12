@@ -57,7 +57,7 @@ class WindowSizeDecoratorTest
 		val event = Event()
 		decorator.decorate(event)
 
-		val result = event.parameters[EventParam.WINDOW_SIZE.paramName] as String?
+		val result = event.parameters[EventParam.WINDOW_SIZE.text] as String?
 
 		Assert.assertEquals("10x10x24", result)
 	}

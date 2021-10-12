@@ -1,20 +1,39 @@
 package com.ringpublishing.tracking.internal.service.queue
 
+import com.google.gson.GsonBuilder
 import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.Event
+import com.ringpublishing.tracking.internal.api.data.User
+import com.ringpublishing.tracking.internal.api.response.IdentifyResponse
 import com.ringpublishing.tracking.internal.constants.Constants
+import com.ringpublishing.tracking.internal.repository.ApiRepository
+import com.ringpublishing.tracking.internal.repository.UserRepository
 import io.mockk.MockKAnnotations
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import java.net.URL
 
 class EventsQueueTest
 {
 
 	@MockK
 	internal lateinit var eventSizeCalculator: EventSizeCalculator
+
+	@MockK
+	internal lateinit var apiRepository: ApiRepository
+
+	@MockK
+	internal lateinit var userRepository: UserRepository
+
+	@MockK
+	internal lateinit var identifyResponse: IdentifyResponse
+
+	@MockK
+	internal lateinit var user: User
 
 	@MockK
 	lateinit var event: Event
@@ -139,5 +158,41 @@ class EventsQueueTest
 		list.add(event2)
 		eventsQueue.removeAll(list)
 		Assert.assertFalse(eventsQueue.hasEventsToSend())
+	}
+
+	@Test
+	fun add_EventWithURLParameter_ThenHaveOneEventToSend()
+	{
+		coEvery { apiRepository.readIdentify() } returns identifyResponse
+		coEvery { apiRepository.readIdentifyRequestDate() } returns null
+		coEvery { userRepository.buildUser() } returns user
+		val realEventSizeCalculator = EventSizeCalculator(GsonBuilder().create(), apiRepository, userRepository)
+		val eventsQueue = EventsQueue(realEventSizeCalculator)
+		val failParameters = mutableMapOf<String, Any>("param" to URL("https://domain.com"))
+		val failEvent = Event(parameters = failParameters)
+		eventsQueue.add(failEvent)
+
+		val events = eventsQueue.getMaximumEventsToSend()
+
+		Assert.assertTrue(events.size == 1)
+	}
+
+	@Test
+	fun add_DifferentParameterTypesToMap_ThenHaveCorrectParsedEvent()
+	{
+		coEvery { apiRepository.readIdentify() } returns identifyResponse
+		coEvery { apiRepository.readIdentifyRequestDate() } returns null
+		coEvery { userRepository.buildUser() } returns user
+		val realEventSizeCalculator = EventSizeCalculator(GsonBuilder().create(), apiRepository, userRepository)
+		val eventsQueue = EventsQueue(realEventSizeCalculator)
+
+		val failParameters = mutableMapOf("paramString" to "text", "paramInt" to 1, "paramLong" to 1L, "paramList" to listOf("text"), "paramMap" to mapOf("key" to 1))
+
+		val failEvent = Event(parameters = failParameters)
+		eventsQueue.add(failEvent)
+
+		val events = eventsQueue.getMaximumEventsToSend()
+
+		Assert.assertTrue(events.size == 1)
 	}
 }

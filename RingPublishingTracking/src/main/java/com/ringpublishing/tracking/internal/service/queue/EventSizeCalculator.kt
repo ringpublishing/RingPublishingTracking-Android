@@ -1,14 +1,16 @@
 package com.ringpublishing.tracking.internal.service.queue
 
+import com.google.gson.Gson
+import com.google.gson.JsonParseException
 import com.ringpublishing.tracking.internal.constants.Constants
+import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.repository.ApiRepository
 import com.ringpublishing.tracking.internal.repository.UserRepository
-import com.google.gson.Gson
 
 internal class EventSizeCalculator(
     private val gson: Gson,
     private val apiRepository: ApiRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 )
 {
     private var maxIdentifySize = Constants.maxRequestBodySizeBuffer
@@ -38,9 +40,20 @@ internal class EventSizeCalculator(
         return totalSize < Constants.maxRequestBodySize
     }
 
-    fun getSizeInBytes(event: Any?): Long
-    {
-        if (event == null) return 0
-        return (gson.toJson(event).length * Character.SIZE / Byte.SIZE_BITS).toLong()
-    }
+	fun getSizeInBytes(anyObject: Any?): Long
+	{
+		if (anyObject == null) return 0
+		val json: String?
+
+		try
+		{
+			json = gson.toJson(anyObject)
+		} catch (e: JsonParseException)
+		{
+			Logger.warn("Event will be ignored. Cannot parse to Json event: $anyObject")
+			return Long.MAX_VALUE
+		}
+
+		return (json.length * Character.SIZE / Byte.SIZE_BITS).toLong()
+	}
 }
