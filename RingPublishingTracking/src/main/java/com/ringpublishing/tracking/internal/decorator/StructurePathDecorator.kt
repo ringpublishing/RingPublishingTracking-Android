@@ -16,7 +16,7 @@ internal class StructurePathDecorator(private val configurationManager: Configur
 
 	override fun decorate(event: Event)
 	{
-		event.add(EventParam.PUBLICATION_STRUCTURE_PATH, buildStructurePathDV())
+		event.add(EventParam.PUBLICATION_STRUCTURE_PATH, buildStructurePathDV().lowercase())
 	}
 
 	private fun buildStructurePathDV(): String

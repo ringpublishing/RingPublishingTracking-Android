@@ -6,6 +6,7 @@ import com.ringpublishing.tracking.internal.api.data.Ids
 import com.ringpublishing.tracking.internal.api.data.User
 import com.ringpublishing.tracking.internal.api.request.EventRequest
 import com.ringpublishing.tracking.internal.api.response.IdentifyResponse
+import java.util.TreeMap
 
 internal class EventRequestBuilder(
     private val events: List<Event>,
@@ -18,7 +19,7 @@ internal class EventRequestBuilder(
     {
         val apiEvents = mutableListOf<ApiEvent>()
 
-        events.forEach { apiEvents.add(ApiEvent(it.analyticsSystemName, it.name, it.parameters)) }
+        events.forEach { apiEvents.add(ApiEvent(it.analyticsSystemName, it.name, TreeMap(it.parameters))) }
 
         val ids = Ids(identifyResponse.ids)
         return EventRequest(apiEvents.toTypedArray(), ids, user)

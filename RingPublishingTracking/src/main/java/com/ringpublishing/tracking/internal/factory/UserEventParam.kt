@@ -9,5 +9,10 @@ package com.ringpublishing.tracking.internal.factory
 internal enum class UserEventParam(val text: String)
 {
 	SELECTED_ELEMENT_NAME("VE"),
-	TARGET_URL("VU")
+	TARGET_URL("VU"),
+	USER_ACTION_CATEGORY_NAME("VE"),
+	USER_ACTION_SUBTYPE_NAME("VC"),
+	USER_ACTION_PAYLOAD("VM"),
+	PAGE_VIEW_CONTENT_INFO("DX"),
+	PAGE_VIEW_RESOURCE_IDENTIFIER("PU"),
 }
