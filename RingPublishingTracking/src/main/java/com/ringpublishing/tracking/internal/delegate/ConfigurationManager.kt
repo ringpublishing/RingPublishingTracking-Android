@@ -108,7 +108,10 @@ internal class ConfigurationManager
 
 	fun updatePublicationUrl(publicationUrl: URL)
 	{
-		updateReferrer()
-		currentPublicationUrl = publicationUrl
+		if (currentPublicationUrl?.equals(publicationUrl) != true)
+		{
+			updateReferrer()
+			currentPublicationUrl = publicationUrl
+		}
 	}
 }

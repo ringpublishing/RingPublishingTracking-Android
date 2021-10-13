@@ -31,12 +31,12 @@ open class ScreenController
 		article = sampleArticle
 	}
 
-	private fun updateTrackingProperties()
+	fun updateTrackingProperties()
 	{
 		RingPublishingTracking.updateApplicationAdvertisementArea(screenTrackingData.advertisementArea)
 	}
 
-	fun viewDidAppear()
+	open fun viewDidAppear()
 	{
 		// Update our tracking properties for this screen
 		updateTrackingProperties()
