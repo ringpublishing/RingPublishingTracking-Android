@@ -142,7 +142,7 @@ fun RingPublishingTracking.reportContentPageView(
 @Suppress("unused")
 fun RingPublishingTracking.resumeContentKeepAliveTracking()
 {
-	// todo: Implement
+	keepAliveReporter.resume()
 }
 
 /**
@@ -151,7 +151,7 @@ fun RingPublishingTracking.resumeContentKeepAliveTracking()
 @Suppress("unused")
 fun RingPublishingTracking.pauseContentKeepAliveTracking()
 {
-	// todo: Implement
+	keepAliveReporter.pause()
 }
 
 /**
@@ -160,5 +160,5 @@ fun RingPublishingTracking.pauseContentKeepAliveTracking()
 @Suppress("unused")
 fun RingPublishingTracking.stopContentKeepAliveTracking()
 {
-	// todo: Implement
+	keepAliveReporter.stop()
 }

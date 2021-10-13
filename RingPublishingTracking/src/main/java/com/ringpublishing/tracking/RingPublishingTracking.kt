@@ -16,6 +16,7 @@ import com.ringpublishing.tracking.internal.di.provideEventDecorator
 import com.ringpublishing.tracking.internal.di.provideEventsService
 import com.ringpublishing.tracking.internal.di.provideGson
 import com.ringpublishing.tracking.internal.factory.EventsFactory
+import com.ringpublishing.tracking.internal.keepalive.KeepAliveReporter
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.listener.LogListener
 import java.lang.ref.WeakReference
@@ -67,6 +68,7 @@ object RingPublishingTracking
 		Component.initComponent(application)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		eventsReporter = EventsReporter(Component.provideEventsService(configurationManager), Component.provideEventDecorator(configurationManager))
+		keepAliveReporter = KeepAliveReporter(eventsReporter)
 		delegate = WeakReference(ringPublishingTrackingDelegate)
 	}
 
@@ -137,6 +139,7 @@ object RingPublishingTracking
 
 	internal val configurationManager = ConfigurationManager()
 	private lateinit var eventsReporter: EventsReporter
+	internal lateinit var keepAliveReporter: KeepAliveReporter
 	internal val eventsFactory = EventsFactory(Component.provideGson())
 	private var delegate: WeakReference<RingPublishingTrackingDelegate>? = null
 }
