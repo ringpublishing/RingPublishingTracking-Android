@@ -13,6 +13,8 @@ import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
 import com.ringpublishing.tracking.internal.log.Logger
 import java.net.URL
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 class EventsFactory(private val gson: Gson)
 {
@@ -66,5 +68,17 @@ class EventsFactory(private val gson: Gson)
 		}
 
 		return Event(AnalyticsSystem.KROPKA_STATS.text, EventType.PAGE_VIEW.text, parameters)
+	}
+
+	fun createAureusOffersImpressionEvent(offerIds: List<String>): Event
+	{
+		var parametersString: String? = null
+
+		if (offerIds.isNotEmpty())
+		{
+			parametersString = URLEncoder.encode(offerIds.joinToString(","), StandardCharsets.UTF_8.name())
+		}
+
+		return createUserActionEvent("aureusOfferImpressions", "offerIds", parametersString)
 	}
 }

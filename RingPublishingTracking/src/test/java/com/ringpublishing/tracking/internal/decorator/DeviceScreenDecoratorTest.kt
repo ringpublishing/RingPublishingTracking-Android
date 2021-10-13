@@ -53,7 +53,7 @@ class DeviceScreenDecoratorTest
 
 		val result = event.parameters[EventParam.SCREEN_SIZE.text] as String?
 
-		Assert.assertEquals("10x10x24", result)
+		Assert.assertEquals("10x10", result)
 	}
 
 	@Test
@@ -72,6 +72,6 @@ class DeviceScreenDecoratorTest
 
 		val result = event.parameters[EventParam.SCREEN_SIZE.text] as String?
 
-		Assert.assertEquals("5x5x24", result)
+		Assert.assertEquals("5x5", result)
 	}
 }
