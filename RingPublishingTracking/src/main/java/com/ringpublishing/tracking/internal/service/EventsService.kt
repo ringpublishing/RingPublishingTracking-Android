@@ -28,6 +28,7 @@ internal class EventsService(
         eventsServiceTimer.flushCallback = this
     }
 
+	@Synchronized
     fun addEvent(event: Event)
     {
         if (configurationManager.isOptOutModeEnabled())
@@ -41,6 +42,7 @@ internal class EventsService(
         eventsServiceTimer.scheduleFlush()
     }
 
+	@Synchronized
     fun addEvents(events: List<Event>)
     {
         if (configurationManager.isOptOutModeEnabled())
@@ -54,6 +56,7 @@ internal class EventsService(
         eventsServiceTimer.scheduleFlush()
     }
 
+	@Synchronized
     private fun flush()
     {
         val eventsToSend = eventsQueue.getMaximumEventsToSend()
