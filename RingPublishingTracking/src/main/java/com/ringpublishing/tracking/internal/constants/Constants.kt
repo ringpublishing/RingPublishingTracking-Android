@@ -22,5 +22,4 @@ internal object Constants
 	val applicationDefaultStructurePath = listOf("undefined")
 
 	const val consentStringPreferenceName = "IABTCF_TCString"
-	const val mobileDepth = 24
 }

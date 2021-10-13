@@ -28,6 +28,6 @@ internal open class DeviceScreenDecorator(context: Context) : BaseDecorator()
 	{
 		val dpWidth = (width / displayMetrics.density).roundToInt()
 		val dpHeight = (height / displayMetrics.density).roundToInt()
-		return "${dpWidth}x${dpHeight}x${Constants.mobileDepth}"
+		return "${dpWidth}x${dpHeight}"
 	}
 }
