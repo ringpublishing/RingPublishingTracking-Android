@@ -18,6 +18,7 @@ import com.ringpublishing.tracking.internal.di.provideGson
 import com.ringpublishing.tracking.internal.factory.EventsFactory
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.listener.LogListener
+import java.lang.ref.WeakReference
 
 /**
  * Main 'RingPublishingTracking' module class to interact with application
@@ -48,6 +49,11 @@ object RingPublishingTracking
 	* @property trackingIdentifier Tracking identifier assigned by the module for this device
 	*/
 	var trackingIdentifier: String? = null
+		set(value)
+		{
+			field = value
+			value?.let { delegate?.get()?.ringPublishingTrackingDidAssignTrackingIdentifier(this, it) }
+		}
 
 	/**
 	 * Initialize all needed parameters needed to report events.
@@ -61,6 +67,7 @@ object RingPublishingTracking
 		Component.initComponent(application)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		eventsReporter = EventsReporter(Component.provideEventsService(configurationManager), Component.provideEventDecorator(configurationManager))
+		delegate = WeakReference(ringPublishingTrackingDelegate)
 	}
 
 	/**
@@ -131,4 +138,5 @@ object RingPublishingTracking
 	internal val configurationManager = ConfigurationManager()
 	private lateinit var eventsReporter: EventsReporter
 	internal val eventsFactory = EventsFactory(Component.provideGson())
+	private var delegate: WeakReference<RingPublishingTrackingDelegate>? = null
 }
