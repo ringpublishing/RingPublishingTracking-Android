@@ -9,7 +9,6 @@ package com.ringpublishing.tracking.internal.decorator
 import android.content.Context
 import android.util.DisplayMetrics
 import com.ringpublishing.tracking.data.Event
-import com.ringpublishing.tracking.internal.constants.Constants
 import kotlin.math.roundToInt
 
 internal open class DeviceScreenDecorator(context: Context) : BaseDecorator()
@@ -28,6 +27,6 @@ internal open class DeviceScreenDecorator(context: Context) : BaseDecorator()
 	{
 		val dpWidth = (width / displayMetrics.density).roundToInt()
 		val dpHeight = (height / displayMetrics.density).roundToInt()
-		return "${dpWidth}x${dpHeight}"
+		return "${dpWidth}x$dpHeight"
 	}
 }
