@@ -1,10 +1,18 @@
-package com.ringpublishing.tracking.internal.delegate
+/*
+ *  Created by Grzegorz Małopolski on 10/14/21, 3:48 PM
+ * Copyright © 2021 Ringier Axel Springer Tech. All rights reserved.
+ *
+ */
+
+package com.ringpublishing.tracking.internal
 
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.internal.config.OperationMode
+import com.ringpublishing.tracking.internal.constants.Constants
 import com.ringpublishing.tracking.internal.data.UserData
 import com.ringpublishing.tracking.internal.decorator.IdGenerator
 import com.ringpublishing.tracking.internal.log.Logger
+import com.ringpublishing.tracking.internal.util.PathBuilder
 import java.net.URL
 
 internal class ConfigurationManager
@@ -15,17 +23,21 @@ internal class ConfigurationManager
 
 	private val idGenerator = IdGenerator()
 
+	private val pathBuilder = PathBuilder(this)
+
 	private val operationMode = OperationMode()
 
 	private val userData = UserData()
 
 	private var currentAdvertisementArea: String? = null
 
-	var currentReferrer: URL? = null
+	var currentReferrer: String? = null
 
 	var currentPublicationUrl: URL? = null
 
 	private var currentStructurePath = mutableListOf<String>()
+
+	var currentContentUrl: String? = null
 
 	var primaryId: String? = null
 
@@ -36,6 +48,7 @@ internal class ConfigurationManager
 		this.ringPublishingTrackingConfiguration = ringPublishingTrackingConfiguration
 		currentAdvertisementArea = ringPublishingTrackingConfiguration.applicationDefaultAdvertisementArea
 		currentStructurePath = ringPublishingTrackingConfiguration.applicationDefaultStructurePath.toMutableList()
+		currentContentUrl = pathBuilder.buildCurrentContentUrl()
 		newPrimaryId()
 		Logger.debug("Initialize configuration $ringPublishingTrackingConfiguration")
 	}
@@ -66,12 +79,6 @@ internal class ConfigurationManager
 		currentAdvertisementArea = currentArea
 	}
 
-	fun updateCurrentStructurePath(structurePath: List<String>)
-	{
-		currentStructurePath.clear()
-		currentStructurePath.addAll(structurePath)
-	}
-
 	fun getUserData() = userData
 
 	fun getTenantId() = ringPublishingTrackingConfiguration.tenantId
@@ -80,9 +87,21 @@ internal class ConfigurationManager
 
 	fun getStructurePath() = currentStructurePath
 
-	private fun updateReferrer()
+	fun getFullStructurePath(): String
 	{
-		currentReferrer = currentPublicationUrl
+		with(ringPublishingTrackingConfiguration)
+		{
+			val rootPath = if (applicationRootPath.endsWith("/")) applicationRootPath.removeSuffix("/") else applicationRootPath
+			return currentStructurePath.joinToString("/", "$rootPath${Constants.defaultRootPathSuffix}/").lowercase()
+		}
+	}
+
+	private fun updateReferrerUrl()
+	{
+		if (!pathBuilder.isDefaultContentUrl(currentContentUrl))
+		{
+			currentReferrer = currentContentUrl
+		}
 	}
 
 	private fun newPrimaryId()
@@ -101,17 +120,18 @@ internal class ConfigurationManager
 		if (partiallyReloaded) newSecondaryId() else newPrimaryId()
 	}
 
-	fun updateStructurePath(currentStructurePath: List<String>)
+	fun updateStructurePath(newStructurePath: List<String>, publicationUrl: URL? = null)
 	{
-		updateCurrentStructurePath(currentStructurePath)
-	}
+		currentStructurePath.clear()
+		currentStructurePath.addAll(newStructurePath)
 
-	fun updatePublicationUrl(publicationUrl: URL)
-	{
 		if (currentPublicationUrl?.equals(publicationUrl) != true)
 		{
-			updateReferrer()
 			currentPublicationUrl = publicationUrl
 		}
+
+		updateReferrerUrl()
+
+		currentContentUrl = pathBuilder.buildCurrentContentUrl()
 	}
 }

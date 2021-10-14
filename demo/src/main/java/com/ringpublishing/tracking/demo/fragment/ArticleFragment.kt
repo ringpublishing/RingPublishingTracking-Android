@@ -50,12 +50,12 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 	{
 		super.onStart()
 		loadData()
-		articleController.contentViewDidAppear(this)
 	}
 
 	override fun onResume()
 	{
 		super.onResume()
+		articleController.contentViewDidAppear(this)
 		articleController.viewResumed()
 	}
 

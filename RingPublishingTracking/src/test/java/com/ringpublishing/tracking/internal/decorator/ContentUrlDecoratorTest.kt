@@ -8,7 +8,7 @@ package com.ringpublishing.tracking.internal.decorator
 
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
-import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
+import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.log.Logger
 import io.mockk.MockKAnnotations
 import org.junit.Assert
@@ -115,7 +115,8 @@ class ContentUrlDecoratorTest
 			"area"
 		)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
-		configurationManager.currentPublicationUrl = URL("https://publicationurl.com")
+
+		configurationManager.updateStructurePath(listOf("path1", "path2"), URL("https://publicationurl.com"))
 
 		val contentUrlDecorator = ContentUrlDecorator(configurationManager)
 

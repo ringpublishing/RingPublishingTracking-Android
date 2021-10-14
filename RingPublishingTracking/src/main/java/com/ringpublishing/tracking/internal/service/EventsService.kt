@@ -1,7 +1,7 @@
 package com.ringpublishing.tracking.internal.service
 
 import com.ringpublishing.tracking.data.Event
-import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
+import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.service.queue.EventsQueue
 import com.ringpublishing.tracking.internal.service.result.ReportEventStatus

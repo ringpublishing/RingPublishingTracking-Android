@@ -65,16 +65,11 @@ class ListArticlesFragment : ListFragment(), OnItemClickListener
 		return super.onCreateView(inflater, container, savedInstanceState)
 	}
 
-	override fun onStart()
-	{
-		super.onStart()
-		listView.onItemClickListener = this
-		listArticlesController.viewDidAppear()
-	}
-
 	override fun onResume()
 	{
 		super.onResume()
+		listView.onItemClickListener = this
+		listArticlesController.viewDidAppear()
 		listArticlesController.viewResumed()
 	}
 

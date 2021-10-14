@@ -9,7 +9,7 @@ package com.ringpublishing.tracking.internal.decorator
 import android.util.Base64
 import com.google.gson.GsonBuilder
 import com.ringpublishing.tracking.data.Event
-import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
+import com.ringpublishing.tracking.internal.ConfigurationManager
 import org.junit.Assert
 import org.junit.Test
 

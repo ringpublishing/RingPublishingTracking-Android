@@ -9,7 +9,7 @@ package com.ringpublishing.tracking.internal.decorator
 import android.app.Application
 import com.google.gson.Gson
 import com.ringpublishing.tracking.data.Event
-import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
+import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.log.Logger
 
 internal class EventDecorator(configurationManager: ConfigurationManager, application: Application, gson: Gson)

@@ -76,7 +76,7 @@ class EventsFactory(private val gson: Gson)
 
 		if (offerIds.isNotEmpty())
 		{
-			parametersString = URLEncoder.encode(offerIds.joinToString(","), StandardCharsets.UTF_8.name())
+			parametersString = URLEncoder.encode(offerIds.joinToString(",", "[", "]"), StandardCharsets.UTF_8.name())
 		}
 
 		return createUserActionEvent("aureusOfferImpressions", "offerIds", parametersString)
