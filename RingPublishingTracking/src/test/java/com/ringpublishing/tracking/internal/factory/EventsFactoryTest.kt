@@ -119,7 +119,7 @@ class EventsFactoryTest
 
 		val event = eventsFactory.createPageViewEvent("publicationId", contentMetadata)
 
-		Assert.assertEquals("PV_4,sourceSystemName,publicationId,1,f", event.parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text])
+		Assert.assertEquals("PV_4_sourceSystemName_publicationId_1_f", event.parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text])
 	}
 
 	@Test
@@ -136,7 +136,7 @@ class EventsFactoryTest
 
 		val event = eventsFactory.createPageViewEvent("publicationId", contentMetadata)
 
-		Assert.assertEquals("PV_4,sourceSystemName,publicationId,1,t", event.parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text])
+		Assert.assertEquals("PV_4_sourceSystemName_publicationId_1_t", event.parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text])
 	}
 
 	@Test
@@ -147,7 +147,7 @@ class EventsFactoryTest
 
 		val event = eventsFactory.createAureusOffersImpressionEvent(offersIds)
 
-		Assert.assertEquals("111%2C222%2C333", event.parameters[UserEventParam.USER_ACTION_PAYLOAD.text])
+		Assert.assertEquals("%5B111%2C222%2C333%5D", event.parameters[UserEventParam.USER_ACTION_PAYLOAD.text])
 		Assert.assertEquals("aureusOfferImpressions", event.parameters[UserEventParam.USER_ACTION_CATEGORY_NAME.text])
 		Assert.assertEquals("offerIds", event.parameters[UserEventParam.USER_ACTION_SUBTYPE_NAME.text])
 	}

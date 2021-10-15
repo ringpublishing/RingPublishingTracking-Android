@@ -6,6 +6,7 @@
 
 package com.ringpublishing.tracking.internal
 
+import com.ringpublishing.tracking.data.ContentPageViewSource
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.internal.config.OperationMode
 import com.ringpublishing.tracking.internal.constants.Constants
@@ -36,6 +37,8 @@ internal class ConfigurationManager
 	var currentPublicationUrl: URL? = null
 
 	private var currentStructurePath = mutableListOf<String>()
+
+	var contentPageViewSource = ContentPageViewSource.DEFAULT
 
 	var currentContentUrl: String? = null
 
@@ -92,7 +95,7 @@ internal class ConfigurationManager
 		with(ringPublishingTrackingConfiguration)
 		{
 			val rootPath = if (applicationRootPath.endsWith("/")) applicationRootPath.removeSuffix("/") else applicationRootPath
-			return currentStructurePath.joinToString("/", "$rootPath${Constants.defaultRootPathSuffix}/").lowercase()
+			return currentStructurePath.joinToString("/", "$rootPath${Constants.defaultRootPathSuffix}/").lowercase().replace(".", "_")
 		}
 	}
 
@@ -120,7 +123,7 @@ internal class ConfigurationManager
 		if (partiallyReloaded) newSecondaryId() else newPrimaryId()
 	}
 
-	fun updateStructurePath(newStructurePath: List<String>, publicationUrl: URL? = null)
+	fun updateStructurePath(newStructurePath: List<String>, publicationUrl: URL? = null, contentPageViewSource: ContentPageViewSource? = null)
 	{
 		currentStructurePath.clear()
 		currentStructurePath.addAll(newStructurePath)
@@ -129,6 +132,8 @@ internal class ConfigurationManager
 		{
 			currentPublicationUrl = publicationUrl
 		}
+
+		contentPageViewSource?.let { this.contentPageViewSource = it }
 
 		updateReferrerUrl()
 

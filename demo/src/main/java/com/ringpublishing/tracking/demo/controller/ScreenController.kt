@@ -21,7 +21,7 @@ open class ScreenController
 
 	var screenTrackingData = ScreenTrackingData(listOf("Home", "List"), "ListAdsArea")
 
-	protected var pageViewSource = ContentPageViewSource.DEFAULT
+	var pageViewSource = ContentPageViewSource.DEFAULT
 
 	private var article: SampleArticle? = null
 

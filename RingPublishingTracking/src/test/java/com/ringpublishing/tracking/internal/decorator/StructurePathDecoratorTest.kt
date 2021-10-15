@@ -39,7 +39,7 @@ class StructurePathDecoratorTest
 
 		val result = event.parameters[EventParam.PUBLICATION_STRUCTURE_PATH.text] as String?
 
-		Assert.assertEquals("rootpath.app.android/path3/path4", result)
+		Assert.assertEquals("rootpath_app_android/path3/path4", result)
 	}
 
 	@Test
@@ -64,7 +64,7 @@ class StructurePathDecoratorTest
 
 		val result = event.parameters[EventParam.PUBLICATION_STRUCTURE_PATH.text] as String?
 
-		Assert.assertEquals("rootpath.app.android/path1/path2", result)
+		Assert.assertEquals("rootpath_app_android/path1/path2", result)
 	}
 
 	@Test
@@ -89,6 +89,6 @@ class StructurePathDecoratorTest
 
 		val result = event.parameters[EventParam.PUBLICATION_STRUCTURE_PATH.text] as String?
 
-		Assert.assertEquals("rootpath.app.android/path1/path2", result)
+		Assert.assertEquals("rootpath_app_android/path1/path2", result)
 	}
 }

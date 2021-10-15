@@ -63,7 +63,7 @@ class EventsFactory(private val gson: Gson)
 			with(it)
 			{
 				val paid = if (contentWasPaidFor) "t" else "f"
-				parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text] = "PV_4,$sourceSystemName,$publicationId,$contentPartIndex,$paid"
+				parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text] = "PV_4_${sourceSystemName.trim()}_${publicationId?.trim()}_${contentPartIndex}_$paid"
 			}
 		}
 

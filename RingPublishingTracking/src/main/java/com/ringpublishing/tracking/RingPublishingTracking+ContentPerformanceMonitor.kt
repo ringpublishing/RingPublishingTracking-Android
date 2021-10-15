@@ -127,7 +127,7 @@ fun RingPublishingTracking.reportContentPageView(
 {
 	with(configurationManager)
 	{
-		updateStructurePath(currentStructurePath, contentMetadata.publicationUrl)
+		updateStructurePath(currentStructurePath, contentMetadata.publicationUrl, contentPageViewSource)
 		updatePartiallyReloaded(partiallyReloaded)
 	}
 
