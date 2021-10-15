@@ -129,14 +129,14 @@ class EventsFactoryTest
 		val contentMetadata = ContentMetadata(
 			"publicationId",
 			URL("https://domain.com"),
-			"source System Name",
+			"source System_Name",
 			1,
 			true
 		)
 
 		val event = eventsFactory.createPageViewEvent("publicationId", contentMetadata)
 
-		Assert.assertEquals("PV_4,sourceSystemName,publicationId,1,t", event.parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text])
+		Assert.assertEquals("PV_4,source_System_Name,publicationId,1,t", event.parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text])
 	}
 
 	@Test
