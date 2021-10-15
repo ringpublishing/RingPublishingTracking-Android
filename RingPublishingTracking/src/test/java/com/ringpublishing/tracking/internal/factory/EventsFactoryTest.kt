@@ -147,7 +147,7 @@ class EventsFactoryTest
 
 		val event = eventsFactory.createAureusOffersImpressionEvent(offersIds)
 
-		Assert.assertEquals("%5B%22123%22,%22456%22,%22789%22%5D", event.parameters[UserEventParam.USER_ACTION_PAYLOAD.text])
+		Assert.assertEquals("%5B%22123%22[%2C%22456%22%2C]%22789%22%5D", event.parameters[UserEventParam.USER_ACTION_PAYLOAD.text])
 		Assert.assertEquals("aureusOfferImpressions", event.parameters[UserEventParam.USER_ACTION_CATEGORY_NAME.text])
 		Assert.assertEquals("offerIds", event.parameters[UserEventParam.USER_ACTION_SUBTYPE_NAME.text])
 	}
