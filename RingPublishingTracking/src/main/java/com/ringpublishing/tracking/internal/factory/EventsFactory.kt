@@ -72,13 +72,13 @@ class EventsFactory(private val gson: Gson)
 
 	fun createAureusOffersImpressionEvent(offerIds: List<String>): Event
 	{
-		var parametersString: String? = null
+		var encoded: String? = null
 
 		if (offerIds.isNotEmpty())
 		{
-			parametersString = URLEncoder.encode(offerIds.joinToString(",", "[", "]"), StandardCharsets.UTF_8.name())
+			encoded = URLEncoder.encode(offerIds.joinToString(",", "[", "]") { "\"$it\"" }, StandardCharsets.UTF_8.name())
 		}
 
-		return createUserActionEvent("aureusOfferImpressions", "offerIds", parametersString)
+		return createUserActionEvent("aureusOfferImpressions", "offerIds", encoded)
 	}
 }
