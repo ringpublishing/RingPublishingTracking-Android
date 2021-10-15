@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowInsets
 import android.view.WindowManager
+import com.ringpublishing.tracking.internal.data.WindowSize
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.util.WindowSizeString
 import java.lang.ref.WeakReference
@@ -76,17 +77,19 @@ class WindowSizeInfo(application: Application)
 		})
 	}
 
-	fun getWindowSizeString(): String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+	fun getWindowSizeString() = getWindowSize().toString()
+
+	fun getWindowSize(): WindowSize = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
 	{
 		with(windowManager.currentWindowMetrics)
 		{
 			val insets = windowInsets.getInsets(WindowInsets.Type.systemBars())
 			with(bounds)
 			{
-				windowSize.buildSizeString(right - left - insets.left - insets.right, bottom - top - insets.bottom - insets.top)
+				WindowSize(right - left - insets.left - insets.right, bottom - top - insets.bottom - insets.top)
 			}
 		}
-	} else if (isSizeSet()) windowSize.buildSizeString(activityWidth, activityHeight) else windowSize.getScreenSizeString()
+	} else if (isSizeSet()) WindowSize(activityWidth, activityHeight) else windowSize.getWindowSizeDp()
 
 	private fun isSizeSet() = activityWidth > 0 && activityHeight > 0
 }

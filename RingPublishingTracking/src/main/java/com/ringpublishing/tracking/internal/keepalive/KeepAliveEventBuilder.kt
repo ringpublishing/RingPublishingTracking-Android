@@ -8,13 +8,14 @@ package com.ringpublishing.tracking.internal.keepalive
 
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.Event
+import com.ringpublishing.tracking.internal.data.WindowSize
 import com.ringpublishing.tracking.internal.device.WindowSizeInfo
 import com.ringpublishing.tracking.internal.util.buildToDX
 
 class KeepAliveEventBuilder(private val windowSizeInfo: WindowSizeInfo)
 {
 
-	fun create(contentMetadata: ContentMetadata?): Event
+	fun create(contentMetadata: ContentMetadata?, documentSizes: List<WindowSize>): Event
 	{
 		val event = Event()
 
@@ -33,6 +34,11 @@ class KeepAliveEventBuilder(private val windowSizeInfo: WindowSizeInfo)
 	{
 	}
 
+	private fun addMeasureTypeKMT(event: Event)
+	{
+		TODO("Not yet implemented")
+	}
+
 	private fun addTimePointsKTP(event: Event)
 	{
 		TODO("Not yet implemented")
@@ -40,17 +46,12 @@ class KeepAliveEventBuilder(private val windowSizeInfo: WindowSizeInfo)
 
 	private fun addTabActiveKTA(event: Event)
 	{
-		TODO("Not yet implemented")
-	}
-
-	private fun addMeasureTypeKMT(event: Event)
-	{
-		TODO("Not yet implemented")
+		event.parameters["KTA"] = 1
 	}
 
 	private fun addHasFocusKHF(event: Event)
 	{
-		TODO("Not yet implemented")
+		event.parameters["KDF"] = 1
 	}
 
 	private fun addContentSizeInfoKDS(event: Event)
