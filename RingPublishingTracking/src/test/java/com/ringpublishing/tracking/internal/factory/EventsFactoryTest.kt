@@ -119,7 +119,7 @@ class EventsFactoryTest
 
 		val event = eventsFactory.createPageViewEvent("publicationId", contentMetadata)
 
-		Assert.assertEquals("PV_4_sourceSystemName_publicationId_1_f", event.parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text])
+		Assert.assertEquals("PV_4,sourceSystemName,publicationId,1,f", event.parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text])
 	}
 
 	@Test
@@ -136,7 +136,7 @@ class EventsFactoryTest
 
 		val event = eventsFactory.createPageViewEvent("publicationId", contentMetadata)
 
-		Assert.assertEquals("PV_4_sourceSystemName_publicationId_1_t", event.parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text])
+		Assert.assertEquals("PV_4,sourceSystemName,publicationId,1,t", event.parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text])
 	}
 
 	@Test
