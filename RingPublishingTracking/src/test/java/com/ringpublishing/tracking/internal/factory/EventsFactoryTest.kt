@@ -129,7 +129,7 @@ class EventsFactoryTest
 		val contentMetadata = ContentMetadata(
 			"publicationId",
 			URL("https://domain.com"),
-			"sourceSystemName",
+			"source System Name",
 			1,
 			true
 		)

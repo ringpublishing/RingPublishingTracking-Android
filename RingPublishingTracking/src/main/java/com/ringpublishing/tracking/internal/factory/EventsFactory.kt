@@ -59,11 +59,11 @@ class EventsFactory(private val gson: Gson)
 		val parameters = mutableMapOf<String, Any>()
 		publicationId?.let { parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = it }
 
-		contentMetadata?.let {
-			with(it)
+		contentMetadata?.let { metadata ->
+			with(metadata)
 			{
 				val paid = if (contentWasPaidFor) "t" else "f"
-				parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text] = "PV_4,${sourceSystemName.trim()},${publicationId?.trim()},$contentPartIndex,$paid"
+				parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text] = "PV_4,${sourceSystemName.filter { !it.isWhitespace() }},${publicationId?.trim()},$contentPartIndex,$paid"
 			}
 		}
 
