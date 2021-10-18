@@ -17,6 +17,6 @@ internal enum class EventParam(val text: String)
 	CONTENT_REFERER("DR"),
 	PUBLICATION_STRUCTURE_PATH("DV"),
 	SCREEN_SIZE("CS"),
-	WINDOW_SIZE("CV"),
+	WINDOW_SIZE("CW"),
 	CONSENT("_adpc"),
 }

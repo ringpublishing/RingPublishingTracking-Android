@@ -13,6 +13,8 @@ import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
 import com.ringpublishing.tracking.internal.log.Logger
 import java.net.URL
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 class EventsFactory(private val gson: Gson)
 {
@@ -57,14 +59,26 @@ class EventsFactory(private val gson: Gson)
 		val parameters = mutableMapOf<String, Any>()
 		publicationId?.let { parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = it }
 
-		contentMetadata?.let {
-			with(it)
+		contentMetadata?.let { metadata ->
+			with(metadata)
 			{
 				val paid = if (contentWasPaidFor) "t" else "f"
-				parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text] = "PV_4,$sourceSystemName,$publicationId,$contentPartIndex,$paid"
+				parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text] = "PV_4,${sourceSystemName.trim().replace(" ", "_")},${publicationId?.trim()},$contentPartIndex,$paid"
 			}
 		}
 
 		return Event(AnalyticsSystem.KROPKA_STATS.text, EventType.PAGE_VIEW.text, parameters)
+	}
+
+	fun createAureusOffersImpressionEvent(offerIds: List<String>): Event
+	{
+		var encoded: String? = null
+
+		if (offerIds.isNotEmpty())
+		{
+			encoded = URLEncoder.encode(offerIds.joinToString(",", "[", "]") { "\"$it\"" }, StandardCharsets.UTF_8.name())
+		}
+
+		return createUserActionEvent("aureusOfferImpressions", "offerIds", encoded)
 	}
 }

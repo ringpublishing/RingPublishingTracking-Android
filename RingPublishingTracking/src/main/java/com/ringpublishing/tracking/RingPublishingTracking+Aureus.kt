@@ -15,5 +15,6 @@ package com.ringpublishing.tracking
 @Suppress("unused", "unused_parameter")
 fun RingPublishingTracking.reportAureusOffersImpressions(offerIds: List<String>)
 {
-	// todo: implement
+	val event = eventsFactory.createAureusOffersImpressionEvent(offerIds)
+	reportEvent(event)
 }

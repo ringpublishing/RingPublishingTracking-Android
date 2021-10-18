@@ -38,7 +38,7 @@ class DeviceScreenDecoratorTest
 	}
 
 	@Test
-	fun decorate_WhenNormalDensity_ThenSizeSame()
+	fun decorate_WhenScreenNormalDensity_ThenSizeSame()
 	{
 		metrics.widthPixels = 10
 		metrics.heightPixels = 10

@@ -19,7 +19,7 @@ internal open class DeviceScreenDecorator(context: Context) : BaseDecorator()
 
 	override fun decorate(event: Event)
 	{
-		event.add(EventParam.SCREEN_SIZE, getScreenSizeString())
+		event.add(EventParam.SCREEN_SIZE, "${getScreenSizeString()}x${Constants.mobileDepth}")
 	}
 
 	protected fun getScreenSizeString() = buildSizeString(displayMetrics.widthPixels, displayMetrics.heightPixels)
@@ -28,6 +28,6 @@ internal open class DeviceScreenDecorator(context: Context) : BaseDecorator()
 	{
 		val dpWidth = (width / displayMetrics.density).roundToInt()
 		val dpHeight = (height / displayMetrics.density).roundToInt()
-		return "${dpWidth}x${dpHeight}x${Constants.mobileDepth}"
+		return "${dpWidth}x$dpHeight"
 	}
 }

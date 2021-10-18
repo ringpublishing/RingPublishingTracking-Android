@@ -7,7 +7,7 @@
 package com.ringpublishing.tracking.internal.decorator
 
 import com.ringpublishing.tracking.data.Event
-import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
+import com.ringpublishing.tracking.internal.ConfigurationManager
 
 internal class SecondaryIdDecorator(private val configuration: ConfigurationManager) : PrimaryIdDecorator(configuration)
 {

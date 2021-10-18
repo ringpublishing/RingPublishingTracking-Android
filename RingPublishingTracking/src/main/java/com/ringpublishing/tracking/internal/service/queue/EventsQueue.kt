@@ -3,13 +3,14 @@ package com.ringpublishing.tracking.internal.service.queue
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.constants.Constants
 import com.ringpublishing.tracking.internal.log.Logger
+import java.util.concurrent.CopyOnWriteArrayList
 
 internal class EventsQueue(private val eventSizeCalculator: EventSizeCalculator)
 {
 
-    private val queue = mutableListOf<Event>()
-    private val eventsToSend = mutableListOf<Event>()
-    private val toBigEvents = mutableListOf<Event>()
+    private val queue = CopyOnWriteArrayList<Event>()
+    private val eventsToSend = CopyOnWriteArrayList<Event>()
+    private val toBigEvents = CopyOnWriteArrayList<Event>()
 
     fun add(event: Event)
     {
@@ -21,6 +22,7 @@ internal class EventsQueue(private val eventSizeCalculator: EventSizeCalculator)
         queue.addAll(event)
     }
 
+	@Synchronized
     fun getMaximumEventsToSend(): List<Event>
     {
         eventsToSend.clear()

@@ -1,7 +1,7 @@
 package com.ringpublishing.tracking.internal.service
 
 import com.ringpublishing.tracking.data.Event
-import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
+import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.service.queue.EventsQueue
 import com.ringpublishing.tracking.internal.service.result.ReportEventStatus
@@ -28,6 +28,7 @@ internal class EventsService(
         eventsServiceTimer.flushCallback = this
     }
 
+	@Synchronized
     fun addEvent(event: Event)
     {
         if (configurationManager.isOptOutModeEnabled())
@@ -41,6 +42,7 @@ internal class EventsService(
         eventsServiceTimer.scheduleFlush()
     }
 
+	@Synchronized
     fun addEvents(events: List<Event>)
     {
         if (configurationManager.isOptOutModeEnabled())
@@ -54,6 +56,7 @@ internal class EventsService(
         eventsServiceTimer.scheduleFlush()
     }
 
+	@Synchronized
     private fun flush()
     {
         val eventsToSend = eventsQueue.getMaximumEventsToSend()

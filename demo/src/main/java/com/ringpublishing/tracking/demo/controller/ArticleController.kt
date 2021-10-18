@@ -23,6 +23,15 @@ class ArticleController : ScreenController()
 		screenTrackingData = ScreenTrackingData(listOf("Home", "Detail"), "DetailAdsArea")
 	}
 
+	fun contentViewDidAppear(contentKeepAliveDataSource: RingPublishingTrackingKeepAliveDataSource)
+	{
+		// Update our tracking properties for this screen
+		updateTrackingProperties()
+
+		// Report page view event
+		reportArticleContentPageView(false, contentKeepAliveDataSource)
+	}
+
 	fun reloadContent(contentKeepAliveDataSource: RingPublishingTrackingKeepAliveDataSource)
 	{
 		// Report page view event when screen is reloaded

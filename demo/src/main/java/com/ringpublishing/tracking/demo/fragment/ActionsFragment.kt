@@ -16,6 +16,7 @@ import com.ringpublishing.tracking.demo.R
 import com.ringpublishing.tracking.demo.builder.SampleArticleBuilder
 import com.ringpublishing.tracking.demo.controller.ActionsController
 import com.ringpublishing.tracking.demo.databinding.FragmentActionsBinding
+import com.ringpublishing.tracking.demo.extension.startArticleActivity
 
 class ActionsFragment : Fragment(R.layout.fragment_actions)
 {
@@ -51,8 +52,14 @@ class ActionsFragment : Fragment(R.layout.fragment_actions)
 				actionReportUserActionString.setOnClickListener { actionReportUserActionString(it) }
 				actionReportUserActionMap.setOnClickListener { actionReportUserActionMap(it) }
 
-				actionOpenDetailFromPush.setOnClickListener { actionOpenDetailFromPush() }
-				actionOpenDetailFromSocial.setOnClickListener { actionOpenDetailFromSocial() }
+				actionOpenDetailFromPush.setOnClickListener {
+					actionOpenDetailFromPush()
+					activity?.startArticleActivity(0, actionsController.pageViewSource)
+				}
+				actionOpenDetailFromSocial.setOnClickListener {
+					actionOpenDetailFromSocial()
+					activity?.startArticleActivity(0, actionsController.pageViewSource)
+				}
 
 				actionReportGenericEvent.setOnClickListener { actionReportGenericEvent() }
 
