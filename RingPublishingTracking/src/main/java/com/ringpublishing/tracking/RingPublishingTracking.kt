@@ -9,8 +9,8 @@ import android.app.Application
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingDelegate
-import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
-import com.ringpublishing.tracking.internal.delegate.EventsReporter
+import com.ringpublishing.tracking.internal.ConfigurationManager
+import com.ringpublishing.tracking.internal.EventsReporter
 import com.ringpublishing.tracking.internal.di.Component
 import com.ringpublishing.tracking.internal.di.provideEventDecorator
 import com.ringpublishing.tracking.internal.di.provideEventsService

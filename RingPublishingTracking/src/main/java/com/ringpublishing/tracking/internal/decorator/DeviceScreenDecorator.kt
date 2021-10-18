@@ -8,6 +8,7 @@ package com.ringpublishing.tracking.internal.decorator
 
 import android.content.Context
 import com.ringpublishing.tracking.data.Event
+import com.ringpublishing.tracking.internal.constants.Constants
 import com.ringpublishing.tracking.internal.util.WindowSizeString
 
 internal open class DeviceScreenDecorator(context: Context) : BaseDecorator()
@@ -17,6 +18,6 @@ internal open class DeviceScreenDecorator(context: Context) : BaseDecorator()
 
 	override fun decorate(event: Event)
 	{
-		event.add(EventParam.SCREEN_SIZE, windowSizeString.getScreenSizeString())
+		event.add(EventParam.SCREEN_SIZE, "${windowSizeString.getScreenSizeString()}x${Constants.mobileDepth}")
 	}
 }

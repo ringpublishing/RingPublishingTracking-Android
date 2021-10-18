@@ -8,7 +8,7 @@ package com.ringpublishing.tracking.internal.decorator
 
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
-import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
+import com.ringpublishing.tracking.internal.ConfigurationManager
 import org.junit.Assert
 import org.junit.Test
 import java.net.URL
@@ -29,7 +29,7 @@ class StructurePathDecoratorTest
 			"area"
 		)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
-		configurationManager.updateCurrentStructurePath(listOf("path3", "path4"))
+		configurationManager.updateStructurePath(listOf("path3", "path4"))
 
 		val decorator = StructurePathDecorator(configurationManager)
 
@@ -39,7 +39,7 @@ class StructurePathDecoratorTest
 
 		val result = event.parameters[EventParam.PUBLICATION_STRUCTURE_PATH.text] as String?
 
-		Assert.assertEquals("rootpath.app.android/path3/path4", result)
+		Assert.assertEquals("rootpath_app_android/path3/path4", result)
 	}
 
 	@Test
@@ -64,7 +64,7 @@ class StructurePathDecoratorTest
 
 		val result = event.parameters[EventParam.PUBLICATION_STRUCTURE_PATH.text] as String?
 
-		Assert.assertEquals("rootpath.app.android/path1/path2", result)
+		Assert.assertEquals("rootpath_app_android/path1/path2", result)
 	}
 
 	@Test
@@ -89,6 +89,6 @@ class StructurePathDecoratorTest
 
 		val result = event.parameters[EventParam.PUBLICATION_STRUCTURE_PATH.text] as String?
 
-		Assert.assertEquals("rootpath.app.android/path1/path2", result)
+		Assert.assertEquals("rootpath_app_android/path1/path2", result)
 	}
 }

@@ -9,7 +9,7 @@ package com.ringpublishing.tracking.internal.decorator
 import android.util.Base64
 import com.google.gson.Gson
 import com.ringpublishing.tracking.data.Event
-import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
+import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.log.Logger
 import java.io.UnsupportedEncodingException
 
@@ -41,7 +41,7 @@ internal class UserSsoDataDecorator(private val configurationManager: Configurat
 			Logger.warn("Parse user sso data UnsupportedEncodingException $e")
 			return null
 		}
-		return Base64.encodeToString(data, Base64.DEFAULT)
+		return Base64.encodeToString(data, Base64.NO_WRAP)
 	}
 
 	private class Logged(val id: String?)

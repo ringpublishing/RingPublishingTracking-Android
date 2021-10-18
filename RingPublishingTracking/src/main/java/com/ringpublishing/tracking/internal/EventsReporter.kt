@@ -1,4 +1,4 @@
-package com.ringpublishing.tracking.internal.delegate
+package com.ringpublishing.tracking.internal
 
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.decorator.EventDecorator

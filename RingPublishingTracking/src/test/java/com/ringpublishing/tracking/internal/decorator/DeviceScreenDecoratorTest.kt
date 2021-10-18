@@ -38,7 +38,7 @@ class DeviceScreenDecoratorTest
 	}
 
 	@Test
-	fun decorate_WhenNormalDensity_ThenSizeSame()
+	fun decorate_WhenScreenNormalDensity_ThenSizeSame()
 	{
 		metrics.widthPixels = 10
 		metrics.heightPixels = 10
@@ -53,7 +53,7 @@ class DeviceScreenDecoratorTest
 
 		val result = event.parameters[EventParam.SCREEN_SIZE.text] as String?
 
-		Assert.assertEquals("10x10", result)
+		Assert.assertEquals("10x10x24", result)
 	}
 
 	@Test
@@ -72,6 +72,6 @@ class DeviceScreenDecoratorTest
 
 		val result = event.parameters[EventParam.SCREEN_SIZE.text] as String?
 
-		Assert.assertEquals("5x5", result)
+		Assert.assertEquals("5x5x24", result)
 	}
 }

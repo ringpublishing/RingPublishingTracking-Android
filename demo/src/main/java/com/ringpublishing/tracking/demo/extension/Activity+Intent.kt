@@ -8,23 +8,31 @@ package com.ringpublishing.tracking.demo.extension
 
 import android.app.Activity
 import android.content.Intent
+import com.ringpublishing.tracking.data.ContentPageViewSource
 import com.ringpublishing.tracking.demo.ArticleActivity
 
 private const val EXTRA_ARTICLE_POSITION = "extraArticlePosition"
-private const val EXTRA_FROM_PUSH = "extraFromPush"
+private const val EXTRA_PAGE_VIEW_SOURCE = "extraPageViewSource"
 
-fun Activity.create(articlePosition: Int) = Intent(this, ArticleActivity::class.java).apply {
+fun Activity.create(articlePosition: Int, pageViewSource: ContentPageViewSource? = null) = Intent(this, ArticleActivity::class.java).apply {
 	putExtra(EXTRA_ARTICLE_POSITION, articlePosition)
-}
-
-fun Activity.createFromPush(articlePosition: Int) = create(articlePosition).apply {
-	putExtra(EXTRA_FROM_PUSH, true)
+	pageViewSource?.let { putExtra(EXTRA_PAGE_VIEW_SOURCE, pageViewSource.name) }
 }
 
 fun Activity.readArticlePosition() = intent?.getIntExtra(EXTRA_ARTICLE_POSITION, 0) ?: 0
 
-fun Activity.isFromPush() = intent?.getBooleanExtra(EXTRA_FROM_PUSH, false)
+fun Activity.isFromPush() = intent?.getStringExtra(EXTRA_PAGE_VIEW_SOURCE)?.equals(ContentPageViewSource.PUSH_NOTIFICATION.name)
 
-fun Activity.startArticleActivity(articlePosition: Int) = startActivity(create(articlePosition))
+fun Activity.getContentPageViewSource(): ContentPageViewSource
+{
+	return when (intent?.getStringExtra(EXTRA_PAGE_VIEW_SOURCE))
+	{
+		ContentPageViewSource.PUSH_NOTIFICATION.name -> ContentPageViewSource.PUSH_NOTIFICATION
+		ContentPageViewSource.SOCIAL_MEDIA.name -> ContentPageViewSource.SOCIAL_MEDIA
+		else -> ContentPageViewSource.DEFAULT
+	}
+}
 
-fun Activity.startArticleActivityFromPush(articlePosition: Int) = startActivity(createFromPush(articlePosition))
+fun Activity.startArticleActivity(articlePosition: Int, pageViewSource: ContentPageViewSource? = null) = startActivity(create(articlePosition, pageViewSource))
+
+fun Activity.startArticleActivityFromPush(articlePosition: Int) = startActivity(create(articlePosition, ContentPageViewSource.PUSH_NOTIFICATION))

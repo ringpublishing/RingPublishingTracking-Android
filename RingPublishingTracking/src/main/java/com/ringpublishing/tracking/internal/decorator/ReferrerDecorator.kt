@@ -7,7 +7,7 @@
 package com.ringpublishing.tracking.internal.decorator
 
 import com.ringpublishing.tracking.data.Event
-import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
+import com.ringpublishing.tracking.internal.ConfigurationManager
 
 internal class ReferrerDecorator(private val configurationManager: ConfigurationManager) : BaseDecorator()
 {

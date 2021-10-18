@@ -1,7 +1,7 @@
 package com.ringpublishing.tracking.internal.di
 
 import com.ringpublishing.tracking.internal.decorator.EventDecorator
-import com.ringpublishing.tracking.internal.delegate.ConfigurationManager
+import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.service.EventsService
 import com.ringpublishing.tracking.internal.service.queue.EventSizeCalculator
 import com.ringpublishing.tracking.internal.service.queue.EventsQueue

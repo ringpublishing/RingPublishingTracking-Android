@@ -23,6 +23,7 @@ import com.ringpublishing.tracking.delegate.RingPublishingTrackingKeepAliveDataS
 import com.ringpublishing.tracking.demo.R
 import com.ringpublishing.tracking.demo.builder.SampleArticleBuilder
 import com.ringpublishing.tracking.demo.controller.ArticleController
+import com.ringpublishing.tracking.demo.extension.getContentPageViewSource
 import com.ringpublishing.tracking.demo.extension.isFromPush
 import com.ringpublishing.tracking.demo.extension.readArticlePosition
 
@@ -44,18 +45,19 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 	{
 		super.onAttach(context)
 		isFromPush = activity?.isFromPush() ?: false
+		activity?.getContentPageViewSource()?.let { articleController.pageViewSource = it }
 	}
 
 	override fun onStart()
 	{
 		super.onStart()
 		loadData()
-		articleController.contentViewDidAppear(this)
 	}
 
 	override fun onResume()
 	{
 		super.onResume()
+		articleController.contentViewDidAppear(this)
 		articleController.viewResumed()
 	}
 

@@ -59,11 +59,11 @@ class EventsFactory(private val gson: Gson)
 		val parameters = mutableMapOf<String, Any>()
 		publicationId?.let { parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = it }
 
-		contentMetadata?.let {
-			with(it)
+		contentMetadata?.let { metadata ->
+			with(metadata)
 			{
 				val paid = if (contentWasPaidFor) "t" else "f"
-				parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text] = "PV_4,$sourceSystemName,$publicationId,$contentPartIndex,$paid"
+				parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text] = "PV_4,${sourceSystemName.trim().replace(" ", "_")},${publicationId?.trim()},$contentPartIndex,$paid"
 			}
 		}
 
@@ -72,13 +72,13 @@ class EventsFactory(private val gson: Gson)
 
 	fun createAureusOffersImpressionEvent(offerIds: List<String>): Event
 	{
-		var parametersString: String? = null
+		var encoded: String? = null
 
 		if (offerIds.isNotEmpty())
 		{
-			parametersString = URLEncoder.encode(offerIds.joinToString(","), StandardCharsets.UTF_8.name())
+			encoded = URLEncoder.encode(offerIds.joinToString(",", "[", "]") { "\"$it\"" }, StandardCharsets.UTF_8.name())
 		}
 
-		return createUserActionEvent("aureusOfferImpressions", "offerIds", parametersString)
+		return createUserActionEvent("aureusOfferImpressions", "offerIds", encoded)
 	}
 }
