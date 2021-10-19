@@ -6,8 +6,12 @@
 
 package com.ringpublishing.tracking.internal.data
 
-class WindowSize(val width: Int, val height: Int)
+import com.ringpublishing.tracking.data.ContentSize
+
+class WindowSize(private val width: Int,private val height: Int)
 {
+	constructor(contentSize: ContentSize): this(contentSize.width, contentSize.height)
+
 	override fun toString(): String
 	{
 		return "${width}x$height"

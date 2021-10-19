@@ -6,17 +6,20 @@
 package com.ringpublishing.tracking
 
 import android.app.Application
+import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.Event
+import com.ringpublishing.tracking.data.KeepAliveContentStatus
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingDelegate
+import com.ringpublishing.tracking.delegate.RingPublishingTrackingKeepAliveDataSource
 import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.EventsReporter
 import com.ringpublishing.tracking.internal.di.Component
 import com.ringpublishing.tracking.internal.di.provideEventDecorator
 import com.ringpublishing.tracking.internal.di.provideEventsService
 import com.ringpublishing.tracking.internal.di.provideGson
-import com.ringpublishing.tracking.internal.di.provideWindowSizeInfo
 import com.ringpublishing.tracking.internal.factory.EventsFactory
+import com.ringpublishing.tracking.internal.keepalive.KeepAliveDataSource
 import com.ringpublishing.tracking.internal.keepalive.KeepAliveReporter
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.listener.LogListener
@@ -44,7 +47,7 @@ import java.lang.ref.WeakReference
  * - Remove custom application logger 'removeLogListener(logListener: LogListener)'
  */
 @Suppress("unused")
-object RingPublishingTracking
+object RingPublishingTracking: KeepAliveDataSource
 {
 
 	/*
@@ -69,7 +72,7 @@ object RingPublishingTracking
 		Component.initComponent(application)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		eventsReporter = EventsReporter(Component.provideEventsService(configurationManager), Component.provideEventDecorator(configurationManager))
-		keepAliveReporter = KeepAliveReporter(eventsReporter, Component.provideWindowSizeInfo())
+		keepAliveReporter = KeepAliveReporter(eventsReporter)
 		delegate = WeakReference(ringPublishingTrackingDelegate)
 	}
 
@@ -138,9 +141,15 @@ object RingPublishingTracking
 		eventsReporter.reportEvents(events)
 	}
 
+	override fun didAskForKeepAliveContentStatus(contentMetadata: ContentMetadata): KeepAliveContentStatus?
+	{
+		return keepAliveDelegate?.get()?.ringPublishingTrackingDidAskForKeepAliveContentStatus(this, contentMetadata)
+	}
+
 	internal val configurationManager = ConfigurationManager()
 	private lateinit var eventsReporter: EventsReporter
 	internal lateinit var keepAliveReporter: KeepAliveReporter
 	internal val eventsFactory = EventsFactory(Component.provideGson())
 	private var delegate: WeakReference<RingPublishingTrackingDelegate>? = null
+	internal var keepAliveDelegate: WeakReference<RingPublishingTrackingKeepAliveDataSource>? = null
 }

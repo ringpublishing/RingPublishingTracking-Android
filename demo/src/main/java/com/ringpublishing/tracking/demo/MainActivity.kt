@@ -9,8 +9,9 @@ import com.ringpublishing.tracking.demo.fragment.ActionsFragment
 import com.ringpublishing.tracking.demo.fragment.ListArticlesFragment
 import com.ringpublishing.tracking.demo.fragment.NoContentFragment
 
-class MainActivity : AppCompatActivity()
+class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener
 {
+	val tabViewpager: TabLayout? = null
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
@@ -22,6 +23,14 @@ class MainActivity : AppCompatActivity()
 
 		tabViewpager.adapter = createAdapterWithFragments()
 		tabTabLayout.setupWithViewPager(tabViewpager)
+
+		tabViewpager.addOnPageChangeListener(this)
+	}
+
+	override fun onStop()
+	{
+		tabViewpager?.clearOnTabSelectedListeners()
+		super.onStop()
 	}
 
 	private fun createAdapterWithFragments(): MainPagerAdapter
@@ -31,5 +40,20 @@ class MainActivity : AppCompatActivity()
 			addFragment("ACTIONS", ActionsFragment())
 			addFragment("WEBVIEW", NoContentFragment())
 		}
+	}
+
+	override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int)
+	{
+
+	}
+
+	override fun onPageSelected(position: Int)
+	{
+
+	}
+
+	override fun onPageScrollStateChanged(state: Int)
+	{
+
 	}
 }

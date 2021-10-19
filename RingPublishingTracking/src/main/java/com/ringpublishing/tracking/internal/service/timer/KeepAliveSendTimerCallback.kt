@@ -8,6 +8,6 @@ package com.ringpublishing.tracking.internal.service.timer
 
 interface KeepAliveSendTimerCallback
 {
-	fun send()
-	fun addNewEvent()
+	fun onSendTimer()
+	fun onActivityTimer()
 }

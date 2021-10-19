@@ -8,59 +8,48 @@ package com.ringpublishing.tracking.internal.keepalive
 
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.Event
+import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
 import com.ringpublishing.tracking.internal.data.WindowSize
-import com.ringpublishing.tracking.internal.device.WindowSizeInfo
+import com.ringpublishing.tracking.internal.factory.EventType
 import com.ringpublishing.tracking.internal.util.buildToDX
+import kotlin.math.roundToLong
 
-class KeepAliveEventBuilder(private val windowSizeInfo: WindowSizeInfo)
+internal class KeepAliveEventBuilder
 {
 
-	fun create(contentMetadata: ContentMetadata?, documentSizes: List<WindowSize>): Event
+	fun create(content: ContentMetadata?, keepAliveList: List<KeepAliveMetadata>): Event
 	{
-		val event = Event()
+		val event = Event(AnalyticsSystem.TIMESCORE.text, EventType.KEEP_ALIVE.text)
 
-		contentMetadata?.let { addContentInfoDX(event, it) }
-		addContentSizeInfoKDS(event)
-		addHasFocusKHF(event)
-		addMeasureTypeKMT(event)
-		addTabActiveKTA(event)
-		addTimePointsKTP(event)
-		addTopScrollKTS(event)
+		val windowSizes = mutableListOf<String>()
+		val focusList = mutableListOf<Int>()
+		val measureTypes = mutableListOf<String>()
+		val timingsInSeconds = mutableListOf<Long>()
+		val scrollOffsets = mutableListOf<Long>()
+
+		keepAliveList.forEach { metaData ->
+			with(metaData)
+			{
+				windowSizes.add(WindowSize(contentStatus.contentSize).toString())
+				focusList.add(if (hasFocus) 1 else 0)
+				measureTypes.add(measureType.text)
+				timingsInSeconds.add(timingInMillis / 1000L)
+				scrollOffsets.add(contentStatus.scrollOffset.roundToLong())
+			}
+		}
+
+		with(event)
+		{
+			content?.let { parameters["DX"] = content.buildToDX() }
+			parameters["KTA"] = 1
+
+			parameters["KDS"] = windowSizes.toTypedArray()
+			parameters["KHF"] = focusList.toTypedArray()
+			parameters["KMT"] = measureTypes.toTypedArray()
+			parameters["KTP"] = timingsInSeconds.toTypedArray()
+			parameters["KTS"] = scrollOffsets.toTypedArray()
+		}
 
 		return event
-	}
-
-	private fun addTopScrollKTS(event: Event)
-	{
-	}
-
-	private fun addMeasureTypeKMT(event: Event)
-	{
-		TODO("Not yet implemented")
-	}
-
-	private fun addTimePointsKTP(event: Event)
-	{
-		TODO("Not yet implemented")
-	}
-
-	private fun addTabActiveKTA(event: Event)
-	{
-		event.parameters["KTA"] = 1
-	}
-
-	private fun addHasFocusKHF(event: Event)
-	{
-		event.parameters["KDF"] = 1
-	}
-
-	private fun addContentSizeInfoKDS(event: Event)
-	{
-		event.parameters["KDF"] = windowSizeInfo.getWindowSizeString()
-	}
-
-	private fun addContentInfoDX(event: Event, contentMetadata: ContentMetadata)
-	{
-		event.parameters["DX"] = contentMetadata.buildToDX()
 	}
 }
