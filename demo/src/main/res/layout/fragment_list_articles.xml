@@ -10,7 +10,6 @@
         android:id="@+id/itemTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textIsSelectable="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         tools:text="TextView" />
 
@@ -18,7 +17,6 @@
         android:id="@+id/itemPaid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textIsSelectable="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         tools:text="Paid: yes" />
 </LinearLayout>
