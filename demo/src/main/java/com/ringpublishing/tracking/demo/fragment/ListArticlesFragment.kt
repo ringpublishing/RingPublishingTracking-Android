@@ -8,6 +8,7 @@ package com.ringpublishing.tracking.demo.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.SimpleAdapter
 import androidx.fragment.app.ListFragment
+import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.demo.R
 import com.ringpublishing.tracking.demo.builder.SampleArticleBuilder
 import com.ringpublishing.tracking.demo.controller.ListArticlesController
@@ -75,6 +77,8 @@ class ListArticlesFragment : ListFragment(), OnItemClickListener
 	{
 		super.onResume()
 		listArticlesController.viewDidAppear()
+
+		Log.i("Demo", "Current tracking identifier is ${RingPublishingTracking.trackingIdentifier}")
 	}
 
 	override fun onPause()

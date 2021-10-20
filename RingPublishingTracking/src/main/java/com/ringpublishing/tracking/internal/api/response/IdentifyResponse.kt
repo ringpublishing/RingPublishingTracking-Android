@@ -19,4 +19,6 @@ internal data class IdentifyResponse(val ids: IdsMap, val profile: Profile, val 
 
 		return calendar.time
 	}
+
+	fun getIdentifier() = ids.parameters["eaUUID"]?.asJsonObject?.get("value")?.toString()
 }

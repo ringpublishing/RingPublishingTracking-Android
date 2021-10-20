@@ -11,6 +11,7 @@ import com.ringpublishing.tracking.internal.service.builder.IdentifyRequestBuild
 import com.ringpublishing.tracking.internal.service.result.ReportEventResult
 import com.ringpublishing.tracking.internal.service.result.ReportEventStatus
 import com.ringpublishing.tracking.internal.service.result.ReportEventStatusMapper
+import kotlinx.coroutines.runBlocking
 import java.util.Date
 
 internal class ApiService(
@@ -21,6 +22,13 @@ internal class ApiService(
 )
 {
     private var identifyResponse: IdentifyResponse? = null
+
+	init
+	{
+		runBlocking {
+			requestIdentify()
+		}
+	}
 
     suspend fun reportEvents(events: List<Event>): ReportEventResult
     {
@@ -88,7 +96,7 @@ internal class ApiService(
 
             apiRepository.saveIdentify(identifyResponse)
 
-            return ReportEventResult(reportEventStatusMapper.getStatus(response.code()), response.body()?.postInterval)
+		        return ReportEventResult(reportEventStatusMapper.getStatus(response.code()), response.body()?.postInterval)
         }.getOrElse {
             Logger.warn("ApiService: Identify request network error ${it.localizedMessage}")
             return ReportEventResult(ReportEventStatus.ERROR_NETWORK)

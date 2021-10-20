@@ -16,6 +16,7 @@ import com.ringpublishing.tracking.delegate.RingPublishingTrackingKeepAliveDataS
 import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.EventsReporter
 import com.ringpublishing.tracking.internal.di.Component
+import com.ringpublishing.tracking.internal.di.provideApiRepository
 import com.ringpublishing.tracking.internal.di.provideEventDecorator
 import com.ringpublishing.tracking.internal.di.provideEventsService
 import com.ringpublishing.tracking.internal.di.provideGson
@@ -59,6 +60,11 @@ object RingPublishingTracking : KeepAliveDataSource
 		{
 			field = value
 			value?.let { delegate?.get()?.ringPublishingTrackingDidAssignTrackingIdentifier(this, it) }
+		}
+		get()
+		{
+			if (!Component.initialized) return null
+			return Component.provideApiRepository().readTrackingIdentifier()
 		}
 
 	/**
