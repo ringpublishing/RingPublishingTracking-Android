@@ -10,6 +10,7 @@ import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.KeepAliveContentStatus
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
+import com.ringpublishing.tracking.data.TrackingIdentifier
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingDelegate
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingKeepAliveDataSource
 import com.ringpublishing.tracking.internal.ConfigurationManager
@@ -53,7 +54,7 @@ object RingPublishingTracking : KeepAliveDataSource
 	/*
 	* @property trackingIdentifier Tracking identifier assigned by the module for this device
 	*/
-	var trackingIdentifier: String? = null
+	var trackingIdentifier: TrackingIdentifier? = null
 		set(value)
 		{
 			field = value
