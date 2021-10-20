@@ -31,7 +31,7 @@ internal class KeepAliveEventBuilder
 			with(metaData)
 			{
 				windowSizes.add(WindowSize(contentStatus.contentSize).toString())
-				focusList.add(if (hasFocus) 1 else 0)
+				focusList.add(1)
 				measureTypes.add(measureType.text)
 				timingsInSeconds.add(timingInMillis / 1000L)
 				scrollOffsets.add(contentStatus.scrollOffset.roundToLong())
