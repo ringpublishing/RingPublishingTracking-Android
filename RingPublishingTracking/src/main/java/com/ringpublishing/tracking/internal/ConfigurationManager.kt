@@ -13,6 +13,7 @@ import com.ringpublishing.tracking.internal.constants.Constants
 import com.ringpublishing.tracking.internal.data.UserData
 import com.ringpublishing.tracking.internal.decorator.IdGenerator
 import com.ringpublishing.tracking.internal.log.Logger
+import com.ringpublishing.tracking.internal.service.builder.md5
 import com.ringpublishing.tracking.internal.util.PathBuilder
 import java.net.URL
 
@@ -71,10 +72,11 @@ internal class ConfigurationManager
 
 	fun isOptOutModeEnabled() = operationMode.optOutEnabled
 
-	fun updateUserData(ssoSystemName: String?, userId: String?)
+	fun updateUserData(ssoSystemName: String?, userId: String?, userEmail: String?)
 	{
 		userData.ssoName = ssoSystemName
 		userData.userId = userId
+		userEmail?.let { userData.emailMd5 = it.trim().lowercase().replace("[\n\r]", "").md5() }
 	}
 
 	fun updateAdvertisementArea(currentArea: String?)

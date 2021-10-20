@@ -64,7 +64,7 @@ class ApiServiceTest
 		runBlocking {
 			apiService.reportEvents(events)
 		}
-		coVerify(exactly = 1) { apiClient.identify(any()) }
+		coVerify(exactly = 2) { apiClient.identify(any()) }
 	}
 
 	@Test
@@ -80,6 +80,6 @@ class ApiServiceTest
 		runBlocking {
 			apiService.reportEvents(events)
 		}
-		coVerify(exactly = 1) { apiClient.identify(any()) }
+		coVerify(exactly = 2) { apiClient.identify(any()) }
 	}
 }

@@ -11,7 +11,10 @@ import com.ringpublishing.tracking.internal.service.builder.IdentifyRequestBuild
 import com.ringpublishing.tracking.internal.service.result.ReportEventResult
 import com.ringpublishing.tracking.internal.service.result.ReportEventStatus
 import com.ringpublishing.tracking.internal.service.result.ReportEventStatusMapper
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import java.util.Date
 
 internal class ApiService(
@@ -25,9 +28,7 @@ internal class ApiService(
 
 	init
 	{
-		runBlocking {
-			requestIdentify()
-		}
+		CoroutineScope(SupervisorJob() + Dispatchers.IO).launch(Dispatchers.IO) { requestIdentify() }
 	}
 
     suspend fun reportEvents(events: List<Event>): ReportEventResult

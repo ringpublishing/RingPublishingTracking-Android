@@ -19,17 +19,18 @@ internal class UserSsoDataDecorator(private val configurationManager: Configurat
 	override fun decorate(event: Event)
 	{
 		val userId = configurationManager.getUserData().userId
+		val emailMd5 = configurationManager.getUserData().emailMd5
 		val ssoName = configurationManager.getUserData().ssoName ?: ""
 
-		if (userId.isNullOrEmpty()) return
+		if (userId.isNullOrEmpty() || emailMd5.isNullOrEmpty()) return
 
-		val encodedUserData = encodeUserData(userId, ssoName)
+		val encodedUserData = encodeUserData(userId, emailMd5, ssoName)
 		encodedUserData?.let { event.add(EventParam.USER_SSO_DATA, it) }
 	}
 
-	private fun encodeUserData(userId: String, ssoName: String): String?
+	private fun encodeUserData(userId: String, emailMd5: String, ssoName: String): String?
 	{
-		val jsonUser = gson.toJson(Sso(Logged(userId), ssoName))
+		val jsonUser = gson.toJson(Sso(Logged(userId, emailMd5), ssoName))
 
 		val data: ByteArray?
 
@@ -44,7 +45,7 @@ internal class UserSsoDataDecorator(private val configurationManager: Configurat
 		return Base64.encodeToString(data, Base64.NO_WRAP)
 	}
 
-	private class Logged(val id: String?)
+	private class Logged(val id: String?, val md5: String?)
 
 	private class Sso(val logged: Logged, val name: String)
 }
