@@ -27,7 +27,7 @@ fun RingPublishingTracking.reportAureusOffersImpressions(offerIds: List<String>)
  * @param selectedElementName that user click
  * @param publicationUrl of content
  * @param publicationId publication identifier in source system (CMS)
- *  @param aureusOfferId identifier
+ * @param aureusOfferId identifier
  */
 @Suppress("unused", "unused_parameter")
 fun RingPublishingTracking.reportContentClick(selectedElementName: String, publicationUrl: URL, publicationId: String, aureusOfferId: String)
