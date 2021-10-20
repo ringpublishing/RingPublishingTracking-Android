@@ -35,9 +35,17 @@ internal class KeepAliveReporter(private val eventsReporter: EventsReporter, con
 
 	private var dataSourceDelegate: WeakReference<KeepAliveDataSource>? = null
 
-	fun start(contentMetadata: ContentMetadata, contentKeepAliveDataSource: KeepAliveDataSource)
+	fun start(contentMetadata: ContentMetadata, contentKeepAliveDataSource: KeepAliveDataSource, partiallyReloaded: Boolean)
 	{
 		Logger.debug("KeepAliveReporter: start()")
+
+		if (partiallyReloaded && contentMetadata == this.contentMetadata)
+		{
+			dataSourceDelegate = WeakReference(contentKeepAliveDataSource)
+			resume()
+			return
+		}
+
 		stop()
 
 		this.contentMetadata = contentMetadata

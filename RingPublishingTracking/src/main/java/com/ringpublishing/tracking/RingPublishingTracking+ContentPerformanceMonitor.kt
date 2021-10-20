@@ -137,7 +137,7 @@ fun RingPublishingTracking.reportContentPageView(
 	reportEvent(event)
 
 	keepAliveDelegate = WeakReference(contentKeepAliveDataSource)
-	keepAliveReporter.start(contentMetadata, this)
+	keepAliveReporter.start(contentMetadata, this, partiallyReloaded)
 }
 
 /**
