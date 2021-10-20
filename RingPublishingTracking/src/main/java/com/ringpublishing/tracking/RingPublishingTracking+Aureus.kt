@@ -5,6 +5,8 @@
  */
 package com.ringpublishing.tracking
 
+import java.net.URL
+
 /**
  * Aureus events
  *
@@ -17,4 +19,22 @@ fun RingPublishingTracking.reportAureusOffersImpressions(offerIds: List<String>)
 {
 	val event = eventsFactory.createAureusOffersImpressionEvent(offerIds)
 	reportEvent(event)
+}
+
+/**
+ * Reports 'Aureus' click event which leads to content page
+ *
+ * @param selectedElementName that user click
+ * @param publicationUrl of content
+ * @param publicationId publication identifier in source system (CMS)
+ *  @param aureusOfferId identifier
+ */
+@Suppress("unused", "unused_parameter")
+fun RingPublishingTracking.reportContentClick(selectedElementName: String, publicationUrl: URL, publicationId: String, aureusOfferId: String)
+{
+	val clickEvent = eventsFactory.createClickEvent(selectedElementName, publicationUrl, publicationId)
+
+	clickEvent.parameters["EI"] = aureusOfferId
+
+	reportEvent(clickEvent)
 }

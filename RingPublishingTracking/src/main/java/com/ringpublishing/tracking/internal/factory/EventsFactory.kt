@@ -19,13 +19,15 @@ import java.nio.charset.StandardCharsets
 class EventsFactory(private val gson: Gson)
 {
 
-	fun createClickEvent(selectedEventName: String? = null, publicationUrl: URL? = null): Event
+	fun createClickEvent(selectedEventName: String? = null, publicationUrl: URL? = null, publicationIdentifier: String? = null): Event
 	{
 		val parameters = mutableMapOf<String, Any>()
 
 		selectedEventName?.let { parameters[UserEventParam.SELECTED_ELEMENT_NAME.text] = it }
 
 		publicationUrl?.let { parameters[UserEventParam.TARGET_URL.text] = it.toString() }
+
+		publicationIdentifier?.let { parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = it }
 
 		return Event(AnalyticsSystem.KROPKA_EVENTS.text, EventType.CLICK.text, parameters)
 	}
