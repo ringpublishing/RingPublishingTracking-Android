@@ -16,19 +16,15 @@ internal class WindowSizeString(context: Context)
 
 	private val metrics: DisplayMetrics = context.resources.displayMetrics
 
-	private fun buildSizeString(width: Int, height: Int): String
-	{
-		val dpWidth = (width / metrics.density).roundToInt()
-		val dpHeight = (height / metrics.density).roundToInt()
-		return "${dpWidth}x$dpHeight"
-	}
+	private fun buildSizeString(windowSize: WindowSize) = "${windowSize.width}x${windowSize.height}"
 
-	fun getWindowSizeDp(): WindowSize
-	{
-		val dpWidth = (metrics.widthPixels / metrics.density).roundToInt()
-		val dpHeight = (metrics.heightPixels / metrics.density).roundToInt()
-		return WindowSize(dpWidth, dpHeight)
-	}
+	fun getWindowSizePxFromMetrics() = WindowSize(metrics.widthPixels, metrics.heightPixels)
 
-	fun getScreenSizeString() = buildSizeString(metrics.widthPixels, metrics.heightPixels)
+	fun getWindowSizeDp(windowSize: WindowSize) = WindowSize(getSizeDp(windowSize.width), getSizeDp(windowSize.height))
+
+	fun getScreenSizeDpString() = buildSizeString(getWindowSizeDp(WindowSize(metrics.widthPixels, metrics.heightPixels)))
+
+	fun getWindowSizeDpString(windowSize: WindowSize) = buildSizeString(getWindowSizeDp(windowSize))
+
+	fun getSizeDp(sizePx: Int) = (sizePx / metrics.density).roundToInt()
 }

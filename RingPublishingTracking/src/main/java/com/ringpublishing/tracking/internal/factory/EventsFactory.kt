@@ -12,6 +12,7 @@ import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
 import com.ringpublishing.tracking.internal.log.Logger
+import com.ringpublishing.tracking.internal.util.buildToDX
 import java.net.URL
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -59,15 +60,10 @@ class EventsFactory(private val gson: Gson)
 	fun createPageViewEvent(publicationId: String? = null, contentMetadata: ContentMetadata? = null): Event
 	{
 		val parameters = mutableMapOf<String, Any>()
+
 		publicationId?.let { parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = it }
 
-		contentMetadata?.let { metadata ->
-			with(metadata)
-			{
-				val paid = if (contentWasPaidFor) "t" else "f"
-				parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text] = "PV_4,${sourceSystemName.trim().replace(" ", "_")},${publicationId?.trim()},$contentPartIndex,$paid"
-			}
-		}
+		contentMetadata?.let { metadata -> parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text] = metadata.buildToDX() }
 
 		return Event(AnalyticsSystem.KROPKA_STATS.text, EventType.PAGE_VIEW.text, parameters)
 	}

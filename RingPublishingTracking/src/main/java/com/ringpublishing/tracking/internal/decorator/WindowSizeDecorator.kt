@@ -15,6 +15,6 @@ internal class WindowSizeDecorator(private val windowSizeInfo: WindowSizeInfo, c
 
 	override fun decorate(event: Event)
 	{
-		event.add(EventParam.WINDOW_SIZE, windowSizeInfo.getWindowSizeString())
+		event.add(EventParam.WINDOW_SIZE, windowSizeInfo.getWindowSizeDpString())
 	}
 }

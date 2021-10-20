@@ -18,6 +18,6 @@ internal open class DeviceScreenDecorator(context: Context) : BaseDecorator()
 
 	override fun decorate(event: Event)
 	{
-		event.add(EventParam.SCREEN_SIZE, "${windowSizeString.getScreenSizeString()}x${Constants.mobileDepth}")
+		event.add(EventParam.SCREEN_SIZE, "${windowSizeString.getScreenSizeDpString()}x${Constants.mobileDepth}")
 	}
 }
