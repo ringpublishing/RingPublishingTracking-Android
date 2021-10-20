@@ -8,6 +8,7 @@ package com.ringpublishing.tracking
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.ContentPageViewSource
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingKeepAliveDataSource
+import java.lang.ref.WeakReference
 import java.net.URL
 
 /**
@@ -133,6 +134,9 @@ fun RingPublishingTracking.reportContentPageView(
 
 	val event = eventsFactory.createPageViewEvent(contentMetadata.publicationId, contentMetadata)
 	reportEvent(event)
+
+	keepAliveDelegate = WeakReference(contentKeepAliveDataSource)
+	keepAliveReporter.start(contentMetadata, this)
 }
 
 /**
@@ -141,7 +145,7 @@ fun RingPublishingTracking.reportContentPageView(
 @Suppress("unused")
 fun RingPublishingTracking.resumeContentKeepAliveTracking()
 {
-	// todo: Implement
+	keepAliveReporter.resume()
 }
 
 /**
@@ -150,7 +154,7 @@ fun RingPublishingTracking.resumeContentKeepAliveTracking()
 @Suppress("unused")
 fun RingPublishingTracking.pauseContentKeepAliveTracking()
 {
-	// todo: Implement
+	keepAliveReporter.pause()
 }
 
 /**
@@ -159,5 +163,5 @@ fun RingPublishingTracking.pauseContentKeepAliveTracking()
 @Suppress("unused")
 fun RingPublishingTracking.stopContentKeepAliveTracking()
 {
-	// todo: Implement
+	keepAliveReporter.stop()
 }

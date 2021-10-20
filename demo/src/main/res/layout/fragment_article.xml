@@ -6,10 +6,12 @@
     android:layout_height="match_parent">
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/scrollViewContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -21,6 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:textIsSelectable="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 tools:text="Article title" />
 
@@ -29,6 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:textIsSelectable="true"
                 tools:text="Article text" />
 
 

@@ -11,6 +11,7 @@ import android.content.res.Resources
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import com.ringpublishing.tracking.data.Event
+import com.ringpublishing.tracking.internal.device.WindowSizeInfo
 import com.ringpublishing.tracking.internal.log.Logger
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -23,7 +24,7 @@ class WindowSizeDecoratorTest
 {
 
 	@MockK
-	lateinit var context: Application
+	lateinit var application: Application
 
 	@MockK
 	lateinit var resources: Resources
@@ -48,11 +49,12 @@ class WindowSizeDecoratorTest
 		metrics.heightPixels = 10
 		metrics.density = 1F
 		every { resources.displayMetrics } returns metrics
-		every { context.resources } returns resources
+		every { application.resources } returns resources
 
-		every { context.getSystemService(any()) } returns windowManager
+		every { application.getSystemService(any()) } returns windowManager
 
-		val decorator = WindowSizeDecorator(context)
+		val windowSizeInfo = WindowSizeInfo(application)
+		val decorator = WindowSizeDecorator(windowSizeInfo, application)
 
 		val event = Event()
 		decorator.decorate(event)

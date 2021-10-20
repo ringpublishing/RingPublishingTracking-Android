@@ -29,7 +29,7 @@ internal class UserSsoDataDecorator(private val configurationManager: Configurat
 
 	private fun encodeUserData(userId: String, ssoName: String): String?
 	{
-		val jsonUser = gson.toJson(User(Sso(Logged(userId)), ssoName))
+		val jsonUser = gson.toJson(Sso(Logged(userId), ssoName))
 
 		val data: ByteArray?
 
@@ -46,7 +46,5 @@ internal class UserSsoDataDecorator(private val configurationManager: Configurat
 
 	private class Logged(val id: String?)
 
-	private class Sso(val logged: Logged)
-
-	private class User(val sso: Sso, val name: String)
+	private class Sso(val logged: Logged, val name: String)
 }

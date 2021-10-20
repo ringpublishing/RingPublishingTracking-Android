@@ -40,6 +40,7 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 	private var articleText: TextView? = null
 	private var swipeRefreshLayout: SwipeRefreshLayout? = null
 	private var scrollView: ScrollView? = null
+	private var scrollViewContent: ViewGroup? = null
 
 	override fun onAttach(context: Context)
 	{
@@ -48,29 +49,27 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 		activity?.getContentPageViewSource()?.let { articleController.pageViewSource = it }
 	}
 
+	override fun onCreate(savedInstanceState: Bundle?)
+	{
+		super.onCreate(savedInstanceState)
+		readArticleData()
+		articleController.contentViewDidAppear(this)
+		articleController.viewDidAppear()
+	}
+
 	override fun onStart()
 	{
 		super.onStart()
-		loadData()
-	}
-
-	override fun onResume()
-	{
-		super.onResume()
-		articleController.contentViewDidAppear(this)
-		articleController.viewResumed()
+		upadteUI()
 	}
 
 	override fun onPause()
 	{
 		super.onPause()
-		articleController.viewPaused()
-	}
-
-	override fun onStop()
-	{
-		super.onStop()
-		articleController.viewStop()
+		if (activity?.isFinishing == true)
+		{
+			articleController.viewStop()
+		}
 	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
@@ -80,6 +79,7 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 		articleText = view?.findViewById(R.id.articleText)
 		swipeRefreshLayout = view?.findViewById(R.id.swipe_refresh_layout)
 		scrollView = view?.findViewById(R.id.scrollView)
+		scrollViewContent = view?.findViewById(R.id.scrollViewContent)
 
 		swipeRefreshLayout?.setOnRefreshListener {
 			loadData()
@@ -90,6 +90,18 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 
 	private fun loadData()
 	{
+		readArticleData()
+		upadteUI()
+	}
+
+	private fun upadteUI()
+	{
+		articleTitle?.text = String.format(getString(R.string.list_is_from_push), isFromPush, data?.first)
+		articleText?.text = data?.second
+	}
+
+	private fun readArticleData()
+	{
 		activity?.readArticlePosition()?.let {
 			val articleTitle = resources.getStringArray(R.array.articles_titles)[it]
 			val articleText = resources.getStringArray(R.array.articles_text)[it]
@@ -97,8 +109,6 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 			swipeRefreshLayout?.isRefreshing = false
 			articleController.loadArticle(SampleArticleBuilder(resources).build(it))
 		}
-		articleTitle?.text = String.format(getString(R.string.list_is_from_push), isFromPush, data?.first)
-		articleText?.text = data?.second
 	}
 
 	fun addContent()
@@ -109,9 +119,11 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 
 	override fun ringPublishingTrackingDidAskForKeepAliveContentStatus(ringPublishingTracking: RingPublishingTracking, contentMetadata: ContentMetadata): KeepAliveContentStatus
 	{
-		// todo: handle weak reference to fragment inside module
-		// Return information about content at given point in time
-		// We have to return how big content is and how far the user has scrolled
-		return KeepAliveContentStatus(scrollView!!.scrollY.toFloat(), ContentSize(scrollView!!.measuredWidth, scrollView!!.measuredHeight))
+		return scrollView?.let {
+
+			scrollViewContent?.let { content ->
+				KeepAliveContentStatus(it.scrollY, ContentSize(content.measuredWidth, content.measuredHeight))
+			} ?: KeepAliveContentStatus(it.scrollY, ContentSize(0, 0))
+		} ?: KeepAliveContentStatus(0, ContentSize(0, 0))
 	}
 }

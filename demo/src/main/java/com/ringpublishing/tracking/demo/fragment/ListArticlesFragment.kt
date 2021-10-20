@@ -65,29 +65,37 @@ class ListArticlesFragment : ListFragment(), OnItemClickListener
 		return super.onCreateView(inflater, container, savedInstanceState)
 	}
 
+	override fun onStart()
+	{
+		super.onStart()
+		listView.onItemClickListener = this
+	}
+
 	override fun onResume()
 	{
 		super.onResume()
-		listView.onItemClickListener = this
 		listArticlesController.viewDidAppear()
-		listArticlesController.viewResumed()
 	}
 
 	override fun onPause()
 	{
 		super.onPause()
-		listView.onItemClickListener = null
-		listArticlesController.viewPaused()
+		if (activity?.isFinishing == true)
+		{
+			listArticlesController.viewStop()
+		}
 	}
 
 	override fun onStop()
 	{
-		listArticlesController.viewStop()
+		listView.onItemClickListener = null
 		super.onStop()
 	}
 
 	override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long)
 	{
+		listArticlesController.viewStop()
+
 		activity?.startArticleActivity(position)
 
 		articles?.let {

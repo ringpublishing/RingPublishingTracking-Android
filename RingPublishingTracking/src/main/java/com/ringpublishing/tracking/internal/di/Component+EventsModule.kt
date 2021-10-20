@@ -48,7 +48,7 @@ internal fun Component.provideEventDecorator(configurationManager: Configuration
 {
 	if (eventDecorator == null)
 	{
-		eventDecorator = EventDecorator(configurationManager, provideApplication(), Component.provideGson())
+		eventDecorator = EventDecorator(configurationManager, provideApplication(), Component.provideGson(), Component.provideWindowSizeInfo())
 	}
 
 	return eventDecorator!!

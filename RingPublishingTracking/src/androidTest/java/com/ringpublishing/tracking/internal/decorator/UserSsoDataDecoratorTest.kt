@@ -33,6 +33,6 @@ class UserSsoDataDecoratorTest
 
 		val decodedResult = String(Base64.decode(result, Base64.NO_WRAP))
 
-		Assert.assertEquals("{\"name\":\"ssoValue\",\"sso\":{\"logged\":{\"id\":\"userIdValue\"}}}", decodedResult)
+		Assert.assertEquals("{\"logged\":{\"id\":\"userIdValue\"},\"name\":\"ssoValue\"}", decodedResult)
 	}
 }

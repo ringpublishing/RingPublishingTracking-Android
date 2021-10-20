@@ -7,27 +7,17 @@
 package com.ringpublishing.tracking.internal.decorator
 
 import android.content.Context
-import android.util.DisplayMetrics
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.constants.Constants
-import kotlin.math.roundToInt
+import com.ringpublishing.tracking.internal.util.WindowSizeString
 
 internal open class DeviceScreenDecorator(context: Context) : BaseDecorator()
 {
 
-	private val displayMetrics: DisplayMetrics = context.resources.displayMetrics
+	private val windowSizeString = WindowSizeString(context)
 
 	override fun decorate(event: Event)
 	{
-		event.add(EventParam.SCREEN_SIZE, "${getScreenSizeString()}x${Constants.mobileDepth}")
-	}
-
-	protected fun getScreenSizeString() = buildSizeString(displayMetrics.widthPixels, displayMetrics.heightPixels)
-
-	protected fun buildSizeString(width: Int, height: Int): String
-	{
-		val dpWidth = (width / displayMetrics.density).roundToInt()
-		val dpHeight = (height / displayMetrics.density).roundToInt()
-		return "${dpWidth}x$dpHeight"
+		event.add(EventParam.SCREEN_SIZE, "${windowSizeString.getScreenSizeDpString()}x${Constants.mobileDepth}")
 	}
 }

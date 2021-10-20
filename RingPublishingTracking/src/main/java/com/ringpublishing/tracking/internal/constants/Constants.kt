@@ -16,7 +16,9 @@ internal object Constants
 	const val eventDefaultName = "Event"
     const val eventDefaultAnalyticsSystemName = "_GENERIC"
 
-    const val defaultRootPathSuffix = "_app_android"
+    const val defaultRootPathSuffixDV = "_app_android"
+
+	const val defaultRootPathSuffix = ".app.android"
 
 	const val applicationDefaultAdvertisementArea = "undefined"
 	val applicationDefaultStructurePath = listOf("undefined")
