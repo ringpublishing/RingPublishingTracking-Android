@@ -120,6 +120,5 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 		return scrollView?.let {
 			KeepAliveContentStatus(it.scrollY.toFloat(), ContentSize(it.measuredWidth, it.measuredHeight))
 		} ?: KeepAliveContentStatus(0F, ContentSize(0, 0))
-
 	}
 }

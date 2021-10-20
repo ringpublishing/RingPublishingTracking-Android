@@ -47,7 +47,7 @@ import java.lang.ref.WeakReference
  * - Remove custom application logger 'removeLogListener(logListener: LogListener)'
  */
 @Suppress("unused")
-object RingPublishingTracking: KeepAliveDataSource
+object RingPublishingTracking : KeepAliveDataSource
 {
 
 	/*

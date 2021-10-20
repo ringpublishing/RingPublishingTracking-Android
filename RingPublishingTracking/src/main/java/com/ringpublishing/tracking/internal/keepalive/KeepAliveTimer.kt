@@ -20,7 +20,6 @@ class KeepAliveTimer(private val callback: KeepAliveSendTimerCallback)
 	private var trackingStartDate: Date? = null
 
 	private val sendTimer = Timer("SendTimer")
-
 	private val activityTimer = Timer("ActivityTimer")
 
 	private val backgroundPeriods = mutableListOf<TimePeriod>()
@@ -40,6 +39,8 @@ class KeepAliveTimer(private val callback: KeepAliveSendTimerCallback)
 	{
 		trackingStartDate = null
 		stopTimers()
+		backgroundPeriods.clear()
+		pausedPeriods.clear()
 	}
 
 	fun scheduleSendTimer()
@@ -65,7 +66,7 @@ class KeepAliveTimer(private val callback: KeepAliveSendTimerCallback)
 			}
 		}
 
-		Logger.debug("KeepAliveTimer: scheduleSendTimer() Time ${timeFromStart/1000L} step:${stepMillis/1000L} seconds")
+		Logger.debug("KeepAliveTimer: scheduleSendTimer() Time ${timeFromStart / 1000L} step:${stepMillis / 1000L} seconds")
 		senderTasks.add(task)
 		sendTimer.schedule(task, stepMillis)
 	}
@@ -93,7 +94,7 @@ class KeepAliveTimer(private val callback: KeepAliveSendTimerCallback)
 			}
 		}
 
-		Logger.debug("KeepAliveTimer: scheduleActivityTimer() Time: ${timeFromStart/1000L} step: ${postIntervalMillis / 1000L} seconds")
+		Logger.debug("KeepAliveTimer: scheduleActivityTimer() Time: ${timeFromStart / 1000L} step: ${postIntervalMillis / 1000L} seconds")
 
 		activityTasks.add(task)
 		activityTimer.schedule(task, postIntervalMillis)
@@ -119,29 +120,25 @@ class KeepAliveTimer(private val callback: KeepAliveSendTimerCallback)
 		pausedPeriods.lastOrNull()?.end()
 	}
 
+	fun pauseBackground()
+	{
+		backgroundPeriods.add(TimePeriod(Date()))
+		stopTimers()
+	}
+
+	fun resumeBackground()
+	{
+		backgroundPeriods.lastOrNull()?.end()
+	}
+
 	fun timeFromStartInForeground(): Long?
 	{
 		val startDate = trackingStartDate ?: return null
 
-		val backgroundTime = calculateTimeDistance(backgroundPeriods)
-		val pausedTime = calculateTimeDistance(pausedPeriods)
+		val backgroundTime = TimePeriodCalculator.sumTimePeriods(backgroundPeriods)
+		val pausedTime = TimePeriodCalculator.sumTimePeriods(pausedPeriods)
 		val startTimeToNow = Date().time - startDate.time
 
 		return startTimeToNow - backgroundTime - pausedTime
 	}
-
-	private fun calculateTimeDistance(dates: List<TimePeriod>) = dates.map {
-		val start = it.startDate
-		val end = it.endDate
-
-		val time = if (end != null)
-		{
-			end.time - start.time
-		}
-		else
-		{
-			Date().time - start.time
-		}
-		time
-	}.sum()
 }

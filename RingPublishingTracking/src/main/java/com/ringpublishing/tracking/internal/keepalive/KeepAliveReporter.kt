@@ -130,22 +130,21 @@ internal class KeepAliveReporter(private val eventsReporter: EventsReporter) : K
 		val dataSourceDelegate = dataSourceDelegate?.get()
 		val currentContentMetadata = contentMetadata
 
-		if (timeFromStart != null && dataSourceDelegate != null && currentContentMetadata != null)
-		{
-			val contentStatus = dataSourceDelegate.didAskForKeepAliveContentStatus(currentContentMetadata)
-
-			contentStatus?.let { status ->
-				val data = KeepAliveMetadata(status, timeFromStart, true, measureType)
-				Logger.debug("KeepAliveReporter: Add data: $data")
-				collectedData.add(data)
-			} ?: run {
-				Logger.warn("KeepAliveReporter: Wrong data for take measurement. ContentStatus is null")
-			}
-		}
-		else
+		if (timeFromStart == null || dataSourceDelegate == null || currentContentMetadata == null)
 		{
 			Logger.warn("KeepAliveReporter: Wrong measurement $timeFromStart $dataSourceDelegate $currentContentMetadata")
 			stop()
+			return
+		}
+
+		val contentStatus = dataSourceDelegate.didAskForKeepAliveContentStatus(currentContentMetadata)
+
+		contentStatus?.let { status ->
+			val data = KeepAliveMetadata(status, timeFromStart, true, measureType)
+			Logger.debug("KeepAliveReporter: Add data: $data")
+			collectedData.add(data)
+		} ?: run {
+			Logger.warn("KeepAliveReporter: Wrong data for take measurement. ContentStatus is null")
 		}
 	}
 
@@ -162,7 +161,7 @@ internal class KeepAliveReporter(private val eventsReporter: EventsReporter) : K
 
 		Logger.debug("KeepAliveReporter: onEnterForeground()")
 
-		timer.resume()
+		timer.resumeBackground()
 
 		takeMeasurements(KeepAliveMeasureType.DOCUMENT_ALIVE)
 
@@ -180,7 +179,7 @@ internal class KeepAliveReporter(private val eventsReporter: EventsReporter) : K
 		}
 		Logger.debug("KeepAliveReporter: onEnterBackground()")
 
-		timer.pause()
+		timer.pauseBackground()
 		takeMeasurements(KeepAliveMeasureType.DOCUMENT_INACTIVE)
 		isInBackground = true
 	}

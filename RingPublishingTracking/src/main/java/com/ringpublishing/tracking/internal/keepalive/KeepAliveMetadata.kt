@@ -9,8 +9,8 @@ package com.ringpublishing.tracking.internal.keepalive
 import com.ringpublishing.tracking.data.KeepAliveContentStatus
 
 internal data class KeepAliveMetadata(
-	val contentStatus: KeepAliveContentStatus,
-	val timingInMillis: Long,
-	val hasFocus: Boolean,
-	val measureType: KeepAliveMeasureType,
+    val contentStatus: KeepAliveContentStatus,
+    val timingInMillis: Long,
+    val hasFocus: Boolean,
+    val measureType: KeepAliveMeasureType,
 )

@@ -8,9 +8,10 @@ package com.ringpublishing.tracking.internal.data
 
 import com.ringpublishing.tracking.data.ContentSize
 
-class WindowSize(private val width: Int,private val height: Int)
+class WindowSize(private val width: Int, private val height: Int)
 {
-	constructor(contentSize: ContentSize): this(contentSize.width, contentSize.height)
+
+	constructor(contentSize: ContentSize) : this(contentSize.width, contentSize.height)
 
 	override fun toString(): String
 	{
