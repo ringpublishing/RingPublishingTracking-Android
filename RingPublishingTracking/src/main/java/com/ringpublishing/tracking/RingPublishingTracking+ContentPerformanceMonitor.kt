@@ -36,11 +36,12 @@ fun RingPublishingTracking.reportClick(selectedElementName: String?)
  *
  * @param selectedElementName that user click
  * @param publicationUrl of content
+ * @param publicationId publication identifier
  */
 @Suppress("unused", "unused_parameter")
-fun RingPublishingTracking.reportContentClick(selectedElementName: String, publicationUrl: URL)
+fun RingPublishingTracking.reportContentClick(selectedElementName: String, publicationUrl: URL, publicationId: String)
 {
-	val event = eventsFactory.createClickEvent(selectedElementName, publicationUrl)
+	val event = eventsFactory.createClickEvent(selectedElementName, publicationUrl, publicationId)
 	reportEvent(event)
 }
 

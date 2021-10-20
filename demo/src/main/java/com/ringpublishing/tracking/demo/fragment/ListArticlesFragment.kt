@@ -101,7 +101,7 @@ class ListArticlesFragment : ListFragment(), OnItemClickListener
 		articles?.let {
 			val sampleArticle = it[position]
 			sampleArticle.let { article ->
-				listArticlesController.listItemClick(article.title, article.publicationUrl)
+				listArticlesController.listItemClick(article.title, article.publicationUrl, article.publicationId)
 			}
 		}
 	}
