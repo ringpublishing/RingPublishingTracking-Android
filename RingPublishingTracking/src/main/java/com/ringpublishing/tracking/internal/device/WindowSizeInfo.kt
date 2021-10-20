@@ -77,9 +77,9 @@ class WindowSizeInfo(application: Application)
 		})
 	}
 
-	fun getWindowSizeString() = getWindowSize().toString()
+	fun getWindowSizeDpString() = windowSize.getWindowSizeDpString(getWindowSizePx())
 
-	fun getWindowSize(): WindowSize = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+	private fun getWindowSizePx(): WindowSize = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
 	{
 		with(windowManager.currentWindowMetrics)
 		{
@@ -89,7 +89,7 @@ class WindowSizeInfo(application: Application)
 				WindowSize(right - left - insets.left - insets.right, bottom - top - insets.bottom - insets.top)
 			}
 		}
-	} else if (isSizeSet()) WindowSize(activityWidth, activityHeight) else windowSize.getWindowSizeDp()
+	} else if (isSizeSet()) WindowSize(activityWidth, activityHeight) else windowSize.getWindowSizePxFromMetrics()
 
 	private fun isSizeSet() = activityWidth > 0 && activityHeight > 0
 }

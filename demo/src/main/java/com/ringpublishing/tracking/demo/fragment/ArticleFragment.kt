@@ -40,6 +40,7 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 	private var articleText: TextView? = null
 	private var swipeRefreshLayout: SwipeRefreshLayout? = null
 	private var scrollView: ScrollView? = null
+	private var scrollViewContent: ViewGroup? = null
 
 	override fun onAttach(context: Context)
 	{
@@ -78,6 +79,7 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 		articleText = view?.findViewById(R.id.articleText)
 		swipeRefreshLayout = view?.findViewById(R.id.swipe_refresh_layout)
 		scrollView = view?.findViewById(R.id.scrollView)
+		scrollViewContent = view?.findViewById(R.id.scrollViewContent)
 
 		swipeRefreshLayout?.setOnRefreshListener {
 			loadData()
@@ -118,7 +120,10 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 	override fun ringPublishingTrackingDidAskForKeepAliveContentStatus(ringPublishingTracking: RingPublishingTracking, contentMetadata: ContentMetadata): KeepAliveContentStatus
 	{
 		return scrollView?.let {
-			KeepAliveContentStatus(it.scrollY.toFloat(), ContentSize(it.measuredWidth, it.measuredHeight))
-		} ?: KeepAliveContentStatus(0F, ContentSize(0, 0))
+
+			scrollViewContent?.let { content ->
+				KeepAliveContentStatus(it.scrollY, ContentSize(content.measuredWidth, content.measuredHeight))
+			} ?: KeepAliveContentStatus(it.scrollY, ContentSize(0, 0))
+		} ?: KeepAliveContentStatus(0, ContentSize(0, 0))
 	}
 }

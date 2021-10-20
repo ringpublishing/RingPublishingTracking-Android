@@ -5,4 +5,4 @@
  */
 package com.ringpublishing.tracking.data
 
-data class KeepAliveContentStatus(val scrollOffset: Float, val contentSize: ContentSize)
+data class KeepAliveContentStatus(val scrollOffsetPx: Int, val contentSizePx: ContentSize)

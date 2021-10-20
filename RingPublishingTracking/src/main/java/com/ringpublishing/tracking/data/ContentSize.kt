@@ -6,4 +6,4 @@
 
 package com.ringpublishing.tracking.data
 
-data class ContentSize(val width: Int, val height: Int)
+data class ContentSize(val widthPx: Int, val heightPx: Int)
