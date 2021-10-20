@@ -8,10 +8,10 @@ package com.ringpublishing.tracking.internal.decorator
 
 import java.util.Calendar
 import java.util.Random
+import kotlin.math.abs
 
 internal class IdGenerator
 {
-
 	fun newId(): String
 	{
 		with(Calendar.getInstance())
@@ -23,8 +23,9 @@ internal class IdGenerator
 			iv = iv * 100 + get(Calendar.MINUTE)
 			iv = iv * 100 + get(Calendar.SECOND)
 			iv = iv * 1000 + get(Calendar.MILLISECOND)
-			iv += ("" + ((1 + Random().nextInt()) * 10000000L)).substring(0, 8).toLong()
-			return iv.toString()
+			val randomPart = abs((1L + Random().nextLong()) * 10000000L)
+			val result = iv.toString() + randomPart.toString()
+			return result.substring(0, 24)
 		}
 	}
 }

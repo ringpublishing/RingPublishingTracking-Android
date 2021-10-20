@@ -23,14 +23,15 @@ class IdGeneratorTest
 	}
 
 	@Test
-	fun decorate_WhenGenerateIsCalled_ThenGenerateNewValue()
+	fun decorate_WhenGenerateIsCalled_ThenGenerateNewValueWithCorrectLength()
 	{
 		val idGenerator = IdGenerator()
 
 		repeat(9999)
 		{
 			val id = idGenerator.newId()
-			Assert.assertTrue(id.length > 7)
+			Assert.assertTrue(id.length == 24)
+			Assert.assertFalse(id.contains("-"))
 		}
 	}
 }
