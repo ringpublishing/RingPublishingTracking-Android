@@ -8,6 +8,7 @@ package com.ringpublishing.tracking.demo.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,12 +58,6 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 		articleController.contentViewDidAppear(this)
 	}
 
-	override fun onStart()
-	{
-		super.onStart()
-		updateUI()
-	}
-
 	override fun onPause()
 	{
 		super.onPause()
@@ -86,6 +81,12 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 			articleController.reloadContent(this)
 		}
 		return view
+	}
+
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+	{
+		super.onViewCreated(view, savedInstanceState)
+		updateUI()
 	}
 
 	private fun loadData()
