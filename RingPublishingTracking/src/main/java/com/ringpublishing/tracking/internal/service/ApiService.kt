@@ -98,17 +98,28 @@ internal class ApiService(
     {
         runCatching {
             Logger.debug("ApiService: Start Request identity")
-            val requestBuilder = IdentifyRequestBuilder(userRepository.buildUser())
+            val requestBuilder = IdentifyRequestBuilder(userRepository.buildUser(), apiRepository.readIdentify())
             val response = apiClient.identify(requestBuilder.build())
             val success = response.isSuccessful
             Logger.logIdentifyResponse(success, response)
 
             identifyResponse = if (success) response.body() else null
 
-	        apiRepository.saveIdentify(identifyResponse)
-	        Logger.debug("ApiService: New identify saved")
+	        return identifyResponse?.let {
 
-	        return ReportEventResult(reportEventStatusMapper.getStatus(response.code()), response.body()?.postInterval)
+		        apiRepository.saveIdentify(identifyResponse)
+		        Logger.debug("ApiService: New identify saved")
+		        return ReportEventResult(reportEventStatusMapper.getStatus(response.code()), response.body()?.postInterval)
+	        } ?: kotlin.run {
+
+		        identifyResponse = apiRepository.readIdentify()
+
+		        Logger.debug("ApiService: Failed identify body. Try use saved identify: $identifyResponse")
+
+		        return identifyResponse?.let { identify ->
+			        ReportEventResult(ReportEventStatus.SUCCESS, identify.postInterval)
+		        } ?: ReportEventResult(ReportEventStatus.ERROR_NETWORK)
+	        }
         }.getOrElse {
 	        Logger.warn("ApiService: Identify request network error ${it.localizedMessage}")
 

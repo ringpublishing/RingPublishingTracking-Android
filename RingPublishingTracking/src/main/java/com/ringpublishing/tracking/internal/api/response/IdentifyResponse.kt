@@ -5,10 +5,10 @@ import com.ringpublishing.tracking.internal.api.data.Profile
 import java.util.Calendar
 import java.util.Date
 
-internal data class IdentifyResponse(val ids: IdsMap, val profile: Profile, val postInterval: Long)
+internal data class IdentifyResponse(val ids: IdsMap?, val profile: Profile?, val postInterval: Long?)
 {
 
-	private fun getLifetime() = ids.parameters["eaUUID"]?.asJsonObject?.get("lifetime")?.asLong ?: 0
+	private fun getLifetime() = ids?.parameters?.get("eaUUID")?.asJsonObject?.get("lifetime")?.asLong ?: 0
 
 	fun getValidDate(savedIdentifyDate: Date?): Date?
 	{
@@ -20,5 +20,5 @@ internal data class IdentifyResponse(val ids: IdsMap, val profile: Profile, val 
 		return calendar.time
 	}
 
-	fun getIdentifier() = ids.parameters["eaUUID"]?.asJsonObject?.get("value")?.toString()
+	fun getIdentifier() = ids?.parameters?.get("eaUUID")?.asJsonObject?.get("value")?.asString
 }
