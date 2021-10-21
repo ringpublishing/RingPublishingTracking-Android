@@ -6,7 +6,6 @@
 
 package com.ringpublishing.tracking.internal.keepalive
 
-import android.content.Context
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
@@ -15,9 +14,9 @@ import com.ringpublishing.tracking.internal.factory.EventType
 import com.ringpublishing.tracking.internal.util.WindowSizeString
 import com.ringpublishing.tracking.internal.util.buildToDX
 
-internal class KeepAliveEventBuilder(context: Context)
+internal class KeepAliveEventBuilder
 {
-	private val windowSize = WindowSizeString(context)
+	private val windowSize = WindowSizeString()
 
 	fun create(content: ContentMetadata?, keepAliveList: List<KeepAliveMetadata>): Event
 	{

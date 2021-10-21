@@ -6,25 +6,25 @@
 
 package com.ringpublishing.tracking.internal.util
 
-import android.content.Context
+import android.content.res.Resources
 import android.util.DisplayMetrics
 import com.ringpublishing.tracking.internal.data.WindowSize
 import kotlin.math.roundToInt
 
-internal class WindowSizeString(context: Context)
+internal class WindowSizeString
 {
 
-	private val metrics: DisplayMetrics = context.resources.displayMetrics
+	private val screenMetrics: DisplayMetrics = Resources.getSystem().displayMetrics
 
 	private fun buildSizeString(windowSize: WindowSize) = "${windowSize.width}x${windowSize.height}"
 
-	fun getWindowSizePxFromMetrics() = WindowSize(metrics.widthPixels, metrics.heightPixels)
+	fun getScreenSizePxFromMetrics() = WindowSize(screenMetrics.widthPixels, screenMetrics.heightPixels)
 
-	fun getWindowSizeDp(windowSize: WindowSize) = WindowSize(getSizeDp(windowSize.width), getSizeDp(windowSize.height))
+	private fun getWindowSizeDp(windowSize: WindowSize) = WindowSize(getSizeDp(windowSize.width), getSizeDp(windowSize.height))
 
-	fun getScreenSizeDpString() = buildSizeString(getWindowSizeDp(WindowSize(metrics.widthPixels, metrics.heightPixels)))
+	fun getScreenSizeDpString() = buildSizeString(getWindowSizeDp(WindowSize(screenMetrics.widthPixels, screenMetrics.heightPixels)))
 
 	fun getWindowSizeDpString(windowSize: WindowSize) = buildSizeString(getWindowSizeDp(windowSize))
 
-	fun getSizeDp(sizePx: Int) = (sizePx / metrics.density).roundToInt()
+	fun getSizeDp(sizePx: Int) = (sizePx / screenMetrics.density).roundToInt()
 }

@@ -14,6 +14,7 @@ import com.ringpublishing.tracking.internal.log.Logger
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockkStatic
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -43,10 +44,10 @@ class DeviceScreenDecoratorTest
 		metrics.widthPixels = 10
 		metrics.heightPixels = 10
 		metrics.density = 1F
-		every { resources.displayMetrics } returns metrics
-		every { context.resources } returns resources
+		mockkStatic(Resources::class)
+		every { Resources.getSystem().displayMetrics } returns metrics
 
-		val deviceScreenDecorator = DeviceScreenDecorator(context)
+		val deviceScreenDecorator = DeviceScreenDecorator()
 
 		val event = Event()
 		deviceScreenDecorator.decorate(event)
@@ -62,10 +63,10 @@ class DeviceScreenDecoratorTest
 		metrics.widthPixels = 10
 		metrics.heightPixels = 10
 		metrics.density = 2F
-		every { resources.displayMetrics } returns metrics
-		every { context.resources } returns resources
+		mockkStatic(Resources::class)
+		every { Resources.getSystem().displayMetrics } returns metrics
 
-		val deviceScreenDecorator = DeviceScreenDecorator(context)
+		val deviceScreenDecorator = DeviceScreenDecorator()
 
 		val event = Event()
 		deviceScreenDecorator.decorate(event)

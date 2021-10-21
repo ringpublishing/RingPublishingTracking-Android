@@ -9,8 +9,8 @@ package com.ringpublishing.tracking.internal.decorator
 import android.app.Application
 import com.google.gson.Gson
 import com.ringpublishing.tracking.data.Event
-import com.ringpublishing.tracking.internal.device.WindowSizeInfo
 import com.ringpublishing.tracking.internal.ConfigurationManager
+import com.ringpublishing.tracking.internal.device.WindowSizeInfo
 import com.ringpublishing.tracking.internal.log.Logger
 
 internal class EventDecorator(
@@ -31,8 +31,8 @@ internal class EventDecorator(
 			add(UserSsoDataDecorator(configurationManager, gson))
 			add(TenantIdDecorator(configurationManager))
 			add(SiteAreaDecorator(configurationManager))
-			add(DeviceScreenDecorator(application))
-			add(WindowSizeDecorator(windowSizeInfo, application))
+			add(DeviceScreenDecorator())
+			add(WindowSizeDecorator(windowSizeInfo))
 			add(ConsentsDecorator(application))
 			add(ContentUrlDecorator(configurationManager))
 			add(StructurePathDecorator(configurationManager))

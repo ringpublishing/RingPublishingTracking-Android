@@ -6,7 +6,6 @@
 
 package com.ringpublishing.tracking.internal.keepalive
 
-import android.content.Context
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -18,12 +17,12 @@ import com.ringpublishing.tracking.internal.service.timer.KeepAliveSendTimerCall
 import java.lang.ref.WeakReference
 import java.util.concurrent.CopyOnWriteArrayList
 
-internal class KeepAliveReporter(private val eventsReporter: EventsReporter, context: Context) : KeepAliveSendTimerCallback, LifecycleObserver
+internal class KeepAliveReporter(private val eventsReporter: EventsReporter) : KeepAliveSendTimerCallback, LifecycleObserver
 {
 
 	private val timer = KeepAliveTimer(this)
 
-	private val eventBuilder = KeepAliveEventBuilder(context)
+	private val eventBuilder = KeepAliveEventBuilder()
 
 	private var contentMetadata: ContentMetadata? = null
 

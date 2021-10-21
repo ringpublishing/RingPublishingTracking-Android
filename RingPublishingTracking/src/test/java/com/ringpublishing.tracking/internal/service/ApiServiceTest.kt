@@ -55,6 +55,7 @@ class ApiServiceTest
 
 		coEvery { identifyResponse.getValidDate(any()) } returns null
 
+		coEvery { identifyResponse.postInterval } returns 500
 		coEvery { userRepository.buildUser() } returns user
 
 		val apiService = ApiService(apiClient, reportEventStatusMapper, apiRepository, userRepository)

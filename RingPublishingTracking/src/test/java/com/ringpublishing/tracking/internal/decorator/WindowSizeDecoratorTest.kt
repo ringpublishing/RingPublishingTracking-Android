@@ -16,6 +16,7 @@ import com.ringpublishing.tracking.internal.log.Logger
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockkStatic
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -48,13 +49,13 @@ class WindowSizeDecoratorTest
 		metrics.widthPixels = 10
 		metrics.heightPixels = 10
 		metrics.density = 1F
-		every { resources.displayMetrics } returns metrics
-		every { application.resources } returns resources
+		mockkStatic(Resources::class)
+		every { Resources.getSystem().displayMetrics } returns metrics
 
 		every { application.getSystemService(any()) } returns windowManager
 
 		val windowSizeInfo = WindowSizeInfo(application)
-		val decorator = WindowSizeDecorator(windowSizeInfo, application)
+		val decorator = WindowSizeDecorator(windowSizeInfo)
 
 		val event = Event()
 		decorator.decorate(event)

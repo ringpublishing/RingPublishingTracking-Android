@@ -70,7 +70,7 @@ internal class ConfigurationManager
 		Logger.info("Set Opt out mode enabled $enabled")
 	}
 
-	fun isOptOutModeEnabled() = operationMode.optOutEnabled
+	fun isSendEventsBlocked() = operationMode.optOutEnabled || operationMode.debugEnabled
 
 	fun updateUserData(ssoSystemName: String?, userId: String?, userEmail: String?)
 	{
