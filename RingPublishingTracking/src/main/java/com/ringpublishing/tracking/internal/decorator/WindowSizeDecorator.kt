@@ -6,10 +6,11 @@
 
 package com.ringpublishing.tracking.internal.decorator
 
+import android.content.Context
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.device.WindowSizeInfo
 
-internal class WindowSizeDecorator(private val windowSizeInfo: WindowSizeInfo) : DeviceScreenDecorator()
+internal class WindowSizeDecorator(private val windowSizeInfo: WindowSizeInfo, context: Context) : DeviceScreenDecorator(context)
 {
 
 	override fun decorate(event: Event)

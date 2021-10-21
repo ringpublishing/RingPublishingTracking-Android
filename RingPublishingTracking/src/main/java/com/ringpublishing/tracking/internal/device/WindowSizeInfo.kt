@@ -28,7 +28,7 @@ class WindowSizeInfo(application: Application)
 
 	private val windowManager = application.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
-	private val windowSize = WindowSizeString()
+	private val windowSize = WindowSizeString(application)
 
 	private var activityWidth: Int = 0
 	private var activityHeight: Int = 0
