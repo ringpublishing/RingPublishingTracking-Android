@@ -20,9 +20,6 @@ import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.util.WindowSizeString
 import java.lang.ref.WeakReference
 
-
-
-
 class WindowSizeInfo(application: Application)
 {
 
