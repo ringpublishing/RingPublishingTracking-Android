@@ -89,7 +89,7 @@ class WindowSizeInfo(application: Application)
 				WindowSize(right - left - insets.left - insets.right, bottom - top - insets.bottom - insets.top)
 			}
 		}
-	} else if (isSizeSet()) WindowSize(activityWidth, activityHeight) else windowSize.getWindowSizePxFromMetrics()
+	} else if (isSizeSet()) WindowSize(activityWidth, activityHeight) else windowSize.getScreenSizePxFromMetrics()
 
 	private fun isSizeSet() = activityWidth > 0 && activityHeight > 0
 }

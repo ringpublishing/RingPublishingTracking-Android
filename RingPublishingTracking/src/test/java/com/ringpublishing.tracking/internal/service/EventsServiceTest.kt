@@ -47,7 +47,7 @@ class EventsServiceTest
 	@Test
 	fun addEvent_WhenDefault_ThenCanAddEvent()
 	{
-		every { configurationManager.isOptOutModeEnabled() } returns false
+		every { configurationManager.isSendEventsBlocked() } returns false
 		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationManager)
 
 		eventService.addEvent(event)
@@ -59,7 +59,7 @@ class EventsServiceTest
 	@Test
 	fun addEvent_WhenOptOutEnabled_ThenEventNotAdded()
 	{
-		every { configurationManager.isOptOutModeEnabled() } returns true
+		every { configurationManager.isSendEventsBlocked() } returns true
 		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationManager)
 
 		eventService.addEvent(event)
@@ -71,7 +71,7 @@ class EventsServiceTest
 	@Test
 	fun addEvents_WhenDefault_ThenCanAddEvents()
 	{
-		every { configurationManager.isOptOutModeEnabled() } returns false
+		every { configurationManager.isSendEventsBlocked() } returns false
 
 		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationManager)
 		val list = mutableListOf<Event>()
@@ -87,7 +87,7 @@ class EventsServiceTest
 	@Test
 	fun addEvents_WhenOptOutEnabled_ThenEventsNotAdded()
 	{
-		every { configurationManager.isOptOutModeEnabled() } returns true
+		every { configurationManager.isSendEventsBlocked() } returns true
 		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationManager)
 		val list = mutableListOf<Event>()
 		list.add(event)
@@ -102,7 +102,7 @@ class EventsServiceTest
 	@Test
 	fun readyToFlush_WhenFLushOneEvent_ThenApiServiceReportOneEvent()
 	{
-		coEvery { configurationManager.isOptOutModeEnabled() } returns false
+		coEvery { configurationManager.isSendEventsBlocked() } returns false
 		val list = mutableListOf<Event>()
 		list.add(event)
 		coEvery { eventsQueue.getMaximumEventsToSend() } returns list
@@ -122,7 +122,7 @@ class EventsServiceTest
 		val list = mutableListOf<Event>()
 		list.add(event)
 		list.add(event2)
-		coEvery { configurationManager.isOptOutModeEnabled() } returns false
+		coEvery { configurationManager.isSendEventsBlocked() } returns false
 		coEvery { eventsQueue.getMaximumEventsToSend() } returns list
 		coEvery { eventsQueue.hasEventsToSend() } returns false
 		coEvery { apiService.reportEvents(any()) } returns ReportEventResult(ReportEventStatus.SUCCESS, 500)
@@ -139,7 +139,7 @@ class EventsServiceTest
 	{
 		val list = mutableListOf<Event>()
 		list.add(event)
-		coEvery { configurationManager.isOptOutModeEnabled() } returns false
+		coEvery { configurationManager.isSendEventsBlocked() } returns false
 		coEvery { eventsQueue.getMaximumEventsToSend() } returns list
 		coEvery { eventsQueue.hasEventsToSend() } returns false
 		coEvery { apiService.reportEvents(any()) } returns ReportEventResult(ReportEventStatus.SUCCESS, 500)
@@ -156,7 +156,7 @@ class EventsServiceTest
 	{
 		val list = mutableListOf<Event>()
 		list.add(event)
-		coEvery { configurationManager.isOptOutModeEnabled() } returns false
+		coEvery { configurationManager.isSendEventsBlocked() } returns false
 		coEvery { eventsQueue.getMaximumEventsToSend() } returns list
 		coEvery { eventsQueue.hasEventsToSend() } returns false
 		coEvery { apiService.reportEvents(any()) } returns ReportEventResult(ReportEventStatus.ERROR_NETWORK, 500)
@@ -173,10 +173,12 @@ class EventsServiceTest
 	{
 		val list = mutableListOf<Event>()
 		list.add(event)
-		coEvery { configurationManager.isOptOutModeEnabled() } returns false
+		coEvery { configurationManager.isSendEventsBlocked() } returns false
 		coEvery { eventsQueue.getMaximumEventsToSend() } returns list
 		coEvery { eventsQueue.hasEventsToSend() } returns false
 		coEvery { apiService.reportEvents(any()) } returns ReportEventResult(ReportEventStatus.ERROR_BAD_REQUEST, 500)
+		coEvery { apiService.hasIdentify()} returns true
+
 		val eventService = EventsService(apiService, eventsQueue, eventsServiceTimer, configurationManager)
 		eventService.addEvent(event)
 

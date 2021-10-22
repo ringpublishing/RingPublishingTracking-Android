@@ -6,6 +6,8 @@
 package com.ringpublishing.tracking
 
 import java.net.URL
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 /**
  * Aureus events
@@ -17,7 +19,15 @@ import java.net.URL
 @Suppress("unused", "unused_parameter")
 fun RingPublishingTracking.reportAureusOffersImpressions(offerIds: List<String>)
 {
-	val event = eventsFactory.createAureusOffersImpressionEvent(offerIds)
+	var encoded: String? = null
+
+	if (offerIds.isNotEmpty())
+	{
+		encoded = URLEncoder.encode(offerIds.joinToString(",", "[", "]") { "\"$it\"" }, StandardCharsets.UTF_8.name())
+	}
+
+	val event = eventsFactory.createUserActionEvent("aureusOfferImpressions", "offerIds", encoded)
+
 	reportEvent(event)
 }
 

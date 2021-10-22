@@ -55,6 +55,7 @@ class ApiServiceTest
 
 		coEvery { identifyResponse.getValidDate(any()) } returns null
 
+		coEvery { identifyResponse.postInterval } returns 500
 		coEvery { userRepository.buildUser() } returns user
 
 		val apiService = ApiService(apiClient, reportEventStatusMapper, apiRepository, userRepository)
@@ -64,7 +65,7 @@ class ApiServiceTest
 		runBlocking {
 			apiService.reportEvents(events)
 		}
-		coVerify(exactly = 1) { apiClient.identify(any()) }
+		coVerify(exactly = 2) { apiClient.identify(any()) }
 	}
 
 	@Test
@@ -80,6 +81,6 @@ class ApiServiceTest
 		runBlocking {
 			apiService.reportEvents(events)
 		}
-		coVerify(exactly = 1) { apiClient.identify(any()) }
+		coVerify(exactly = 2) { apiClient.identify(any()) }
 	}
 }

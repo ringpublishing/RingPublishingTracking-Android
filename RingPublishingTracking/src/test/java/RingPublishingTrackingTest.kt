@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.util.DisplayMetrics
+import android.view.Display
 import android.view.WindowManager
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingDelegate
@@ -13,6 +14,7 @@ import com.ringpublishing.tracking.internal.log.Logger
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockkStatic
 import org.junit.Before
 import org.junit.Test
 import java.net.URL
@@ -25,6 +27,9 @@ class RingPublishingTrackingTest
 
 	@MockK
 	lateinit var resources: Resources
+
+	@MockK
+	lateinit var display: Display
 
 	@MockK
 	lateinit var packageManager: PackageManager
@@ -67,7 +72,11 @@ class RingPublishingTrackingTest
 		every { context.resources } returns resources
 		every { context.resources.configuration } returns configuration
 
-		every { context.resources.displayMetrics } returns displayMetrics
+		every { windowManager.defaultDisplay } returns display
+
+		mockkStatic(Resources::class)
+		every { Resources.getSystem().displayMetrics } returns displayMetrics
+
 		every { context.getSharedPreferences(any(), any()) } returns sharedPreferences
 
 		every { context.getSystemService(any()) } returns windowManager

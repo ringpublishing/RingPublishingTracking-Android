@@ -14,8 +14,6 @@ import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.util.buildToDX
 import java.net.URL
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 class EventsFactory(private val gson: Gson)
 {
@@ -66,17 +64,5 @@ class EventsFactory(private val gson: Gson)
 		contentMetadata?.let { metadata -> parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text] = metadata.buildToDX() }
 
 		return Event(AnalyticsSystem.KROPKA_STATS.text, EventType.PAGE_VIEW.text, parameters)
-	}
-
-	fun createAureusOffersImpressionEvent(offerIds: List<String>): Event
-	{
-		var encoded: String? = null
-
-		if (offerIds.isNotEmpty())
-		{
-			encoded = URLEncoder.encode(offerIds.joinToString(",", "[", "]") { "\"$it\"" }, StandardCharsets.UTF_8.name())
-		}
-
-		return createUserActionEvent("aureusOfferImpressions", "offerIds", encoded)
 	}
 }

@@ -10,11 +10,13 @@ import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.KeepAliveContentStatus
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
+import com.ringpublishing.tracking.data.TrackingIdentifier
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingDelegate
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingKeepAliveDataSource
 import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.EventsReporter
 import com.ringpublishing.tracking.internal.di.Component
+import com.ringpublishing.tracking.internal.di.provideApiRepository
 import com.ringpublishing.tracking.internal.di.provideEventDecorator
 import com.ringpublishing.tracking.internal.di.provideEventsService
 import com.ringpublishing.tracking.internal.di.provideGson
@@ -53,11 +55,16 @@ object RingPublishingTracking : KeepAliveDataSource
 	/*
 	* @property trackingIdentifier Tracking identifier assigned by the module for this device
 	*/
-	var trackingIdentifier: String? = null
+	var trackingIdentifier: TrackingIdentifier? = null
 		set(value)
 		{
 			field = value
 			value?.let { delegate?.get()?.ringPublishingTrackingDidAssignTrackingIdentifier(this, it) }
+		}
+		get()
+		{
+			if (!Component.initialized) return null
+			return Component.provideApiRepository().readTrackingIdentifier()
 		}
 
 	/**

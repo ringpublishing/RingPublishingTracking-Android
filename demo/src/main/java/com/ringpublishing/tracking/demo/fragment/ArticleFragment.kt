@@ -33,6 +33,7 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 	private val articleController = ArticleController()
 
 	private var data: Pair<String, String>? = null
+	private var articleDataText: String? = ""
 
 	private var isFromPush = false
 
@@ -54,13 +55,6 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 		super.onCreate(savedInstanceState)
 		readArticleData()
 		articleController.contentViewDidAppear(this)
-		articleController.viewDidAppear()
-	}
-
-	override fun onStart()
-	{
-		super.onStart()
-		upadteUI()
 	}
 
 	override fun onPause()
@@ -88,13 +82,19 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 		return view
 	}
 
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+	{
+		super.onViewCreated(view, savedInstanceState)
+		updateUI()
+	}
+
 	private fun loadData()
 	{
 		readArticleData()
-		upadteUI()
+		updateUI()
 	}
 
-	private fun upadteUI()
+	private fun updateUI()
 	{
 		articleTitle?.text = String.format(getString(R.string.list_is_from_push), isFromPush, data?.first)
 		articleText?.text = data?.second
@@ -106,6 +106,7 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 			val articleTitle = resources.getStringArray(R.array.articles_titles)[it]
 			val articleText = resources.getStringArray(R.array.articles_text)[it]
 			data = Pair(articleTitle, articleText)
+			articleDataText = articleText
 			swipeRefreshLayout?.isRefreshing = false
 			articleController.loadArticle(SampleArticleBuilder(resources).build(it))
 		}
@@ -113,7 +114,9 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
 
 	fun addContent()
 	{
+		data = Pair(data?.first ?: "", data?.second + articleDataText)
 		articleText?.append(data?.second)
+
 		articleController.addMoreContent(this)
 	}
 

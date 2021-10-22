@@ -138,17 +138,4 @@ class EventsFactoryTest
 
 		Assert.assertEquals("PV_4,source_System_Name,publicationId,1,t", event.parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text])
 	}
-
-	@Test
-	fun createAureusOffersImpressionEvent_WithOffers_ThenOffersInEvent()
-	{
-		val eventsFactory = EventsFactory(gson)
-		val offersIds = listOf("123", "456", "789")
-
-		val event = eventsFactory.createAureusOffersImpressionEvent(offersIds)
-
-		Assert.assertEquals("%5B%22123%22%2C%22456%22%2C%22789%22%5D", event.parameters[UserEventParam.USER_ACTION_PAYLOAD.text])
-		Assert.assertEquals("aureusOfferImpressions", event.parameters[UserEventParam.USER_ACTION_CATEGORY_NAME.text])
-		Assert.assertEquals("offerIds", event.parameters[UserEventParam.USER_ACTION_SUBTYPE_NAME.text])
-	}
 }

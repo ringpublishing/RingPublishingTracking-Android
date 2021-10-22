@@ -21,7 +21,7 @@ class UserSsoDataDecoratorTest
 	{
 		val configurationManager = ConfigurationManager()
 
-		configurationManager.updateUserData("ssoValue", "userIdValue")
+		configurationManager.updateUserData("ssoValue", "userIdValue", userEmail)
 
 		val gson = GsonBuilder().create()
 		val userSsoDataDecorator = UserSsoDataDecorator(configurationManager, gson)

@@ -13,11 +13,12 @@ package com.ringpublishing.tracking
  *
  * @param ssoSystemName: Name of SSO system used to login
  * @param userId: User identifier
+ * @param userEmail: User email address
  */
 @Suppress("unused", "unused_parameter")
-fun RingPublishingTracking.updateUserData(ssoSystemName: String, userId: String?)
+fun RingPublishingTracking.updateUserData(ssoSystemName: String, userId: String?, userEmail: String?)
 {
-	configurationManager.updateUserData(ssoSystemName, userId)
+	configurationManager.updateUserData(ssoSystemName, userId, userEmail)
 }
 
 /**

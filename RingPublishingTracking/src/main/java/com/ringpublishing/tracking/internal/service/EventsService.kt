@@ -31,7 +31,7 @@ internal class EventsService(
 	@Synchronized
     fun addEvent(event: Event)
     {
-        if (configurationManager.isOptOutModeEnabled())
+        if (configurationManager.isSendEventsBlocked())
         {
             Logger.info("EventsService: OptOut mode enabled. Ignore new event")
             return
@@ -45,7 +45,7 @@ internal class EventsService(
 	@Synchronized
     fun addEvents(events: List<Event>)
     {
-        if (configurationManager.isOptOutModeEnabled())
+        if (configurationManager.isSendEventsBlocked())
         {
             Logger.info("EventsService: OptOut mode enabled. Ignore new events")
             return
@@ -57,50 +57,53 @@ internal class EventsService(
     }
 
 	@Synchronized
-    private fun flush()
-    {
-        val eventsToSend = eventsQueue.getMaximumEventsToSend()
+	private fun flush()
+	{
+		val eventsToSend = eventsQueue.getMaximumEventsToSend()
 
-        Logger.debug("EventsService: Flush ${eventsToSend.size} events $eventsToSend")
+		Logger.debug("EventsService: Flush ${eventsToSend.size} events $eventsToSend")
 
-        if (eventsToSend.isEmpty()) return
+		if (eventsToSend.isEmpty()) return
 
-        runBlocking {
+		runBlocking {
 
-            withContext(Dispatchers.IO) {
-                val reportEventsResult = apiService.reportEvents(eventsToSend)
+			withContext(Dispatchers.IO) {
+				val reportEventsResult = apiService.reportEvents(eventsToSend)
 
-                reportEventsResult.postInterval?.let { eventsServiceTimer.postInterval = it }
+				reportEventsResult.postInterval?.let { eventsServiceTimer.postInterval = it }
 
-                when (reportEventsResult.status)
-                {
-                    ReportEventStatus.SUCCESS ->
-                        {
-                            Logger.debug("EventsService: Events send success. Remove ${eventsToSend.size} events from queue.")
-                            eventsQueue.removeAll(eventsToSend)
+				when (reportEventsResult.status)
+				{
+					ReportEventStatus.SUCCESS ->
+					{
+						Logger.debug("EventsService: Events send success. Remove ${eventsToSend.size} events from queue.")
+						eventsQueue.removeAll(eventsToSend)
 
-                            if (eventsQueue.hasEventsToSend())
-                                {
-                                    Logger.debug("EventsService: Events queue have more events to send")
-                                    flush()
-                                } else {
-                                Logger.debug("EventsService: Queue is empty")
-                            }
-                        }
-                    ReportEventStatus.ERROR_NETWORK ->
-                        {
-                            Logger.warn("EventsService: Events not send! Network error! Try next time")
-                        }
-                    ReportEventStatus.ERROR_BAD_REQUEST ->
-                        {
-                            eventsQueue.removeAll(eventsToSend)
-                            Logger.error("EventsService: Events not send! Wrong events! Remove from queue")
-                        }
-                }
-                reportEventsResult
-            }
-        }
-    }
+						if (eventsQueue.hasEventsToSend())
+						{
+							Logger.debug("EventsService: Events queue have more events to send")
+							flush()
+						}
+						else Logger.debug("EventsService: Queue is empty")
+					}
+					ReportEventStatus.ERROR_NETWORK ->
+					{
+						Logger.warn("EventsService: Events not send! Network error! Try next time")
+					}
+					ReportEventStatus.ERROR_BAD_REQUEST ->
+					{
+						if (apiService.hasIdentify())
+						{
+							eventsQueue.removeAll(eventsToSend)
+							Logger.error("EventsService: Events not send! Wrong events! Remove from queue")
+						}
+						else Logger.error("EventsService: Events not send! Wrong events! Wait for identify")
+					}
+				}
+				reportEventsResult
+			}
+		}
+	}
 
     override fun readyToFlush()
     {

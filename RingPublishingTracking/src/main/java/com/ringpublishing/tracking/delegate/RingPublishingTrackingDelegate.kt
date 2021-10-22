@@ -6,6 +6,7 @@
 package com.ringpublishing.tracking.delegate
 
 import com.ringpublishing.tracking.RingPublishingTracking
+import com.ringpublishing.tracking.data.TrackingIdentifier
 
 interface RingPublishingTrackingDelegate
 {
@@ -15,5 +16,5 @@ interface RingPublishingTrackingDelegate
 	 * @param ringPublishingTracking object
 	 * @param identifier Assigned tracking identifier
 	 */
-	fun ringPublishingTrackingDidAssignTrackingIdentifier(ringPublishingTracking: RingPublishingTracking, identifier: String)
+	fun ringPublishingTrackingDidAssignTrackingIdentifier(ringPublishingTracking: RingPublishingTracking, identifier: TrackingIdentifier)
 }

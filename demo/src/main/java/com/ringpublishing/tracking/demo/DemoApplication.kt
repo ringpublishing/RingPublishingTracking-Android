@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.multidex.MultiDexApplication
 import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
+import com.ringpublishing.tracking.data.TrackingIdentifier
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingDelegate
 import com.ringpublishing.tracking.demo.logger.DemoAppLogger
 
@@ -14,7 +15,7 @@ class DemoApplication : MultiDexApplication()
 
 	private val ringPublishingTrackingDelegate = object : RingPublishingTrackingDelegate
 	{
-		override fun ringPublishingTrackingDidAssignTrackingIdentifier(ringPublishingTracking: RingPublishingTracking, identifier: String)
+		override fun ringPublishingTrackingDidAssignTrackingIdentifier(ringPublishingTracking: RingPublishingTracking, identifier: TrackingIdentifier)
 		{
 			Log.i("Demo", "RingPublishingTracking: received tracking identifier:$identifier")
 		}
