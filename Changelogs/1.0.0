@@ -9,3 +9,8 @@ Fully functional 'RingPublishingTracking' module release.
 * 'trackingIdentifier' property on `RingPublishingTracking` object is now a struct and contains `identifier` and `expirationDate` properties
 * 'publicationId' parameter was added to `reportContentClick` method
 * Added `reportContentClick` method variant with `aureusOfferId` parameter which should be used when interacting with Aureus recommendations
+
+### Changes
+
+* SDK initialization now takes as parameter "Application" object instead of Context.
+* There was wrong type declared for "applicationDefaultStructurePath" in "RingPublishingTrackingConfiguration", parameter type was changes from String to List
