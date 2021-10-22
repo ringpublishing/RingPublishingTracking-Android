@@ -13,7 +13,6 @@ import android.view.WindowManager
 import com.ringpublishing.tracking.internal.data.WindowSize
 import kotlin.math.roundToInt
 
-
 internal class WindowSizeString(context: Context)
 {
 

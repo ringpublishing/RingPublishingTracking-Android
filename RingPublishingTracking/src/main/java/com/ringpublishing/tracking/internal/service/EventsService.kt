@@ -83,8 +83,7 @@ internal class EventsService(
 						{
 							Logger.debug("EventsService: Events queue have more events to send")
 							flush()
-						}
-						else Logger.debug("EventsService: Queue is empty")
+						} else Logger.debug("EventsService: Queue is empty")
 					}
 					ReportEventStatus.ERROR_NETWORK ->
 					{
@@ -96,8 +95,7 @@ internal class EventsService(
 						{
 							eventsQueue.removeAll(eventsToSend)
 							Logger.error("EventsService: Events not send! Wrong events! Remove from queue")
-						}
-						else Logger.error("EventsService: Events not send! Wrong events! Wait for identify")
+						} else Logger.error("EventsService: Events not send! Wrong events! Wait for identify")
 					}
 				}
 				reportEventsResult
