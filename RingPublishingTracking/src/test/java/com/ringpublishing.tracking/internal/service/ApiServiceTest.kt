@@ -48,27 +48,6 @@ class ApiServiceTest
 	}
 
 	@Test
-	fun reportEvents_NoSavedIdentifyDate_IdentifyApiWasCalled()
-	{
-		coEvery { apiRepository.readIdentify() } returns identifyResponse
-		coEvery { apiRepository.readIdentifyRequestDate() } returns null
-
-		coEvery { identifyResponse.getValidDate(any()) } returns null
-
-		coEvery { identifyResponse.postInterval } returns 500
-		coEvery { userRepository.buildUser() } returns user
-
-		val apiService = ApiService(apiClient, reportEventStatusMapper, apiRepository, userRepository)
-
-		val events = mutableListOf(event)
-
-		runBlocking {
-			apiService.reportEvents(events)
-		}
-		coVerify(exactly = 2) { apiClient.identify(any()) }
-	}
-
-	@Test
 	fun reportEvents_NoSavedIdentify_IdentifyApiWasCalled()
 	{
 		coEvery { apiRepository.readIdentify() } returns null
