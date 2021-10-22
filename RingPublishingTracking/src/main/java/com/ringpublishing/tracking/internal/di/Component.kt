@@ -10,13 +10,10 @@ internal object Component
 
     private lateinit var appApplication: Application
 
-    var initialized = false
-
     fun initComponent(application: Application)
     {
 	    appApplication = application
         initOnStart()
-	    initialized = true
     }
 
     private fun initOnStart()
