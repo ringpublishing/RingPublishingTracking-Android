@@ -84,9 +84,7 @@ dependencies
     api "com.squareup.retrofit2:converter-gson:2.9.0"
 
     // For AdvertisingInfo
-    implementation 'androidx.ads:ads-identifier:1.0.0-alpha04'
-    // Used for the calls to addCallback() in the snippets on AdvertisingInfo
-    implementation 'com.google.guava:guava:28.0-android'
+    api "com.google.android.gms:play-services-ads-identifier:17.1.0"
 
     testImplementation "junit:junit:4.13.2"
     testImplementation 'androidx.test:core:1.4.0'

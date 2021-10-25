@@ -20,6 +20,7 @@ import com.ringpublishing.tracking.internal.di.provideApiRepository
 import com.ringpublishing.tracking.internal.di.provideEventDecorator
 import com.ringpublishing.tracking.internal.di.provideEventsService
 import com.ringpublishing.tracking.internal.di.provideGson
+import com.ringpublishing.tracking.internal.di.provideScreenSizeInfo
 import com.ringpublishing.tracking.internal.factory.EventsFactory
 import com.ringpublishing.tracking.internal.keepalive.KeepAliveDataSource
 import com.ringpublishing.tracking.internal.keepalive.KeepAliveReporter
@@ -79,7 +80,7 @@ object RingPublishingTracking : KeepAliveDataSource
 		Component.initComponent(application)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		eventsReporter = EventsReporter(Component.provideEventsService(configurationManager), Component.provideEventDecorator(configurationManager))
-		keepAliveReporter = KeepAliveReporter(eventsReporter, Component.provideContext())
+		keepAliveReporter = KeepAliveReporter(eventsReporter, Component.provideScreenSizeInfo())
 		delegate = WeakReference(ringPublishingTrackingDelegate)
 	}
 

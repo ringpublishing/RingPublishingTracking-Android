@@ -1,10 +1,12 @@
 package com.ringpublishing.tracking
 
 import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.hardware.display.DisplayManager
 import android.util.DisplayMetrics
 import android.view.Display
 import android.view.WindowManager
@@ -53,6 +55,9 @@ class RingPublishingTrackingTest
 	lateinit var displayMetrics: DisplayMetrics
 
 	@MockK
+	lateinit var displayManager: DisplayManager
+
+	@MockK
 	lateinit var windowManager: WindowManager
 
 	@Before
@@ -72,14 +77,19 @@ class RingPublishingTrackingTest
 		every { context.resources } returns resources
 		every { context.resources.configuration } returns configuration
 
-		every { windowManager.defaultDisplay } returns display
+		every { displayManager.getDisplay(Display.DEFAULT_DISPLAY) } returns display
 
 		mockkStatic(Resources::class)
 		every { Resources.getSystem().displayMetrics } returns displayMetrics
 
 		every { context.getSharedPreferences(any(), any()) } returns sharedPreferences
 
-		every { context.getSystemService(any()) } returns windowManager
+		every { sharedPreferences.contains(any()) } returns true
+		every { sharedPreferences.getString(any(), any()) } returns ""
+
+		every { context.getSystemService(Context.DISPLAY_SERVICE) } returns displayManager
+		every { context.getSystemService(Context.WINDOW_SERVICE) } returns windowManager
+
 		every { context.packageName } returns "com.ringpublishing"
 
 		every { ringPublishingTrackingConfiguration.apiKey } returns ""

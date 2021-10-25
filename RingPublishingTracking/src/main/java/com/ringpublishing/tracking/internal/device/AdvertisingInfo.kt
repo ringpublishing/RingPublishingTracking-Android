@@ -1,12 +1,12 @@
 package com.ringpublishing.tracking.internal.device
 
 import android.content.Context
-import androidx.ads.identifier.AdvertisingIdClient
-import androidx.ads.identifier.AdvertisingIdInfo
+import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.ringpublishing.tracking.internal.log.Logger
-import com.google.common.util.concurrent.FutureCallback
-import com.google.common.util.concurrent.Futures
-import java.util.concurrent.Executors
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 internal class AdvertisingInfo(private val context: Context)
 {
@@ -18,25 +18,18 @@ internal class AdvertisingInfo(private val context: Context)
      */
     fun obtainAdvertisingId()
     {
-        if (!AdvertisingIdClient.isAdvertisingIdProviderAvailable(context)) return
-
-        val advertisingIdInfoListenableFuture = AdvertisingIdClient.getAdvertisingIdInfo(context)
-
-        Futures.addCallback(
-            advertisingIdInfoListenableFuture,
-            object : FutureCallback<AdvertisingIdInfo>
-            {
-                override fun onSuccess(adInfo: AdvertisingIdInfo?)
-                {
-                    advertisingId = adInfo?.id
-                }
-
-                override fun onFailure(throwable: Throwable)
-                {
-                    Logger.warn("Failed to connect to Advertising ID provider.${throwable.localizedMessage}")
-                }
-            },
-            Executors.newSingleThreadExecutor()
-        )
+	    CoroutineScope(SupervisorJob() + Dispatchers.IO).launch(Dispatchers.IO) {
+		    readAdvertisementInfo()
+	    }
     }
+
+	private suspend fun readAdvertisementInfo()
+	{
+		try {
+			advertisingId = AdvertisingIdClient.getAdvertisingIdInfo(context).id
+		} catch (e: Exception)
+		{
+			Logger.info("Cannot get advertisingId ${e.localizedMessage}")
+		}
+	}
 }
