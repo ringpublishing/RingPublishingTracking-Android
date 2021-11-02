@@ -13,10 +13,8 @@ import android.view.Display
 import com.ringpublishing.tracking.internal.data.WindowSize
 import kotlin.math.roundToInt
 
-internal class ScreenSizeInfo(context: Context)
+internal class ScreenSizeInfo(context: Context, private val screenMetrics: DisplayMetrics)
 {
-
-	private var screenMetrics: DisplayMetrics = DisplayMetrics()
 
 	init
 	{

@@ -6,6 +6,7 @@
 package com.ringpublishing.tracking
 
 import android.app.Application
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.KeepAliveContentStatus
@@ -80,7 +81,7 @@ object RingPublishingTracking : KeepAliveDataSource
 		Component.initComponent(application)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		eventsReporter = EventsReporter(Component.provideEventsService(configurationManager), Component.provideEventDecorator(configurationManager))
-		keepAliveReporter = KeepAliveReporter(eventsReporter, Component.provideScreenSizeInfo())
+		keepAliveReporter = KeepAliveReporter(eventsReporter, Component.provideScreenSizeInfo(), ProcessLifecycleOwner.get())
 		delegate = WeakReference(ringPublishingTrackingDelegate)
 	}
 

@@ -1,8 +1,16 @@
-package com.ringpublishing.tracking.internal.service
+/*
+ *  Created by Grzegorz Małopolski on 10/28/21, 3:46 PM
+ * Copyright © 2021 Ringier Axel Springer Tech. All rights reserved.
+ *
+ */
+
+package com.ringpublishing.tracking.com.ringpublishing.tracking.internal.service
 
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.log.Logger
+import com.ringpublishing.tracking.internal.service.ApiService
+import com.ringpublishing.tracking.internal.service.EventsService
 import com.ringpublishing.tracking.internal.service.queue.EventsQueue
 import com.ringpublishing.tracking.internal.service.result.ReportEventResult
 import com.ringpublishing.tracking.internal.service.result.ReportEventStatus

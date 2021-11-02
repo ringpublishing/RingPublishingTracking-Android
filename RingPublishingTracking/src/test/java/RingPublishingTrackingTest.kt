@@ -12,7 +12,10 @@ import android.view.Display
 import android.view.WindowManager
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingDelegate
+import com.ringpublishing.tracking.internal.api.ApiClient
 import com.ringpublishing.tracking.internal.log.Logger
+import com.ringpublishing.tracking.internal.service.ApiService
+import com.ringpublishing.tracking.internal.service.EventsService
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -21,7 +24,7 @@ import org.junit.Before
 import org.junit.Test
 import java.net.URL
 
-class RingPublishingTrackingTest
+internal class RingPublishingTrackingTest
 {
 
 	@MockK

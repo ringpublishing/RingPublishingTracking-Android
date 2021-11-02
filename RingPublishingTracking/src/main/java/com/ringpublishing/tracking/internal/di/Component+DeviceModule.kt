@@ -1,5 +1,6 @@
 package com.ringpublishing.tracking.internal.di
 
+import android.util.DisplayMetrics
 import com.ringpublishing.tracking.internal.device.AdvertisingInfo
 import com.ringpublishing.tracking.internal.device.DeviceInfo
 import com.ringpublishing.tracking.internal.device.WindowSizeInfo
@@ -13,7 +14,7 @@ internal fun Component.provideDeviceInfo(): DeviceInfo = deviceInfo
 
 internal fun Component.provideAdvertisingInfo(): AdvertisingInfo = advertisingInfo
 
-private val screenSizeInfo: ScreenSizeInfo by lazy {ScreenSizeInfo(Component.provideApplication())}
+private val screenSizeInfo: ScreenSizeInfo by lazy {ScreenSizeInfo(Component.provideApplication(), DisplayMetrics())}
 
 internal fun Component.provideScreenSizeInfo(): ScreenSizeInfo = screenSizeInfo
 

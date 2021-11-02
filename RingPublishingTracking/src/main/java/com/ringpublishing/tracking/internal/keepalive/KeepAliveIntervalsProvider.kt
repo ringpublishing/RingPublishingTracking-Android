@@ -6,7 +6,7 @@
 
 package com.ringpublishing.tracking.internal.keepalive
 
-class KeepAliveIntervalsProvider
+internal class KeepAliveIntervalsProvider
 {
 
 	private val milliseconds = 1000L
@@ -26,9 +26,9 @@ class KeepAliveIntervalsProvider
 		return delaySeconds * milliseconds
 	}
 
-	fun nextIntervalForSendingMillis(timeInMillis: Long): Long
+	fun nextIntervalForSendingMillis(timeFromStartInMillis: Long): Long
 	{
-		val delaySeconds = when (val timeInSeconds = timeInMillis / milliseconds)
+		val delaySeconds = when (val timeInSeconds = timeFromStartInMillis / milliseconds)
 		{
 			in 0L..183L -> pseudoFibonacci.first { it > timeInSeconds } - timeInSeconds
 			in 183L..899L -> 60L
