@@ -11,4 +11,5 @@ internal enum class AnalyticsSystem(val text: String)
 	KROPKA_EVENTS("kropka-events"),
 	KROPKA_STATS("kropka-stats"),
 	TIMESCORE("timescore"),
+	KROPKA_MONITORING("kropka-monitoring"),
 }

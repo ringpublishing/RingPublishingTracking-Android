@@ -46,7 +46,7 @@ internal class KeepAliveReporterTest
 		RingPublishingTracking.setDebugMode(true)
 
 		every { screenSizeInfo.getWindowSizeDpString(any()) } returns "1x1"
-		every { keepAliveDataSource.didAskForKeepAliveContentStatus(any()) } returns KeepAliveContentStatus(1, ContentSize(2,2))
+		every { keepAliveDataSource.didAskForKeepAliveContentStatus(any()) } returns KeepAliveContentStatus(1, ContentSize(2, 2))
 
 		every { keepAliveDataSource.toString() } returns ""
 		every { screenSizeInfo.getSizeDp(any()) } returns 1

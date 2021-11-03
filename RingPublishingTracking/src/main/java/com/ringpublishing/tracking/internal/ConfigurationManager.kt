@@ -109,6 +109,8 @@ internal class ConfigurationManager
 		}
 	}
 
+	fun getRootPath() = ringPublishingTrackingConfiguration.applicationRootPath
+
 	private fun newPrimaryId()
 	{
 		primaryId = idGenerator.newId()

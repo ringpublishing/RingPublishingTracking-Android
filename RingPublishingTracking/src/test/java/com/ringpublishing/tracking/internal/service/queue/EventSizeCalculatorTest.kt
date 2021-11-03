@@ -6,6 +6,8 @@
 
 package com.ringpublishing.tracking.com.ringpublishing.tracking.internal.service.queue
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.api.data.User
 import com.ringpublishing.tracking.internal.api.response.IdentifyResponse
@@ -13,8 +15,6 @@ import com.ringpublishing.tracking.internal.constants.Constants
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.repository.ApiRepository
 import com.ringpublishing.tracking.internal.repository.UserRepository
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.ringpublishing.tracking.internal.service.queue.EventSizeCalculator
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -80,13 +80,13 @@ class EventSizeCalculatorTest
 	}
 
 	@Test
-	fun isLowerThanMaxRequestSize()
+	fun isBiggerThanMaxRequestSize()
 	{
 		val eventSizeCalculator = EventSizeCalculator(gson, apiRepository, userRepository)
 
-		val isLower = eventSizeCalculator.isLowerThanMaxRequestSize(200, 100)
+		val isLower = eventSizeCalculator.isBiggerThanMaxRequestSize(200, 100)
 
-		Assert.assertTrue(isLower)
+		Assert.assertFalse(isLower)
 	}
 
 	@Test

@@ -12,6 +12,7 @@ import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.ContentPageViewSource
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.demo.data.ScreenTrackingData
+import com.ringpublishing.tracking.internal.factory.EventType
 import com.ringpublishing.tracking.reportAureusOffersImpressions
 import com.ringpublishing.tracking.reportClick
 import com.ringpublishing.tracking.reportUserAction
@@ -126,6 +127,22 @@ class ActionsController : ScreenController()
 
 		val offerIds = listOf("123", "456", "789")
 		RingPublishingTracking.reportAureusOffersImpressions(offerIds)
+	}
+
+	fun actionReportTooBigEvent()
+	{
+		// Test to report to many parameters in event
+
+		val parameters = mutableMapOf<String, Any>()
+
+		for (i in 0..50)
+		{
+			parameters["$i"] = "Long parameter value Long parameter value Long parameter value Long parameter value Long parameter value Long parameter value Long parameter value "
+		}
+
+		val event = Event("kropka-events", EventType.CLICK.text, parameters)
+
+		RingPublishingTracking.reportEvent(event)
 	}
 
 	private fun reportButtonClickEvent(sender: View)
