@@ -46,7 +46,7 @@ internal class KeepAliveReporterTest
 		RingPublishingTracking.setDebugMode(true)
 
 		every { screenSizeInfo.getWindowSizeDpString(any()) } returns "1x1"
-		every { keepAliveDataSource.didAskForKeepAliveContentStatus(any()) } returns KeepAliveContentStatus(1, ContentSize(2,2))
+		every { keepAliveDataSource.didAskForKeepAliveContentStatus(any()) } returns KeepAliveContentStatus(1, ContentSize(2, 2))
 
 		every { keepAliveDataSource.toString() } returns ""
 		every { screenSizeInfo.getSizeDp(any()) } returns 1
@@ -57,10 +57,15 @@ internal class KeepAliveReporterTest
 
 		every { keepAliveDataSource.toString() } returns ""
 
-		val lifecycle = object : Lifecycle() {
-			override fun addObserver(observer: LifecycleObserver) { }
+		val lifecycle = object : Lifecycle()
+		{
+			override fun addObserver(observer: LifecycleObserver)
+			{
+			}
 
-			override fun removeObserver(observer: LifecycleObserver) { }
+			override fun removeObserver(observer: LifecycleObserver)
+			{
+			}
 
 			override fun getCurrentState(): State
 			{

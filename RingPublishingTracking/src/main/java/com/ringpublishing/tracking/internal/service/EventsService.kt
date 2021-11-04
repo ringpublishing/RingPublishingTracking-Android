@@ -7,9 +7,10 @@ import com.ringpublishing.tracking.internal.service.queue.EventsQueue
 import com.ringpublishing.tracking.internal.service.result.ReportEventStatus
 import com.ringpublishing.tracking.internal.service.timer.EventServiceTimerCallback
 import com.ringpublishing.tracking.internal.service.timer.EventsServiceTimer
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 /**
  * This service will add events and will send it when needed
@@ -59,46 +60,43 @@ internal class EventsService(
 	@Synchronized
 	private fun flush()
 	{
-		val eventsToSend = eventsQueue.getMaximumEventsToSend()
+		CoroutineScope(SupervisorJob() + Dispatchers.IO).launch(Dispatchers.IO) {
 
-		Logger.debug("EventsService: Flush ${eventsToSend.size} events $eventsToSend")
+			val eventsToSend = eventsQueue.getMaximumEventsToSend()
 
-		if (eventsToSend.isEmpty()) return
+			Logger.debug("EventsService: Flush ${eventsToSend.size} events $eventsToSend")
 
-		runBlocking {
+			if (eventsToSend.isEmpty()) return@launch
 
-			withContext(Dispatchers.IO) {
-				val reportEventsResult = apiService.reportEvents(eventsToSend)
+			val reportEventsResult = apiService.reportEvents(eventsToSend)
 
-				reportEventsResult.postInterval?.let { eventsServiceTimer.postInterval = it }
+			reportEventsResult.postInterval?.let { eventsServiceTimer.postInterval = it }
 
-				when (reportEventsResult.status)
+			when (reportEventsResult.status)
+			{
+				ReportEventStatus.SUCCESS ->
 				{
-					ReportEventStatus.SUCCESS ->
-					{
-						Logger.debug("EventsService: Events send success. Remove ${eventsToSend.size} events from queue.")
-						eventsQueue.removeAll(eventsToSend)
+					Logger.debug("EventsService: Events send success. Remove ${eventsToSend.size} events from queue.")
+					eventsQueue.removeAll(eventsToSend)
 
-						if (eventsQueue.hasEventsToSend())
-						{
-							Logger.debug("EventsService: Events queue have more events to send")
-							flush()
-						} else Logger.debug("EventsService: Queue is empty")
-					}
-					ReportEventStatus.ERROR_NETWORK ->
+					if (eventsQueue.hasEventsToSend())
 					{
-						Logger.warn("EventsService: Events not send! Network error! Try next time")
-					}
-					ReportEventStatus.ERROR_BAD_REQUEST ->
-					{
-						if (apiService.hasIdentify())
-						{
-							eventsQueue.removeAll(eventsToSend)
-							Logger.error("EventsService: Events not send! Wrong events! Remove from queue")
-						} else Logger.error("EventsService: Events not send! Wrong events! Wait for identify")
-					}
+						Logger.debug("EventsService: Events queue have more events to send")
+						flush()
+					} else Logger.debug("EventsService: Queue is empty")
 				}
-				reportEventsResult
+				ReportEventStatus.ERROR_NETWORK ->
+				{
+					Logger.warn("EventsService: Events not send! Network error! Try next time")
+				}
+				ReportEventStatus.ERROR_BAD_REQUEST ->
+				{
+					if (apiService.hasIdentify())
+					{
+						eventsQueue.removeAll(eventsToSend)
+						Logger.error("EventsService: Events not send! Wrong events! Remove from queue")
+					} else Logger.error("EventsService: Events not send! Wrong events! Wait for identify")
+				}
 			}
 		}
 	}

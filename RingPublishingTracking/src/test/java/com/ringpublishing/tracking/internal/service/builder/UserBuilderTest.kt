@@ -39,7 +39,7 @@ internal class UserBuilderTest
 	@Test
 	fun build_WhenAdvertisementId_ThenIsInUserAndDeviceIdIsNull()
 	{
-		every { advertisingInfo.advertisingId } returns "id"
+		every { advertisingInfo.readAdvertisingId() } returns "id"
 		val userBuilder = UserBuilder(advertisingInfo, deviceInfo, userRepository)
 
 		val user = userBuilder.build()
@@ -51,7 +51,7 @@ internal class UserBuilderTest
 	@Test
 	fun build_WhenNoAdvertisementId_ThenUserHaveDeviceId()
 	{
-		every { advertisingInfo.advertisingId } returns null
+		every { advertisingInfo.readAdvertisingId() } returns null
 		every { deviceInfo.getDeviceId() } returns "deviceId"
 		every { userRepository.readDeviceId() } returns null
 
@@ -66,7 +66,7 @@ internal class UserBuilderTest
 	@Test
 	fun build_WhenNoAdvertisementIdAndHaveDeviceIdInRepository_ThenUserHaveDeviceIdFromRepository()
 	{
-		every { advertisingInfo.advertisingId } returns null
+		every { advertisingInfo.readAdvertisingId() } returns null
 		every { userRepository.readDeviceId() } returns "deviceId"
 
 		val userBuilder = UserBuilder(advertisingInfo, deviceInfo, userRepository)

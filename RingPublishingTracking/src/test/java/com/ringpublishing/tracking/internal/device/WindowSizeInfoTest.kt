@@ -42,7 +42,7 @@ internal class WindowSizeInfoTest
 	{
 		every { application.getSystemService(any()) } returns windowManager
 
-		every { screenSizeInfo.getScreenSizePxFromMetrics() } returns WindowSize(1,1)
+		every { screenSizeInfo.getScreenSizePxFromMetrics() } returns WindowSize(1, 1)
 		every { screenSizeInfo.getWindowSizeDpString(any()) } returns "1x1"
 		val windowSizeInfo = WindowSizeInfo(screenSizeInfo, application)
 
