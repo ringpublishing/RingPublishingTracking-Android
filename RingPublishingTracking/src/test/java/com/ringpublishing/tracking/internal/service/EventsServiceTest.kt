@@ -121,7 +121,7 @@ class EventsServiceTest
 
 		eventService.readyToFlush()
 
-		coVerify(exactly = 1) { apiService.reportEvents(any()) }
+		coVerify(exactly = 1, timeout = 10000) { apiService.reportEvents(any()) }
 	}
 
 	@Test
@@ -139,7 +139,7 @@ class EventsServiceTest
 
 		eventService.readyToFlush()
 
-		coVerify(exactly = 1) { apiService.reportEvents(list) }
+		coVerify(exactly = 1, timeout = 10000) { apiService.reportEvents(list) }
 	}
 
 	@Test
@@ -192,6 +192,6 @@ class EventsServiceTest
 
 		eventService.readyToFlush()
 
-		coVerify(exactly = 1) { eventsQueue.removeAll(any())}
+		coVerify(exactly = 1, timeout = 10000) { eventsQueue.removeAll(any())}
 	}
 }
