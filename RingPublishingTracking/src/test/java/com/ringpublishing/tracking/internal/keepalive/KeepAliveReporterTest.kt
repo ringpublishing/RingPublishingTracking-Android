@@ -57,10 +57,15 @@ internal class KeepAliveReporterTest
 
 		every { keepAliveDataSource.toString() } returns ""
 
-		val lifecycle = object : Lifecycle() {
-			override fun addObserver(observer: LifecycleObserver) { }
+		val lifecycle = object : Lifecycle()
+		{
+			override fun addObserver(observer: LifecycleObserver)
+			{
+			}
 
-			override fun removeObserver(observer: LifecycleObserver) { }
+			override fun removeObserver(observer: LifecycleObserver)
+			{
+			}
 
 			override fun getCurrentState(): State
 			{

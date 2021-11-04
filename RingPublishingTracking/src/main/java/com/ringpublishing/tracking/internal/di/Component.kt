@@ -19,13 +19,7 @@ internal object Component
     {
 	    appApplication = application
 	    this.configurationManager = configurationManager
-        initOnStart()
 	    initialized = true
-    }
-
-    private fun initOnStart()
-    {
-        provideAdvertisingInfo().obtainAdvertisingId()
     }
 
     fun provideContext(): Context = appApplication.applicationContext
