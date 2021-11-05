@@ -15,13 +15,7 @@ internal object Component
     fun initComponent(application: Application)
     {
 	    appApplication = application
-        initOnStart()
 	    initialized = true
-    }
-
-    private fun initOnStart()
-    {
-        provideAdvertisingInfo().obtainAdvertisingId()
     }
 
     fun provideContext(): Context = appApplication.applicationContext

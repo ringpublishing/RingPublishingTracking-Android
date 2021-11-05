@@ -1,7 +1,7 @@
 package com.ringpublishing.tracking.internal.di
 
-import com.ringpublishing.tracking.internal.decorator.EventDecorator
 import com.ringpublishing.tracking.internal.ConfigurationManager
+import com.ringpublishing.tracking.internal.decorator.EventDecorator
 import com.ringpublishing.tracking.internal.service.EventsService
 import com.ringpublishing.tracking.internal.service.queue.EventSizeCalculator
 import com.ringpublishing.tracking.internal.service.queue.EventsQueue
@@ -48,7 +48,13 @@ internal fun Component.provideEventDecorator(configurationManager: Configuration
 {
 	if (eventDecorator == null)
 	{
-		eventDecorator = EventDecorator(configurationManager, provideApplication(), Component.provideGson(), Component.provideWindowSizeInfo())
+		eventDecorator = EventDecorator(
+			configurationManager,
+			provideApplication(),
+			Component.provideGson(),
+			Component.provideWindowSizeInfo(),
+			Component.provideScreenSizeInfo()
+		)
 	}
 
 	return eventDecorator!!

@@ -5,8 +5,8 @@ import com.ringpublishing.tracking.internal.api.request.IdentifyRequest
 import com.ringpublishing.tracking.internal.api.response.IdentifyResponse
 
 internal class IdentifyRequestBuilder(
-    private val user: User?,
-    private val oldRequest: IdentifyResponse?
+    private val user: User? = null,
+    private val oldRequest: IdentifyResponse? = null
 )
 {
 

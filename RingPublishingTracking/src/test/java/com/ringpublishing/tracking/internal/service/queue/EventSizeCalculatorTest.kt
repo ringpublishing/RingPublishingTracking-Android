@@ -1,4 +1,10 @@
-package com.ringpublishing.tracking.internal.service.queue
+/*
+ *  Created by Grzegorz Małopolski on 10/28/21, 3:46 PM
+ * Copyright © 2021 Ringier Axel Springer Tech. All rights reserved.
+ *
+ */
+
+package com.ringpublishing.tracking.com.ringpublishing.tracking.internal.service.queue
 
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.api.data.User
@@ -9,6 +15,7 @@ import com.ringpublishing.tracking.internal.repository.ApiRepository
 import com.ringpublishing.tracking.internal.repository.UserRepository
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.ringpublishing.tracking.internal.service.queue.EventSizeCalculator
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

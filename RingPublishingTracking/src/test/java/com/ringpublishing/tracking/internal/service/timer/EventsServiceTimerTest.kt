@@ -1,6 +1,14 @@
-package com.ringpublishing.tracking.internal.service.timer
+/*
+ *  Created by Grzegorz Małopolski on 10/28/21, 3:46 PM
+ * Copyright © 2021 Ringier Axel Springer Tech. All rights reserved.
+ *
+ */
+
+package com.ringpublishing.tracking.com.ringpublishing.tracking.internal.service.timer
 
 import com.ringpublishing.tracking.RingPublishingTracking
+import com.ringpublishing.tracking.internal.service.timer.EventServiceTimerCallback
+import com.ringpublishing.tracking.internal.service.timer.EventsServiceTimer
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify

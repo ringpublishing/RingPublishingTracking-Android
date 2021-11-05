@@ -7,21 +7,19 @@
 package com.ringpublishing.tracking.internal.util
 
 import android.content.Context
+import android.hardware.display.DisplayManager
 import android.util.DisplayMetrics
 import android.view.Display
-import android.view.WindowManager
 import com.ringpublishing.tracking.internal.data.WindowSize
 import kotlin.math.roundToInt
 
-internal class WindowSizeString(context: Context)
+internal class ScreenSizeInfo(context: Context, private val screenMetrics: DisplayMetrics)
 {
-
-	private var screenMetrics: DisplayMetrics = DisplayMetrics()
 
 	init
 	{
-		val display: Display = (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
-		display.getRealMetrics(screenMetrics)
+		val displayManager = (context.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager)
+		displayManager.getDisplay(Display.DEFAULT_DISPLAY).getRealMetrics(screenMetrics)
 	}
 
 	private fun buildSizeString(windowSize: WindowSize) = "${windowSize.width}x${windowSize.height}"

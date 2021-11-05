@@ -14,7 +14,7 @@ internal class UserBuilder(
 
     fun build(): User
     {
-        val advertisingId = advertisingInfo.advertisingId
+        val advertisingId = advertisingInfo.readAdvertisingId()
         var deviceId: String? = null
 
         if (advertisingId.isNullOrEmpty())

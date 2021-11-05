@@ -6,24 +6,28 @@
 
 package com.ringpublishing.tracking.internal.keepalive
 
-import android.content.Context
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.ProcessLifecycleOwner
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.internal.EventsReporter
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.service.timer.KeepAliveSendTimerCallback
+import com.ringpublishing.tracking.internal.util.ScreenSizeInfo
 import java.lang.ref.WeakReference
 import java.util.concurrent.CopyOnWriteArrayList
 
-internal class KeepAliveReporter(private val eventsReporter: EventsReporter, context: Context) : KeepAliveSendTimerCallback, LifecycleObserver
+internal class KeepAliveReporter(
+    private val eventsReporter: EventsReporter,
+    screenSizeInfo: ScreenSizeInfo,
+    private val lifecycleOwner: LifecycleOwner,
+) : KeepAliveSendTimerCallback, LifecycleObserver
 {
 
 	private val timer = KeepAliveTimer(this)
 
-	private val eventBuilder = KeepAliveEventBuilder(context)
+	private val eventBuilder = KeepAliveEventBuilder(screenSizeInfo)
 
 	private var contentMetadata: ContentMetadata? = null
 
@@ -54,8 +58,7 @@ internal class KeepAliveReporter(private val eventsReporter: EventsReporter, con
 		timer.start()
 		isPaused = false
 		isInBackground = false
-
-		ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+		lifecycleOwner.lifecycle.addObserver(this)
 	}
 
 	fun pause()
@@ -98,7 +101,7 @@ internal class KeepAliveReporter(private val eventsReporter: EventsReporter, con
 		timer.stop()
 		contentMetadata = null
 		dataSourceDelegate = null
-		ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
+		lifecycleOwner.lifecycle.removeObserver(this)
 	}
 
 	@Synchronized

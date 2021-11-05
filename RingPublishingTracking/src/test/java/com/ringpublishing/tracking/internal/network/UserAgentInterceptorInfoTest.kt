@@ -1,10 +1,17 @@
-package com.ringpublishing.tracking.internal.network
+/*
+ *  Created by Grzegorz Małopolski on 10/28/21, 3:46 PM
+ * Copyright © 2021 Ringier Axel Springer Tech. All rights reserved.
+ *
+ */
+
+package com.ringpublishing.tracking.com.ringpublishing.tracking.internal.network
 
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import com.ringpublishing.tracking.internal.device.DeviceInfo
+import com.ringpublishing.tracking.internal.network.UserAgentInterceptorInfo
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

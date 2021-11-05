@@ -1,11 +1,12 @@
 package com.ringpublishing.tracking
 
 import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.util.DisplayMetrics
+import android.hardware.display.DisplayManager
 import android.view.Display
 import android.view.WindowManager
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
@@ -14,12 +15,11 @@ import com.ringpublishing.tracking.internal.log.Logger
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockkStatic
 import org.junit.Before
 import org.junit.Test
 import java.net.URL
 
-class RingPublishingTrackingTest
+internal class RingPublishingTrackingTest
 {
 
 	@MockK
@@ -50,7 +50,7 @@ class RingPublishingTrackingTest
 	lateinit var apiUrl: URL
 
 	@MockK
-	lateinit var displayMetrics: DisplayMetrics
+	lateinit var displayManager: DisplayManager
 
 	@MockK
 	lateinit var windowManager: WindowManager
@@ -72,14 +72,16 @@ class RingPublishingTrackingTest
 		every { context.resources } returns resources
 		every { context.resources.configuration } returns configuration
 
-		every { windowManager.defaultDisplay } returns display
-
-		mockkStatic(Resources::class)
-		every { Resources.getSystem().displayMetrics } returns displayMetrics
+		every { displayManager.getDisplay(Display.DEFAULT_DISPLAY) } returns display
 
 		every { context.getSharedPreferences(any(), any()) } returns sharedPreferences
 
-		every { context.getSystemService(any()) } returns windowManager
+		every { sharedPreferences.contains(any()) } returns true
+		every { sharedPreferences.getString(any(), any()) } returns ""
+
+		every { context.getSystemService(Context.DISPLAY_SERVICE) } returns displayManager
+		every { context.getSystemService(Context.WINDOW_SERVICE) } returns windowManager
+
 		every { context.packageName } returns "com.ringpublishing"
 
 		every { ringPublishingTrackingConfiguration.apiKey } returns ""

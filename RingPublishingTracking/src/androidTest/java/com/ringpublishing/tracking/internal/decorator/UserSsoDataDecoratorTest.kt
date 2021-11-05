@@ -13,7 +13,7 @@ import com.ringpublishing.tracking.internal.ConfigurationManager
 import org.junit.Assert
 import org.junit.Test
 
-class UserSsoDataDecoratorTest
+internal class UserSsoDataDecoratorTest
 {
 
 	@Test
@@ -21,7 +21,7 @@ class UserSsoDataDecoratorTest
 	{
 		val configurationManager = ConfigurationManager()
 
-		configurationManager.updateUserData("ssoValue", "userIdValue", userEmail)
+		configurationManager.updateUserData("ssoValue", "userIdValue", "1")
 
 		val gson = GsonBuilder().create()
 		val userSsoDataDecorator = UserSsoDataDecorator(configurationManager, gson)
@@ -33,6 +33,9 @@ class UserSsoDataDecoratorTest
 
 		val decodedResult = String(Base64.decode(result, Base64.NO_WRAP))
 
-		Assert.assertEquals("{\"logged\":{\"id\":\"userIdValue\"},\"name\":\"ssoValue\"}", decodedResult)
+		Assert.assertTrue(decodedResult.contains("logged"))
+		Assert.assertTrue(decodedResult.contains("userIdValue"))
+		Assert.assertTrue(decodedResult.contains("md5"))
+		Assert.assertTrue(decodedResult.contains("name"))
 	}
 }

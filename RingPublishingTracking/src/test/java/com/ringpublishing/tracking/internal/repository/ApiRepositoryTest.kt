@@ -1,7 +1,15 @@
-package com.ringpublishing.tracking.internal.repository
+/*
+ *  Created by Grzegorz Małopolski on 10/28/21, 3:46 PM
+ * Copyright © 2021 Ringier Axel Springer Tech. All rights reserved.
+ *
+ */
+
+package com.ringpublishing.tracking.com.ringpublishing.tracking.internal.repository
 
 import com.ringpublishing.tracking.internal.api.response.IdentifyResponse
 import com.ringpublishing.tracking.internal.log.Logger
+import com.ringpublishing.tracking.internal.repository.ApiRepository
+import com.ringpublishing.tracking.internal.repository.DataRepository
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

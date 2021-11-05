@@ -1,5 +1,13 @@
-package com.ringpublishing.tracking.internal.network
+/*
+ *  Created by Grzegorz Małopolski on 10/28/21, 3:46 PM
+ * Copyright © 2021 Ringier Axel Springer Tech. All rights reserved.
+ *
+ */
 
+package com.ringpublishing.tracking.com.ringpublishing.tracking.internal.network
+
+import com.ringpublishing.tracking.internal.network.NetworkClient
+import com.ringpublishing.tracking.internal.network.UserAgentInterceptorInfo
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

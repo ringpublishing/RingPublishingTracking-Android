@@ -6,19 +6,16 @@
 
 package com.ringpublishing.tracking.internal.keepalive
 
-import android.content.Context
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
 import com.ringpublishing.tracking.internal.data.WindowSize
 import com.ringpublishing.tracking.internal.factory.EventType
-import com.ringpublishing.tracking.internal.util.WindowSizeString
+import com.ringpublishing.tracking.internal.util.ScreenSizeInfo
 import com.ringpublishing.tracking.internal.util.buildToDX
 
-internal class KeepAliveEventBuilder(context: Context)
+internal class KeepAliveEventBuilder(private val screenSizeInfo: ScreenSizeInfo)
 {
-	private val windowSize = WindowSizeString(context)
-
 	fun create(content: ContentMetadata?, keepAliveList: List<KeepAliveMetadata>): Event
 	{
 		val event = Event(AnalyticsSystem.TIMESCORE.text, EventType.KEEP_ALIVE.text)
@@ -32,11 +29,11 @@ internal class KeepAliveEventBuilder(context: Context)
 		keepAliveList.forEach { metaData ->
 			with(metaData)
 			{
-				windowSizes.add(windowSize.getWindowSizeDpString(WindowSize(contentStatus.contentSizePx)))
+				windowSizes.add(screenSizeInfo.getWindowSizeDpString(WindowSize(contentStatus.contentSizePx)))
 				focusList.add(1)
 				measureTypes.add(measureType.text)
 				timingsInSeconds.add(timingInMillis / 1000L)
-				scrollOffsets.add(windowSize.getSizeDp(contentStatus.scrollOffsetPx))
+				scrollOffsets.add(screenSizeInfo.getSizeDp(contentStatus.scrollOffsetPx))
 			}
 		}
 

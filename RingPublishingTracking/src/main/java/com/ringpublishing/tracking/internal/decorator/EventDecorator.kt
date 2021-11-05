@@ -12,12 +12,14 @@ import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.device.WindowSizeInfo
 import com.ringpublishing.tracking.internal.log.Logger
+import com.ringpublishing.tracking.internal.util.ScreenSizeInfo
 
 internal class EventDecorator(
     configurationManager: ConfigurationManager,
     application: Application,
     gson: Gson,
-    windowSizeInfo: WindowSizeInfo
+    windowSizeInfo: WindowSizeInfo,
+    screenSizeInfo: ScreenSizeInfo,
 )
 {
 	private val decorators = mutableListOf<Decorator>()
@@ -31,8 +33,8 @@ internal class EventDecorator(
 			add(UserSsoDataDecorator(configurationManager, gson))
 			add(TenantIdDecorator(configurationManager))
 			add(SiteAreaDecorator(configurationManager))
-			add(DeviceScreenDecorator(application))
-			add(WindowSizeDecorator(windowSizeInfo, application))
+			add(DeviceScreenDecorator(screenSizeInfo))
+			add(WindowSizeDecorator(windowSizeInfo, screenSizeInfo))
 			add(ConsentsDecorator(application))
 			add(ContentUrlDecorator(configurationManager))
 			add(StructurePathDecorator(configurationManager))

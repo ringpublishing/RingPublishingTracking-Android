@@ -17,15 +17,13 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import com.ringpublishing.tracking.internal.data.WindowSize
 import com.ringpublishing.tracking.internal.log.Logger
-import com.ringpublishing.tracking.internal.util.WindowSizeString
+import com.ringpublishing.tracking.internal.util.ScreenSizeInfo
 import java.lang.ref.WeakReference
 
-class WindowSizeInfo(application: Application)
+internal class WindowSizeInfo(private val screenSizeInfo: ScreenSizeInfo, application: Application)
 {
 
 	private val windowManager = application.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-
-	private val windowSize = WindowSizeString(application)
 
 	private var activityWidth: Int = 0
 	private var activityHeight: Int = 0
@@ -77,7 +75,7 @@ class WindowSizeInfo(application: Application)
 		})
 	}
 
-	fun getWindowSizeDpString() = windowSize.getWindowSizeDpString(getWindowSizePx())
+	fun getWindowSizeDpString() = screenSizeInfo.getWindowSizeDpString(getWindowSizePx())
 
 	private fun getWindowSizePx(): WindowSize = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
 	{
@@ -89,7 +87,7 @@ class WindowSizeInfo(application: Application)
 				WindowSize(right - left - insets.left - insets.right, bottom - top - insets.bottom - insets.top)
 			}
 		}
-	} else if (isSizeSet()) WindowSize(activityWidth, activityHeight) else windowSize.getScreenSizePxFromMetrics()
+	} else if (isSizeSet()) WindowSize(activityWidth, activityHeight) else screenSizeInfo.getScreenSizePxFromMetrics()
 
 	private fun isSizeSet() = activityWidth > 0 && activityHeight > 0
 }

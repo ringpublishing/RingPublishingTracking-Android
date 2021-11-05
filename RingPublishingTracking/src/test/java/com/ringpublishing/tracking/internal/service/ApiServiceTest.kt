@@ -1,4 +1,10 @@
-package com.ringpublishing.tracking.internal.service
+/*
+ *  Created by Grzegorz Małopolski on 10/28/21, 3:46 PM
+ * Copyright © 2021 Ringier Axel Springer Tech. All rights reserved.
+ *
+ */
+
+package com.ringpublishing.tracking.com.ringpublishing.tracking.internal.service
 
 import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.Event
@@ -7,6 +13,7 @@ import com.ringpublishing.tracking.internal.api.data.User
 import com.ringpublishing.tracking.internal.api.response.IdentifyResponse
 import com.ringpublishing.tracking.internal.repository.ApiRepository
 import com.ringpublishing.tracking.internal.repository.UserRepository
+import com.ringpublishing.tracking.internal.service.ApiService
 import com.ringpublishing.tracking.internal.service.result.ReportEventStatusMapper
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -15,6 +22,7 @@ import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
+import java.util.Date
 
 class ApiServiceTest
 {
@@ -61,5 +69,43 @@ class ApiServiceTest
 			apiService.reportEvents(events)
 		}
 		coVerify(exactly = 2) { apiClient.identify(any()) }
+	}
+
+	@Test
+	fun reportEvents_SavedIdentify_IdentifyApiNotCalled()
+	{
+		coEvery { identifyResponse.getValidDate(any()) } returns Date(Date().time + 10000)
+		coEvery { identifyResponse.postInterval } returns 500
+		coEvery { apiRepository.readIdentify() } returns identifyResponse
+		coEvery { apiRepository.readIdentifyRequestDate()} returns Date()
+		coEvery { userRepository.buildUser() } returns user
+
+		val apiService = ApiService(apiClient, reportEventStatusMapper, apiRepository, userRepository)
+
+		val events = mutableListOf(event)
+
+		runBlocking {
+			apiService.reportEvents(events)
+		}
+		coVerify(exactly = 0) { apiClient.identify(any()) }
+	}
+
+	@Test
+	fun reportEvents_SavedIdentifyExist_ThenNoSaveNewIdentify()
+	{
+		coEvery { identifyResponse.getValidDate(any()) } returns Date(Date().time + 10000)
+		coEvery { identifyResponse.postInterval } returns 500
+		coEvery { apiRepository.readIdentify() } returns identifyResponse
+		coEvery { apiRepository.readIdentifyRequestDate() } returns Date()
+
+		val apiService = ApiService(apiClient, reportEventStatusMapper, apiRepository, userRepository)
+
+		val events = mutableListOf(event)
+
+		runBlocking {
+			apiService.reportEvents(events)
+		}
+		coVerify(exactly = 2) { userRepository.buildUser() }
+		coVerify(exactly = 0) { apiRepository.saveIdentify(any()) }
 	}
 }
