@@ -173,7 +173,7 @@ class EventsServiceTest
 
 		eventService.readyToFlush()
 
-		coVerify(exactly = 0) { eventsQueue.removeAll(any())}
+		coVerify(exactly = 0, timeout = 10000) { eventsQueue.removeAll(any())}
 	}
 
 	@Test
