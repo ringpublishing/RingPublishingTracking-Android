@@ -34,10 +34,10 @@ internal class EventSizeCalculator(
 
     fun available(eventsToSendSize: Long) = Constants.maxRequestBodySize - totalOtherBodyObjectsSize - eventsToSendSize
 
-    fun isLowerThanMaxRequestSize(currentSize: Long, newElementSize: Long): Boolean
+    fun isBiggerThanMaxRequestSize(currentSize: Long, newElementSize: Long): Boolean
     {
         val totalSize = totalOtherBodyObjectsSize + currentSize + newElementSize
-        return totalSize < Constants.maxRequestBodySize
+        return totalSize >= Constants.maxRequestBodySize
     }
 
 	fun getSizeInBytes(anyObject: Any?): Long

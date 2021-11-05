@@ -5,62 +5,54 @@ import com.ringpublishing.tracking.internal.constants.Constants
 import com.ringpublishing.tracking.internal.log.Logger
 import java.util.concurrent.CopyOnWriteArrayList
 
-internal class EventsQueue(private val eventSizeCalculator: EventSizeCalculator)
+internal class EventsQueue(private val eventSizeCalculator: EventSizeCalculator, private val tooBigEventReplacement: TooBigEventReplacement)
 {
 
     private val queue = CopyOnWriteArrayList<Event>()
     private val eventsToSend = CopyOnWriteArrayList<Event>()
-    private val toBigEvents = CopyOnWriteArrayList<Event>()
 
-    fun add(event: Event)
-    {
-        queue.add(event)
-    }
+	fun add(event: Event)
+	{
+		val eventSize = eventSizeCalculator.getSizeInBytes(event)
 
-    fun addAll(event: List<Event>)
-    {
-        queue.addAll(event)
-    }
+		val eventWithSize = if (eventSize >= Constants.maxEventSize)
+		{
+			tooBigEventReplacement.replace(event, eventSize)
+		} else event
+
+		queue.add(eventWithSize)
+	}
+
+    fun addAll(events: List<Event>) = events.forEach { add(it) }
 
 	@Synchronized
-    fun getMaximumEventsToSend(): List<Event>
-    {
-        eventsToSend.clear()
-        eventSizeCalculator.calculateBodyElementsSize()
+	fun getMaximumEventsToSend(): List<Event>
+	{
+		eventsToSend.clear()
+		eventSizeCalculator.calculateBodyElementsSize()
 
-        var eventsToSendSize = 0L
+		var eventsToSendSize = 0L
 
-        queue.forEach {
-            val eventSize = eventSizeCalculator.getSizeInBytes(it)
+		queue.forEach {
+			val eventSize = eventSizeCalculator.getSizeInBytes(it)
 
-            if (eventSize < Constants.maxEventSize)
-                {
-                    if (eventSizeCalculator.isLowerThanMaxRequestSize(eventsToSendSize, eventSize))
-                        {
-                            eventsToSend.add(it)
-                            eventsToSendSize += eventSize
-                            Logger.debug(
-                                "TrackingQueue: Added event with size: $eventSize. " +
-                                    "Events to send size: $eventsToSendSize. " +
-                                    "Available: ${eventSizeCalculator.available(eventsToSendSize)} $it",
-                            )
-                        } else {
-                        return@forEach
-                    }
-                } else {
-                toBigEvents.add(it)
-                Logger.warn(
-                    "TrackingQueue: Event is to big. Maximum size is ${Constants.maxEventSize}. " +
-                        "Event size is $eventSize $it"
-                )
-            }
-        }
+			if (eventSizeCalculator.isBiggerThanMaxRequestSize(eventsToSendSize, eventSize))
+			{
+				return@forEach
+			}
 
-        queue.removeAll(toBigEvents)
-        toBigEvents.clear()
+			eventsToSend.add(it)
+			eventsToSendSize += eventSize
 
-        return eventsToSend
-    }
+			Logger.debug(
+				"TrackingQueue: Added event with size: $eventSize. " +
+						"Events to send size: $eventsToSendSize. " +
+						"Available: ${eventSizeCalculator.available(eventsToSendSize)} $it",
+			)
+		}
+
+		return eventsToSend
+	}
 
     fun hasEventsToSend() = queue.isNotEmpty()
 

@@ -5,9 +5,14 @@ import com.ringpublishing.tracking.internal.decorator.EventDecorator
 import com.ringpublishing.tracking.internal.service.EventsService
 import com.ringpublishing.tracking.internal.service.queue.EventSizeCalculator
 import com.ringpublishing.tracking.internal.service.queue.EventsQueue
+import com.ringpublishing.tracking.internal.service.queue.TooBigEventReplacement
 import com.ringpublishing.tracking.internal.service.timer.EventsServiceTimer
 
-private val eventsQueue: EventsQueue by lazy { EventsQueue(Component.provideEventSizeCalculator()) }
+private val tooBigEventReplacement: TooBigEventReplacement by lazy { TooBigEventReplacement(Component.provideConfigurationManager()) }
+
+internal fun Component.provideTooBigEventReplacement() = tooBigEventReplacement
+
+private val eventsQueue: EventsQueue by lazy { EventsQueue(Component.provideEventSizeCalculator(), Component.provideTooBigEventReplacement()) }
 
 internal fun Component.provideEventsQueue() = eventsQueue
 
