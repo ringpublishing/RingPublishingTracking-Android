@@ -38,7 +38,7 @@ internal class ApiRepository(private val repository: DataRepository)
 
 			if (identifier.isNullOrEmpty() || expirationDate == null) return null
 
-			return TrackingIdentifier(identifier, Date())
+			return TrackingIdentifier(identifier, expirationDate)
 		}
 	}
 }

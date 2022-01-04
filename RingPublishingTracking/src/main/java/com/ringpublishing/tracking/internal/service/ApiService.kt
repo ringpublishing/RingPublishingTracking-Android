@@ -1,5 +1,6 @@
 package com.ringpublishing.tracking.internal.service
 
+import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.api.ApiClient
 import com.ringpublishing.tracking.internal.api.response.IdentifyResponse
@@ -32,6 +33,13 @@ internal class ApiService(
 		Logger.debug("ApiService: First identify start request")
 		firstRequestIdentifyResult = requestIdentify()
 		Logger.debug("ApiService: First identify end request")
+
+		firstRequestIdentifyResult?.let {
+			if (it.isSuccess())
+			{
+				RingPublishingTracking.trackingIdentifier = apiRepository.readTrackingIdentifier()
+			}
+		}
 	}
 
     suspend fun reportEvents(events: List<Event>): ReportEventResult
@@ -107,7 +115,7 @@ internal class ApiService(
 
 	        return identifyResponse?.let {
 
-		        apiRepository.saveIdentify(identifyResponse)
+		        apiRepository.saveIdentify(it)
 		        Logger.debug("ApiService: New identify saved")
 		        return ReportEventResult(reportEventStatusMapper.getStatus(response.code()), response.body()?.postInterval)
 	        } ?: kotlin.run {
