@@ -1,3 +1,11 @@
+1.0.2 Release notes (2022-01-04)
+=============================================================
+
+Improvements to the 'RingPublishingTracking' module.
+
+### Changes
+
+* Assign 'trackingIdentifier' variable on start and notify 'RingPublishingTrackingDelegate'.
 1.0.1 Release notes (2021-11-05)
 =============================================================
 
