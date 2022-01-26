@@ -14,7 +14,6 @@ import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.data.TrackingIdentifier
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingDelegate
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingKeepAliveDataSource
-import com.ringpublishing.tracking.delegate.TrackingIdentifierError
 import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.EventsReporter
 import com.ringpublishing.tracking.internal.di.Component
@@ -70,11 +69,11 @@ object RingPublishingTracking : KeepAliveDataSource
 			return Component.provideApiRepository().readTrackingIdentifier()
 		}
 
-	internal var trackingIdentifierError: TrackingIdentifierError = TrackingIdentifierError.EMPTY
+	internal var trackingIdentifierError: TrackingIdentifierError? = null
 		set(value)
 		{
 			field = value
-			delegate?.get()?.ringPublishingTrackingDidFailToRetrieveTrackingIdentifier(this, value)
+			value?.let { delegate?.get()?.ringPublishingTrackingDidFailToRetrieveTrackingIdentifier(this, value) }
 		}
 
 	/**

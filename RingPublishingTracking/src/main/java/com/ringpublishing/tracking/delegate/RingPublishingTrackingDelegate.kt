@@ -6,6 +6,7 @@
 package com.ringpublishing.tracking.delegate
 
 import com.ringpublishing.tracking.RingPublishingTracking
+import com.ringpublishing.tracking.TrackingIdentifierError
 import com.ringpublishing.tracking.data.TrackingIdentifier
 
 interface RingPublishingTrackingDelegate
