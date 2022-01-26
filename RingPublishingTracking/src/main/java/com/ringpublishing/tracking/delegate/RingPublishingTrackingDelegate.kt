@@ -17,4 +17,13 @@ interface RingPublishingTrackingDelegate
 	 * @param identifier Assigned tracking identifier
 	 */
 	fun ringPublishingTrackingDidAssignTrackingIdentifier(ringPublishingTracking: RingPublishingTracking, identifier: TrackingIdentifier)
+
+	/**
+	 * Delegate method informing that RingPublishingTracking module failed to assign tracking identifier.
+	 * This method will be called every time there was an attempt to fetch tracking identifier but it failed
+	 * (during module initialization or when another attempt to fetch tracking identifier was performed)
+	 * @param ringPublishingTracking: RingPublishingTracking
+	 * @param error: TrackingIdentifierError
+	 */
+	fun ringPublishingTrackingDidFailToRetrieveTrackingIdentifier(ringPublishingTracking: RingPublishingTracking, error: TrackingIdentifierError)
 }

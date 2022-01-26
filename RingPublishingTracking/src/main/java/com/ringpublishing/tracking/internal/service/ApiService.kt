@@ -1,6 +1,7 @@
 package com.ringpublishing.tracking.internal.service
 
 import com.ringpublishing.tracking.RingPublishingTracking
+import com.ringpublishing.tracking.TrackingIdentifierError
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.api.ApiClient
 import com.ringpublishing.tracking.internal.api.response.IdentifyResponse
@@ -17,16 +18,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import retrofit2.Response
 import java.util.Date
 
 internal class ApiService(
-    private val apiClient: ApiClient,
-    private val reportEventStatusMapper: ReportEventStatusMapper,
-    private val apiRepository: ApiRepository,
-    private val userRepository: UserRepository
+	private val apiClient: ApiClient,
+	private val reportEventStatusMapper: ReportEventStatusMapper,
+	private val apiRepository: ApiRepository,
+	private val userRepository: UserRepository,
 )
 {
-    private var identifyResponse: IdentifyResponse? = null
+
+	private var identifyResponse: IdentifyResponse? = null
 	private var firstRequestIdentifyResult: ReportEventResult? = null
 
 	private val appStartIdentifyRequest: Job = CoroutineScope(SupervisorJob() + Dispatchers.IO).launch(Dispatchers.IO) {
@@ -42,104 +45,122 @@ internal class ApiService(
 		}
 	}
 
-    suspend fun reportEvents(events: List<Event>): ReportEventResult
-    {
-	    if (firstRequestIdentifyResult == null)
-	    {
-		    Logger.debug("ApiService: reportEvents() wait for first identify request")
-		    appStartIdentifyRequest.join()
-		    Logger.debug("ApiService: reportEvents() continue work after first identify request")
-	    }
+	suspend fun reportEvents(events: List<Event>): ReportEventResult
+	{
+		if (firstRequestIdentifyResult == null)
+		{
+			Logger.debug("ApiService: reportEvents() wait for first identify request")
+			appStartIdentifyRequest.join()
+			Logger.debug("ApiService: reportEvents() continue work after first identify request")
+		}
 
-        if (!shouldRequestIdentify())
-        {
-            return requestEvents(events)
-        }
+		if (!shouldRequestIdentify())
+		{
+			return requestEvents(events)
+		}
 
-        val identifyStatus = requestIdentify()
+		val identifyStatus = requestIdentify()
 
-        if (!identifyStatus.isSuccess())
-        {
-            return identifyStatus
-        }
+		if (!identifyStatus.isSuccess())
+		{
+			return identifyStatus
+		}
 
-        return requestEvents(events)
-    }
+		return requestEvents(events)
+	}
 
 	private fun shouldRequestIdentify(): Boolean
-    {
-        if (identifyResponse == null)
-        {
-            identifyResponse = apiRepository.readIdentify() ?: return true
-        }
+	{
+		if (identifyResponse == null)
+		{
+			identifyResponse = apiRepository.readIdentify() ?: return true
+		}
 
-        val identifyValidToDate = identifyResponse?.getValidDate(apiRepository.readIdentifyRequestDate())
+		val identifyValidToDate = identifyResponse?.getValidDate(apiRepository.readIdentifyRequestDate())
 
-        if (identifyValidToDate == null || identifyValidToDate.before(Date()))
-        {
-            apiRepository.removeIdentify()
-            identifyResponse = null
-            return true
-        }
+		if (identifyValidToDate == null || identifyValidToDate.before(Date()))
+		{
+			apiRepository.removeIdentify()
+			identifyResponse = null
+			return true
+		}
 
-        return false
-    }
+		return false
+	}
 
-    private suspend fun requestEvents(events: List<Event>): ReportEventResult
-    {
-        runCatching {
-            Logger.debug("ApiService: Start Request events")
-            val requestBuilder = EventRequestBuilder(events, identifyResponse!!, userRepository.buildUser())
+	private suspend fun requestEvents(events: List<Event>): ReportEventResult
+	{
+		runCatching {
+			Logger.debug("ApiService: Start Request events")
+			val requestBuilder = EventRequestBuilder(events, identifyResponse!!, userRepository.buildUser())
 
-            val response = apiClient.send(requestBuilder.build())
-            val success = response.isSuccessful
-            Logger.logEventResponse(success, response)
+			val response = apiClient.send(requestBuilder.build())
+			val success = response.isSuccessful
+			Logger.logEventResponse(success, response)
 
-            return ReportEventResult(reportEventStatusMapper.getStatus(response.code()), response.body()?.postInterval)
-        }.getOrElse {
-            Logger.warn("ApiService: Send request Network error ${it.localizedMessage}")
-            return ReportEventResult(ReportEventStatus.ERROR_NETWORK)
-        }
-    }
+			return ReportEventResult(reportEventStatusMapper.getStatus(response.code()), response.body()?.postInterval)
+		}.getOrElse {
+			Logger.warn("ApiService: Send request Network error ${it.localizedMessage}")
+			return ReportEventResult(ReportEventStatus.ERROR_NETWORK)
+		}
+	}
 
-    private suspend fun requestIdentify(): ReportEventResult
-    {
-        runCatching {
-            Logger.debug("ApiService: Start Request identity")
-            val requestBuilder = IdentifyRequestBuilder(userRepository.buildUser(), apiRepository.readIdentify())
-            val response = apiClient.identify(requestBuilder.build())
-            val success = response.isSuccessful
-            Logger.logIdentifyResponse(success, response)
+	private suspend fun requestIdentify(): ReportEventResult
+	{
+		runCatching {
+			Logger.debug("ApiService: Start Request identity")
+			val requestBuilder = IdentifyRequestBuilder(userRepository.buildUser(), apiRepository.readIdentify())
+			val response = apiClient.identify(requestBuilder.build())
+			val success = response.isSuccessful
+			Logger.logIdentifyResponse(success, response)
+			handleRequestIdentify(success, response)
 
-            identifyResponse = if (success) response.body() else null
+			return identifyResponse?.let {
 
-	        return identifyResponse?.let {
+				apiRepository.saveIdentify(it)
+				Logger.debug("ApiService: New identify saved")
+				return ReportEventResult(reportEventStatusMapper.getStatus(response.code()), response.body()?.postInterval)
+			} ?: kotlin.run {
 
-		        apiRepository.saveIdentify(it)
-		        Logger.debug("ApiService: New identify saved")
-		        return ReportEventResult(reportEventStatusMapper.getStatus(response.code()), response.body()?.postInterval)
-	        } ?: kotlin.run {
+				identifyResponse = apiRepository.readIdentify()
+				RingPublishingTracking.trackingIdentifierError = TrackingIdentifierError.RESPONSE_ERROR
 
-		        identifyResponse = apiRepository.readIdentify()
+				Logger.debug("ApiService: Failed identify body. Try use saved identify: $identifyResponse")
 
-		        Logger.debug("ApiService: Failed identify body. Try use saved identify: $identifyResponse")
+				return identifyResponse?.let { identify ->
+					ReportEventResult(ReportEventStatus.SUCCESS, identify.postInterval)
+				} ?: reportEventResult()
+			}
+		}.getOrElse {
+			Logger.warn("ApiService: Identify request network error ${it.localizedMessage}")
 
-		        return identifyResponse?.let { identify ->
-			        ReportEventResult(ReportEventStatus.SUCCESS, identify.postInterval)
-		        } ?: ReportEventResult(ReportEventStatus.ERROR_NETWORK)
-	        }
-        }.getOrElse {
-	        Logger.warn("ApiService: Identify request network error ${it.localizedMessage}")
+			identifyResponse = apiRepository.readIdentify()
 
-	        identifyResponse = apiRepository.readIdentify()
+			Logger.debug("ApiService: Try read last saved identify after fail request. Saved identify: $identifyResponse")
 
-	        Logger.debug("ApiService: Try read last saved identify after fail request. Saved identify: $identifyResponse")
+			return identifyResponse?.let { identify ->
+				ReportEventResult(ReportEventStatus.SUCCESS, identify.postInterval)
+			} ?: reportEventResult()
+		}
+	}
 
-	        return identifyResponse?.let { identify ->
-		        ReportEventResult(ReportEventStatus.SUCCESS, identify.postInterval)
-	        } ?: ReportEventResult(ReportEventStatus.ERROR_NETWORK)
-        }
-    }
+	private fun reportEventResult(): ReportEventResult
+	{
+		RingPublishingTracking.trackingIdentifierError = TrackingIdentifierError.CONNECTION_ERROR
+		return ReportEventResult(ReportEventStatus.ERROR_NETWORK)
+	}
+
+	private fun handleRequestIdentify(success: Boolean, response: Response<IdentifyResponse>)
+	{
+		if (success)
+		{
+			identifyResponse = response.body()
+		}
+		else
+		{
+			RingPublishingTracking.trackingIdentifierError = TrackingIdentifierError.REQUEST_ERROR
+		}
+	}
 
 	fun hasIdentify() = identifyResponse != null
 }

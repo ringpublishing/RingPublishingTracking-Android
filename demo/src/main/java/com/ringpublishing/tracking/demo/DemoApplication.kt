@@ -8,6 +8,7 @@ import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.data.TrackingIdentifier
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingDelegate
+import com.ringpublishing.tracking.delegate.TrackingIdentifierError
 import com.ringpublishing.tracking.demo.logger.DemoAppLogger
 
 class DemoApplication : MultiDexApplication()
@@ -17,7 +18,12 @@ class DemoApplication : MultiDexApplication()
 	{
 		override fun ringPublishingTrackingDidAssignTrackingIdentifier(ringPublishingTracking: RingPublishingTracking, identifier: TrackingIdentifier)
 		{
-			Log.i("Demo", "RingPublishingTracking: received tracking identifier:$identifier")
+			Log.i("Demo", "RingPublishingTracking: received tracking identifier: $identifier")
+		}
+
+		override fun ringPublishingTrackingDidFailToRetrieveTrackingIdentifier(ringPublishingTracking: RingPublishingTracking, error: TrackingIdentifierError)
+		{
+			Log.i("Demo", "RingPublishingTracking: did fail to retrieve tracking identifier: $error")
 		}
 	}
 
