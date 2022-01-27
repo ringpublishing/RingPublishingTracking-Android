@@ -1,9 +1,11 @@
 package com.ringpublishing.tracking.internal.service
 
+import com.google.gson.JsonElement
 import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.TrackingIdentifierError
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.api.ApiClient
+import com.ringpublishing.tracking.internal.api.data.IdsMap
 import com.ringpublishing.tracking.internal.api.response.IdentifyResponse
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.repository.ApiRepository
@@ -19,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import retrofit2.Response
 
 internal class ApiService(
@@ -149,17 +152,14 @@ internal class ApiService(
 	private fun onNewIdentifySaved(identify: IdentifyResponse, response: Response<IdentifyResponse>): ReportEventResult
 	{
 		var eventResult = ReportEventResult(ReportEventStatus.ERROR_BAD_RESPONSE)
-		identify.ids?.parameters?.let {
-			if(it.containsKey("value") && it.containsKey("lifetime")) {
-				apiRepository.saveIdentify(identify)
-				"New identify saved".toDebugLog()
-				 eventResult = ReportEventResult(reportEventStatusMapper.getStatus(response.code()), response.body()?.postInterval)
-			} else {
-				reportResponseError()
-			}
-		} ?: run {
+		if(identify.getIdentifier() != null && identify.getLifetime() > 0) {
+			apiRepository.saveIdentify(identify)
+			"New identify saved".toDebugLog()
+			 eventResult = ReportEventResult(reportEventStatusMapper.getStatus(response.code()), response.body()?.postInterval)
+		} else {
 			reportResponseError()
 		}
+
 		return eventResult
 	}
 

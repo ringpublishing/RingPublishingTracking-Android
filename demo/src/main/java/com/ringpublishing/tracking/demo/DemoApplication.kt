@@ -18,12 +18,12 @@ class DemoApplication : MultiDexApplication()
 	{
 		override fun ringPublishingTrackingDidAssignTrackingIdentifier(ringPublishingTracking: RingPublishingTracking, identifier: TrackingIdentifier)
 		{
-			Log.i("Demo", "RingPublishingTracking: received tracking identifier: $identifier")
+			Log.i("Demo", "RingPublishingTracking: ApiService: received tracking identifier: $identifier")
 		}
 
 		override fun ringPublishingTrackingDidFailToRetrieveTrackingIdentifier(ringPublishingTracking: RingPublishingTracking, error: TrackingIdentifierError)
 		{
-			Log.w("Demo", "RingPublishingTracking: did fail to retrieve tracking identifier: $error")
+			Log.w("Demo", "RingPublishingTracking: ApiService: did fail to retrieve tracking identifier: $error")
 		}
 	}
 

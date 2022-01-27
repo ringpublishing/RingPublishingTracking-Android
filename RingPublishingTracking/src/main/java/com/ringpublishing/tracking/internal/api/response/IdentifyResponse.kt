@@ -8,7 +8,7 @@ import java.util.Date
 internal data class IdentifyResponse(val ids: IdsMap?, val profile: Profile?, val postInterval: Long?)
 {
 
-	private fun getLifetime() = ids?.parameters?.get("eaUUID")?.asJsonObject?.get("lifetime")?.asLong ?: 0
+	fun getLifetime() = ids?.parameters?.get("eaUUID")?.asJsonObject?.get("lifetime")?.asLong ?: 0
 
 	fun getValidDate(savedIdentifyDate: Date?): Date?
 	{
