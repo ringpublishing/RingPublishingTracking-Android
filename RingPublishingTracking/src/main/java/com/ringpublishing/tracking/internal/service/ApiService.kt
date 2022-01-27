@@ -13,6 +13,7 @@ import com.ringpublishing.tracking.internal.service.builder.IdentifyRequestBuild
 import com.ringpublishing.tracking.internal.service.result.ReportEventResult
 import com.ringpublishing.tracking.internal.service.result.ReportEventStatus
 import com.ringpublishing.tracking.internal.service.result.ReportEventStatusMapper
+import com.ringpublishing.tracking.internal.util.isIdentifyExpire
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -50,9 +51,9 @@ internal class ApiService(
 	{
 		if (firstRequestIdentifyResult == null)
 		{
-			Logger.debug("ApiService: reportEvents() wait for first identify request")
+			"reportEvents() wait for first identify request".toDebugLog()
 			appStartIdentifyRequest.join()
-			Logger.debug("ApiService: reportEvents() continue work after first identify request")
+			"ApiService: reportEvents() continue work after first identify request".toDebugLog()
 		}
 
 		if (!shouldRequestIdentify())
@@ -77,9 +78,7 @@ internal class ApiService(
 			identifyResponse = apiRepository.readIdentify() ?: return true
 		}
 
-		val identifyValidToDate = identifyResponse?.getValidDate(apiRepository.readIdentifyRequestDate())
-
-		if (identifyValidToDate == null || identifyValidToDate.before(Date()))
+		if (identifyResponse?.getValidDate(apiRepository.readIdentifyRequestDate()).isIdentifyExpire())
 		{
 			apiRepository.removeIdentify()
 			identifyResponse = null
@@ -124,7 +123,7 @@ internal class ApiService(
 
 	private suspend fun onIdentifyRequest(): Response<IdentifyResponse>
 	{
-		Logger.debug("ApiService: Start Request identity")
+		"Start Request identity".toDebugLog()
 
 		val requestBuilder = IdentifyRequestBuilder(userRepository.buildUser(), apiRepository.readIdentify())
 		val response = apiClient.identify(requestBuilder.build())

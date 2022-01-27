@@ -2,6 +2,7 @@ package com.ringpublishing.tracking.internal.repository
 
 import com.ringpublishing.tracking.data.TrackingIdentifier
 import com.ringpublishing.tracking.internal.api.response.IdentifyResponse
+import com.ringpublishing.tracking.internal.util.isIdentifyExpire
 import java.util.Date
 
 internal class ApiRepository(private val repository: DataRepository)
@@ -18,7 +19,18 @@ internal class ApiRepository(private val repository: DataRepository)
         repository.saveObject(Key.IDENTIFY_DATE.text, Date())
     }
 
-    fun readIdentify() = repository.readObject<IdentifyResponse?>(Key.IDENTIFY.text, IdentifyResponse::class.java)
+    fun readIdentify(): IdentifyResponse? {
+
+	    val identifyResponse = repository.readObject<IdentifyResponse?>(Key.IDENTIFY.text, IdentifyResponse::class.java)
+	    val expirationDate = identifyResponse?.getValidDate(readIdentifyRequestDate())
+
+	    return if (!expirationDate.isIdentifyExpire()) {
+		    identifyResponse
+	    } else {
+		    removeIdentify()
+		    null
+	    }
+    }
 
     fun readIdentifyRequestDate() = repository.readObject<Date?>(Key.IDENTIFY_DATE.text, Date::class.java)
 
@@ -36,9 +48,10 @@ internal class ApiRepository(private val repository: DataRepository)
 			val expirationDate = identify.getValidDate(readIdentifyRequestDate())
 			val identifier = identify.getIdentifier()
 
-			if (identifier.isNullOrEmpty() || expirationDate == null) return null
+			if (identifier.isNullOrEmpty() || expirationDate.isIdentifyExpire()) return null
 
-			return TrackingIdentifier(identifier, expirationDate)
+			return TrackingIdentifier(identifier, expirationDate!!)
 		}
 	}
+
 }
