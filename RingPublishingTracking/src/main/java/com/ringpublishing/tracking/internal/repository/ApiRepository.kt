@@ -8,37 +8,43 @@ import java.util.Date
 internal class ApiRepository(private val repository: DataRepository)
 {
 
-    private enum class Key(val text: String) {
-        IDENTIFY("identify"),
-        IDENTIFY_DATE("identifyDate")
-    }
+	private enum class Key(val text: String)
+	{
 
-    fun saveIdentify(identifyResponse: IdentifyResponse?)
-    {
-        repository.saveObject(Key.IDENTIFY.text, identifyResponse)
-        repository.saveObject(Key.IDENTIFY_DATE.text, Date())
-    }
+		IDENTIFY("identify"),
+		IDENTIFY_DATE("identifyDate")
+	}
 
-    fun readIdentify(): IdentifyResponse? {
+	fun saveIdentify(identifyResponse: IdentifyResponse?)
+	{
+		repository.saveObject(Key.IDENTIFY.text, identifyResponse)
+		repository.saveObject(Key.IDENTIFY_DATE.text, Date())
+	}
 
-	    val identifyResponse = repository.readObject<IdentifyResponse?>(Key.IDENTIFY.text, IdentifyResponse::class.java)
-	    val expirationDate = identifyResponse?.getValidDate(readIdentifyRequestDate())
+	fun readIdentify(): IdentifyResponse?
+	{
 
-	    return if (!expirationDate.isIdentifyExpire()) {
-		    identifyResponse
-	    } else {
-		    removeIdentify()
-		    null
-	    }
-    }
+		val identifyResponse = repository.readObject<IdentifyResponse?>(Key.IDENTIFY.text, IdentifyResponse::class.java)
+		val expirationDate = identifyResponse?.getValidDate(readIdentifyRequestDate())
 
-    fun readIdentifyRequestDate() = repository.readObject<Date?>(Key.IDENTIFY_DATE.text, Date::class.java)
+		return if (!expirationDate.isIdentifyExpire())
+		{
+			identifyResponse
+		}
+		else
+		{
+			removeIdentify()
+			null
+		}
+	}
 
-    fun removeIdentify()
-    {
-        repository.remove(Key.IDENTIFY.text)
-        repository.remove(Key.IDENTIFY_DATE.text)
-    }
+	fun readIdentifyRequestDate() = repository.readObject<Date?>(Key.IDENTIFY_DATE.text, Date::class.java)
+
+	fun removeIdentify()
+	{
+		repository.remove(Key.IDENTIFY.text)
+		repository.remove(Key.IDENTIFY_DATE.text)
+	}
 
 	fun readTrackingIdentifier(): TrackingIdentifier?
 	{
@@ -53,5 +59,4 @@ internal class ApiRepository(private val repository: DataRepository)
 			return TrackingIdentifier(identifier, expirationDate!!)
 		}
 	}
-
 }

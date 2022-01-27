@@ -20,7 +20,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import retrofit2.Response
-import java.util.Date
 
 internal class ApiService(
 	private val apiClient: ApiClient,
