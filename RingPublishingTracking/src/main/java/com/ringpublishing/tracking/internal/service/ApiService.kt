@@ -146,11 +146,21 @@ internal class ApiService(
 		}
 	}
 
-	private fun onNewIdentifySaved(it: IdentifyResponse, response: Response<IdentifyResponse>): ReportEventResult
+	private fun onNewIdentifySaved(identify: IdentifyResponse, response: Response<IdentifyResponse>): ReportEventResult
 	{
-		apiRepository.saveIdentify(it)
-		"New identify saved".toDebugLog()
-		return ReportEventResult(reportEventStatusMapper.getStatus(response.code()), response.body()?.postInterval)
+		var eventResult = ReportEventResult(ReportEventStatus.ERROR_BAD_RESPONSE)
+		identify.ids?.parameters?.let {
+			if(it.containsKey("value") && it.containsKey("lifetime")) {
+				apiRepository.saveIdentify(identify)
+				"New identify saved".toDebugLog()
+				 eventResult = ReportEventResult(reportEventStatusMapper.getStatus(response.code()), response.body()?.postInterval)
+			} else {
+				reportResponseError()
+			}
+		} ?: run {
+			reportResponseError()
+		}
+		return eventResult
 	}
 
 	private fun onIdentifyBodyFailed()
@@ -163,6 +173,12 @@ internal class ApiService(
 	private fun parseIdentifyResponse() = identifyResponse?.let { identify ->
 		ReportEventResult(ReportEventStatus.SUCCESS, identify.postInterval)
 	} ?: reportConnectionError()
+
+	private fun reportResponseError(): ReportEventResult
+	{
+		RingPublishingTracking.trackingIdentifierError = TrackingIdentifierError.RESPONSE_ERROR
+		return ReportEventResult(ReportEventStatus.ERROR_BAD_RESPONSE)
+	}
 
 	private fun reportConnectionError(): ReportEventResult
 	{
