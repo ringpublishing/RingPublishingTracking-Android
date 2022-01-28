@@ -15,10 +15,12 @@ import com.ringpublishing.tracking.internal.repository.ApiRepository
 import com.ringpublishing.tracking.internal.repository.UserRepository
 import com.ringpublishing.tracking.internal.service.ApiService
 import com.ringpublishing.tracking.internal.service.result.ReportEventStatusMapper
+import com.ringpublishing.tracking.internal.util.isIdentifyExpire
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockkStatic
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -48,9 +50,13 @@ class ApiServiceTest
 	@MockK
 	internal lateinit var user: User
 
+	@MockK
+	internal var expiryDate: Date = Date(Date().time + 10000)
+
 	@Before
 	fun before()
 	{
+		mockkStatic("com.ringpublishing.tracking.internal.util.Date_IndetifierExpireKt")
 		MockKAnnotations.init(this, relaxUnitFun = true)
 		RingPublishingTracking.setDebugMode(true)
 	}
@@ -74,7 +80,8 @@ class ApiServiceTest
 	@Test
 	fun reportEvents_SavedIdentify_IdentifyApiNotCalled()
 	{
-		coEvery { identifyResponse.getValidDate(any()) } returns Date(Date().time + 10000)
+		coEvery { identifyResponse.getValidDate(any()) } returns expiryDate
+		coEvery { expiryDate.isIdentifyExpire() } returns false
 		coEvery { identifyResponse.postInterval } returns 500
 		coEvery { apiRepository.readIdentify() } returns identifyResponse
 		coEvery { apiRepository.readIdentifyRequestDate()} returns Date()
@@ -93,7 +100,8 @@ class ApiServiceTest
 	@Test
 	fun reportEvents_SavedIdentifyExist_ThenNoSaveNewIdentify()
 	{
-		coEvery { identifyResponse.getValidDate(any()) } returns Date(Date().time + 10000)
+		coEvery { identifyResponse.getValidDate(any()) } returns expiryDate
+		coEvery { expiryDate.isIdentifyExpire() } returns false
 		coEvery { identifyResponse.postInterval } returns 500
 		coEvery { apiRepository.readIdentify() } returns identifyResponse
 		coEvery { apiRepository.readIdentifyRequestDate() } returns Date()

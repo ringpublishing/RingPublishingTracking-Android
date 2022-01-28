@@ -1,11 +1,9 @@
 package com.ringpublishing.tracking.internal.service
 
-import com.google.gson.JsonElement
 import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.TrackingIdentifierError
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.api.ApiClient
-import com.ringpublishing.tracking.internal.api.data.IdsMap
 import com.ringpublishing.tracking.internal.api.response.IdentifyResponse
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.repository.ApiRepository
@@ -21,14 +19,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import retrofit2.Response
 
 internal class ApiService(
-	private val apiClient: ApiClient,
-	private val reportEventStatusMapper: ReportEventStatusMapper,
-	private val apiRepository: ApiRepository,
-	private val userRepository: UserRepository,
+    private val apiClient: ApiClient,
+    private val reportEventStatusMapper: ReportEventStatusMapper,
+    private val apiRepository: ApiRepository,
+    private val userRepository: UserRepository,
 )
 {
 
@@ -142,9 +139,7 @@ internal class ApiService(
 		{
 			identifyResponse = response.body()
 			RingPublishingTracking.trackingIdentifierError = null
-		}
-		else
-		{
+		} else {
 			RingPublishingTracking.trackingIdentifierError = TrackingIdentifierError.REQUEST_ERROR
 		}
 	}
@@ -152,7 +147,7 @@ internal class ApiService(
 	private fun onNewIdentifySaved(identify: IdentifyResponse, response: Response<IdentifyResponse>): ReportEventResult
 	{
 		var eventResult = ReportEventResult(ReportEventStatus.ERROR_BAD_RESPONSE)
-		if(identify.getIdentifier() != null && identify.getLifetime() > 0) {
+		if (identify.getIdentifier() != null && identify.getLifetime() > 0) {
 			apiRepository.saveIdentify(identify)
 			"New identify saved".toDebugLog()
 			 eventResult = ReportEventResult(reportEventStatusMapper.getStatus(response.code()), response.body()?.postInterval)

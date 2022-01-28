@@ -10,9 +10,11 @@ import com.ringpublishing.tracking.internal.api.response.IdentifyResponse
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.repository.ApiRepository
 import com.ringpublishing.tracking.internal.repository.DataRepository
+import com.ringpublishing.tracking.internal.util.isIdentifyExpire
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockkStatic
 import io.mockk.verify
 import org.junit.Assert
 import org.junit.Before
@@ -29,7 +31,13 @@ class ApiRepositoryTest
 	internal lateinit var identifyResponse: IdentifyResponse
 
 	@MockK
-	lateinit var date: Date
+	internal lateinit var date: Date
+
+	@MockK
+	internal lateinit var expirationDate: Date
+
+	@MockK
+	internal lateinit var identifyDate: Date
 
 	@Before
 	fun before()
@@ -49,14 +57,36 @@ class ApiRepositoryTest
 	}
 
 	@Test
-	fun readIdentify_FromApiRepository_ReadObjectFromDataRepository()
+	fun readIdentify_FromApiRepository_ReadObjectFromDataRepository_WhenIdentifierIsUpToDate()
 	{
-		every { dataRepository.readObject<IdentifyResponse?>(any(), IdentifyResponse::class.java) } returns identifyResponse
+		prepareMocksForReadingIdentify(false)
+
 		val apiRepository = ApiRepository(dataRepository)
 
 		val result = apiRepository.readIdentify()
 
 		Assert.assertNotNull(result)
+	}
+
+	@Test
+	fun readNull_FromApiRepository_ReadObjectFromDataRepository_WhenIdentifierIsExpired()
+	{
+		prepareMocksForReadingIdentify(true)
+
+		val apiRepository = ApiRepository(dataRepository)
+
+		val result = apiRepository.readIdentify()
+
+		Assert.assertNull(result)
+	}
+
+	private fun prepareMocksForReadingIdentify(isExpired: Boolean)
+	{
+		mockkStatic("com.ringpublishing.tracking.internal.util.Date_IndetifierExpireKt")
+		every { dataRepository.readObject<IdentifyResponse?>(any(), IdentifyResponse::class.java) } returns identifyResponse
+		every { dataRepository.readObject<Date?>(any(), Date::class.java) } returns identifyDate
+		every { identifyResponse.getValidDate(identifyDate) } returns expirationDate
+		every { expirationDate.isIdentifyExpire() } returns isExpired
 	}
 
 	@Test

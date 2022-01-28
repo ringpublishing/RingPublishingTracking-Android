@@ -30,9 +30,7 @@ internal class ApiRepository(private val repository: DataRepository)
 		return if (!expirationDate.isIdentifyExpire())
 		{
 			identifyResponse
-		}
-		else
-		{
+		} else {
 			removeIdentify()
 			null
 		}
