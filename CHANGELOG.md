@@ -1,3 +1,14 @@
+1.1.0 Release notes (2022-01-27)
+=============================================================
+
+Improvements to the 'RingPublishingTracking' module.
+
+### Features
+
+* Added 'TrackingIdentifierError' enum
+* Added 'ringPublishingTrackingDidFailToRetrieveTrackingIdentifier' method to 'RingPublishingTrackingDelegate' interface
+        This method will be called every time there was an attempt to fetch tracking identifier but it failed during module initialization (or when another attempt to fetch tracking identifier was performed)
+
 1.0.2 Release notes (2022-01-04)
 =============================================================
 
