@@ -51,124 +51,113 @@ import java.lang.ref.WeakReference
  * - Remove custom application logger 'removeLogListener(logListener: LogListener)'
  */
 @Suppress("unused")
-object RingPublishingTracking : KeepAliveDataSource
-{
+object RingPublishingTracking : KeepAliveDataSource {
 
-	/*
-	* @property trackingIdentifier Tracking identifier assigned by the module for this device
-	*/
-	var trackingIdentifier: TrackingIdentifier? = null
-		set(value)
-		{
-			field = value
-			value?.let { delegate?.get()?.ringPublishingTrackingDidAssignTrackingIdentifier(this, it) }
-		}
-		get()
-		{
-			if (!Component.initialized) return null
-			return Component.provideApiRepository().readTrackingIdentifier()
-		}
+    /*
+    * @property trackingIdentifier Tracking identifier assigned by the module for this device
+    */
+    var trackingIdentifier: TrackingIdentifier? = null
+        set(value) {
+            field = value
+            value?.let { delegate?.get()?.ringPublishingTrackingDidAssignTrackingIdentifier(this, it) }
+        }
+        get() {
+            if (!Component.initialized) return null
+            return Component.provideApiRepository().readTrackingIdentifier()
+        }
 
-	internal var trackingIdentifierError: TrackingIdentifierError? = null
-		set(value)
-		{
-			field = value
-			value?.let { delegate?.get()?.ringPublishingTrackingDidFailToRetrieveTrackingIdentifier(this, value) }
-		}
+    internal var trackingIdentifierError: TrackingIdentifierError? = null
+        set(value) {
+            field = value
+            value?.let { delegate?.get()?.ringPublishingTrackingDidFailToRetrieveTrackingIdentifier(this, value) }
+        }
 
-	/**
-	 * Initialize all needed parameters needed to report events.
-	 * Should be called once in main point of application.
-	 *
-	 * @param application is Android Application
-	 * @param ringPublishingTrackingConfiguration is tenant for this application
-	 */
-	fun initialize(
-		application: Application, ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration,
-		ringPublishingTrackingDelegate: RingPublishingTrackingDelegate?,
-	)
-	{
-		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
-		Component.initComponent(application, configurationManager)
-		eventsReporter = EventsReporter(Component.provideEventsService(configurationManager), Component.provideEventDecorator(configurationManager))
-		keepAliveReporter = KeepAliveReporter(eventsReporter, Component.provideScreenSizeInfo(), ProcessLifecycleOwner.get())
-		delegate = WeakReference(ringPublishingTrackingDelegate)
-	}
+    /**
+     * Initialize all needed parameters needed to report events.
+     * Should be called once in main point of application.
+     *
+     * @param application is Android Application
+     * @param ringPublishingTrackingConfiguration is tenant for this application
+     */
+    fun initialize(
+        application: Application,
+        ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration,
+        ringPublishingTrackingDelegate: RingPublishingTrackingDelegate?,
+    ) {
+        configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
+        Component.initComponent(application, configurationManager)
+        eventsReporter = EventsReporter(Component.provideEventsService(configurationManager), Component.provideEventDecorator(configurationManager))
+        keepAliveReporter = KeepAliveReporter(eventsReporter, Component.provideScreenSizeInfo(), ProcessLifecycleOwner.get())
+        delegate = WeakReference(ringPublishingTrackingDelegate)
+    }
 
-	/**
-	 * Tur on or off debug mode
-	 * By default debug mode is disabled
-	 * Debug mode enable debug logs
-	 *
-	 * @param enabled turn on debug logs when is set to true
-	 */
-	fun setDebugMode(enabled: Boolean)
-	{
-		configurationManager.setDebugMode(enabled)
-	}
+    /**
+     * Tur on or off debug mode
+     * By default debug mode is disabled
+     * Debug mode enable debug logs
+     *
+     * @param enabled turn on debug logs when is set to true
+     */
+    fun setDebugMode(enabled: Boolean) {
+        configurationManager.setDebugMode(enabled)
+    }
 
-	/**
-	 * Turn on or off send events to server
-	 * By default 'enabled' is false, so events are send
-	 *
-	 * @param enabled can be set to true. Then events are not send
-	 */
-	fun setOptOutMode(enabled: Boolean)
-	{
-		configurationManager.setOptOutMode(enabled)
-	}
+    /**
+     * Turn on or off send events to server
+     * By default 'enabled' is false, so events are send
+     *
+     * @param enabled can be set to true. Then events are not send
+     */
+    fun setOptOutMode(enabled: Boolean) {
+        configurationManager.setOptOutMode(enabled)
+    }
 
-	/**
-	 * Add custom logger
-	 *
-	 * @param logListener is custom application logger that implement 'LogListener'
-	 */
-	fun addLogListener(logListener: LogListener)
-	{
-		Logger.addLogListener(logListener)
-	}
+    /**
+     * Add custom logger
+     *
+     * @param logListener is custom application logger that implement 'LogListener'
+     */
+    fun addLogListener(logListener: LogListener) {
+        Logger.addLogListener(logListener)
+    }
 
-	/**
-	 * Remove already added custom logger
-	 *
-	 * @param logListener is logger to remove
-	 */
-	fun removeLogListener(logListener: LogListener)
-	{
-		Logger.removeLogListener(logListener)
-	}
+    /**
+     * Remove already added custom logger
+     *
+     * @param logListener is logger to remove
+     */
+    fun removeLogListener(logListener: LogListener) {
+        Logger.removeLogListener(logListener)
+    }
 
-	/**
-	 * Generic event
-	 * Reports generic event which is not predefined in module
-	 *
-	 * @param event: Event
-	 */
-	fun reportEvent(event: Event)
-	{
-		eventsReporter.reportEvent(event)
-	}
+    /**
+     * Generic event
+     * Reports generic event which is not predefined in module
+     *
+     * @param event: Event
+     */
+    fun reportEvent(event: Event) {
+        eventsReporter.reportEvent(event)
+    }
 
-	/**
-	 * Generic event
-	 * Reports many generic events at once which are not predefined in module
-	 *
-	 * @param events: List of events
-	 */
-	fun reportEvents(events: List<Event>)
-	{
-		eventsReporter.reportEvents(events)
-	}
+    /**
+     * Generic event
+     * Reports many generic events at once which are not predefined in module
+     *
+     * @param events: List of events
+     */
+    fun reportEvents(events: List<Event>) {
+        eventsReporter.reportEvents(events)
+    }
 
-	override fun didAskForKeepAliveContentStatus(contentMetadata: ContentMetadata): KeepAliveContentStatus?
-	{
-		return keepAliveDelegate?.get()?.ringPublishingTrackingDidAskForKeepAliveContentStatus(this, contentMetadata)
-	}
+    override fun didAskForKeepAliveContentStatus(contentMetadata: ContentMetadata): KeepAliveContentStatus? {
+        return keepAliveDelegate?.get()?.ringPublishingTrackingDidAskForKeepAliveContentStatus(this, contentMetadata)
+    }
 
-	internal val configurationManager = ConfigurationManager()
-	private lateinit var eventsReporter: EventsReporter
-	internal lateinit var keepAliveReporter: KeepAliveReporter
-	internal val eventsFactory = EventsFactory(Component.provideGson())
-	var delegate: WeakReference<RingPublishingTrackingDelegate>? = null
-	internal var keepAliveDelegate: WeakReference<RingPublishingTrackingKeepAliveDataSource>? = null
+    internal val configurationManager = ConfigurationManager()
+    private lateinit var eventsReporter: EventsReporter
+    internal lateinit var keepAliveReporter: KeepAliveReporter
+    internal val eventsFactory = EventsFactory(Component.provideGson())
+    var delegate: WeakReference<RingPublishingTrackingDelegate>? = null
+    internal var keepAliveDelegate: WeakReference<RingPublishingTrackingKeepAliveDataSource>? = null
 }
