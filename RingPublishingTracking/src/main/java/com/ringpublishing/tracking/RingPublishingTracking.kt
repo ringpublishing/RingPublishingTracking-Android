@@ -69,6 +69,13 @@ object RingPublishingTracking : KeepAliveDataSource
 			return Component.provideApiRepository().readTrackingIdentifier()
 		}
 
+	internal var trackingIdentifierError: TrackingIdentifierError? = null
+		set(value)
+		{
+			field = value
+			value?.let { delegate?.get()?.ringPublishingTrackingDidFailToRetrieveTrackingIdentifier(this, value) }
+		}
+
 	/**
 	 * Initialize all needed parameters needed to report events.
 	 * Should be called once in main point of application.
@@ -76,7 +83,10 @@ object RingPublishingTracking : KeepAliveDataSource
 	 * @param application is Android Application
 	 * @param ringPublishingTrackingConfiguration is tenant for this application
 	 */
-	fun initialize(application: Application, ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration, ringPublishingTrackingDelegate: RingPublishingTrackingDelegate?)
+	fun initialize(
+		application: Application, ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration,
+		ringPublishingTrackingDelegate: RingPublishingTrackingDelegate?,
+	)
 	{
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		Component.initComponent(application, configurationManager)
@@ -159,6 +169,6 @@ object RingPublishingTracking : KeepAliveDataSource
 	private lateinit var eventsReporter: EventsReporter
 	internal lateinit var keepAliveReporter: KeepAliveReporter
 	internal val eventsFactory = EventsFactory(Component.provideGson())
-	private var delegate: WeakReference<RingPublishingTrackingDelegate>? = null
+	var delegate: WeakReference<RingPublishingTrackingDelegate>? = null
 	internal var keepAliveDelegate: WeakReference<RingPublishingTrackingKeepAliveDataSource>? = null
 }

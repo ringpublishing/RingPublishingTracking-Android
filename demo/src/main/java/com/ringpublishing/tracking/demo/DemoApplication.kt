@@ -5,6 +5,7 @@ package com.ringpublishing.tracking.demo
 import android.util.Log
 import androidx.multidex.MultiDexApplication
 import com.ringpublishing.tracking.RingPublishingTracking
+import com.ringpublishing.tracking.TrackingIdentifierError
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.data.TrackingIdentifier
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingDelegate
@@ -17,7 +18,12 @@ class DemoApplication : MultiDexApplication()
 	{
 		override fun ringPublishingTrackingDidAssignTrackingIdentifier(ringPublishingTracking: RingPublishingTracking, identifier: TrackingIdentifier)
 		{
-			Log.i("Demo", "RingPublishingTracking: received tracking identifier:$identifier")
+			Log.i("Demo", "RingPublishingTracking: ApiService: received tracking identifier: $identifier")
+		}
+
+		override fun ringPublishingTrackingDidFailToRetrieveTrackingIdentifier(ringPublishingTracking: RingPublishingTracking, error: TrackingIdentifierError)
+		{
+			Log.w("Demo", "RingPublishingTracking: ApiService: did fail to retrieve tracking identifier: $error")
 		}
 	}
 
