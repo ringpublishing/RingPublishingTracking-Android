@@ -11,6 +11,7 @@ internal enum class EventParam(val text: String)
 	PRIMARY_ID("IP"),
 	SECONDARY_ID("IV"),
 	USER_SSO_DATA("RDLU"),
+	USER_SSO_IDENTIFIER("IZ"),
 	TENANT_ID("TID"),
 	SITE_AREA("DA"),
 	CONTENT_URL("DU"),
