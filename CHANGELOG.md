@@ -1,3 +1,12 @@
+1.1.1 Release notes (2022-02-21)
+=============================================================
+
+Add user id parameter to Event
+
+### Changes
+
+* Add new internal parameter user id to Event request with name 'IZ'
+
 1.1.0 Release notes (2022-01-27)
 =============================================================
 
