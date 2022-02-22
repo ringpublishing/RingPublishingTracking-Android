@@ -26,6 +26,8 @@ internal class UserSsoDataDecorator(private val configurationManager: Configurat
 
 		val encodedUserData = encodeUserData(userId, emailMd5, ssoName)
 		encodedUserData?.let { event.add(EventParam.USER_SSO_DATA, it) }
+
+		event.add(EventParam.USER_SSO_IDENTIFIER, userId)
 	}
 
 	private fun encodeUserData(userId: String, emailMd5: String, ssoName: String): String?
