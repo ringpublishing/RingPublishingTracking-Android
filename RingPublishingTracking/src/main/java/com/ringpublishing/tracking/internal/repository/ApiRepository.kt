@@ -12,13 +12,13 @@ internal class ApiRepository(private val repository: DataRepository)
 	{
 
 		IDENTIFY("identify"),
-		IDENTIFY_DATE("identifyDate")
+		IDENTIFY_DATE("identifyDateLong")
 	}
 
 	fun saveIdentify(identifyResponse: IdentifyResponse?)
 	{
 		repository.saveObject(Key.IDENTIFY.text, identifyResponse)
-		repository.saveObject(Key.IDENTIFY_DATE.text, Date())
+		repository.saveLong(Key.IDENTIFY_DATE.text, Date().time)
 	}
 
 	fun readIdentify(): IdentifyResponse?
@@ -36,7 +36,19 @@ internal class ApiRepository(private val repository: DataRepository)
 		}
 	}
 
-	fun readIdentifyRequestDate() = repository.readObject<Date?>(Key.IDENTIFY_DATE.text, Date::class.java)
+	fun readIdentifyRequestDate(): Date?
+	{
+		val dateValue = repository.readLong(Key.IDENTIFY_DATE.text)
+
+		return if (dateValue != null && dateValue > 0L)
+		{
+			Date(dateValue)
+		}
+		else
+		{
+			null
+		}
+	}
 
 	fun removeIdentify()
 	{
