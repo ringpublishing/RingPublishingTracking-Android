@@ -60,6 +60,7 @@ class ApiRepositoryTest
 	fun readIdentify_FromApiRepository_ReadObjectFromDataRepository_WhenIdentifierIsUpToDate()
 	{
 		prepareMocksForReadingIdentify(false)
+		every { identifyResponse?.getValidDate(any())} returns expirationDate
 
 		val apiRepository = ApiRepository(dataRepository)
 
@@ -85,7 +86,9 @@ class ApiRepositoryTest
 		mockkStatic("com.ringpublishing.tracking.internal.util.Date_IndetifierExpireKt")
 		every { dataRepository.readObject<IdentifyResponse?>(any(), IdentifyResponse::class.java) } returns identifyResponse
 		every { dataRepository.readLong(any()) } returns 0L
+
 		every { identifyResponse.getValidDate(identifyDate) } returns expirationDate
+		every { identifyResponse.getValidDate(null) } returns null
 		every { expirationDate.isIdentifyExpire() } returns isExpired
 	}
 
