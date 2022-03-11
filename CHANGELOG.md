@@ -1,3 +1,10 @@
+1.1.2 Release notes (2022-03-11)
+=============================================================
+
+### Fixes
+
+* Fix date parsing. Now Long value is persisted instead of Date
+
 1.1.1 Release notes (2022-02-21)
 =============================================================
 
