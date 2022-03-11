@@ -43,9 +43,7 @@ internal class ApiRepository(private val repository: DataRepository)
 		return if (dateValue != null && dateValue > 0L)
 		{
 			Date(dateValue)
-		}
-		else
-		{
+		} else {
 			null
 		}
 	}
