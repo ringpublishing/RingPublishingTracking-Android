@@ -113,6 +113,7 @@ internal class KeepAliveReporter(
 		timer.scheduleSendTimer()
 	}
 
+	@Synchronized
 	override fun onActivityTimer()
 	{
 		Logger.debug("KeepAliveReporter: onActivityTimer() time. Start take measurement")
@@ -120,6 +121,7 @@ internal class KeepAliveReporter(
 		timer.scheduleActivityTimer()
 	}
 
+	@Synchronized
 	private fun sendMeasurements()
 	{
 		if (collectedData.isEmpty())
@@ -136,6 +138,7 @@ internal class KeepAliveReporter(
 		collectedData.clear()
 	}
 
+	@Synchronized
 	private fun takeMeasurements(measureType: KeepAliveMeasureType)
 	{
 		val timeFromStart = timer.timeFromStartInForeground()
