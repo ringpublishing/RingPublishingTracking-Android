@@ -85,7 +85,8 @@ internal class EventsService(
 						flush()
 					} else Logger.debug("EventsService: Queue is empty")
 				}
-				ReportEventStatus.ERROR_NETWORK ->
+				ReportEventStatus.ERROR_NETWORK,
+				ReportEventStatus.ERROR_BAD_RESPONSE ->
 				{
 					Logger.warn("EventsService: Events not send! Network error! Try next time")
 				}

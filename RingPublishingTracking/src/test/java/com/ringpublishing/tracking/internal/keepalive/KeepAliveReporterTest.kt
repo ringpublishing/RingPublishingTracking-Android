@@ -54,6 +54,7 @@ internal class KeepAliveReporterTest
 		every { contentMetadata.sourceSystemName } returns ""
 		every { contentMetadata.publicationId } returns ""
 		every { contentMetadata.contentPartIndex } returns 1
+		every { contentMetadata.contentId } returns "1"
 
 		every { keepAliveDataSource.toString() } returns ""
 

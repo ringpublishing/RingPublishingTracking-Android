@@ -114,7 +114,8 @@ class EventsFactoryTest
 			URL("https://domain.com"),
 			"sourceSystemName",
 			1,
-			false
+			false,
+			"my-unique-content-id-1234"
 		)
 
 		val event = eventsFactory.createPageViewEvent("publicationId", contentMetadata)
@@ -131,7 +132,8 @@ class EventsFactoryTest
 			URL("https://domain.com"),
 			"source System_Name",
 			1,
-			true
+			true,
+			"my-unique-content-id-1234"
 		)
 
 		val event = eventsFactory.createPageViewEvent("publicationId", contentMetadata)

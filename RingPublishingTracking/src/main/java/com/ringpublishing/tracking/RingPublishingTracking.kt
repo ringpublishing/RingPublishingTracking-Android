@@ -78,6 +78,7 @@ object RingPublishingTracking : KeepAliveDataSource {
      *
      * @param application is Android Application
      * @param ringPublishingTrackingConfiguration is tenant for this application
+     * @param ringPublishingTrackingDelegate RingPublishingTrackingDelegate which will be set as WeakReference
      */
     fun initialize(
         application: Application,

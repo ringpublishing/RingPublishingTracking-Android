@@ -47,6 +47,8 @@ internal class KeepAliveEventBuilder(private val screenSizeInfo: ScreenSizeInfo)
 			parameters["KMT"] = measureTypes.toTypedArray()
 			parameters["KTP"] = timingsInSeconds.toTypedArray()
 			parameters["KTS"] = scrollOffsets.toTypedArray()
+
+			content?.let { parameters["PV"] = content.contentId }
 		}
 
 		return event

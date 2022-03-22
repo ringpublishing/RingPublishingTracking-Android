@@ -13,6 +13,12 @@
         <item>Android 12 Beta: Designed for you</item>
     </string-array>
 
+    <string-array name="articles_content_ids">
+        <item>111</item>
+        <item>222</item>
+        <item>333</item>
+    </string-array>
+
     <string-array name="articles_url">
         <item>https://android-developers.googleblog.com/2021/08/making-ratings-and-reviews-better-for.html</item>
         <item>https://firebase.googleblog.com/2021/07/the-firebase-guide-to-building-stable-high-performing-apps.html</item>

@@ -60,7 +60,7 @@ class ApiRepositoryTest
 	fun readIdentify_FromApiRepository_ReadObjectFromDataRepository_WhenIdentifierIsUpToDate()
 	{
 		prepareMocksForReadingIdentify(false)
-		every { identifyResponse?.getValidDate(any())} returns expirationDate
+		every { identifyResponse.getValidDate(any())} returns expirationDate
 
 		val apiRepository = ApiRepository(dataRepository)
 
