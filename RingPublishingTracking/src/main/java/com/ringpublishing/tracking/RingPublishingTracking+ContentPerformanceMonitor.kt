@@ -36,12 +36,12 @@ fun RingPublishingTracking.reportClick(selectedElementName: String?)
  *
  * @param selectedElementName that user click
  * @param publicationUrl of content
- * @param publicationId publication identifier
+ * @param contentId content identifier in source system (CMS)
  */
 @Suppress("unused", "unused_parameter")
-fun RingPublishingTracking.reportContentClick(selectedElementName: String, publicationUrl: URL, publicationId: String)
+fun RingPublishingTracking.reportContentClick(selectedElementName: String, publicationUrl: URL, contentId: String)
 {
-	val event = eventsFactory.createClickEvent(selectedElementName, publicationUrl, publicationId)
+	val event = eventsFactory.createClickEvent(selectedElementName, publicationUrl, contentId)
 	reportEvent(event)
 }
 
@@ -136,7 +136,7 @@ fun RingPublishingTracking.reportContentPageView(
 		updatePartiallyReloaded(partiallyReloaded)
 	}
 
-	val event = eventsFactory.createPageViewEvent(contentMetadata.publicationId, contentMetadata)
+	val event = eventsFactory.createPageViewEvent(contentMetadata.contentId, contentMetadata)
 	reportEvent(event)
 }
 

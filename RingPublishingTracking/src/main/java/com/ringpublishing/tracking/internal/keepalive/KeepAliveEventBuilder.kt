@@ -40,6 +40,8 @@ internal class KeepAliveEventBuilder(private val screenSizeInfo: ScreenSizeInfo)
 		with(event)
 		{
 			content?.let { parameters["DX"] = content.buildToDX() }
+			content?.let { parameters["PU"] = content.contentId.trim() }
+
 			parameters["KTA"] = 1
 
 			parameters["KDS"] = windowSizes.toTypedArray()
@@ -47,8 +49,6 @@ internal class KeepAliveEventBuilder(private val screenSizeInfo: ScreenSizeInfo)
 			parameters["KMT"] = measureTypes.toTypedArray()
 			parameters["KTP"] = timingsInSeconds.toTypedArray()
 			parameters["KTS"] = scrollOffsets.toTypedArray()
-
-			content?.let { parameters["PV"] = content.contentId }
 		}
 
 		return event

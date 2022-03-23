@@ -19,8 +19,8 @@ class ListArticlesController : ScreenController()
 		screenTrackingData = ScreenTrackingData(listOf("Home", "List"), "ListAdsArea")
 	}
 
-	fun listItemClick(title: String, publicationUrl: URL, publicationId: String)
+	fun listItemClick(title: String, publicationUrl: URL, contentId: String)
 	{
-		RingPublishingTracking.reportContentClick(title, publicationUrl, publicationId, aureusOfferId = "a4gb35")
+		RingPublishingTracking.reportContentClick(title, publicationUrl, contentId, aureusOfferId = "a4gb35")
 	}
 }

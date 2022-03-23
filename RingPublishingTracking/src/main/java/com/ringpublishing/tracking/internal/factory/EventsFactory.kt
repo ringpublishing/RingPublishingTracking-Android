@@ -18,7 +18,7 @@ import java.net.URL
 class EventsFactory(private val gson: Gson)
 {
 
-	fun createClickEvent(selectedEventName: String? = null, publicationUrl: URL? = null, publicationIdentifier: String? = null): Event
+	fun createClickEvent(selectedEventName: String? = null, publicationUrl: URL? = null, contentIdentifier: String? = null): Event
 	{
 		val parameters = mutableMapOf<String, Any>()
 
@@ -26,7 +26,7 @@ class EventsFactory(private val gson: Gson)
 
 		publicationUrl?.let { parameters[UserEventParam.TARGET_URL.text] = it.toString() }
 
-		publicationIdentifier?.let { parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = it }
+		contentIdentifier?.let { parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = it }
 
 		return Event(AnalyticsSystem.KROPKA_EVENTS.text, EventType.CLICK.text, parameters)
 	}
@@ -55,11 +55,11 @@ class EventsFactory(private val gson: Gson)
 		return Event(AnalyticsSystem.KROPKA_EVENTS.text, EventType.USER_ACTION.text, parameters)
 	}
 
-	fun createPageViewEvent(publicationId: String? = null, contentMetadata: ContentMetadata? = null): Event
+	fun createPageViewEvent(contentIdentifier: String? = null, contentMetadata: ContentMetadata? = null): Event
 	{
 		val parameters = mutableMapOf<String, Any>()
 
-		publicationId?.let { parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = it }
+		contentIdentifier?.let { parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = it }
 
 		contentMetadata?.let { metadata -> parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text] = metadata.buildToDX() }
 
