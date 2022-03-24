@@ -54,7 +54,8 @@ class ArticleController : ScreenController()
 			articleToReport.publicationId,
 			articleToReport.publicationUrl,
 			articleToReport.sourceSystemName,
-			contentWasPaidFor = articleToReport.contentWasPaidFor)
+			contentWasPaidFor = articleToReport.contentWasPaidFor,
+			contentId = articleToReport.contentId)
 
 		RingPublishingTracking.reportContentPageView(
 			contentMetadata,

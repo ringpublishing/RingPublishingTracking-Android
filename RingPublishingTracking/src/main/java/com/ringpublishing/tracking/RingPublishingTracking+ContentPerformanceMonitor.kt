@@ -36,12 +36,12 @@ fun RingPublishingTracking.reportClick(selectedElementName: String?)
  *
  * @param selectedElementName that user click
  * @param publicationUrl of content
- * @param publicationId publication identifier
+ * @param contentId content identifier in source system (CMS)
  */
 @Suppress("unused", "unused_parameter")
-fun RingPublishingTracking.reportContentClick(selectedElementName: String, publicationUrl: URL, publicationId: String)
+fun RingPublishingTracking.reportContentClick(selectedElementName: String, publicationUrl: URL, contentId: String)
 {
-	val event = eventsFactory.createClickEvent(selectedElementName, publicationUrl, publicationId)
+	val event = eventsFactory.createClickEvent(selectedElementName, publicationUrl, contentId)
 	reportEvent(event)
 }
 
@@ -116,7 +116,7 @@ fun RingPublishingTracking.reportPageView(currentStructurePath: List<String>, pa
  * @param currentStructurePath: Current application structure path used to identify application screen
  * For example "home/sport_list_screen"
  * @param partiallyReloaded: Pass true if you content was partially reloaded, for example content was refreshed after in app purchase
- * @param contentKeepAliveDataSource: RingPublishingTrackingKeepAliveDataSource
+ * @param contentKeepAliveDataSource: RingPublishingTrackingKeepAliveDataSource which will be set as WeakReference
  */
 @Suppress("unused", "unused_parameter")
 fun RingPublishingTracking.reportContentPageView(
@@ -127,17 +127,17 @@ fun RingPublishingTracking.reportContentPageView(
     contentKeepAliveDataSource: RingPublishingTrackingKeepAliveDataSource,
 )
 {
+	keepAliveDelegate = WeakReference(contentKeepAliveDataSource)
+	keepAliveReporter.start(contentMetadata, this, partiallyReloaded)
+
 	with(configurationManager)
 	{
 		updateStructurePath(currentStructurePath, contentMetadata.publicationUrl, contentPageViewSource)
 		updatePartiallyReloaded(partiallyReloaded)
 	}
 
-	val event = eventsFactory.createPageViewEvent(contentMetadata.publicationId, contentMetadata)
+	val event = eventsFactory.createPageViewEvent(contentMetadata.contentId, contentMetadata)
 	reportEvent(event)
-
-	keepAliveDelegate = WeakReference(contentKeepAliveDataSource)
-	keepAliveReporter.start(contentMetadata, this, partiallyReloaded)
 }
 
 /**

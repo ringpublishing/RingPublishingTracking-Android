@@ -15,6 +15,7 @@ import java.net.URL
  * @param sourceSystemName: Source system (CMS) name
  * @param contentPartIndex: Index of displayed content part (applies only if given content can be consumed in parts).
  * @param contentWasPaidFor: Did user pay for access to this content?
+ * @param contentId: Content identifier in source system (CMS)
  */
 data class ContentMetadata(
     val publicationId: String,
@@ -22,4 +23,5 @@ data class ContentMetadata(
     val sourceSystemName: String,
     val contentPartIndex: Int = 1,
     val contentWasPaidFor: Boolean,
+    val contentId: String,
 )

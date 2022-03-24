@@ -20,7 +20,8 @@ class SampleArticleBuilder(private val resources: Resources)
 			resources.getStringArray(R.array.articles_titles)[position],
 			resources.getStringArray(R.array.articles_text)[position],
 			URL(resources.getStringArray(R.array.articles_url)[position]),
-			resources.getIntArray(R.array.articles_paid)[position] > 0
+			resources.getIntArray(R.array.articles_paid)[position] > 0,
+			resources.getStringArray(R.array.articles_content_ids)[position]
 		)
 	}
 }

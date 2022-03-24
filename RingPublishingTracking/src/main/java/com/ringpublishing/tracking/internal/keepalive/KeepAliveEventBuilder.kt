@@ -40,6 +40,8 @@ internal class KeepAliveEventBuilder(private val screenSizeInfo: ScreenSizeInfo)
 		with(event)
 		{
 			content?.let { parameters["DX"] = content.buildToDX() }
+			content?.let { parameters["PU"] = content.contentId.trim() }
+
 			parameters["KTA"] = 1
 
 			parameters["KDS"] = windowSizes.toTypedArray()
