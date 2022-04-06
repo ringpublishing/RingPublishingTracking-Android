@@ -29,7 +29,7 @@ class StructurePathDecoratorTest
 			"area"
 		)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
-		configurationManager.updateStructurePath(listOf("path3", "path4"))
+		configurationManager.updateStructurePath(listOf("path3", "path4"), partiallyReloaded = false)
 
 		val decorator = StructurePathDecorator(configurationManager)
 

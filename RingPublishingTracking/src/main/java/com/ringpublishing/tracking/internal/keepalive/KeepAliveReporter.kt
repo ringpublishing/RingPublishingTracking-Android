@@ -33,6 +33,8 @@ internal class KeepAliveReporter(
 
 	private var isPaused = false
 
+	private var isWorking = false
+
 	private var isInBackground = false
 
 	private var collectedData = CopyOnWriteArrayList<KeepAliveMetadata>()
@@ -56,6 +58,7 @@ internal class KeepAliveReporter(
 		dataSourceDelegate = WeakReference(contentKeepAliveDataSource)
 
 		timer.start()
+		isWorking = true
 		isPaused = false
 		isInBackground = false
 		lifecycleOwner.lifecycle.addObserver(this)
@@ -70,6 +73,7 @@ internal class KeepAliveReporter(
 			return
 		}
 		isPaused = true
+		isWorking = false
 		timer.pause()
 	}
 
@@ -83,6 +87,7 @@ internal class KeepAliveReporter(
 		}
 		timer.resume()
 		isPaused = false
+		isWorking = true
 		timer.scheduleActivityTimer()
 		timer.scheduleSendTimer()
 	}
@@ -97,6 +102,7 @@ internal class KeepAliveReporter(
 
 		collectedData.clear()
 		isPaused = false
+		isWorking = false
 		isInBackground = false
 		timer.stop()
 		contentMetadata = null
@@ -107,18 +113,24 @@ internal class KeepAliveReporter(
 	@Synchronized
 	override fun onSendTimer()
 	{
-		Logger.debug("KeepAliveReporter: onSendTimer() time. Start take and send measurement")
-		takeMeasurements(KeepAliveMeasureType.SEND_TIMER)
-		sendMeasurements()
-		timer.scheduleSendTimer()
+		Logger.debug("KeepAliveReporter: onSendTimer() time. Start take and send measurement isWorking $isWorking")
+		if (isWorking)
+		{
+			takeMeasurements(KeepAliveMeasureType.SEND_TIMER)
+			sendMeasurements()
+			timer.scheduleSendTimer()
+		}
 	}
 
 	@Synchronized
 	override fun onActivityTimer()
 	{
-		Logger.debug("KeepAliveReporter: onActivityTimer() time. Start take measurement")
-		takeMeasurements(KeepAliveMeasureType.ACTIVITY_TIMER)
-		timer.scheduleActivityTimer()
+		Logger.debug("KeepAliveReporter: onActivityTimer() time. Start take measurement isWorking $isWorking")
+		if (isWorking)
+		{
+			takeMeasurements(KeepAliveMeasureType.ACTIVITY_TIMER)
+			timer.scheduleActivityTimer()
+		}
 	}
 
 	@Synchronized
@@ -148,7 +160,6 @@ internal class KeepAliveReporter(
 		if (timeFromStart == null || dataSourceDelegate == null || currentContentMetadata == null)
 		{
 			Logger.warn("KeepAliveReporter: Wrong measurement $timeFromStart $dataSourceDelegate $currentContentMetadata")
-			stop()
 			return
 		}
 

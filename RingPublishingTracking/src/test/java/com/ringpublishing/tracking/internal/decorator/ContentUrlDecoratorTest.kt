@@ -116,7 +116,7 @@ class ContentUrlDecoratorTest
 		)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 
-		configurationManager.updateStructurePath(listOf("path1", "path2"), URL("https://publicationurl.com"))
+		configurationManager.updateStructurePath(listOf("path1", "path2"), URL("https://publicationurl.com"), partiallyReloaded = false)
 
 		val contentUrlDecorator = ContentUrlDecorator(configurationManager)
 
