@@ -1,3 +1,14 @@
+1.2.1 Release notes (2022-04-06)
+=============================================================
+
+Improvements to the 'RingPublishingTracking' module.
+
+### Fixes
+
+* Track last KeepAlive event before change content page
+* In KeepAlive reporter remove observer not in main thread
+
+
 1.2.0 Release notes (2022-03-23)
 =============================================================
 
