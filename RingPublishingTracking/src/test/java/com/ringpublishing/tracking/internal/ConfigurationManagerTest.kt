@@ -262,7 +262,7 @@ class ConfigurationManagerTest
 		val configurationManager = ConfigurationManager()
 		configurationManager.initializeConfiguration(ringPublishingConfiguration)
 
-		configurationManager.updateStructurePath(listOf("newPath"))
+		configurationManager.updateStructurePath(listOf("newPath"), partiallyReloaded = false)
 
 		Assert.assertEquals(listOf("newPath"), configurationManager.getStructurePath())
 	}

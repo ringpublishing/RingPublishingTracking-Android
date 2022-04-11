@@ -127,7 +127,7 @@ internal class ConfigurationManager
 		if (partiallyReloaded) newSecondaryId() else newPrimaryId()
 	}
 
-	fun updateStructurePath(newStructurePath: List<String>, publicationUrl: URL? = null, contentPageViewSource: ContentPageViewSource? = null)
+	fun updateStructurePath(newStructurePath: List<String>, publicationUrl: URL? = null, contentPageViewSource: ContentPageViewSource? = null, partiallyReloaded: Boolean)
 	{
 		currentStructurePath.clear()
 		currentStructurePath.addAll(newStructurePath)
@@ -139,7 +139,10 @@ internal class ConfigurationManager
 
 		contentPageViewSource?.let { this.contentPageViewSource = it }
 
-		updateReferrerUrl()
+		if (!partiallyReloaded)
+		{
+			updateReferrerUrl()
+		}
 
 		currentContentUrl = pathBuilder.buildCurrentContentUrl()
 	}

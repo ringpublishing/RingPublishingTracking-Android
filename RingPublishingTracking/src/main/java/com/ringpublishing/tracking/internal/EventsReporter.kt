@@ -10,8 +10,8 @@ internal class EventsReporter(private val eventsService: EventsService, private 
 
 	fun reportEvent(event: Event)
 	{
-		Logger.debug("App reported event $event")
 		val decoratedEvent = eventDecorator.decorate(event)
+		Logger.debug("App reported event $event")
 		eventsService.addEvent(decoratedEvent)
 	}
 
