@@ -30,20 +30,4 @@ internal class ClientDecoratorTest
 
 		Assert.assertTrue(decodedResult.contains("{\"client\":{\"type\":\"native_app\"}}"))
 	}
-
-	@Test
-	fun decorate_When_Correct_Client_Then_Decoded_Result_Fail()
-	{
-		val gson = GsonBuilder().create()
-		val clientDecorator = ClientDecorator(gson)
-
-		val event = Event()
-		clientDecorator.decorate(event)
-
-		val result = event.parameters[EventParam.CLIENT_ID.text] as String?
-
-		val decodedResult = String(Base64.decode(result, Base64.NO_WRAP))
-
-		Assert.assertFalse(decodedResult.contains("{\"fail\":{\"type\":\"native_app\"}}"))
-	}
 }
