@@ -15,7 +15,7 @@ buildscript
 
 plugins
 {
-    id "org.jlleitschuh.gradle.ktlint" version "10.1.0"
+    id "org.jlleitschuh.gradle.ktlint" version "10.2.1"
     id "io.gitlab.arturbosch.detekt" version "1.18.1"
 }
 
@@ -39,4 +39,10 @@ ext
     TARGET_SDK_VERSION = 30
     COMPILE_SDK_VERSION = 30
     BUILD_TOOLS_VERSION = '30.0.2'
+}
+
+allprojects {
+    configurations.all {
+        resolutionStrategy.force 'org.objenesis:objenesis:2.6'
+    }
 }

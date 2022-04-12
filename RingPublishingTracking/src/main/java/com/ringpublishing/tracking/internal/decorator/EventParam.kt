@@ -20,4 +20,5 @@ internal enum class EventParam(val text: String)
 	SCREEN_SIZE("CS"),
 	WINDOW_SIZE("CW"),
 	CONSENT("_adpc"),
+	CLIENT_ID("RDLC"),
 }
