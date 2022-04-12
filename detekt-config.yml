@@ -7,3 +7,9 @@ formatting:
   NoLineBreakAfterElse:
       active: false
       autoCorrect: false
+  SpacingAroundCurly:
+        active: false
+        autoCorrect: false
+  Indentation:
+        active: false
+        autoCorrect: false
