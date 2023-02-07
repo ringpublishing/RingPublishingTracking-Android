@@ -15,8 +15,7 @@ internal data class IdentifyResponse(val ids: IdsMap?, val profile: Profile?, va
 		if (savedIdentifyDate == null) return null
 
 		val calendar = Calendar.getInstance()
-		calendar.timeInMillis = savedIdentifyDate.time + getLifetime()
-
+		calendar.timeInMillis = (savedIdentifyDate.time + getLifetime()) * 1000
 		return calendar.time
 	}
 
