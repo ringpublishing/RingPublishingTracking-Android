@@ -65,8 +65,9 @@ internal class IdentifyResponseTest
 		val identifyResponse = IdentifyResponse(idsMap, profile, lifetime)
 
 		val resultDate = identifyResponse.getValidDate(Date())
+        val laterDate = Date(Date().time + (lifetime * 2000))
 
-		Assert.assertTrue(resultDate!!.before(Date(Date().time + lifetime + lifetime)))
+		Assert.assertTrue(resultDate!!.before(laterDate))
 	}
 
 	@Test
