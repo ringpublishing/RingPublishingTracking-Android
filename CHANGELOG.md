@@ -1,3 +1,12 @@
+1.2.3 Release notes (2023-02-07)
+=============================================================
+
+Improvements to the 'RingPublishingTracking' module.
+
+### Changes
+
+* Fixed a bug where valid expiration date for trackingIdentifier was wrongly interpreted as miliseconds
+
 1.2.2 Release notes (2022-04-12)
 =============================================================
 
