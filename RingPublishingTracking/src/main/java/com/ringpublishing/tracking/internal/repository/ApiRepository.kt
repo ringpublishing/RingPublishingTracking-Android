@@ -25,7 +25,7 @@ internal class ApiRepository(private val repository: DataRepository)
 	{
 
 		val identifyResponse = repository.readObject<IdentifyResponse?>(Key.IDENTIFY.text, IdentifyResponse::class.java)
-		val expirationDate = identifyResponse?.getValidDate(readIdentifyRequestDate())
+ 		val expirationDate = identifyResponse?.getValidDate(readIdentifyRequestDate())
 
 		return if (!expirationDate.isIdentifyExpire())
 		{

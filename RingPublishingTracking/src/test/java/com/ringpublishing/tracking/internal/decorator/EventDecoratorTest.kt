@@ -82,7 +82,7 @@ internal class EventDecoratorTest
 
 		every { event.parameters } returns parameters
 
-		val eventDecorator = EventDecorator(configurationManager, application, Gson(), windowSizeInfo, screenSizeInfo)
+		val eventDecorator = EventDecorator(configurationManager, Gson(), windowSizeInfo, screenSizeInfo)
 
 		val eventDecorated = eventDecorator.decorate(event)
 

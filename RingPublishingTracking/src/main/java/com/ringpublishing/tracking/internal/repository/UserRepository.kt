@@ -1,10 +1,12 @@
 package com.ringpublishing.tracking.internal.repository
 
+import android.content.Context
 import com.ringpublishing.tracking.internal.device.AdvertisingInfo
 import com.ringpublishing.tracking.internal.device.DeviceInfo
 import com.ringpublishing.tracking.internal.service.builder.UserBuilder
 
 internal class UserRepository(
+    private val context: Context,
     private val advertisingInfo: AdvertisingInfo,
     private val deviceInfo: DeviceInfo,
     private val dataRepository: DataRepository
@@ -18,5 +20,5 @@ internal class UserRepository(
 
     fun readDeviceId() = dataRepository.readString(Key.USER_DEVICE_ID.text)
 
-    fun buildUser() = UserBuilder(advertisingInfo, deviceInfo, this).build()
+    fun buildUser() = UserBuilder(context, advertisingInfo, deviceInfo, this).build()
 }
