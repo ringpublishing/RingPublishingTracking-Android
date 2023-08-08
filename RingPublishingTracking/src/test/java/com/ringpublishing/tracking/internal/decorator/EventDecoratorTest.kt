@@ -96,7 +96,6 @@ internal class EventDecoratorTest
 			Assert.assertEquals("area", parameters["DA"])
 			Assert.assertEquals("1x1x24", parameters["CS"])
 			Assert.assertEquals("1x1", parameters["CW"])
-			Assert.assertEquals("preference", parameters["_adpc"])
 			Assert.assertEquals("contentUrl", parameters["DU"])
 			Assert.assertEquals("structurePath", parameters["DV"])
 			Assert.assertEquals("referrer", parameters["DR"])
