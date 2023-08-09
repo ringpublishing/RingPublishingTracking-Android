@@ -1,3 +1,13 @@
+1.2.4 Release notes (2023-08-08)
+=============================================================
+
+Improvements to the 'RingPublishingTracking' module.
+
+### Changes
+
+* Remove user consents from events data object
+* Add user consents to user object
+
 1.2.3 Release notes (2023-02-07)
 =============================================================
 
