@@ -13,6 +13,7 @@ import com.ringpublishing.tracking.internal.repository.UserRepository
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -40,7 +41,8 @@ internal class UserBuilderTest
 	fun build_WhenAdvertisementId_ThenIsInUserAndDeviceIdIsNull()
 	{
 		every { advertisingInfo.readAdvertisingId() } returns "id"
-		val userBuilder = UserBuilder(advertisingInfo, deviceInfo, userRepository)
+
+		val userBuilder = UserBuilder(mockk(relaxed = true), advertisingInfo, deviceInfo, userRepository)
 
 		val user = userBuilder.build()
 
@@ -55,7 +57,7 @@ internal class UserBuilderTest
 		every { deviceInfo.getDeviceId() } returns "deviceId"
 		every { userRepository.readDeviceId() } returns null
 
-		val userBuilder = UserBuilder(advertisingInfo, deviceInfo, userRepository)
+		val userBuilder = UserBuilder(mockk(relaxed = true), advertisingInfo, deviceInfo, userRepository)
 
 		val user = userBuilder.build()
 
@@ -69,7 +71,7 @@ internal class UserBuilderTest
 		every { advertisingInfo.readAdvertisingId() } returns null
 		every { userRepository.readDeviceId() } returns "deviceId"
 
-		val userBuilder = UserBuilder(advertisingInfo, deviceInfo, userRepository)
+		val userBuilder = UserBuilder(mockk(relaxed = true), advertisingInfo, deviceInfo, userRepository)
 
 		val user = userBuilder.build()
 

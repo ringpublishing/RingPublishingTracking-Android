@@ -21,6 +21,7 @@ internal fun Component.provideApiRepository() = apiRepository
 
 private val userRepository: UserRepository by lazy {
     UserRepository(
+	    Component.provideContext(),
         Component.provideAdvertisingInfo(),
         Component.provideDeviceInfo(),
         Component.provideDataRepository()
