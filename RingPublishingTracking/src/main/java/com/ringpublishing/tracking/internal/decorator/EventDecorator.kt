@@ -14,10 +14,10 @@ import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.util.ScreenSizeInfo
 
 internal class EventDecorator(
-	configurationManager: ConfigurationManager,
-	gson: Gson,
-	windowSizeInfo: WindowSizeInfo,
-	screenSizeInfo: ScreenSizeInfo,
+    configurationManager: ConfigurationManager,
+    gson: Gson,
+    windowSizeInfo: WindowSizeInfo,
+    screenSizeInfo: ScreenSizeInfo,
 )
 {
 	private val decorators = mutableListOf<Decorator>()
