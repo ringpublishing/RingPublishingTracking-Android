@@ -9,8 +9,8 @@ apply from: 'publish.gradle'
 
 android
 {
+    namespace 'com.ringpublishing.tracking'
     compileSdk COMPILE_SDK_VERSION
-    buildToolsVersion BUILD_TOOLS_VERSION
 
     defaultConfig
     {
@@ -31,6 +31,11 @@ android
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    buildFeatures
+    {
+        buildConfig true
     }
 
     compileOptions

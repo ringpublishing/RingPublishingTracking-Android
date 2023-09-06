@@ -47,7 +47,7 @@ class UserAgentInterceptorInfoTest
 	{
 		every { context.packageManager } returns packageManager
 		every { context.packageName } returns "packagename"
-		every { packageManager.getPackageInfo("packagename", any()) } returns packageInfo
+		every { packageManager.getPackageInfo("packagename", 0) } returns packageInfo
 		every { packageManager.getApplicationInfo("packagename", 0) } returns applicationInfo
 		every { deviceInfo.isTablet() } returns false
 
@@ -61,7 +61,7 @@ class UserAgentInterceptorInfoTest
 	{
 		every { context.packageManager } returns packageManager
 		every { context.packageName } returns "packagename"
-		every { packageManager.getPackageInfo("packagename", any()) } returns packageInfo
+		every { packageManager.getPackageInfo("packagename", 0) } returns packageInfo
 		every { packageManager.getApplicationInfo("packagename", 0) } returns applicationInfo
 		every { deviceInfo.isTablet() } returns true
 

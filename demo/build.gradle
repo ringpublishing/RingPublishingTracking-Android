@@ -8,12 +8,11 @@ apply from: '../bamboo.gradle'
 
 android
 {
+    namespace 'com.ringpublishing.tracking.demo'
     compileSdk COMPILE_SDK_VERSION
-    buildToolsVersion BUILD_TOOLS_VERSION
 
     defaultConfig
     {
-        applicationId "com.ringpublishing.tracking.demo"
         minSdk MIN_SDK_VERSION
         targetSdk TARGET_SDK_VERSION
         versionCode Integer.parseInt(sdk_version_code)
@@ -49,6 +48,7 @@ android
 
     buildFeatures
     {
+        buildConfig true
         viewBinding true
     }
 

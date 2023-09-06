@@ -67,7 +67,7 @@ internal class RingPublishingTrackingTest
 	{
 		every { context.applicationContext } returns context
 		every { context.packageManager } returns packageManager
-		every { packageManager.queryIntentServices(any(), any()) } returns emptyList()
+		every { packageManager.queryIntentServices(any(), 0) } returns emptyList()
 		every { resources.configuration } returns configuration
 		every { context.resources } returns resources
 		every { context.resources.configuration } returns configuration
