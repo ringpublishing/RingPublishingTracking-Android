@@ -8,8 +8,8 @@ buildscript
 
     dependencies
     {
-        classpath "com.android.tools.build:gradle:7.0.2"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.30"
+        classpath "com.android.tools.build:gradle:8.1.0"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0"
     }
 }
 
@@ -32,13 +32,13 @@ task clean(type: Delete)
 
 ext
 {
-    JVM_TARGET = '1.8'
-    JAVA_VERSION = JavaVersion.VERSION_1_8
+    JVM_TARGET = '17'
+    JAVA_VERSION = JavaVersion.VERSION_17
 
     MIN_SDK_VERSION = 22
-    TARGET_SDK_VERSION = 30
-    COMPILE_SDK_VERSION = 30
-    BUILD_TOOLS_VERSION = '30.0.2'
+    TARGET_SDK_VERSION = 34
+    COMPILE_SDK_VERSION = 34
+    BUILD_TOOLS_VERSION = '34.0.0'
 }
 
 allprojects {
