@@ -1,3 +1,12 @@
+1.2.5 Release notes (2023-09-06)
+=============================================================
+
+Improvements to the 'RingPublishingTracking' module.
+
+### Changes
+
+* Gradle 8
+* Android 14
 1.2.4 Release notes (2023-08-08)
 =============================================================
 
