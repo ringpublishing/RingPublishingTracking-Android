@@ -21,7 +21,7 @@ import com.ringpublishing.tracking.data.ContentSize
 import com.ringpublishing.tracking.data.KeepAliveContentStatus
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingKeepAliveDataSource
 import com.ringpublishing.tracking.demo.R
-import com.ringpublishing.tracking.demo.builder.SampleArticleBuilder
+import com.ringpublishing.tracking.demo.sample.SampleArticleBuilder
 import com.ringpublishing.tracking.demo.controller.ArticleController
 import com.ringpublishing.tracking.demo.extension.getContentPageViewSource
 import com.ringpublishing.tracking.demo.extension.isFromPush

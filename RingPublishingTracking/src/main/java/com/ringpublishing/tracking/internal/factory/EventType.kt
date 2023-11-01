@@ -12,5 +12,6 @@ enum class EventType(val text: String)
 	USER_ACTION("UserAction"),
 	PAGE_VIEW("PageView"),
 	KEEP_ALIVE("KeepAlive"),
+	VIDEO("VidEvent"),
 	ERROR("ErrEvent"),
 }

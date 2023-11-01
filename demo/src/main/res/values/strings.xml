@@ -1,12 +1,16 @@
 <resources>
 
     <string name="app_name">RingPublishingTracking Demo</string>
+
+    <!-- Article -->
     <string name="menu_article_push_title">Push</string>
     <string name="menu_article_modal_title">Modal</string>
     <string name="menu_article_add_content_title">Add Content</string>
     <string name="article_dialog_title">Article dialog title</string>
     <string name="article_dialog_message">Article dialog message</string>
     <string name="list_is_from_push">Is from push: %1$s\n\n%2$s</string>
+
+    <!-- Actions-->
     <string name="button_login">Login</string>
     <string name="button_logout">Logout</string>
     <string name="button_report_user_action_string">Report user action string</string>
@@ -19,5 +23,14 @@
     <string name="button_enable_opt_out_mode">Enable OptOut Mode</string>
     <string name="button_disable_opt_out_mode">Disable OptOut Mode</string>
     <string name="button_report_aureus_impression">Report aureus impression</string>
+
+    <!-- Video actions-->
+    <string name="button_keep_playing">Keep playing</string>
+    <string name="button_paused">Paused</string>
+    <string name="button_playing">Playing</string>
+    <string name="button_playing_autostart">Playing autostart</string>
+    <string name="button_playing_end">Playing end</string>
+    <string name="button_playing_start">Playing start</string>
+    <string name="button_start">Start</string>
 
 </resources>

@@ -18,7 +18,7 @@ import android.widget.SimpleAdapter
 import androidx.fragment.app.ListFragment
 import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.demo.R
-import com.ringpublishing.tracking.demo.builder.SampleArticleBuilder
+import com.ringpublishing.tracking.demo.sample.SampleArticleBuilder
 import com.ringpublishing.tracking.demo.controller.ListArticlesController
 import com.ringpublishing.tracking.demo.data.SampleArticle
 import com.ringpublishing.tracking.demo.extension.startArticleActivity
