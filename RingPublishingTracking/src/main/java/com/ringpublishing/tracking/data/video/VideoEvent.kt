@@ -1,4 +1,4 @@
-package com.ringpublishing.tracking.internal.video
+package com.ringpublishing.tracking.data.video
 
 /**
  * Video event related params
@@ -40,5 +40,4 @@ enum class VideoEvent(val text: String) {
      * Video player finished playing video material
      */
     PLAYING_END("PLAYING_END")
-
 }

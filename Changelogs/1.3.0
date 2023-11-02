@@ -1,0 +1,13 @@
+1.3.0 Release notes (2023-11-02)
+=============================================================
+
+Improvements to the 'RingPublishingTracking' module.
+
+### Features
+
+* Implemented video event tracking flow
+    - Implemented video events factory
+    - Handled new event parameters
+    - Updated RingPublishingTracking object with new factory class
+    - Added video event- related model classes
+    - Added proper video event tests

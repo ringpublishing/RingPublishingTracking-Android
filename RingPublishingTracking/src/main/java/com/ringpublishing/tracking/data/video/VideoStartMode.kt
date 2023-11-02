@@ -1,4 +1,4 @@
-package com.ringpublishing.tracking.internal.video
+package com.ringpublishing.tracking.data.video
 
 /**
  * Video start mode related params
@@ -20,5 +20,4 @@ enum class VideoStartMode(val text: String) {
      *  Video was started while muted but later was unmuted
      */
     WAS_MUTED("wm")
-
 }

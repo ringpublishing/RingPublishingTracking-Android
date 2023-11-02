@@ -1,4 +1,4 @@
-package com.ringpublishing.tracking.internal.factory
+package com.ringpublishing.tracking.internal.video
 
 internal enum class VideoEventParam(val text: String) {
     SELECTED_ELEMENT_NAME("VE"),

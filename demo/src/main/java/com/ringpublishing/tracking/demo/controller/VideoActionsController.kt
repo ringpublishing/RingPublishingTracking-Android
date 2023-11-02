@@ -10,7 +10,7 @@ import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.demo.data.ScreenTrackingData
 import com.ringpublishing.tracking.demo.sample.sampleVideoMetadata
 import com.ringpublishing.tracking.demo.sample.sampleVideoState
-import com.ringpublishing.tracking.internal.video.VideoEvent
+import com.ringpublishing.tracking.data.video.VideoEvent
 import com.ringpublishing.tracking.reportVideoEvent
 
 class VideoActionsController : ScreenController() {

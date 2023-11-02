@@ -1,12 +1,12 @@
 package com.ringpublishing.tracking.demo.sample
 
-import com.ringpublishing.tracking.internal.video.VideoAdsConfiguration
-import com.ringpublishing.tracking.internal.video.VideoContentCategory
-import com.ringpublishing.tracking.internal.video.VideoMetadata
-import com.ringpublishing.tracking.internal.video.VideoStartMode
-import com.ringpublishing.tracking.internal.video.VideoState
-import com.ringpublishing.tracking.internal.video.VideoStreamFormat
-import com.ringpublishing.tracking.internal.video.VideoVisibilityState
+import com.ringpublishing.tracking.data.video.VideoAdsConfiguration
+import com.ringpublishing.tracking.data.video.VideoContentCategory
+import com.ringpublishing.tracking.data.video.VideoMetadata
+import com.ringpublishing.tracking.data.video.VideoStartMode
+import com.ringpublishing.tracking.data.video.VideoState
+import com.ringpublishing.tracking.data.video.VideoStreamFormat
+import com.ringpublishing.tracking.data.video.VideoVisibilityState
 
 val sampleVideoMetadata = VideoMetadata(
     publicationId = "2305009.546843861",

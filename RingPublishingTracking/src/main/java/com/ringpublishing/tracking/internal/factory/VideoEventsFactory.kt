@@ -4,15 +4,16 @@ import android.util.Base64
 import com.google.gson.Gson
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
-import com.ringpublishing.tracking.internal.video.VideoEvent
-import com.ringpublishing.tracking.internal.video.VideoMetadata
-import com.ringpublishing.tracking.internal.video.VideoState
-import com.ringpublishing.tracking.internal.video.VideoVisibility
-import com.ringpublishing.tracking.internal.video.VideoVisibilityContext
-import com.ringpublishing.tracking.internal.video.VideoVisibilityState
+import com.ringpublishing.tracking.data.video.VideoEvent
+import com.ringpublishing.tracking.data.video.VideoMetadata
+import com.ringpublishing.tracking.data.video.VideoState
+import com.ringpublishing.tracking.data.video.VideoVisibility
+import com.ringpublishing.tracking.data.video.VideoVisibilityContext
+import com.ringpublishing.tracking.data.video.VideoVisibilityState
+import com.ringpublishing.tracking.internal.video.VideoEventParam
 import kotlin.math.roundToInt
 
-class VideoEventsFactory(private val gson: Gson) {
+internal class VideoEventsFactory(private val gson: Gson) {
 
     private val sessionTimestamps: MutableMap<String, String> = mutableMapOf()
     private val sessionCounters: MutableMap<String, Int> = mutableMapOf()

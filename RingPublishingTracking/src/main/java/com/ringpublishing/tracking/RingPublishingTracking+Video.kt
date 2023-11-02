@@ -1,8 +1,8 @@
 package com.ringpublishing.tracking
 
-import com.ringpublishing.tracking.internal.video.VideoEvent
-import com.ringpublishing.tracking.internal.video.VideoMetadata
-import com.ringpublishing.tracking.internal.video.VideoState
+import com.ringpublishing.tracking.data.video.VideoEvent
+import com.ringpublishing.tracking.data.video.VideoMetadata
+import com.ringpublishing.tracking.data.video.VideoState
 
 /**
  * Reports Video player event

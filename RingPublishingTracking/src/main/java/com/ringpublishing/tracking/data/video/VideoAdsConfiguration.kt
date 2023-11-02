@@ -1,4 +1,4 @@
-package com.ringpublishing.tracking.internal.video
+package com.ringpublishing.tracking.data.video
 
 /**
  * Video ads configuration related params
@@ -25,5 +25,4 @@ enum class VideoAdsConfiguration(val text: String?) {
      * Ads are temporarily disabled
      */
     DISABLED_WITH_GRACE_PERIOD("gp")
-
 }

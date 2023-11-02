@@ -1,4 +1,4 @@
-package com.ringpublishing.tracking.internal.video
+package com.ringpublishing.tracking.data.video
 
 /**
  * Video stream format related params

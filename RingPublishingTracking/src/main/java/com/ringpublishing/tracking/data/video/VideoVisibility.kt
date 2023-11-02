@@ -1,6 +1,4 @@
-package com.ringpublishing.tracking.internal.video
-
-import com.google.gson.Gson
+package com.ringpublishing.tracking.data.video
 
 /**
  * Video visibility state related params
@@ -17,8 +15,8 @@ enum class VideoVisibilityState(val text: String) {
      * Video is not visible (out of viewport) for the user
      */
     OUT_OF_VIEWPORT("out-of-viewport")
-
 }
+
 class VideoVisibilityContext(val visible: String)
 
 class VideoVisibility(val context: VideoVisibilityContext)
