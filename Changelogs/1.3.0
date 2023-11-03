@@ -5,9 +5,13 @@ Improvements to the 'RingPublishingTracking' module.
 
 ### Features
 
-* Implemented video event tracking flow
-    - Implemented video events factory
-    - Handled new event parameters
-    - Updated RingPublishingTracking object with new factory class
-    - Added video event- related model classes
-    - Added proper video event tests
+* Added possibility of reporting video events through 'reportVideoEvent' method  in 'RingPublishingTracking'
+* Added classes used to describe reported video event:
+    - VideoState class
+    - VideoMetadata class
+    - VideoEvent enum class
+    - VideoAdsConfiguration enum class
+    - VideoContentCategory enum class
+    - VideoStartMode enum class
+    - VideoStreamFormat enum class
+    - VideoVisibility classes

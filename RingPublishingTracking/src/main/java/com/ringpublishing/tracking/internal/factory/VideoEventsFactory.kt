@@ -45,7 +45,7 @@ internal class VideoEventsFactory(private val gson: Gson) {
 
         return Event(
             analyticsSystemName = AnalyticsSystem.KROPKA_STATS.text,
-            name = videoEvent.text,
+            name = EventType.VIDEO.text,
             parameters = parameters
         )
     }
@@ -97,6 +97,6 @@ internal class VideoEventsFactory(private val gson: Gson) {
      */
     fun createVisibilityParam(visibility: VideoVisibilityState): String =
         gson.toJson(VideoVisibility(VideoVisibilityContext(visibility.text))).let { json ->
-            Base64.encodeToString(json.toByteArray(), Base64.DEFAULT)
+            Base64.encodeToString(json.toByteArray(), Base64.NO_WRAP)
         }
 }

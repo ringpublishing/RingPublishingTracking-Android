@@ -55,7 +55,7 @@ class VideoEventsFactoryTest {
         val arraySlot = slot<ByteArray>()
 
         every {
-            Base64.encodeToString(capture(arraySlot), Base64.DEFAULT)
+            Base64.encodeToString(capture(arraySlot), Base64.NO_WRAP)
         } answers {
             java.util.Base64.getEncoder().encodeToString(arraySlot.captured)
         }
