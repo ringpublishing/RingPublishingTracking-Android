@@ -1,3 +1,21 @@
+1.3.0 Release notes (2023-11-02)
+=============================================================
+
+Improvements to the 'RingPublishingTracking' module.
+
+### Features
+
+* Added possibility of reporting video events through 'reportVideoEvent' method  in 'RingPublishingTracking'
+* Added classes used to describe reported video event:
+    - VideoState class
+    - VideoMetadata class
+    - VideoEvent enum class
+    - VideoAdsConfiguration enum class
+    - VideoContentCategory enum class
+    - VideoStartMode enum class
+    - VideoStreamFormat enum class
+    - VideoVisibility classes
+
 1.2.5 Release notes (2023-09-06)
 =============================================================
 
