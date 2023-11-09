@@ -4,7 +4,7 @@
  *
  */
 
-package com.ringpublishing.tracking.demo.builder
+package com.ringpublishing.tracking.demo.sample
 
 import android.content.res.Resources
 import androidx.annotation.Size

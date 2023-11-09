@@ -69,7 +69,7 @@ maven {
 2. Add to your application project module dependencies section
 
 ```ruby
-implementation("com.ringpublishing:tracking:1.1.+")
+implementation("com.ringpublishing:tracking:1.3.+")
 ```
 
 

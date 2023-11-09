@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.ringpublishing.tracking.data.ContentPageViewSource
 import com.ringpublishing.tracking.demo.R
-import com.ringpublishing.tracking.demo.builder.SampleArticleBuilder
+import com.ringpublishing.tracking.demo.sample.SampleArticleBuilder
 import com.ringpublishing.tracking.demo.controller.ActionsController
 import com.ringpublishing.tracking.demo.databinding.FragmentActionsBinding
 import com.ringpublishing.tracking.demo.extension.startArticleActivity
