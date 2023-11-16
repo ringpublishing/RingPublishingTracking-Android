@@ -58,12 +58,16 @@ internal class ApiService(
             Logger.debug("ApiService: reportEvents() continue work after first identify request")
         }
         if (identifyProvider.shouldRequestIdentify())
-            {
-                identifyProvider.requestIdentify().let {
+        {
+            identifyProvider.requestIdentify().let {
                 if (!it.isSuccess()) return it
+                else artemisProvider.requestArtemisId().let { artemisResult ->
+                    if (!artemisResult.isSuccess()) return artemisResult
+                    else updateTrackingIdentifier()
+                }
             }
         }
-        if (identifyProvider.shouldRequestIdentify() || artemisProvider.shouldRequestArtemisId())
+        if (artemisProvider.shouldRequestArtemisId())
         {
             artemisProvider.requestArtemisId().let {
                 if (!it.isSuccess()) return it

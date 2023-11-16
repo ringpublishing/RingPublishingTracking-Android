@@ -184,4 +184,36 @@ class ApiServiceTest {
         coVerify(exactly = 1) { apiClient.identify(any()) }
         coVerify(exactly = 1) { apiClient.getArtemisId(any()) }
     }
+
+    @Test
+    fun reportEvents_SavedIdentifyExist_ThenNoSaveNewIdentify()
+    {
+        coEvery { identifyResponse.getValidDate(any()) } returns expiryDate
+        coEvery { identifyResponse.getIdentifier() } returns "123"
+        coEvery { identifyResponse.postInterval } returns 500
+        coEvery { artemisIdResponse.getValidDate(any()) } returns expiryDate
+        coEvery { artemisIdResponse.getIdentifier() } returns "123"
+        coEvery { expiryDate.isIdentifyExpire() } returns false
+        coEvery { apiRepository.readIdentify() } returns identifyResponse
+        coEvery { apiRepository.readArtemisId() } returns artemisIdResponse
+        coEvery { apiRepository.readIdentifyRequestDate() } returns Date()
+        coEvery { apiRepository.readArtemisIdDate() } returns Date()
+
+        val apiService = ApiService(
+            apiClient = apiClient,
+            reportEventStatusMapper = reportEventStatusMapper,
+            userRepository = userRepository,
+            configurationManager = configurationManager,
+            apiRepository = apiRepository,
+        )
+
+        val events = mutableListOf(event)
+
+        runBlocking {
+            apiService.reportEvents(events)
+        }
+        coVerify(exactly = 2) { userRepository.buildUser() }
+        coVerify(exactly = 0) { apiRepository.saveIdentify(any()) }
+        coVerify(exactly = 0) { apiRepository.saveArtemisId(any()) }
+    }
 }
