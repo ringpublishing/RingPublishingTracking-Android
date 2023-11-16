@@ -8,7 +8,7 @@ package com.ringpublishing.tracking.internal.decorator
 
 import android.util.Base64
 import com.google.gson.Gson
-import com.ringpublishing.tracking.data.ArtemisId
+import com.google.gson.JsonElement
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.log.Logger
@@ -27,13 +27,17 @@ internal class UserIdentifierDataDecorator(
         val sso = createSso(userId)
         val artemisId = createArtemisId()
 
-        if (userId.isNullOrEmpty() || sso == null || artemisId == null) return
-
-		encodeUserData(sso, artemisId)?.let {
-            event.add(EventParam.USER_SSO_DATA, it)
+        if (artemisId != null)
+        {
+            encodeUserData(sso, artemisId)?.let {
+                event.add(EventParam.USER_SSO_DATA, it)
+            }
         }
 
-		event.add(EventParam.USER_SSO_IDENTIFIER, userId)
+        if (!userId.isNullOrEmpty())
+        {
+            event.add(EventParam.USER_SSO_IDENTIFIER, userId)
+        }
 	}
 
     private fun createSso(userId: String?): Sso?
@@ -45,9 +49,19 @@ internal class UserIdentifierDataDecorator(
         else Sso(Logged(userId, emailMd5), ssoName)
     }
 
-    private fun createArtemisId(): ArtemisId? = apiRepository.readArtemisId()?.toArtemisId()
+    private fun createArtemisId(): ArtemisId? = apiRepository.readArtemisId()?.let { response ->
+        with(response.user?.id) {
+            ArtemisId(
+                artemis = this?.real,
+                external = External(
+                    model = this?.model,
+                    models = this?.models,
+                )
+            )
+        }
+    }
 
-    private fun encodeUserData(sso: Sso, artemisId: ArtemisId): String?
+    private fun encodeUserData(sso: Sso?, artemisId: ArtemisId): String?
     {
         val jsonUser = gson.toJson(UserIdentifier(artemisId, sso))
         return runCatching {
@@ -63,7 +77,11 @@ internal class UserIdentifierDataDecorator(
 
     private class UserIdentifier(val id: ArtemisId?, val sso: Sso?)
 
-	private class Logged(val id: String?, val md5: String?)
+    private class ArtemisId(val artemis: String?, val external: External?)
+
+    private class External(val model: String?, val models: JsonElement?)
+
+    private class Logged(val id: String?, val md5: String?)
 
 	private class Sso(val logged: Logged, val name: String)
 }

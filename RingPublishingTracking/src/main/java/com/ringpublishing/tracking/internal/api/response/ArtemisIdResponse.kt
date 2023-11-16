@@ -1,8 +1,6 @@
 package com.ringpublishing.tracking.internal.api.response
 
 import com.google.gson.JsonElement
-import com.ringpublishing.tracking.data.ArtemisId
-import com.ringpublishing.tracking.data.External
 import java.util.Calendar
 import java.util.Date
 
@@ -10,13 +8,6 @@ internal data class ArtemisIdResponse(
     val cfg: Cfg?,
     val user: User?
 ) {
-    fun toArtemisId() = ArtemisId(
-        artemis = user?.id?.real,
-        external = External(
-            model = user?.id?.model,
-            models = user?.id?.models
-        )
-    )
 
     fun getLifetime() = cfg?.ttl ?: 0
 
@@ -27,6 +18,8 @@ internal data class ArtemisIdResponse(
         calendar.timeInMillis = savedIdentifyDate.time + ((cfg?.ttl ?: 0) * 1000)
         return calendar.time
     }
+
+    fun getIdentifier() = user?.id?.real
 }
 
 internal data class Cfg(

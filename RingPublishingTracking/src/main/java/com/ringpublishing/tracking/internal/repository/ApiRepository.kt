@@ -1,8 +1,7 @@
 package com.ringpublishing.tracking.internal.repository
 
-import com.ringpublishing.tracking.data.ArtemisIdentifier
+import com.ringpublishing.tracking.data.Identifier
 import com.ringpublishing.tracking.data.TrackingIdentifier
-import com.ringpublishing.tracking.data.UserIdentifier
 import com.ringpublishing.tracking.internal.api.response.ArtemisIdResponse
 import com.ringpublishing.tracking.internal.api.response.IdentifyResponse
 import com.ringpublishing.tracking.internal.util.isIdentifyExpire
@@ -84,19 +83,23 @@ internal class ApiRepository(private val repository: DataRepository)
         repository.remove(Key.ARTEMIS_DATE.text)
     }
 
-    private fun readUserIdentifier(): UserIdentifier? = readIdentify()?.let { identify ->
-        val expirationDate = identify.getValidDate(readIdentifyRequestDate())
-        val identifier = identify.getIdentifier()
-
-        if (identifier.isNullOrEmpty() || expirationDate.isIdentifyExpire()) null
-        else UserIdentifier(identifier, expirationDate!!)
+    private fun readUserIdentifier(): Identifier? = readIdentify()?.let { identify ->
+        createIdentifier(
+            id = identify.getIdentifier(),
+            date = identify.getValidDate(readIdentifyRequestDate())
+        )
     }
 
-    private fun readArtemisIdentifier(): ArtemisIdentifier? = readArtemisId()?.let { identify ->
-        val expirationDate = identify.getValidDate(readIdentifyRequestDate())
+    private fun readArtemisIdentifier(): Identifier? = readArtemisId()?.let { artemisId ->
+        createIdentifier(
+            id = artemisId.getIdentifier(),
+            date = artemisId.getValidDate(readIdentifyRequestDate())
+        )
+    }
 
-        if (expirationDate.isIdentifyExpire()) null
-        else ArtemisIdentifier(identify.toArtemisId(), expirationDate!!)
+    private fun createIdentifier(id: String?, date: Date?): Identifier? {
+        return if (id.isNullOrEmpty() || date.isIdentifyExpire()) null
+        else Identifier(id, date!!)
     }
 
     fun readTrackingIdentifier(): TrackingIdentifier?

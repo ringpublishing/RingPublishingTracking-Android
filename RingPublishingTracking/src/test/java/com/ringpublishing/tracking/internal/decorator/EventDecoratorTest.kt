@@ -11,11 +11,11 @@ import android.content.SharedPreferences
 import android.util.Base64
 import com.google.gson.Gson
 import com.google.gson.JsonElement
-import com.ringpublishing.tracking.data.ArtemisId
 import com.ringpublishing.tracking.data.Event
-import com.ringpublishing.tracking.data.External
 import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.api.response.ArtemisIdResponse
+import com.ringpublishing.tracking.internal.api.response.Id
+import com.ringpublishing.tracking.internal.api.response.User
 import com.ringpublishing.tracking.internal.data.UserData
 import com.ringpublishing.tracking.internal.device.WindowSizeInfo
 import com.ringpublishing.tracking.internal.log.Logger
@@ -105,7 +105,7 @@ internal class EventDecoratorTest
 		every { event.name } returns "name"
 
         every { apiRepository.readArtemisId() } returns artemisIdResponse
-        every { artemisIdResponse.toArtemisId() } returns mockArtemisId(Gson())
+        every { artemisIdResponse.user } returns mockArtemisIdUser()
 
 		val parameters = mutableMapOf<String, Any>()
 
@@ -132,11 +132,11 @@ internal class EventDecoratorTest
 		}
 	}
 
-    private fun mockArtemisId(gson: Gson) = ArtemisId(
-        artemis = "1234",
-        external = External(
+    private fun mockArtemisIdUser() = User(
+        id = Id(
+            real = "1234",
             model = "1234",
-            models = gson.fromJson("{\n\"ats_ri\": \"1234\"\n}", JsonElement::class.java)
+            models = Gson().fromJson("{\n\"ats_ri\": \"1234\"\n}", JsonElement::class.java)
         )
     )
 

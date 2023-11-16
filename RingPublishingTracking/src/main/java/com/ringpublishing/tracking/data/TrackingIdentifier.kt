@@ -15,10 +15,8 @@ import java.util.Date
  * @param artemisIdentifier artemis tracking identifier
  */
 data class TrackingIdentifier(
-    val userIdentifier: UserIdentifier,
-    val artemisIdentifier: ArtemisIdentifier
+    val userIdentifier: Identifier,
+    val artemisIdentifier: Identifier
 )
 
-data class UserIdentifier(val identifier: String, val expirationDate: Date)
-
-data class ArtemisIdentifier(val identifier: ArtemisId, val expirationDate: Date)
+data class Identifier(val identifier: String, val expirationDate: Date)
