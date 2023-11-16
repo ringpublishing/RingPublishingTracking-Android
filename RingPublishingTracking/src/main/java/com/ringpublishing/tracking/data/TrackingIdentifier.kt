@@ -11,12 +11,12 @@ import java.util.Date
 /**
  * Tracking identifier
  *
- * @param userIdentifier base tracking identifier
- * @param artemisIdentifier artemis tracking identifier
+ * @param eaUUID base tracking identifier
+ * @param artemisID artemis tracking identifier
  */
 data class TrackingIdentifier(
-    val userIdentifier: Identifier,
-    val artemisIdentifier: Identifier
+    val eaUUID: Identifier,
+    val artemisID: Identifier
 )
 
-data class Identifier(val identifier: String, val expirationDate: Date)
+data class Identifier(val value: String, val expirationDate: Date)
