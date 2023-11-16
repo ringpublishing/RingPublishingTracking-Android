@@ -1,6 +1,5 @@
 package com.ringpublishing.tracking.internal.api
 
-import android.util.Log
 import com.google.gson.GsonBuilder
 import com.ringpublishing.tracking.internal.api.data.IdsMap
 import com.ringpublishing.tracking.internal.api.request.ArtemisIdRequest

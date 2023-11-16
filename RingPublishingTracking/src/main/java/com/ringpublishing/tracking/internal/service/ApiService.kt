@@ -1,7 +1,5 @@
 package com.ringpublishing.tracking.internal.service
 
-import android.util.Log
-import com.google.gson.Gson
 import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.ConfigurationManager
@@ -90,8 +88,6 @@ internal class ApiService(
             Logger.warn("ApiService: Send request Network error ${it.localizedMessage}")
             return ReportEventResult(ReportEventStatus.ERROR_NETWORK)
         }
-
-        return ReportEventResult(ReportEventStatus.ERROR_NETWORK)
     }
 
     private fun updateTrackingIdentifier()
@@ -101,5 +97,4 @@ internal class ApiService(
     }
 
     fun hasIdentify() = identifyProvider.identifyResponse != null && artemisProvider.artemisIdResponse != null
-
 }

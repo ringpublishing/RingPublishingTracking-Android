@@ -12,7 +12,6 @@ import com.ringpublishing.tracking.internal.api.response.ArtemisIdResponse
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.repository.ApiRepository
 import com.ringpublishing.tracking.internal.service.logArtemisIdResponse
-import com.ringpublishing.tracking.internal.service.logIdentifyResponse
 import com.ringpublishing.tracking.internal.service.result.ReportEventResult
 import com.ringpublishing.tracking.internal.service.result.ReportEventStatus
 import com.ringpublishing.tracking.internal.service.result.ReportEventStatusMapper
@@ -96,8 +95,7 @@ internal class ArtemisIdProvider(
         {
             artemisIdResponse = response.body()
             RingPublishingTracking.trackingIdentifierError = null
-        } else
-        {
+        } else {
             RingPublishingTracking.trackingIdentifierError = TrackingIdentifierError.REQUEST_ERROR
         }
     }
@@ -110,8 +108,7 @@ internal class ArtemisIdProvider(
             apiRepository.saveArtemisId(artemisId)
             "New ArtemisId saved".toDebugLog()
             eventResult = ReportEventResult(reportEventStatusMapper.getStatus(response.code()))
-        } else
-        {
+        } else {
             reportResponseError()
         }
 

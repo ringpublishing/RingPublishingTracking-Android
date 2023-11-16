@@ -77,8 +77,7 @@ internal class IdentifyProvider(
         {
             identifyResponse = response.body()
             RingPublishingTracking.trackingIdentifierError = null
-        } else
-        {
+        } else {
             RingPublishingTracking.trackingIdentifierError = TrackingIdentifierError.REQUEST_ERROR
         }
     }
@@ -91,8 +90,7 @@ internal class IdentifyProvider(
             apiRepository.saveIdentify(identify)
             "New identify saved".toDebugLog()
             eventResult = ReportEventResult(reportEventStatusMapper.getStatus(response.code()), response.body()?.postInterval)
-        } else
-        {
+        } else {
             reportResponseError()
         }
 
@@ -132,5 +130,4 @@ internal class IdentifyProvider(
     private fun String.toDebugLog() = Logger.debug("IdentifyProvider: $this")
 
     private fun String.toWarnLog() = Logger.warn("IdentifyProvider: $this")
-
 }
