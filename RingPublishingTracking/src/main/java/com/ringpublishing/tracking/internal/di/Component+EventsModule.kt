@@ -55,6 +55,7 @@ internal fun Component.provideEventDecorator(configurationManager: Configuration
 	{
 		eventDecorator = EventDecorator(
 			configurationManager,
+            Component.provideApiRepository(),
 			Component.provideGson(),
 			Component.provideWindowSizeInfo(),
 			Component.provideScreenSizeInfo()

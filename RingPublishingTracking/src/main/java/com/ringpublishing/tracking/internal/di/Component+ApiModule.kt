@@ -28,9 +28,10 @@ internal fun Component.provideApiService(ringPublishingTrackingConfiguration: Ri
 		apiService = ApiService(
 			Component.provideApiClient(ringPublishingTrackingConfiguration.apiKey, ringPublishingTrackingConfiguration.apiUrl ?: Constants.apiUrl),
 			Component.provideReportEventStatusMapper(),
-			Component.provideApiRepository(),
-			Component.provideUserRepository()
-		)
+            Component.provideUserRepository(),
+            Component.provideConfigurationManager(),
+            Component.provideApiRepository(),
+        )
 	}
 
 	return apiService!!
