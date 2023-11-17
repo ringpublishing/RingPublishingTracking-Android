@@ -1,11 +1,12 @@
 package com.ringpublishing.tracking.internal.api
 
+import com.google.gson.GsonBuilder
 import com.ringpublishing.tracking.internal.api.data.IdsMap
+import com.ringpublishing.tracking.internal.api.request.ArtemisIdRequest
 import com.ringpublishing.tracking.internal.api.request.EventRequest
 import com.ringpublishing.tracking.internal.api.request.IdentifyRequest
 import com.ringpublishing.tracking.internal.api.serialization.IdsMapDeserializer
 import com.ringpublishing.tracking.internal.network.NetworkClient
-import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.URL
@@ -17,7 +18,9 @@ internal class ApiClient(private val apiKey: String, private val apiUrl: URL, pr
 
 	suspend fun identify(identifyRequest: IdentifyRequest) = api.identify(apiKey, identifyRequest)
 
-	suspend fun send(eventRequest: EventRequest) = api.send(apiKey, eventRequest)
+    suspend fun getArtemisId(artemisIdRequest: ArtemisIdRequest) = api.getArtemisId(apiKey, artemisIdRequest)
+
+    suspend fun send(eventRequest: EventRequest) = api.send(apiKey, eventRequest)
 
 	private fun buildRetrofit() = Retrofit.Builder()
 		.baseUrl(apiUrl)

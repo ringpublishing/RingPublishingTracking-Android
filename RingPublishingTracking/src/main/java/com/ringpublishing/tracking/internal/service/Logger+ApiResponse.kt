@@ -1,5 +1,6 @@
 package com.ringpublishing.tracking.internal.service
 
+import com.ringpublishing.tracking.internal.api.response.ArtemisIdResponse
 import com.ringpublishing.tracking.internal.api.response.EventResponse
 import com.ringpublishing.tracking.internal.api.response.IdentifyResponse
 import com.ringpublishing.tracking.internal.log.Logger
@@ -22,5 +23,15 @@ internal fun Logger.logIdentifyResponse(success: Boolean, response: Response<Ide
         debug("EventApi: Identify response result success=$response.body()")
     } else {
         warn("EventApi: Identify response result ${response.errorBody()} Error code=${response.code()}")
+    }
+}
+
+internal fun Logger.logArtemisIdResponse(success: Boolean, response: Response<ArtemisIdResponse>)
+{
+    if (success)
+    {
+        debug("EventApi: ArtemisId response result success=$response.body()")
+    } else {
+        warn("EventApi: ArtemisId response result ${response.errorBody()} Error code=${response.code()}")
     }
 }
