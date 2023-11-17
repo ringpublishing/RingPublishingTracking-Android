@@ -1,3 +1,13 @@
+1.4.0 Release notes (2023-11-16)
+=============================================================
+
+Improvements to the 'RingPublishingTracking' module.
+
+### Features
+
+* Extended current tracking identifier by adding new artemis identifier support
+* Added proper ArtemisId class describing new identifier
+
 1.3.0 Release notes (2023-11-02)
 =============================================================
 
