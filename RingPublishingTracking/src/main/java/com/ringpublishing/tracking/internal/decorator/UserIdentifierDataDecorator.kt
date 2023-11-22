@@ -27,7 +27,7 @@ internal class UserIdentifierDataDecorator(
         val sso = createSso(userId)
         val artemisId = createArtemisId()
 
-        if (artemisId != null)
+        if (artemisId != null || sso != null)
         {
             encodeUserData(sso, artemisId)?.let {
                 event.add(EventParam.USER_SSO_DATA, it)
@@ -61,7 +61,7 @@ internal class UserIdentifierDataDecorator(
         }
     }
 
-    private fun encodeUserData(sso: Sso?, artemisId: ArtemisId): String?
+    private fun encodeUserData(sso: Sso?, artemisId: ArtemisId?): String?
     {
         val jsonUser = gson.toJson(UserIdentifier(artemisId, sso))
         return runCatching {

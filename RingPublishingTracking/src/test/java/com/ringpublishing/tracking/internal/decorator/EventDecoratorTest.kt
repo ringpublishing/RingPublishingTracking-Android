@@ -119,18 +119,96 @@ internal class EventDecoratorTest
 
 		with(eventDecorated)
 		{
-			Assert.assertEquals("primaryId", parameters["IP"])
-			Assert.assertEquals("secondaryId", parameters["IV"])
-			Assert.assertEquals("tenantId", parameters["TID"])
-			Assert.assertEquals("area", parameters["DA"])
-			Assert.assertEquals("1x1x24", parameters["CS"])
-			Assert.assertEquals("1x1", parameters["CW"])
-			Assert.assertEquals("contentUrl", parameters["DU"])
-			Assert.assertEquals("structurePath", parameters["DV"])
-			Assert.assertEquals("referrer", parameters["DR"])
-			Assert.assertEquals(mockRdluEncoding(), parameters["RDLU"])
+			Assert.assertEquals("primaryId", this.parameters["IP"])
+			Assert.assertEquals("secondaryId", this.parameters["IV"])
+			Assert.assertEquals("tenantId", this.parameters["TID"])
+			Assert.assertEquals("area", this.parameters["DA"])
+			Assert.assertEquals("1x1x24", this.parameters["CS"])
+			Assert.assertEquals("1x1", this.parameters["CW"])
+			Assert.assertEquals("contentUrl", this.parameters["DU"])
+			Assert.assertEquals("structurePath", this.parameters["DV"])
+			Assert.assertEquals("referrer", this.parameters["DR"])
+			Assert.assertEquals(mockRdluArtemisSsoEncoding(), this.parameters["RDLU"])
 		}
 	}
+
+    @Test
+    fun decorateEvent_WithSSO_WithNoArtemisId()
+    {
+        every { application.packageName } returns "package"
+        every { application.getSharedPreferences(any(), any()) } returns sharedPreferences
+        every { configurationManager.primaryId } returns "primaryId"
+        every { configurationManager.secondaryId } returns "secondaryId"
+        every { configurationManager.getTenantId() } returns "tenantId"
+        every { configurationManager.getSiteArea() } returns "area"
+        every { configurationManager.getUserData() } returns userData
+        every { configurationManager.currentContentUrl } returns "contentUrl"
+        every { configurationManager.getFullStructurePath() } returns "structurePath"
+        every { configurationManager.currentReferrer } returns "referrer"
+        every { screenSizeInfo.getScreenSizeDpString() } returns "1x1"
+        every { windowSizeInfo.getWindowSizeDpString() } returns "1x1"
+        every { sharedPreferences.getString(any(), any()) } returns "preference"
+        every { event.name } returns "name"
+
+        every { userData.userId } returns "12345"
+        every { userData.emailMd5 } returns "1234"
+        every { userData.ssoName } returns "RingPublishingTrackingSSO"
+
+        every { apiRepository.readArtemisId() } returns null
+        every { artemisIdResponse.user } returns null
+
+        val parameters = mutableMapOf<String, Any>()
+
+        every { event.parameters } returns parameters
+
+        val eventDecorator = EventDecorator(configurationManager, apiRepository, Gson(), windowSizeInfo, screenSizeInfo)
+
+        val eventDecorated = eventDecorator.decorate(event)
+
+        with(eventDecorated)
+        {
+            Assert.assertEquals(mockRdluSsoEncoding(), this.parameters["RDLU"])
+        }
+    }
+
+    @Test
+    fun decorateEvent_WithArtemisId_WithNOSSO()
+    {
+        every { application.packageName } returns "package"
+        every { application.getSharedPreferences(any(), any()) } returns sharedPreferences
+        every { configurationManager.primaryId } returns "primaryId"
+        every { configurationManager.secondaryId } returns "secondaryId"
+        every { configurationManager.getTenantId() } returns "tenantId"
+        every { configurationManager.getSiteArea() } returns "area"
+        every { configurationManager.getUserData() } returns userData
+        every { configurationManager.currentContentUrl } returns "contentUrl"
+        every { configurationManager.getFullStructurePath() } returns "structurePath"
+        every { configurationManager.currentReferrer } returns "referrer"
+        every { screenSizeInfo.getScreenSizeDpString() } returns "1x1"
+        every { windowSizeInfo.getWindowSizeDpString() } returns "1x1"
+        every { sharedPreferences.getString(any(), any()) } returns "preference"
+        every { event.name } returns "name"
+
+        every { userData.userId } returns null
+        every { userData.emailMd5 } returns null
+        every { userData.ssoName } returns null
+
+        every { apiRepository.readArtemisId() } returns artemisIdResponse
+        every { artemisIdResponse.user } returns mockArtemisIdUser()
+
+        val parameters = mutableMapOf<String, Any>()
+
+        every { event.parameters } returns parameters
+
+        val eventDecorator = EventDecorator(configurationManager, apiRepository, Gson(), windowSizeInfo, screenSizeInfo)
+
+        val eventDecorated = eventDecorator.decorate(event)
+
+        with(eventDecorated)
+        {
+            Assert.assertEquals(mockRdluArtemisEncoding(), this.parameters["RDLU"])
+        }
+    }
 
     private fun mockArtemisIdUser() = User(
         id = Id(
@@ -140,12 +218,22 @@ internal class EventDecoratorTest
         )
     )
 
-    private fun mockRdluEncoding(): String {
-        val jsonUser =
-            "{\"id\":{\"artemis\":\"1234\",\"external\":{\"model\":\"1234\",\"models\":{\"ats_ri\":\"1234\"}}},\"sso\":{\"logged\":{\"id\":\"12345\",\"md5\":\"1234\"},\"name\"" +
-                    ":\"RingPublishingTrackingSSO\"}}"
+    private fun mockRdluArtemisSsoEncoding() = mockRdluEncoding(
+        "{\"id\":{\"artemis\":\"1234\",\"external\":{\"model\":\"1234\",\"models\":{\"ats_ri\":\"1234\"}}},\"sso\":{\"logged\":{\"id\":\"12345\",\"md5\":\"1234\"},\"name\"" +
+                ":\"RingPublishingTrackingSSO\"}}"
+    )
+
+    private fun mockRdluSsoEncoding() = mockRdluEncoding(
+        "{\"sso\":{\"logged\":{\"id\":\"12345\",\"md5\":\"1234\"},\"name\":\"RingPublishingTrackingSSO\"}}"
+    )
+
+    private fun mockRdluArtemisEncoding() = mockRdluEncoding(
+        "{\"id\":{\"artemis\":\"1234\",\"external\":{\"model\":\"1234\",\"models\":{\"ats_ri\":\"1234\"}}}}"
+    )
+
+    private fun mockRdluEncoding(input: String): String {
         return Base64.encodeToString(
-            jsonUser.toByteArray(Charsets.UTF_8),
+            input.toByteArray(Charsets.UTF_8),
             Base64.NO_WRAP
         )
     }
