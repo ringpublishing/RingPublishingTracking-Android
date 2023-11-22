@@ -1,3 +1,12 @@
+1.4.1 Release notes (2023-11-21)
+=============================================================
+
+Improvements to the 'RingPublishingTracking' module.
+
+### Changes
+
+* RDLU parameter is now sent with Event if SSO or ArtemisId is available
+
 1.4.0 Release notes (2023-11-16)
 =============================================================
 
