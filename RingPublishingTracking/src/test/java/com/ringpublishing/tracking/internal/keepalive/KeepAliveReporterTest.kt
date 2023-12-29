@@ -58,9 +58,12 @@ internal class KeepAliveReporterTest
 
 		every { keepAliveDataSource.toString() } returns ""
 
-		val lifecycle = object : Lifecycle()
+		val cycle = object : Lifecycle()
 		{
-			override fun addObserver(observer: LifecycleObserver)
+            override val currentState: State
+                get() = State.CREATED
+
+            override fun addObserver(observer: LifecycleObserver)
 			{
 			}
 
@@ -68,13 +71,12 @@ internal class KeepAliveReporterTest
 			{
 			}
 
-			override fun getCurrentState(): State
-			{
-				return State.CREATED
-			}
 		}
 
-		lifecycleOwner = LifecycleOwner { lifecycle }
+        lifecycleOwner = object : LifecycleOwner {
+            override val lifecycle: Lifecycle
+                get() = cycle
+        }
 	}
 
 	@Test
