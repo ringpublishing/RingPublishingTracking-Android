@@ -1,3 +1,12 @@
+1.4.2 Release notes (2023-12-29)
+=============================================================
+
+Update libraries
+
+### Changes
+
+* Update external libraries to latest versions
+
 1.4.1 Release notes (2023-11-21)
 =============================================================
 
