@@ -70,7 +70,6 @@ internal class KeepAliveReporterTest
 			override fun removeObserver(observer: LifecycleObserver)
 			{
 			}
-
 		}
 
         lifecycleOwner = object : LifecycleOwner {
