@@ -8,6 +8,7 @@ package com.ringpublishing.tracking
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.ContentPageViewSource
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingKeepAliveDataSource
+import com.ringpublishing.tracking.internal.di.Component
 import java.lang.ref.WeakReference
 import java.net.URL
 
@@ -91,7 +92,7 @@ fun RingPublishingTracking.reportUserAction(actionName: String, actionSubtypeNam
 @Suppress("unused", "unused_parameter")
 fun RingPublishingTracking.reportPageView(currentStructurePath: List<String>, partiallyReloaded: Boolean)
 {
-	keepAliveReporter.stop()
+	keepAliveReporter?.stop()
 
 	with(configurationManager)
 	{
@@ -130,7 +131,7 @@ fun RingPublishingTracking.reportContentPageView(
 )
 {
 	keepAliveDelegate = WeakReference(contentKeepAliveDataSource)
-	keepAliveReporter.start(contentMetadata, this, partiallyReloaded)
+	keepAliveReporter?.start(contentMetadata, this, partiallyReloaded)
 
 	with(configurationManager)
 	{
@@ -148,7 +149,7 @@ fun RingPublishingTracking.reportContentPageView(
 @Suppress("unused")
 fun RingPublishingTracking.resumeContentKeepAliveTracking()
 {
-	keepAliveReporter.resume()
+	keepAliveReporter?.resume()
 }
 
 /**
@@ -157,7 +158,7 @@ fun RingPublishingTracking.resumeContentKeepAliveTracking()
 @Suppress("unused")
 fun RingPublishingTracking.pauseContentKeepAliveTracking()
 {
-	keepAliveReporter.pause()
+	keepAliveReporter?.pause()
 }
 
 /**
@@ -166,5 +167,5 @@ fun RingPublishingTracking.pauseContentKeepAliveTracking()
 @Suppress("unused")
 fun RingPublishingTracking.stopContentKeepAliveTracking()
 {
-	keepAliveReporter.stop()
+	keepAliveReporter?.stop()
 }

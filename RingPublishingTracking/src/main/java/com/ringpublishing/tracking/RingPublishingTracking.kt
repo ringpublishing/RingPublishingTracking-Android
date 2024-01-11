@@ -89,7 +89,7 @@ object RingPublishingTracking : KeepAliveDataSource {
         configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
         Component.initComponent(application, configurationManager)
         eventsReporter = EventsReporter(Component.provideEventsService(configurationManager), Component.provideEventDecorator(configurationManager))
-        keepAliveReporter = KeepAliveReporter(eventsReporter, Component.provideScreenSizeInfo(), ProcessLifecycleOwner.get())
+        keepAliveReporter = KeepAliveReporter(eventsReporter!!, Component.provideScreenSizeInfo(), ProcessLifecycleOwner.get())
         delegate = WeakReference(ringPublishingTrackingDelegate)
     }
 
@@ -139,7 +139,7 @@ object RingPublishingTracking : KeepAliveDataSource {
      * @param event: Event
      */
     fun reportEvent(event: Event) {
-        eventsReporter.reportEvent(event)
+        eventsReporter?.reportEvent(event)
     }
 
     /**
@@ -149,7 +149,7 @@ object RingPublishingTracking : KeepAliveDataSource {
      * @param events: List of events
      */
     fun reportEvents(events: List<Event>) {
-        eventsReporter.reportEvents(events)
+        eventsReporter?.reportEvents(events)
     }
 
     override fun didAskForKeepAliveContentStatus(contentMetadata: ContentMetadata): KeepAliveContentStatus? {
@@ -157,8 +157,8 @@ object RingPublishingTracking : KeepAliveDataSource {
     }
 
     internal val configurationManager = ConfigurationManager()
-    private lateinit var eventsReporter: EventsReporter
-    internal lateinit var keepAliveReporter: KeepAliveReporter
+    private var eventsReporter: EventsReporter? = null
+    internal var keepAliveReporter: KeepAliveReporter? = null
     internal val eventsFactory = EventsFactory(Component.provideGson())
     internal val videoEventsFactory = VideoEventsFactory(Component.provideGson())
     var delegate: WeakReference<RingPublishingTrackingDelegate>? = null
