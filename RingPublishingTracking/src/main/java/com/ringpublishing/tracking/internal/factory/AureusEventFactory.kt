@@ -41,9 +41,7 @@ class AureusEventFactory(private val snakeCaseGson: Gson)
         publicationUrl?.let { parameters[UserEventParam.TARGET_URL.text] = it.toString() }
         teaser?.contentId?.let { parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = it }
         aureusOfferId?.let { parameters[AureusEventParam.EI.text] = it }
-        eventContext?.prepareEcxParameter()?.let {  ecx ->
-            parameters[AureusEventParam.ECX.text] = ecx
-        }
+        eventContext?.prepareEcxParameter()?.let { parameters[AureusEventParam.ECX.text] = it }
 
         return Event(AnalyticsSystem.KROPKA_EVENTS.text, EventType.CLICK.text, parameters)
     }
