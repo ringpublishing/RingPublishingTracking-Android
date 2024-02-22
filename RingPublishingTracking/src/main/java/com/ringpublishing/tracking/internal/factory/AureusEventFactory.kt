@@ -2,6 +2,7 @@ package com.ringpublishing.tracking.internal.factory
 
 import android.util.Base64
 import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.aureus.AureusEventContext
 import com.ringpublishing.tracking.data.aureus.AureusTeaser
@@ -15,8 +16,11 @@ class AureusEventFactory(private val snakeCaseGson: Gson)
     fun createAureusImpressionEvent(teasers: List<AureusTeaser>, eventContext: AureusEventContext): Event
     {
         val parameters = mutableMapOf<String, Any>()
+        val displayedItemsJsonArray = runCatching {
+            snakeCaseGson.fromJson(snakeCaseGson.toJson(teasers), JsonArray::class.java)
+        }.getOrNull()
 
-        parameters[AureusEventParam.DISPLAYED_ITEMS.text] = snakeCaseGson.toJson(teasers)
+        displayedItemsJsonArray?.let { parameters[AureusEventParam.DISPLAYED_ITEMS.text] = it }
         eventContext.clientUuid?.let { parameters[AureusEventParam.CLIENT_UUID.text] = it }
         eventContext.variantUuid?.let { parameters[AureusEventParam.VARIANT_UUID.text] = it }
         eventContext.segmentId?.let { parameters[AureusEventParam.SEGMENT_ID.text] = it }
