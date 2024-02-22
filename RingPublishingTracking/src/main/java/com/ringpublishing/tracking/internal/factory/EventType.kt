@@ -13,5 +13,6 @@ enum class EventType(val text: String)
 	PAGE_VIEW("PageView"),
 	KEEP_ALIVE("KeepAlive"),
 	VIDEO("VidEvent"),
-	ERROR("ErrEvent"),
+    AUREUS_IMPRESSION_EVENT("AureusImpressionEvent"),
+    ERROR("ErrEvent"),
 }

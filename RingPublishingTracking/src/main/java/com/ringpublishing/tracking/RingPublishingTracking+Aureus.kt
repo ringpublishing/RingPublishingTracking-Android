@@ -5,29 +5,22 @@
  */
 package com.ringpublishing.tracking
 
+import com.ringpublishing.tracking.data.aureus.AureusEventContext
+import com.ringpublishing.tracking.data.aureus.AureusTeaser
 import java.net.URL
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 /**
  * Aureus events
  *
- * Reports 'Aureus' offers impression event
+ * Reports 'Aureus' impression event
  *
- * @param offerIds list aureus offers
+ * @param teasers list of AureusTeaser instances
+ * @param eventContext AureusContext instance
  */
-@Suppress("unused", "unused_parameter")
-fun RingPublishingTracking.reportAureusOffersImpressions(offerIds: List<String>)
+@Suppress("unused")
+fun RingPublishingTracking.reportAureusImpression(teasers: List<AureusTeaser>, eventContext: AureusEventContext)
 {
-	var encoded: String? = null
-
-	if (offerIds.isNotEmpty())
-	{
-		encoded = URLEncoder.encode(offerIds.joinToString(",", "[", "]") { "\"$it\"" }, StandardCharsets.UTF_8.name())
-	}
-
-	val event = eventsFactory.createUserActionEvent("aureusOfferImpressions", "offerIds", encoded)
-
+	val event = aureusEventFactory.createAureusImpressionEvent(teasers, eventContext)
 	reportEvent(event)
 }
 
@@ -36,15 +29,17 @@ fun RingPublishingTracking.reportAureusOffersImpressions(offerIds: List<String>)
  *
  * @param selectedElementName that user click
  * @param publicationUrl of content
- * @param contentId content identifier in source system (CMS)
  * @param aureusOfferId identifier
+ * @param teaser AureusTeaser instance
+ * @param eventContext AureusContext instance
  */
-@Suppress("unused", "unused_parameter")
-fun RingPublishingTracking.reportContentClick(selectedElementName: String, publicationUrl: URL, contentId: String, aureusOfferId: String)
+@Suppress("unused")
+fun RingPublishingTracking.reportContentClick(selectedElementName: String,
+                                              publicationUrl: URL,
+                                              aureusOfferId: String,
+                                              teaser: AureusTeaser,
+                                              eventContext: AureusEventContext)
 {
-	val clickEvent = eventsFactory.createClickEvent(selectedElementName, publicationUrl, contentId)
-
-	clickEvent.parameters["EI"] = aureusOfferId
-
-	reportEvent(clickEvent)
+    val clickEvent = aureusEventFactory.createAureusClickEvent(selectedElementName, publicationUrl, aureusOfferId, teaser, eventContext)
+    reportEvent(clickEvent)
 }
