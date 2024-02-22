@@ -1,23 +1,20 @@
 package com.ringpublishing.tracking.data.aureus
 
+
+/**
+ * AureusEventContext
+ *
+ * @param clientUuid: Aureus client UUID. Corresponds to a purchase of Aureus service for a given website
+ * @param variantUuid: Aureus variant UUID. Corresponds to the unique 'recipe' which was used to generate this particular recommendation
+ * @param batchId: Query identifier executed to Aureus
+ * @param recommendationId: Identifier of single recommendation. A batch contains one or more recommendations
+ * @param segmentId: Segment identifier of given end user
+ */
 data class AureusEventContext(
-
-    // Aureus client UUID
-    // Corresponds to a purchase of Aureus service for a given website
     val clientUuid: String?,
-
-    // Aureus variant UUID
-    // Corresponds to the unique 'recipe' which was used to generate this particular recommendation
     val variantUuid: String?,
-
-    // Query identifier executed to Aureus
     val batchId: String?,
-
-    // Identifier of single recommendation
-    // A batch contains one or more recommendations
     val recommendationId: String?,
-
-    // Segment identifier of given end user
     val segmentId: String?
 )
 {

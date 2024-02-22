@@ -1,9 +1,9 @@
 package com.ringpublishing.tracking.data.aureus
 
-data class AureusTeaser(
-    // Aureus teaser identifier
-    val teaserId: String,
-
-    // Content identifier
-    val contentId: String
-)
+/**
+ * AureusTeaser
+ *
+ * @param teaserId: Aureus teaser identifier
+ * @param contentId: Content identifier
+ */
+data class AureusTeaser(val teaserId: String, val contentId: String)
