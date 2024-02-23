@@ -3,6 +3,7 @@ package com.ringpublishing.tracking.com.ringpublishing.tracking.internal.factory
 import android.util.Base64
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonArray
 import com.ringpublishing.tracking.data.aureus.AureusEventContext
 import com.ringpublishing.tracking.data.aureus.AureusTeaser
 import com.ringpublishing.tracking.internal.aureus.AureusEventParam
@@ -54,7 +55,7 @@ class AureusEventsFactoryTest {
 
         Assert.assertEquals(AnalyticsSystem.GENERIC.text, event.analyticsSystemName)
         Assert.assertEquals(EventType.AUREUS_IMPRESSION_EVENT.text, event.name)
-        Assert.assertEquals(event.parameters[AureusEventParam.DISPLAYED_ITEMS.text], snakeCaseGson.toJson(teasers))
+        Assert.assertEquals(event.parameters[AureusEventParam.DISPLAYED_ITEMS.text], snakeCaseGson.fromJson(snakeCaseGson.toJson(teasers), JsonArray::class.java))
         Assert.assertEquals(event.parameters[AureusEventParam.CLIENT_UUID.text], aureusEventContext.clientUuid)
         Assert.assertEquals(event.parameters[AureusEventParam.VARIANT_UUID.text], aureusEventContext.variantUuid)
         Assert.assertEquals(event.parameters[AureusEventParam.SEGMENT_ID.text], aureusEventContext.segmentId)
