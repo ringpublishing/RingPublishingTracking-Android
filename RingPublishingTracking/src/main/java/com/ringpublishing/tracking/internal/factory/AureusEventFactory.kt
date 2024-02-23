@@ -27,7 +27,6 @@ class AureusEventFactory(private val snakeCaseGson: Gson)
         eventContext.batchId?.let { parameters[AureusEventParam.BATCH_ID.text] = it }
         eventContext.recommendationId?.let { parameters[AureusEventParam.RECOMMENDATION_ID.text] = it }
 
-
         return Event(AnalyticsSystem.GENERIC.text, EventType.AUREUS_IMPRESSION_EVENT.text, parameters)
     }
 
@@ -35,7 +34,8 @@ class AureusEventFactory(private val snakeCaseGson: Gson)
                                publicationUrl: URL? = null,
                                aureusOfferId: String? = null,
                                teaser: AureusTeaser? = null,
-                               eventContext: AureusEventContext? = null): Event
+                               eventContext: AureusEventContext? = null
+    ): Event
     {
         val parameters = mutableMapOf<String, Any>()
 

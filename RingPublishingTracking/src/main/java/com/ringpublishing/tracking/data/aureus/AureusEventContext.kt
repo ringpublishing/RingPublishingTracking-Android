@@ -1,6 +1,5 @@
 package com.ringpublishing.tracking.data.aureus
 
-
 /**
  * AureusEventContext
  *
@@ -21,4 +20,3 @@ data class AureusEventContext(
     // Identifier of a teaser displayed to the user
     var teaserId: String? = null
 }
-

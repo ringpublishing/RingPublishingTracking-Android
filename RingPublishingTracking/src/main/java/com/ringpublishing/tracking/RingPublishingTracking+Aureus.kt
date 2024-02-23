@@ -34,11 +34,7 @@ fun RingPublishingTracking.reportAureusImpression(teasers: List<AureusTeaser>, e
  * @param eventContext AureusContext instance
  */
 @Suppress("unused")
-fun RingPublishingTracking.reportContentClick(selectedElementName: String,
-                                              publicationUrl: URL,
-                                              aureusOfferId: String,
-                                              teaser: AureusTeaser,
-                                              eventContext: AureusEventContext)
+fun RingPublishingTracking.reportContentClick(selectedElementName: String, publicationUrl: URL, aureusOfferId: String, teaser: AureusTeaser, eventContext: AureusEventContext)
 {
     val clickEvent = aureusEventFactory.createAureusClickEvent(selectedElementName, publicationUrl, aureusOfferId, teaser, eventContext)
     reportEvent(clickEvent)
