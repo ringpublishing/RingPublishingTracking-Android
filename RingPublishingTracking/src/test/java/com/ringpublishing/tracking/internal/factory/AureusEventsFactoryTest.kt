@@ -96,7 +96,8 @@ class AureusEventsFactoryTest {
 
     private fun prepareEncodedAureusEventContext(): String? {
         val aureusEventContextJson =
-            "{\"context\":{\"aureus\":{\"client_uuid\":\"581ad584-2333-4e69-8963-c105184cfd04\",\"variant_uuid\":\"0e8c860f-006a-49ef-923c-38b8cfc7ca57\",\"batch_id\":\"79935e2327\",\"recommendation_id\":\"e4b25216db\",\"segment_id\":\"group1.segment1\",\"teaser_id\":\"teaser_id_1\"}}}"
+            "{\"context\":{\"aureus\":{\"client_uuid\":\"581ad584-2333-4e69-8963-c105184cfd04\",\"variant_uuid\":\"0e8c860f-006a-49ef-923c-38b8cfc7ca57\",\"batch_id\"" +
+                    ":\"79935e2327\",\"recommendation_id\":\"e4b25216db\",\"segment_id\":\"group1.segment1\",\"teaser_id\":\"teaser_id_1\"}}}"
         return runCatching {
             Base64.encodeToString(aureusEventContextJson.toByteArray(Charsets.UTF_8), Base64.NO_WRAP)
         }.getOrNull()
