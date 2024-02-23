@@ -30,11 +30,12 @@ class AureusEventFactory(private val snakeCaseGson: Gson)
         return Event(AnalyticsSystem.GENERIC.text, EventType.AUREUS_IMPRESSION_EVENT.text, parameters)
     }
 
-    fun createAureusClickEvent(selectedEventName: String? = null,
-                               publicationUrl: URL? = null,
-                               aureusOfferId: String? = null,
-                               teaser: AureusTeaser? = null,
-                               eventContext: AureusEventContext? = null
+    fun createAureusClickEvent(
+        selectedEventName: String? = null,
+        publicationUrl: URL? = null,
+        aureusOfferId: String? = null,
+        teaser: AureusTeaser? = null,
+        eventContext: AureusEventContext? = null
     ): Event
     {
         val parameters = mutableMapOf<String, Any>()
