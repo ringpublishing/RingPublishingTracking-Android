@@ -10,11 +10,11 @@ package com.ringpublishing.tracking.data.aureus
  * @param segmentId: Segment identifier of given end user
  */
 data class AureusEventContext(
-    val clientUuid: String?,
-    val variantUuid: String?,
-    val batchId: String?,
-    val recommendationId: String?,
-    val segmentId: String?
+    val clientUuid: String,
+    val variantUuid: String,
+    val batchId: String,
+    val recommendationId: String,
+    val segmentId: String
 )
 {
     // Identifier of a teaser displayed to the user
