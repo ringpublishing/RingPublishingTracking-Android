@@ -11,8 +11,10 @@ import android.widget.Button
 import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.ContentPageViewSource
 import com.ringpublishing.tracking.data.Event
+import com.ringpublishing.tracking.data.aureus.AureusEventContext
+import com.ringpublishing.tracking.data.aureus.AureusTeaser
 import com.ringpublishing.tracking.demo.data.ScreenTrackingData
-import com.ringpublishing.tracking.reportAureusOffersImpressions
+import com.ringpublishing.tracking.reportAureusImpression
 import com.ringpublishing.tracking.reportClick
 import com.ringpublishing.tracking.reportUserAction
 import com.ringpublishing.tracking.updateUserData
@@ -124,8 +126,20 @@ class ActionsController : ScreenController()
 		// If you have recommendations delivered by personalization engine (Aureus) you should report
 		// when those items are displayed to the user
 
-		val offerIds = listOf("123", "456", "789")
-		RingPublishingTracking.reportAureusOffersImpressions(offerIds)
+		val teasers = listOf(
+            AureusTeaser("teaser_id_1", "content_id_1"),
+            AureusTeaser("teaser_id_2", "content_id_2"),
+            AureusTeaser("teaser_id_3", "content_id_3"),
+        )
+        val aureusEventContext = AureusEventContext(
+            clientUuid = "581ad584-2333-4e69-8963-c105184cfd04",
+            variantUuid = "0e8c860f-006a-49ef-923c-38b8cfc7ca57",
+            batchId = "79935e2327",
+            recommendationId = "e4b25216db",
+            segmentId = "group1.segment1"
+        )
+
+        RingPublishingTracking.reportAureusImpression(teasers, aureusEventContext)
 	}
 
 	private fun reportButtonClickEvent(sender: View)
