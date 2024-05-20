@@ -22,8 +22,6 @@ import com.ringpublishing.tracking.internal.di.provideEventDecorator
 import com.ringpublishing.tracking.internal.di.provideEventsService
 import com.ringpublishing.tracking.internal.di.provideGson
 import com.ringpublishing.tracking.internal.di.provideScreenSizeInfo
-import com.ringpublishing.tracking.internal.di.provideSnakeCaseGson
-import com.ringpublishing.tracking.internal.factory.AureusEventFactory
 import com.ringpublishing.tracking.internal.factory.EventsFactory
 import com.ringpublishing.tracking.internal.factory.VideoEventsFactory
 import com.ringpublishing.tracking.internal.keepalive.KeepAliveDataSource
@@ -163,7 +161,6 @@ object RingPublishingTracking : KeepAliveDataSource {
     internal lateinit var keepAliveReporter: KeepAliveReporter
     internal val eventsFactory = EventsFactory(Component.provideGson())
     internal val videoEventsFactory = VideoEventsFactory(Component.provideGson())
-    internal val aureusEventFactory = AureusEventFactory(Component.provideSnakeCaseGson())
     var delegate: WeakReference<RingPublishingTrackingDelegate>? = null
     internal var keepAliveDelegate: WeakReference<RingPublishingTrackingKeepAliveDataSource>? = null
 }
