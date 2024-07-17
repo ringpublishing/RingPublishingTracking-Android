@@ -221,11 +221,14 @@ internal class EventDecoratorTest
     )
 
     private fun mockRdluArtemisSsoEncoding() = mockRdluEncoding(
-        "{\"id\":{\"artemis\":\"1234\",\"external\":{\"model\":\"1234\",\"models\":{\"ats_ri\":\"1234\"}}},\"sso\":{\"logged\":{\"id\":\"12345\",\"md5\":\"1234\"},\"name\":\"RingPublishingTrackingSSO\"}}"
+        "{\"id\":{\"artemis\":\"1234\",\"external\":{\"model\":\"1234\",\"models\":{\"ats_ri\":\"1234\"}}}," +
+                "\"sso\":{\"logged\":{\"id\":\"12345\",\"md5\":\"1234\"},\"name\":\"RingPublishingTrackingSSO\"}}"
     )
 
     private fun mockRdluArtemisSsoEncodingWithSubscription() = mockRdluEncoding(
-        "{\"id\":{\"artemis\":\"1234\",\"external\":{\"model\":\"1234\",\"models\":{\"ats_ri\":\"1234\"}}},\"sso\":{\"logged\":{\"id\":\"12345\",\"md5\":\"1234\"},\"name\":\"RingPublishingTrackingSSO\"},\"type\":\"subscriber\"}"    )
+        "{\"id\":{\"artemis\":\"1234\",\"external\":{\"model\":\"1234\",\"models\":{\"ats_ri\":\"1234\"}}}," +
+                "\"sso\":{\"logged\":{\"id\":\"12345\",\"md5\":\"1234\"},\"name\":\"RingPublishingTrackingSSO\"},\"type\":\"subscriber\"}"
+    )
 
     private fun mockRdluSsoEncoding() = mockRdluEncoding(
         "{\"sso\":{\"logged\":{\"id\":\"12345\",\"md5\":\"1234\"},\"name\":\"RingPublishingTrackingSSO\"}}"
