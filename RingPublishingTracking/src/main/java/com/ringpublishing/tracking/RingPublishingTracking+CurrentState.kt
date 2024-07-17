@@ -14,11 +14,12 @@ package com.ringpublishing.tracking
  * @param ssoSystemName: Name of SSO system used to login
  * @param userId: User identifier
  * @param userEmail: User email address
+ * @param isActiveSubscriber: Is user a subscriber
  */
 @Suppress("unused", "unused_parameter")
-fun RingPublishingTracking.updateUserData(ssoSystemName: String, userId: String?, userEmail: String?)
+fun RingPublishingTracking.updateUserData(ssoSystemName: String, userId: String?, userEmail: String?, isActiveSubscriber: Boolean?)
 {
-	configurationManager.updateUserData(ssoSystemName, userId, userEmail)
+	configurationManager.updateUserData(ssoSystemName, userId, userEmail, isActiveSubscriber)
 }
 
 /**

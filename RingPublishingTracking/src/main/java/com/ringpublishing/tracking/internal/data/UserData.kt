@@ -6,4 +6,9 @@
 
 package com.ringpublishing.tracking.internal.data
 
-data class UserData(var userId: String? = null, var ssoName: String? = null, var emailMd5: String? = null)
+data class UserData(
+    var userId: String? = null,
+    var ssoName: String? = null,
+    var emailMd5: String? = null,
+    var isActiveSubscriber: Boolean? = null
+)

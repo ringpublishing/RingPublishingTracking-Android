@@ -24,12 +24,13 @@ internal class UserIdentifierDataDecorator(
 	override fun decorate(event: Event)
 	{
         val userId = configurationManager.getUserData().userId
+        val isActiveSubscriber = configurationManager.getUserData().isActiveSubscriber
         val sso = createSso(userId)
         val artemisId = createArtemisId()
 
         if (artemisId != null || sso != null)
         {
-            encodeUserData(sso, artemisId)?.let {
+            encodeUserData(sso, artemisId, isActiveSubscriber)?.let {
                 event.add(EventParam.USER_SSO_DATA, it)
             }
         }
@@ -61,9 +62,14 @@ internal class UserIdentifierDataDecorator(
         }
     }
 
-    private fun encodeUserData(sso: Sso?, artemisId: ArtemisId?): String?
-    {
-        val jsonUser = gson.toJson(UserIdentifier(artemisId, sso))
+    private fun encodeUserData(sso: Sso?, artemisId: ArtemisId?, isActiveSubscriber: Boolean?): String? {
+        val jsonUser = gson.toJson(
+            UserIdentifier(
+                id = artemisId,
+                sso = sso,
+                type = if (isActiveSubscriber == true) "subscriber" else null
+            )
+        )
         return runCatching {
             Base64.encodeToString(
                 jsonUser.toByteArray(Charsets.UTF_8),
@@ -75,7 +81,7 @@ internal class UserIdentifierDataDecorator(
         }
     }
 
-    private class UserIdentifier(val id: ArtemisId?, val sso: Sso?)
+    private class UserIdentifier(val id: ArtemisId?, val sso: Sso?, val type: String?)
 
     private class ArtemisId(val artemis: String?, val external: External?)
 
