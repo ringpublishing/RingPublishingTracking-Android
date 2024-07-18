@@ -89,7 +89,7 @@ object RingPublishingTracking : KeepAliveDataSource {
         configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
         Component.initComponent(application, configurationManager)
         eventsReporter = EventsReporter(Component.provideEventsService(configurationManager), Component.provideEventDecorator(configurationManager))
-        keepAliveReporter = KeepAliveReporter(eventsReporter, Component.provideScreenSizeInfo(), ProcessLifecycleOwner.get())
+        keepAliveReporter = KeepAliveReporter(eventsReporter, Component.provideScreenSizeInfo(), ProcessLifecycleOwner.get(), Component.provideGson())
         delegate = WeakReference(ringPublishingTrackingDelegate)
     }
 

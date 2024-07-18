@@ -6,10 +6,16 @@
 
 package com.ringpublishing.tracking.internal.factory
 
+import android.util.Base64
 import com.google.gson.GsonBuilder
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
+import com.ringpublishing.tracking.internal.decorator.EventParam
+import io.mockk.every
+import io.mockk.mockkStatic
+import io.mockk.slot
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 import java.net.URL
 
@@ -17,6 +23,18 @@ class EventsFactoryTest
 {
 
 	private val gson = GsonBuilder().create()
+
+    @Before
+    fun `Bypass android_util_Base64 to java_util_Base64`() {
+        mockkStatic(Base64::class)
+        val arraySlot = slot<ByteArray>()
+
+        every {
+            Base64.encodeToString(capture(arraySlot), Base64.NO_WRAP)
+        } answers {
+            java.util.Base64.getEncoder().encodeToString(arraySlot.captured)
+        }
+    }
 
 	@Test
 	fun createClickEvent_WhenNoParameters_ThenResultWithoutParameters()
@@ -121,6 +139,7 @@ class EventsFactoryTest
 		val event = eventsFactory.createPageViewEvent("publicationId", contentMetadata)
 
 		Assert.assertEquals("PV_4,sourceSystemName,publicationId,1,f", event.parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text])
+		Assert.assertEquals(mockRdlcnEncodingNotPaid(), event.parameters[EventParam.MARKED_AS_PAID_DATA.text])
 	}
 
 	@Test
@@ -139,5 +158,21 @@ class EventsFactoryTest
 		val event = eventsFactory.createPageViewEvent("publicationId", contentMetadata)
 
 		Assert.assertEquals("PV_4,source_System_Name,publicationId,1,t", event.parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text])
-	}
+        Assert.assertEquals(mockRdlcnEncodingPaid(), event.parameters[EventParam.MARKED_AS_PAID_DATA.text])
+    }
+
+    private fun mockRdlcnEncodingPaid() = encode(
+        "{\"publication\":{\"premium\":true},\"source\":{\"id\":\"my-unique-content-id-1234\",\"system\":\"source System_Name\"}}"
+    )
+
+    private fun mockRdlcnEncodingNotPaid() = encode(
+        "{\"publication\":{\"premium\":false},\"source\":{\"id\":\"my-unique-content-id-1234\",\"system\":\"sourceSystemName\"}}"
+    )
+
+    private fun encode(input: String): String {
+        return Base64.encodeToString(
+            input.toByteArray(Charsets.UTF_8),
+            Base64.NO_WRAP
+        )
+    }
 }

@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
+import com.google.gson.Gson
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.internal.EventsReporter
 import com.ringpublishing.tracking.internal.log.Logger
@@ -22,12 +23,13 @@ internal class KeepAliveReporter(
     private val eventsReporter: EventsReporter,
     screenSizeInfo: ScreenSizeInfo,
     private val lifecycleOwner: LifecycleOwner,
+    gson: Gson
 ) : KeepAliveSendTimerCallback, LifecycleObserver
 {
 
 	private val timer = KeepAliveTimer(this)
 
-	private val eventBuilder = KeepAliveEventBuilder(screenSizeInfo)
+	private val eventBuilder = KeepAliveEventBuilder(screenSizeInfo, gson)
 
 	private var contentMetadata: ContentMetadata? = null
 

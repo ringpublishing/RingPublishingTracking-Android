@@ -11,6 +11,8 @@ import com.google.gson.JsonParseException
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
+import com.ringpublishing.tracking.internal.decorator.EventParam
+import com.ringpublishing.tracking.internal.decorator.createMarkedAsPaidParam
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.util.buildToDX
 import java.net.URL
@@ -59,9 +61,11 @@ class EventsFactory(private val gson: Gson)
 	{
 		val parameters = mutableMapOf<String, Any>()
 
-		contentIdentifier?.let { parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = it }
-
-		contentMetadata?.let { metadata -> parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text] = metadata.buildToDX() }
+        contentIdentifier?.let { parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = it }
+        contentMetadata?.let { metadata ->
+            parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text] = metadata.buildToDX()
+            createMarkedAsPaidParam(gson, metadata)?.let { param -> parameters[EventParam.MARKED_AS_PAID_DATA.text] = param }
+        }
 
 		return Event(AnalyticsSystem.KROPKA_STATS.text, EventType.PAGE_VIEW.text, parameters)
 	}
