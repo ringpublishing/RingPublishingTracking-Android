@@ -9,6 +9,7 @@ package com.ringpublishing.tracking.internal.keepalive
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.google.gson.GsonBuilder
 import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.ContentSize
@@ -25,7 +26,9 @@ import org.junit.Test
 internal class KeepAliveReporterTest
 {
 
-	@MockK
+    private val gson = GsonBuilder().create()
+
+    @MockK
 	lateinit var eventsReporter: EventsReporter
 
 	@MockK
@@ -50,7 +53,7 @@ internal class KeepAliveReporterTest
 
 		every { keepAliveDataSource.toString() } returns ""
 		every { screenSizeInfo.getSizeDp(any()) } returns 1
-		every { contentMetadata.contentWasPaidFor } returns false
+		every { contentMetadata.paidContent } returns false
 		every { contentMetadata.sourceSystemName } returns ""
 		every { contentMetadata.publicationId } returns ""
 		every { contentMetadata.contentPartIndex } returns 1
@@ -81,8 +84,7 @@ internal class KeepAliveReporterTest
 	@Test
 	fun start_WhenStartedCollectingEvents_ThenEventAfterTimeIsSend()
 	{
-
-		val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner)
+        val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner, gson)
 
 		keepAliveReporter.start(contentMetadata, keepAliveDataSource, false)
 
@@ -92,7 +94,7 @@ internal class KeepAliveReporterTest
 	@Test
 	fun pause_WhenCollectingEventsPaused_ThenAnyEventSend()
 	{
-		val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner)
+        val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner, gson)
 
 		keepAliveReporter.start(contentMetadata, keepAliveDataSource, false)
 
@@ -104,7 +106,7 @@ internal class KeepAliveReporterTest
 	@Test
 	fun resume_WhenReportStartedAndPaused_ThenResumeWillSendCollectedEvents()
 	{
-		val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner)
+        val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner, gson)
 
 		keepAliveReporter.start(contentMetadata, keepAliveDataSource, false)
 
@@ -117,7 +119,7 @@ internal class KeepAliveReporterTest
 	@Test
 	fun stop_WhenStartedAndEventsCollected_ThenSendEventsBeforeStop()
 	{
-		val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner)
+        val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner, gson)
 
 		keepAliveReporter.start(contentMetadata, keepAliveDataSource, false)
 

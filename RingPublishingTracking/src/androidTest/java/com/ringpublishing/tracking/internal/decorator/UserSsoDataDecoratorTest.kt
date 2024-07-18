@@ -38,7 +38,9 @@ internal class UserSsoDataDecoratorTest
 
 		val apiRepository = ApiRepository(dataRepository)
 
-		configurationManager.updateUserData("ssoValue", "userIdValue", "1")
+		configurationManager.updateSsoSystemName("ssoValue")
+		configurationManager.updateUserData("userIdValue", "1", true)
+
         apiRepository.saveArtemisId(prepareArtemisResponse())
 
 		val userSsoDataDecorator = UserIdentifierDataDecorator(

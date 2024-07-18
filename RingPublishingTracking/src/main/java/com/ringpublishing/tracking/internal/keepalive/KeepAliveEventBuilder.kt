@@ -6,15 +6,21 @@
 
 package com.ringpublishing.tracking.internal.keepalive
 
+import com.google.gson.Gson
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
 import com.ringpublishing.tracking.internal.data.WindowSize
+import com.ringpublishing.tracking.internal.decorator.EventParam
+import com.ringpublishing.tracking.internal.decorator.createMarkedAsPaidParam
 import com.ringpublishing.tracking.internal.factory.EventType
 import com.ringpublishing.tracking.internal.util.ScreenSizeInfo
 import com.ringpublishing.tracking.internal.util.buildToDX
 
-internal class KeepAliveEventBuilder(private val screenSizeInfo: ScreenSizeInfo)
+internal class KeepAliveEventBuilder(
+    private val screenSizeInfo: ScreenSizeInfo,
+    private val gson: Gson
+)
 {
 	fun create(content: ContentMetadata?, keepAliveList: List<KeepAliveMetadata>): Event
 	{
@@ -39,8 +45,11 @@ internal class KeepAliveEventBuilder(private val screenSizeInfo: ScreenSizeInfo)
 
 		with(event)
 		{
-			content?.let { parameters["DX"] = content.buildToDX() }
-			content?.let { parameters["PU"] = content.contentId.trim() }
+			content?.let {
+                parameters["DX"] = content.buildToDX()
+                parameters["PU"] = content.contentId.trim()
+                createMarkedAsPaidParam(gson, content)?.let { param -> parameters[EventParam.MARKED_AS_PAID_DATA.text] = param }
+            }
 
 			parameters["KTA"] = 1
 
