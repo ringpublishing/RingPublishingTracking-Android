@@ -83,12 +83,17 @@ class ConfigurationManagerTest
 	fun updateUserData_WhenSet_ThenHaveAllValues()
 	{
 		val configurationManager = ConfigurationManager()
-		configurationManager.updateUserData("sso", "userId", "email")
+
+		configurationManager.updateSsoSystemName("sso")
+		configurationManager.updateUserData("userId", "email", true)
+
 		val userData = configurationManager.getUserData()
+
 		Assert.assertNotNull(userData)
 		Assert.assertEquals("sso", userData.ssoName)
 		Assert.assertEquals("userId", userData.userId)
 		Assert.assertTrue(userData.emailMd5?.isNotEmpty() == true)
+		Assert.assertTrue(userData.isActiveSubscriber == true)
 	}
 
 	@Test
@@ -103,10 +108,16 @@ class ConfigurationManagerTest
 	fun getUserData_WhenDataAndSetTONull_ThenNoUserData()
 	{
 		val configurationManager = ConfigurationManager()
-		configurationManager.updateUserData("sso", "userId", "email")
-		configurationManager.updateUserData(null, null, null)
+
+        configurationManager.updateSsoSystemName("sso")
+        configurationManager.updateUserData("userId", "email", true)
+
+        configurationManager.updateSsoSystemName(null)
+        configurationManager.updateUserData(null, null, null)
+
 		Assert.assertNull(configurationManager.getUserData().userId)
 		Assert.assertNull(configurationManager.getUserData().ssoName)
+		Assert.assertNull(configurationManager.getUserData().isActiveSubscriber)
 	}
 
 	@Test

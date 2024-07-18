@@ -82,43 +82,21 @@ internal class EventDecoratorTest
 	@Test
 	fun decorate()
 	{
-		every { application.packageName } returns "package"
-		every { application.getSharedPreferences(any(), any()) } returns sharedPreferences
-		every { configurationManager.primaryId } returns "primaryId"
-		every { configurationManager.secondaryId } returns "secondaryId"
-		every { configurationManager.getTenantId() } returns "tenantId"
-		every { configurationManager.getSiteArea() } returns "area"
-		every { configurationManager.getUserData() } returns userData
-		every { configurationManager.currentContentUrl } returns "contentUrl"
-		every { configurationManager.getFullStructurePath() } returns "structurePath"
-		every { configurationManager.currentReferrer } returns "referrer"
+        mockDefaultParameters()
 
-		every { userData.userId } returns "12345"
+        every { userData.userId } returns "12345"
 		every { userData.emailMd5 } returns "1234"
 		every { userData.ssoName } returns "RingPublishingTrackingSSO"
-
-		every { screenSizeInfo.getScreenSizeDpString() } returns "1x1"
-		every { windowSizeInfo.getWindowSizeDpString() } returns "1x1"
-
-		every { sharedPreferences.getString(any(), any()) } returns "preference"
-
-		every { event.name } returns "name"
-
+		every { userData.isActiveSubscriber } returns true
         every { apiRepository.readArtemisId() } returns artemisIdResponse
         every { artemisIdResponse.user } returns mockArtemisIdUser()
 
-		val parameters = mutableMapOf<String, Any>()
-
-		every { event.parameters } returns parameters
-
 		val eventDecorator = EventDecorator(configurationManager, apiRepository, Gson(), windowSizeInfo, screenSizeInfo)
-
 		val eventDecorated = eventDecorator.decorate(event)
-
-		Assert.assertEquals("name", eventDecorated.name)
 
 		with(eventDecorated)
 		{
+            Assert.assertEquals("name", this.name)
 			Assert.assertEquals("primaryId", this.parameters["IP"])
 			Assert.assertEquals("secondaryId", this.parameters["IV"])
 			Assert.assertEquals("tenantId", this.parameters["TID"])
@@ -128,41 +106,23 @@ internal class EventDecoratorTest
 			Assert.assertEquals("contentUrl", this.parameters["DU"])
 			Assert.assertEquals("structurePath", this.parameters["DV"])
 			Assert.assertEquals("referrer", this.parameters["DR"])
-			Assert.assertEquals(mockRdluArtemisSsoEncoding(), this.parameters["RDLU"])
+			Assert.assertEquals(mockRdluArtemisSsoEncodingWithSubscription(), this.parameters["RDLU"])
 		}
 	}
 
     @Test
-    fun decorateEvent_WithSSO_WithNoArtemisId()
+    fun decorateEvent_WithSSO_WithNoArtemisId_WithNoSubscription()
     {
-        every { application.packageName } returns "package"
-        every { application.getSharedPreferences(any(), any()) } returns sharedPreferences
-        every { configurationManager.primaryId } returns "primaryId"
-        every { configurationManager.secondaryId } returns "secondaryId"
-        every { configurationManager.getTenantId() } returns "tenantId"
-        every { configurationManager.getSiteArea() } returns "area"
-        every { configurationManager.getUserData() } returns userData
-        every { configurationManager.currentContentUrl } returns "contentUrl"
-        every { configurationManager.getFullStructurePath() } returns "structurePath"
-        every { configurationManager.currentReferrer } returns "referrer"
-        every { screenSizeInfo.getScreenSizeDpString() } returns "1x1"
-        every { windowSizeInfo.getWindowSizeDpString() } returns "1x1"
-        every { sharedPreferences.getString(any(), any()) } returns "preference"
-        every { event.name } returns "name"
+        mockDefaultParameters()
 
         every { userData.userId } returns "12345"
         every { userData.emailMd5 } returns "1234"
         every { userData.ssoName } returns "RingPublishingTrackingSSO"
-
+        every { userData.isActiveSubscriber } returns false
         every { apiRepository.readArtemisId() } returns null
         every { artemisIdResponse.user } returns null
 
-        val parameters = mutableMapOf<String, Any>()
-
-        every { event.parameters } returns parameters
-
         val eventDecorator = EventDecorator(configurationManager, apiRepository, Gson(), windowSizeInfo, screenSizeInfo)
-
         val eventDecorated = eventDecorator.decorate(event)
 
         with(eventDecorated)
@@ -172,8 +132,69 @@ internal class EventDecoratorTest
     }
 
     @Test
-    fun decorateEvent_WithArtemisId_WithNOSSO()
+    fun decorateEvent_WithSSO_WithNoArtemisId_WithSubscription()
     {
+        mockDefaultParameters()
+
+        every { userData.userId } returns "12345"
+        every { userData.emailMd5 } returns "1234"
+        every { userData.ssoName } returns "RingPublishingTrackingSSO"
+        every { userData.isActiveSubscriber } returns true
+        every { apiRepository.readArtemisId() } returns null
+        every { artemisIdResponse.user } returns null
+
+        val eventDecorator = EventDecorator(configurationManager, apiRepository, Gson(), windowSizeInfo, screenSizeInfo)
+        val eventDecorated = eventDecorator.decorate(event)
+
+        with(eventDecorated)
+        {
+            Assert.assertEquals(mockRdluSsoEncodingWithSubscription(), this.parameters["RDLU"])
+        }
+    }
+
+    @Test
+    fun decorateEvent_WithArtemisId_WithNOSSO_WithNoSubscription()
+    {
+        mockDefaultParameters()
+
+        every { userData.userId } returns null
+        every { userData.emailMd5 } returns null
+        every { userData.ssoName } returns null
+        every { userData.isActiveSubscriber } returns null
+        every { apiRepository.readArtemisId() } returns artemisIdResponse
+        every { artemisIdResponse.user } returns mockArtemisIdUser()
+
+        val eventDecorator = EventDecorator(configurationManager, apiRepository, Gson(), windowSizeInfo, screenSizeInfo)
+        val eventDecorated = eventDecorator.decorate(event)
+
+        with(eventDecorated)
+        {
+            Assert.assertEquals(mockRdluArtemisEncoding(), this.parameters["RDLU"])
+        }
+    }
+
+    @Test
+    fun decorateEvent_WithArtemisId_WithNOSSO_WithSubscription()
+    {
+        mockDefaultParameters()
+
+        every { userData.userId } returns null
+        every { userData.emailMd5 } returns null
+        every { userData.ssoName } returns null
+        every { userData.isActiveSubscriber } returns true
+        every { apiRepository.readArtemisId() } returns artemisIdResponse
+        every { artemisIdResponse.user } returns mockArtemisIdUser()
+
+        val eventDecorator = EventDecorator(configurationManager, apiRepository, Gson(), windowSizeInfo, screenSizeInfo)
+        val eventDecorated = eventDecorator.decorate(event)
+
+        with(eventDecorated)
+        {
+            Assert.assertEquals(mockRdluArtemisEncodingWithSubscription(), this.parameters["RDLU"])
+        }
+    }
+
+    private fun mockDefaultParameters() {
         every { application.packageName } returns "package"
         every { application.getSharedPreferences(any(), any()) } returns sharedPreferences
         every { configurationManager.primaryId } returns "primaryId"
@@ -188,26 +209,7 @@ internal class EventDecoratorTest
         every { windowSizeInfo.getWindowSizeDpString() } returns "1x1"
         every { sharedPreferences.getString(any(), any()) } returns "preference"
         every { event.name } returns "name"
-
-        every { userData.userId } returns null
-        every { userData.emailMd5 } returns null
-        every { userData.ssoName } returns null
-
-        every { apiRepository.readArtemisId() } returns artemisIdResponse
-        every { artemisIdResponse.user } returns mockArtemisIdUser()
-
-        val parameters = mutableMapOf<String, Any>()
-
-        every { event.parameters } returns parameters
-
-        val eventDecorator = EventDecorator(configurationManager, apiRepository, Gson(), windowSizeInfo, screenSizeInfo)
-
-        val eventDecorated = eventDecorator.decorate(event)
-
-        with(eventDecorated)
-        {
-            Assert.assertEquals(mockRdluArtemisEncoding(), this.parameters["RDLU"])
-        }
+        every { event.parameters } returns mutableMapOf()
     }
 
     private fun mockArtemisIdUser() = User(
@@ -219,16 +221,29 @@ internal class EventDecoratorTest
     )
 
     private fun mockRdluArtemisSsoEncoding() = mockRdluEncoding(
-        "{\"id\":{\"artemis\":\"1234\",\"external\":{\"model\":\"1234\",\"models\":{\"ats_ri\":\"1234\"}}},\"sso\":{\"logged\":{\"id\":\"12345\",\"md5\":\"1234\"},\"name\"" +
-                ":\"RingPublishingTrackingSSO\"}}"
+        "{\"id\":{\"artemis\":\"1234\",\"external\":{\"model\":\"1234\",\"models\":{\"ats_ri\":\"1234\"}}}," +
+                "\"sso\":{\"logged\":{\"id\":\"12345\",\"md5\":\"1234\"},\"name\":\"RingPublishingTrackingSSO\"}}"
+    )
+
+    private fun mockRdluArtemisSsoEncodingWithSubscription() = mockRdluEncoding(
+        "{\"id\":{\"artemis\":\"1234\",\"external\":{\"model\":\"1234\",\"models\":{\"ats_ri\":\"1234\"}}}," +
+                "\"sso\":{\"logged\":{\"id\":\"12345\",\"md5\":\"1234\"},\"name\":\"RingPublishingTrackingSSO\"},\"type\":\"subscriber\"}"
     )
 
     private fun mockRdluSsoEncoding() = mockRdluEncoding(
         "{\"sso\":{\"logged\":{\"id\":\"12345\",\"md5\":\"1234\"},\"name\":\"RingPublishingTrackingSSO\"}}"
     )
 
+    private fun mockRdluSsoEncodingWithSubscription() = mockRdluEncoding(
+        "{\"sso\":{\"logged\":{\"id\":\"12345\",\"md5\":\"1234\"},\"name\":\"RingPublishingTrackingSSO\"},\"type\":\"subscriber\"}"
+    )
+
     private fun mockRdluArtemisEncoding() = mockRdluEncoding(
         "{\"id\":{\"artemis\":\"1234\",\"external\":{\"model\":\"1234\",\"models\":{\"ats_ri\":\"1234\"}}}}"
+    )
+
+    private fun mockRdluArtemisEncodingWithSubscription() = mockRdluEncoding(
+        "{\"id\":{\"artemis\":\"1234\",\"external\":{\"model\":\"1234\",\"models\":{\"ats_ri\":\"1234\"}}},\"type\":\"subscriber\"}"
     )
 
     private fun mockRdluEncoding(input: String): String {
