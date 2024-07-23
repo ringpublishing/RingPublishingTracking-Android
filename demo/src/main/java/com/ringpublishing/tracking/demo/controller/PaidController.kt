@@ -7,6 +7,7 @@ package com.ringpublishing.tracking.demo.controller
 
 import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.demo.data.ScreenTrackingData
+import com.ringpublishing.tracking.demo.sample.sampleContentMetadata
 import com.ringpublishing.tracking.demo.sample.sampleLikelihoodData
 import com.ringpublishing.tracking.demo.sample.sampleMetricsData
 import com.ringpublishing.tracking.demo.sample.sampleOfferContextData
@@ -30,12 +31,14 @@ class PaidController : ScreenController()
     }
 
     fun showOffer() = RingPublishingTracking.reportShowOfferEvent(
+        contentMetadata = sampleContentMetadata,
         offerData = sampleOfferData,
         offerContextData = sampleOfferContextData,
         tpcc = "hard_xmass_promoInline"
     )
 
     fun showOfferTeaser() = RingPublishingTracking.reportShowOfferTeaserEvent(
+        contentMetadata = sampleContentMetadata,
         offerData = sampleOfferData,
         offerContextData = sampleOfferContextData,
         tpcc = "hard_xmass_promoInline"
@@ -43,6 +46,7 @@ class PaidController : ScreenController()
 
 
     fun clickButton() = RingPublishingTracking.reportPurchaseClickButtonEvent(
+        contentMetadata = sampleContentMetadata,
         offerData = sampleOfferData,
         offerContextData = sampleOfferContextData,
         termId = "TMEVT00KVHV0",
@@ -50,6 +54,7 @@ class PaidController : ScreenController()
     )
 
     fun purchase() = RingPublishingTracking.reportPurchaseEvent(
+        contentMetadata = sampleContentMetadata,
         offerData = sampleOfferData,
         offerContextData = sampleOfferContextData,
         subscriptionPaymentData = sampleSubscriptionPaymentData,
@@ -60,6 +65,7 @@ class PaidController : ScreenController()
     )
 
     fun showMetricLimit() = RingPublishingTracking.reportShowMetricLimitEvent(
+        contentMetadata = sampleContentMetadata,
         supplierData = sampleSupplierData,
         metricsData = sampleMetricsData,
         sourcePublicationUuid = "b8b7ce67-63b8-43f6-ae47-bbfeac4002cf",
@@ -67,6 +73,7 @@ class PaidController : ScreenController()
     )
 
     fun showLikelihoodScoring() = RingPublishingTracking.reportLikelihoodScoringEvent(
+        contentMetadata = sampleContentMetadata,
         supplierData = sampleSupplierData,
         likelihoodData = sampleLikelihoodData,
         sourcePublicationUuid = "b8b7ce67-63b8-43f6-ae47-bbfeac4002cf",
@@ -74,6 +81,7 @@ class PaidController : ScreenController()
     )
 
     fun replaceFakeUser() = RingPublishingTracking.reportMobileAppFakeUserIdReplacedEvent(
+        contentMetadata = sampleContentMetadata,
         fakeUserId = "fake_001",
         realUserId = "real_001"
     )

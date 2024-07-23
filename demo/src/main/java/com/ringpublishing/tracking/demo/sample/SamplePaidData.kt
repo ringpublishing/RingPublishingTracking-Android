@@ -5,6 +5,7 @@
  */
 package com.ringpublishing.tracking.demo.sample
 
+import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.paid.LikelihoodData
 import com.ringpublishing.tracking.data.paid.MetricsData
 import com.ringpublishing.tracking.data.paid.OfferContextData
@@ -13,6 +14,7 @@ import com.ringpublishing.tracking.data.paid.OfferDisplayMode
 import com.ringpublishing.tracking.data.paid.PaymentMethod
 import com.ringpublishing.tracking.data.paid.SubscriptionPaymentData
 import com.ringpublishing.tracking.data.paid.SupplierData
+import java.net.URL
 
 val sampleSupplierData = SupplierData(
     supplierAppId = "GTccriLYpe",
@@ -50,4 +52,13 @@ val sampleMetricsData = MetricsData(
 val sampleLikelihoodData = LikelihoodData(
     lts = 5,
     ltc = 4
+)
+
+val sampleContentMetadata = ContentMetadata(
+    publicationId = "publicationId",
+    publicationUrl = URL("https://domain.com"),
+    sourceSystemName = "source System_Name",
+    contentPartIndex = 1,
+    paidContent = true,
+    contentId = "my-unique-content-id-1234"
 )

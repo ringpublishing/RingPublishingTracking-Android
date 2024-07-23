@@ -7,6 +7,7 @@ package com.ringpublishing.tracking.com.ringpublishing.tracking.internal.factory
 
 import android.util.Base64
 import com.google.gson.GsonBuilder
+import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.paid.LikelihoodData
 import com.ringpublishing.tracking.data.paid.MetricsData
 import com.ringpublishing.tracking.data.paid.OfferContextData
@@ -15,6 +16,7 @@ import com.ringpublishing.tracking.data.paid.OfferDisplayMode
 import com.ringpublishing.tracking.data.paid.PaymentMethod
 import com.ringpublishing.tracking.data.paid.SubscriptionPaymentData
 import com.ringpublishing.tracking.data.paid.SupplierData
+import com.ringpublishing.tracking.internal.decorator.EventParam
 import com.ringpublishing.tracking.internal.factory.PaidEventsFactory
 import com.ringpublishing.tracking.internal.paid.PaidEventParam
 import io.mockk.every
@@ -23,6 +25,7 @@ import io.mockk.slot
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import java.net.URL
 
 class PaidEventsFactoryTest
 {
@@ -67,6 +70,15 @@ class PaidEventsFactoryTest
         ltc = 4
     )
 
+    private val sampleContentMetadata = ContentMetadata(
+        publicationId = "publicationId",
+        publicationUrl = URL("https://domain.com"),
+        sourceSystemName = "source System_Name",
+        contentPartIndex = 1,
+        paidContent = true,
+        contentId = "my-unique-content-id-1234"
+    )
+
     @Before
     fun `Bypass android_util_Base64 to java_util_Base64`()
     {
@@ -85,6 +97,7 @@ class PaidEventsFactoryTest
     {
         val eventsFactory = PaidEventsFactory(gson)
         val event = eventsFactory.createShowOfferEvent(
+            contentMetadata = sampleContentMetadata,
             offerData = sampleOfferData,
             offerContextData = sampleOfferContextData,
             tpcc = "hard_xmass_promoInline"
@@ -99,6 +112,7 @@ class PaidEventsFactoryTest
         val eventsFactory = PaidEventsFactory(gson)
         val sampleTpcc = "hard_xmass_promoInline"
         val event = eventsFactory.createShowOfferEvent(
+            contentMetadata = sampleContentMetadata,
             offerData = sampleOfferData,
             offerContextData = sampleOfferContextData,
             tpcc = sampleTpcc
@@ -114,6 +128,7 @@ class PaidEventsFactoryTest
         Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_DX.text], sampleOfferContextData.sourceDx)
         Assert.assertEquals(event.parameters[PaidEventParam.CLOSURE_PERCENTAGE.text], sampleOfferContextData.closurePercentage)
         Assert.assertEquals(event.parameters[PaidEventParam.TPCC.text], sampleTpcc)
+        Assert.assertEquals(event.parameters[EventParam.MARKED_AS_PAID_DATA.text], mockRdlcnEncodingPaid())
     }
 
     @Test
@@ -122,6 +137,7 @@ class PaidEventsFactoryTest
         val eventsFactory = PaidEventsFactory(gson)
         val sampleTpcc = "hard_xmass_promoInline"
         val event = eventsFactory.createShowOfferTeaserEvent(
+            contentMetadata = sampleContentMetadata,
             offerData = sampleOfferData,
             offerContextData = sampleOfferContextData,
             tpcc = sampleTpcc
@@ -137,6 +153,7 @@ class PaidEventsFactoryTest
         Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_DX.text], sampleOfferContextData.sourceDx)
         Assert.assertEquals(event.parameters[PaidEventParam.CLOSURE_PERCENTAGE.text], sampleOfferContextData.closurePercentage)
         Assert.assertEquals(event.parameters[PaidEventParam.TPCC.text], sampleTpcc)
+        Assert.assertEquals(event.parameters[EventParam.MARKED_AS_PAID_DATA.text], mockRdlcnEncodingPaid())
     }
 
     @Test
@@ -146,6 +163,7 @@ class PaidEventsFactoryTest
         val sampleTpcc = "hard_xmass_promoInline"
         val sampleTermId = "TMEVT00KVHV0"
         val event = eventsFactory.createPurchaseClickButtonEvent(
+            contentMetadata = sampleContentMetadata,
             offerData = sampleOfferData,
             offerContextData = sampleOfferContextData.copy(closurePercentage = null),
             termId = sampleTermId,
@@ -163,6 +181,7 @@ class PaidEventsFactoryTest
         Assert.assertEquals(event.parameters[PaidEventParam.CLOSURE_PERCENTAGE.text], null)
         Assert.assertEquals(event.parameters[PaidEventParam.TPCC.text], sampleTpcc)
         Assert.assertEquals(event.parameters[PaidEventParam.TERM_ID.text], sampleTermId)
+        Assert.assertEquals(event.parameters[EventParam.MARKED_AS_PAID_DATA.text], mockRdlcnEncodingPaid())
     }
 
     @Test
@@ -175,6 +194,7 @@ class PaidEventsFactoryTest
         val sampleTermConversionId = "TCCJTS9X87VB"
         val sampleFakeUserJson = "{\"fake_user_id\":\"${sampleFakeUserId}\"}"
         val event = eventsFactory.createPurchaseEvent(
+            contentMetadata = sampleContentMetadata,
             offerData = sampleOfferData,
             offerContextData = sampleOfferContextData.copy(closurePercentage = null),
             subscriptionPaymentData = sampleSubscriptionPaymentData,
@@ -202,6 +222,7 @@ class PaidEventsFactoryTest
         Assert.assertEquals(event.parameters[PaidEventParam.TERM_ID.text], sampleTermId)
         Assert.assertEquals(event.parameters[PaidEventParam.TERM_CONVERSION_ID.text], sampleTermConversionId)
         Assert.assertEquals(event.parameters[PaidEventParam.EVENT_DETAILS.text], sampleFakeUserJson)
+        Assert.assertEquals(event.parameters[EventParam.MARKED_AS_PAID_DATA.text], mockRdlcnEncodingPaid())
     }
 
     @Test
@@ -209,6 +230,7 @@ class PaidEventsFactoryTest
     {
         val eventsFactory = PaidEventsFactory(gson)
         val event = eventsFactory.createShowMetricLimitEvent(
+            contentMetadata = sampleContentMetadata,
             metricsData = sampleMetricsData,
             supplierData = sampleSupplierData,
             sourcePublicationUuid = sampleOfferContextData.sourcePublicationUuid!!,
@@ -223,6 +245,7 @@ class PaidEventsFactoryTest
         Assert.assertEquals(event.parameters[PaidEventParam.PAYWALL_SUPPLIER.text], sampleSupplierData.paywallSupplier)
         Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_PUBLICATION_UUID.text], sampleOfferContextData.sourcePublicationUuid)
         Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_DX.text], sampleOfferContextData.sourceDx)
+        Assert.assertEquals(event.parameters[EventParam.MARKED_AS_PAID_DATA.text], mockRdlcnEncodingPaid())
     }
 
     @Test
@@ -231,6 +254,7 @@ class PaidEventsFactoryTest
         val eventsFactory = PaidEventsFactory(gson)
         val sampleLikelihoodJson = "{\"lts\":${sampleLikelihoodData.lts},\"ltc\":${sampleLikelihoodData.ltc}}"
         val event = eventsFactory.createLikelihoodScoringEvent(
+            contentMetadata = sampleContentMetadata,
             supplierData = sampleSupplierData,
             sourcePublicationUuid = sampleOfferContextData.sourcePublicationUuid!!,
             sourceDx = sampleOfferContextData.sourceDx!!,
@@ -243,6 +267,7 @@ class PaidEventsFactoryTest
         Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_PUBLICATION_UUID.text], sampleOfferContextData.sourcePublicationUuid)
         Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_DX.text], sampleOfferContextData.sourceDx)
         Assert.assertEquals(event.parameters[PaidEventParam.EVENT_DETAILS.text], sampleLikelihoodJson)
+        Assert.assertEquals(event.parameters[EventParam.MARKED_AS_PAID_DATA.text], mockRdlcnEncodingPaid())
     }
 
     @Test
@@ -253,11 +278,25 @@ class PaidEventsFactoryTest
         val sampleRealUserId = "real_001"
         val sampleUserJson = "{\"fake_user_id\":\"${sampleFakeUserId}\",\"real_user_id\":\"${sampleRealUserId}\"}"
         val event = eventsFactory.createMobileAppFakeUserIdReplacedEvent(
+            contentMetadata = sampleContentMetadata,
             fakeUserId = sampleFakeUserId,
             realUserId = sampleRealUserId
         )
 
         Assert.assertTrue(event.parameters.isNotEmpty())
         Assert.assertEquals(event.parameters[PaidEventParam.EVENT_DETAILS.text], sampleUserJson)
+        Assert.assertEquals(event.parameters[EventParam.MARKED_AS_PAID_DATA.text], mockRdlcnEncodingPaid())
+    }
+
+    private fun mockRdlcnEncodingPaid() = encode(
+        "{\"publication\":{\"premium\":${sampleContentMetadata.paidContent}},\"source\":{\"id\":\"${sampleContentMetadata.contentId}\"" +
+                ",\"system\":\"${sampleContentMetadata.sourceSystemName}\"}}"
+    )
+
+    private fun encode(input: String): String {
+        return Base64.encodeToString(
+            input.toByteArray(Charsets.UTF_8),
+            Base64.NO_WRAP
+        )
     }
 }

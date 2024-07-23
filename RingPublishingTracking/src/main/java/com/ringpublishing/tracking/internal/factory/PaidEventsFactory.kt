@@ -7,6 +7,7 @@ package com.ringpublishing.tracking.internal.factory
 
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.paid.LikelihoodData
 import com.ringpublishing.tracking.data.paid.MetricsData
@@ -15,11 +16,17 @@ import com.ringpublishing.tracking.data.paid.OfferData
 import com.ringpublishing.tracking.data.paid.SubscriptionPaymentData
 import com.ringpublishing.tracking.data.paid.SupplierData
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
+import com.ringpublishing.tracking.internal.decorator.EventParam
+import com.ringpublishing.tracking.internal.decorator.createMarkedAsPaidParam
 import com.ringpublishing.tracking.internal.paid.PaidEventParam
 
 internal class PaidEventsFactory(private val gson: Gson) {
 
-    fun createShowOfferEvent(offerData: OfferData, offerContextData: OfferContextData, tpcc: String?): Event {
+    fun createShowOfferEvent(contentMetadata: ContentMetadata,
+                             offerData: OfferData,
+                             offerContextData: OfferContextData,
+                             tpcc: String?): Event
+    {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "checkout"
             this[PaidEventParam.EVENT_ACTION.text] = "showOffer"
@@ -42,12 +49,17 @@ internal class PaidEventsFactory(private val gson: Gson) {
             tpcc?.let {
                 this[PaidEventParam.TPCC.text] = it
             }
+            createMarkedAsPaidParam(gson, contentMetadata)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
 
         return createPaidEvent(parameters)
     }
 
-    fun createShowOfferTeaserEvent(offerData: OfferData, offerContextData: OfferContextData, tpcc: String?): Event {
+    fun createShowOfferTeaserEvent(contentMetadata: ContentMetadata,
+                                   offerData: OfferData,
+                                   offerContextData: OfferContextData,
+                                   tpcc: String?): Event
+    {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "checkout"
             this[PaidEventParam.EVENT_ACTION.text] = "showOfferTeaser"
@@ -70,12 +82,19 @@ internal class PaidEventsFactory(private val gson: Gson) {
             tpcc?.let {
                 this[PaidEventParam.TPCC.text] = it
             }
+            createMarkedAsPaidParam(gson, contentMetadata)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
 
         return createPaidEvent(parameters)
     }
 
-    fun createPurchaseClickButtonEvent(offerData: OfferData, offerContextData: OfferContextData, termId: String, tpcc: String?): Event {
+    fun createPurchaseClickButtonEvent(contentMetadata: ContentMetadata,
+                                       offerData: OfferData,
+                                       offerContextData:
+                                       OfferContextData,
+                                       termId: String,
+                                       tpcc: String?): Event
+    {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "checkout"
             this[PaidEventParam.EVENT_ACTION.text] = "clickButton"
@@ -96,20 +115,20 @@ internal class PaidEventsFactory(private val gson: Gson) {
             tpcc?.let {
                 this[PaidEventParam.TPCC.text] = it
             }
+            createMarkedAsPaidParam(gson, contentMetadata)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
 
         return createPaidEvent(parameters)
     }
 
-    fun createPurchaseEvent(
-        offerData: OfferData,
-        offerContextData: OfferContextData,
-        subscriptionPaymentData: SubscriptionPaymentData,
-        termId: String,
-        termConversionId: String,
-        tpcc: String?,
-        fakeUserId: String?
-    ): Event {
+    fun createPurchaseEvent(contentMetadata: ContentMetadata,
+                            offerData: OfferData,
+                            offerContextData: OfferContextData,
+                            subscriptionPaymentData: SubscriptionPaymentData,
+                            termId: String, termConversionId: String,
+                            tpcc: String?,
+                            fakeUserId: String?): Event
+    {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "checkout"
             this[PaidEventParam.EVENT_ACTION.text] = "purchase"
@@ -143,17 +162,18 @@ internal class PaidEventsFactory(private val gson: Gson) {
             createUserIdJson(UserId(fakeUserId = fakeUserId))?.let {
                 this[PaidEventParam.EVENT_DETAILS.text] = it
             }
+            createMarkedAsPaidParam(gson, contentMetadata)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
 
         return createPaidEvent(parameters)
     }
 
-    fun createShowMetricLimitEvent(
-        supplierData: SupplierData,
-        metricsData: MetricsData,
-        sourcePublicationUuid: String,
-        sourceDx: String,
-    ): Event {
+    fun createShowMetricLimitEvent(contentMetadata: ContentMetadata,
+                                   supplierData: SupplierData,
+                                   metricsData: MetricsData,
+                                   sourcePublicationUuid: String,
+                                   sourceDx: String): Event
+    {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "metric_limit"
             this[PaidEventParam.EVENT_ACTION.text] = "showMetricLimit"
@@ -164,17 +184,18 @@ internal class PaidEventsFactory(private val gson: Gson) {
             this[PaidEventParam.FREE_PV_LIMIT.text] = metricsData.freePvLimit
             this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = sourcePublicationUuid
             this[PaidEventParam.SOURCE_DX.text] = sourceDx
+            createMarkedAsPaidParam(gson, contentMetadata)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
 
         return createPaidEvent(parameters)
     }
 
-    fun createLikelihoodScoringEvent(
-        supplierData: SupplierData,
-        likelihoodData: LikelihoodData,
-        sourcePublicationUuid: String,
-        sourceDx: String,
-    ): Event {
+    fun createLikelihoodScoringEvent(contentMetadata: ContentMetadata,
+                                     supplierData: SupplierData,
+                                     likelihoodData: LikelihoodData,
+                                     sourcePublicationUuid: String,
+                                     sourceDx: String): Event
+    {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "likelihood_scoring"
             this[PaidEventParam.EVENT_ACTION.text] = "likelihoodScoring"
@@ -185,21 +206,23 @@ internal class PaidEventsFactory(private val gson: Gson) {
             createLikelihoodDataJson(likelihoodData)?.let {
                 this[PaidEventParam.EVENT_DETAILS.text] = it
             }
+            createMarkedAsPaidParam(gson, contentMetadata)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
 
         return createPaidEvent(parameters)
     }
 
-    fun createMobileAppFakeUserIdReplacedEvent(
-        fakeUserId: String,
-        realUserId: String
-    ): Event {
+    fun createMobileAppFakeUserIdReplacedEvent(contentMetadata: ContentMetadata,
+                                               fakeUserId: String,
+                                               realUserId: String): Event
+    {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "mobile_app_fake_user_id_replaced"
             this[PaidEventParam.EVENT_ACTION.text] = "mobileAppFakeUserIdReplaced"
             createUserIdJson(UserId(fakeUserId, realUserId))?.let {
                 this[PaidEventParam.EVENT_DETAILS.text] = it
             }
+            createMarkedAsPaidParam(gson, contentMetadata)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
 
         return createPaidEvent(parameters)
