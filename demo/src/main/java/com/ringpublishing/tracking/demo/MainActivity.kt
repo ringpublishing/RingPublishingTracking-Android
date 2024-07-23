@@ -8,6 +8,7 @@ import com.ringpublishing.tracking.demo.adapter.MainPagerAdapter
 import com.ringpublishing.tracking.demo.fragment.ActionsFragment
 import com.ringpublishing.tracking.demo.fragment.ListArticlesFragment
 import com.ringpublishing.tracking.demo.fragment.NoContentFragment
+import com.ringpublishing.tracking.demo.fragment.PaidFragment
 import com.ringpublishing.tracking.demo.fragment.VideoActionsFragment
 
 class MainActivity : AppCompatActivity()
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity()
 			addFragment("ACTIONS", ActionsFragment())
             addFragment("VIDEO ACTIONS", VideoActionsFragment())
             addFragment("WEBVIEW", NoContentFragment())
+            addFragment("PAID", PaidFragment())
 		}
 	}
 }

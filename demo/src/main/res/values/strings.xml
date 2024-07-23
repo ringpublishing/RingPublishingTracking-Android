@@ -24,6 +24,15 @@
     <string name="button_disable_opt_out_mode">Disable OptOut Mode</string>
     <string name="button_report_aureus_impression">Report aureus impression</string>
 
+    <!-- Paid -->
+    <string name="button_show_offer">Show offer</string>
+    <string name="button_show_offer_teaser">Show offer teaser</string>
+    <string name="button_click_button">Click button</string>
+    <string name="button_purchase">Purchase</string>
+    <string name="button_show_metric_limit">Show metric limit</string>
+    <string name="button_likelihood_scoring">Likelihood scoring</string>
+    <string name="button_fake_user_replaced">Fake user replaced</string>
+
     <!-- Video actions-->
     <string name="button_keep_playing">Keep playing</string>
     <string name="button_paused">Paused</string>

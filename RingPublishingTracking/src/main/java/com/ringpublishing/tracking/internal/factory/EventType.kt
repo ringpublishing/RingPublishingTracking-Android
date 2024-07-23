@@ -14,4 +14,5 @@ enum class EventType(val text: String)
 	KEEP_ALIVE("KeepAlive"),
 	VIDEO("VidEvent"),
 	ERROR("ErrEvent"),
+	PAID("PaidEvent"),
 }
