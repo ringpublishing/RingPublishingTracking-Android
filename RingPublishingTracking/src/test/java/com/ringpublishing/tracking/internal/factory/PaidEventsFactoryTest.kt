@@ -56,7 +56,7 @@ class PaidEventsFactoryTest
         subscriptionPromoPrice = "99.99",
         subscriptionPromoPriceDuration = "1w",
         subscriptionPriceCurrency = "usd",
-        paymentMethod = PaymentMethod.GOOGLE_PLAY
+        paymentMethod = PaymentMethod.APP_STORE
     )
 
     private val sampleMetricsData = MetricsData(
