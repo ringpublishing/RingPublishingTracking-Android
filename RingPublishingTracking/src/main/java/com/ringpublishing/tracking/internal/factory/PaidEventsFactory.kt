@@ -22,11 +22,7 @@ import com.ringpublishing.tracking.internal.paid.PaidEventParam
 
 internal class PaidEventsFactory(private val gson: Gson) {
 
-    fun createShowOfferEvent(contentMetadata: ContentMetadata,
-                             offerData: OfferData,
-                             offerContextData: OfferContextData,
-                             tpcc: String?): Event
-    {
+    fun createShowOfferEvent(contentMetadata: ContentMetadata, offerData: OfferData, offerContextData: OfferContextData, tpcc: String?): Event {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "checkout"
             this[PaidEventParam.EVENT_ACTION.text] = "showOffer"
@@ -55,10 +51,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
         return createPaidEvent(parameters)
     }
 
-    fun createShowOfferTeaserEvent(contentMetadata: ContentMetadata,
-                                   offerData: OfferData,
-                                   offerContextData: OfferContextData,
-                                   tpcc: String?): Event
+    fun createShowOfferTeaserEvent(contentMetadata: ContentMetadata, offerData: OfferData, offerContextData: OfferContextData, tpcc: String?): Event
     {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "checkout"
@@ -88,12 +81,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
         return createPaidEvent(parameters)
     }
 
-    fun createPurchaseClickButtonEvent(contentMetadata: ContentMetadata,
-                                       offerData: OfferData,
-                                       offerContextData:
-                                       OfferContextData,
-                                       termId: String,
-                                       tpcc: String?): Event
+    fun createPurchaseClickButtonEvent(contentMetadata: ContentMetadata, offerData: OfferData, offerContextData: OfferContextData, termId: String, tpcc: String?): Event
     {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "checkout"
@@ -121,13 +109,16 @@ internal class PaidEventsFactory(private val gson: Gson) {
         return createPaidEvent(parameters)
     }
 
-    fun createPurchaseEvent(contentMetadata: ContentMetadata,
-                            offerData: OfferData,
-                            offerContextData: OfferContextData,
-                            subscriptionPaymentData: SubscriptionPaymentData,
-                            termId: String, termConversionId: String,
-                            tpcc: String?,
-                            fakeUserId: String?): Event
+    fun createPurchaseEvent(
+        contentMetadata: ContentMetadata,
+        offerData: OfferData,
+        offerContextData: OfferContextData,
+        subscriptionPaymentData: SubscriptionPaymentData,
+        termId: String,
+        termConversionId: String,
+        tpcc: String?,
+        fakeUserId: String?
+    ): Event
     {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "checkout"
@@ -168,11 +159,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
         return createPaidEvent(parameters)
     }
 
-    fun createShowMetricLimitEvent(contentMetadata: ContentMetadata,
-                                   supplierData: SupplierData,
-                                   metricsData: MetricsData,
-                                   sourcePublicationUuid: String,
-                                   sourceDx: String): Event
+    fun createShowMetricLimitEvent(contentMetadata: ContentMetadata, supplierData: SupplierData, metricsData: MetricsData, sourcePublicationUuid: String, sourceDx: String): Event
     {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "metric_limit"
@@ -190,11 +177,13 @@ internal class PaidEventsFactory(private val gson: Gson) {
         return createPaidEvent(parameters)
     }
 
-    fun createLikelihoodScoringEvent(contentMetadata: ContentMetadata,
-                                     supplierData: SupplierData,
-                                     likelihoodData: LikelihoodData,
-                                     sourcePublicationUuid: String,
-                                     sourceDx: String): Event
+    fun createLikelihoodScoringEvent(
+        contentMetadata: ContentMetadata,
+        supplierData: SupplierData,
+        likelihoodData: LikelihoodData,
+        sourcePublicationUuid: String,
+        sourceDx: String
+    ): Event
     {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "likelihood_scoring"
@@ -212,9 +201,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
         return createPaidEvent(parameters)
     }
 
-    fun createMobileAppFakeUserIdReplacedEvent(contentMetadata: ContentMetadata,
-                                               fakeUserId: String,
-                                               realUserId: String): Event
+    fun createMobileAppFakeUserIdReplacedEvent(contentMetadata: ContentMetadata, fakeUserId: String, realUserId: String): Event
     {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "mobile_app_fake_user_id_replaced"

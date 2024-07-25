@@ -44,7 +44,6 @@ class PaidController : ScreenController()
         tpcc = "hard_xmass_promoInline"
     )
 
-
     fun clickButton() = RingPublishingTracking.reportPurchaseClickButtonEvent(
         contentMetadata = sampleContentMetadata,
         offerData = sampleOfferData,
