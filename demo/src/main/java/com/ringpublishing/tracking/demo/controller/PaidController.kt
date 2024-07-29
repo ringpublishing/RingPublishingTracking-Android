@@ -15,7 +15,7 @@ import com.ringpublishing.tracking.demo.sample.sampleOfferData
 import com.ringpublishing.tracking.demo.sample.sampleSubscriptionPaymentData
 import com.ringpublishing.tracking.demo.sample.sampleSupplierData
 import com.ringpublishing.tracking.reportLikelihoodScoringEvent
-import com.ringpublishing.tracking.reportMobileAppFakeUserIdReplacedEvent
+import com.ringpublishing.tracking.reportMobileAppTemporaryUserIdReplacedEvent
 import com.ringpublishing.tracking.reportPurchaseClickButtonEvent
 import com.ringpublishing.tracking.reportPurchaseEvent
 import com.ringpublishing.tracking.reportShowMetricLimitEvent
@@ -34,14 +34,14 @@ class PaidController : ScreenController()
         contentMetadata = sampleContentMetadata,
         offerData = sampleOfferData,
         offerContextData = sampleOfferContextData,
-        tpcc = "hard_xmass_promoInline"
+        targetPromotionCampaignCode = "hard_xmass_promoInline"
     )
 
     fun showOfferTeaser() = RingPublishingTracking.reportShowOfferTeaserEvent(
         contentMetadata = sampleContentMetadata,
         offerData = sampleOfferData,
         offerContextData = sampleOfferContextData,
-        tpcc = "hard_xmass_promoInline"
+        targetPromotionCampaignCode = "hard_xmass_promoInline"
     )
 
     fun clickButton() = RingPublishingTracking.reportPurchaseClickButtonEvent(
@@ -49,7 +49,7 @@ class PaidController : ScreenController()
         offerData = sampleOfferData,
         offerContextData = sampleOfferContextData,
         termId = "TMEVT00KVHV0",
-        tpcc = "hard_xmass_promoInline"
+        targetPromotionCampaignCode = "hard_xmass_promoInline"
     )
 
     fun purchase() = RingPublishingTracking.reportPurchaseEvent(
@@ -59,29 +59,25 @@ class PaidController : ScreenController()
         subscriptionPaymentData = sampleSubscriptionPaymentData,
         termId = "TMEVT00KVHV0",
         termConversionId = "TCCJTS9X87VB",
-        tpcc = "hard_xmass_promoInline",
-        fakeUserId = "001"
+        targetPromotionCampaignCode = "hard_xmass_promoInline",
+        temporaryUserId = "001"
     )
 
     fun showMetricLimit() = RingPublishingTracking.reportShowMetricLimitEvent(
         contentMetadata = sampleContentMetadata,
         supplierData = sampleSupplierData,
         metricsData = sampleMetricsData,
-        sourcePublicationUuid = "b8b7ce67-63b8-43f6-ae47-bbfeac4002cf",
-        sourceDx = "PV,puls,lb6vvn5,2,a"
     )
 
     fun showLikelihoodScoring() = RingPublishingTracking.reportLikelihoodScoringEvent(
         contentMetadata = sampleContentMetadata,
         supplierData = sampleSupplierData,
         likelihoodData = sampleLikelihoodData,
-        sourcePublicationUuid = "b8b7ce67-63b8-43f6-ae47-bbfeac4002cf",
-        sourceDx = "PV,puls,lb6vvn5,2,a"
     )
 
-    fun replaceFakeUser() = RingPublishingTracking.reportMobileAppFakeUserIdReplacedEvent(
+    fun replaceFakeUser() = RingPublishingTracking.reportMobileAppTemporaryUserIdReplacedEvent(
         contentMetadata = sampleContentMetadata,
-        fakeUserId = "fake_001",
+        temporaryUserId = "fake_001",
         realUserId = "real_001"
     )
 }

@@ -9,11 +9,11 @@ package com.ringpublishing.tracking.data.paid
  * Metric counter data
  *
  * @param [metricLimitName]: Name of displayed metric counter
- * @param [freePvCnt]: Number of views remaining within the metric counter
- * @param [freePvLimit]: Number of free views within the metric counter
+ * @param [freePageViewCount]: Number of views remaining within the metric counter
+ * @param [freePageViewLimit]: Number of free views within the metric counter
  */
 data class MetricsData(
     val metricLimitName: String,
-    val freePvCnt: Int,
-    val freePvLimit: Int,
+    val freePageViewCount: Int,
+    val freePageViewLimit: Int,
 )

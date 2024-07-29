@@ -20,7 +20,7 @@ import com.ringpublishing.tracking.data.paid.SupplierData
  * @param [contentMetadata]: Content metadata
  * @param [offerData]: Data regarding the supplier of sales offers and offers themselves
  * @param [offerContextData]: Data regarding the offer context / content
- * @param [tpcc]: Offer id of given promotion / campaign
+ * @param [targetPromotionCampaignCode]: Offer id of given promotion / campaign
  *
  * @see ContentMetadata
  * @see OfferData
@@ -30,8 +30,8 @@ fun RingPublishingTracking.reportShowOfferEvent(
     contentMetadata: ContentMetadata,
     offerData: OfferData,
     offerContextData: OfferContextData,
-    tpcc: String?,
-) = reportEvent(paidEventsFactory.createShowOfferEvent(contentMetadata, offerData, offerContextData, tpcc))
+    targetPromotionCampaignCode: String?,
+) = reportEvent(paidEventsFactory.createShowOfferEvent(contentMetadata, offerData, offerContextData, targetPromotionCampaignCode))
 
 /**
  * Reports showing offer teaser event
@@ -40,7 +40,7 @@ fun RingPublishingTracking.reportShowOfferEvent(
  * @param [contentMetadata]: Content metadata
  * @param [offerData]: Data regarding the supplier of sales offers and offers themselves
  * @param [offerContextData]: Data regarding the offer context / content
- * @param [tpcc]: Offer id of given promotion / campaign
+ * @param [targetPromotionCampaignCode]: Offer id of given promotion / campaign
  *
  * @see ContentMetadata
  * @see OfferData
@@ -50,8 +50,8 @@ fun RingPublishingTracking.reportShowOfferTeaserEvent(
     contentMetadata: ContentMetadata,
     offerData: OfferData,
     offerContextData: OfferContextData,
-    tpcc: String?,
-) = reportEvent(paidEventsFactory.createShowOfferTeaserEvent(contentMetadata, offerData, offerContextData, tpcc))
+    targetPromotionCampaignCode: String?,
+) = reportEvent(paidEventsFactory.createShowOfferTeaserEvent(contentMetadata, offerData, offerContextData, targetPromotionCampaignCode))
 
 /**
  * Reports event of clicking button used to start purchasing process flow
@@ -60,7 +60,7 @@ fun RingPublishingTracking.reportShowOfferTeaserEvent(
  * @param [offerData]: Data regarding the supplier of sales offers and offers themselves
  * @param [offerContextData]: Data regarding the offer context / content
  * @param [termId]: Id of specific purchase term / offer selected by user
- * @param [tpcc]: Offer id of given promotion / campaign
+ * @param [targetPromotionCampaignCode]: Offer id of given promotion / campaign
  *
  * @see ContentMetadata
  * @see OfferData
@@ -71,8 +71,8 @@ fun RingPublishingTracking.reportPurchaseClickButtonEvent(
     offerData: OfferData,
     offerContextData: OfferContextData,
     termId: String,
-    tpcc: String?,
-) = reportEvent(paidEventsFactory.createPurchaseClickButtonEvent(contentMetadata, offerData, offerContextData, termId, tpcc))
+    targetPromotionCampaignCode: String?,
+) = reportEvent(paidEventsFactory.createPurchaseClickButtonEvent(contentMetadata, offerData, offerContextData, termId, targetPromotionCampaignCode))
 
 /**
  * Reports subscription purchase event
@@ -83,8 +83,8 @@ fun RingPublishingTracking.reportPurchaseClickButtonEvent(
  * @param [subscriptionPaymentData]: Data regarding subscription payment
  * @param [termId]: Id of specific purchase term / offer selected by user
  * @param [termConversionId]: Purchase conversion id
- * @param [tpcc]: Offer id of given promotion / campaign
- * @param [fakeUserId]: previous fake user id
+ * @param [targetPromotionCampaignCode]: Offer id of given promotion / campaign
+ * @param [temporaryUserId]: temporary user id
  *
  * @see ContentMetadata
  * @see OfferData
@@ -98,9 +98,18 @@ fun RingPublishingTracking.reportPurchaseEvent(
     subscriptionPaymentData: SubscriptionPaymentData,
     termId: String,
     termConversionId: String,
-    tpcc: String?,
-    fakeUserId: String?
-) = reportEvent(paidEventsFactory.createPurchaseEvent(contentMetadata, offerData, offerContextData, subscriptionPaymentData, termId, termConversionId, tpcc, fakeUserId))
+    targetPromotionCampaignCode: String?,
+    temporaryUserId: String?
+) = reportEvent(paidEventsFactory.createPurchaseEvent(
+    contentMetadata,
+    offerData,
+    offerContextData,
+    subscriptionPaymentData,
+    termId,
+    termConversionId,
+    targetPromotionCampaignCode,
+    temporaryUserId
+))
 
 /**
  * Reports event of displaying paid content to the user within a metered counter.
@@ -108,8 +117,6 @@ fun RingPublishingTracking.reportPurchaseEvent(
  * @param [contentMetadata]: Content metadata
  * @param [supplierData]: Data regarding the supplier of sales
  * @param [metricsData]: Metric counter data
- * @param [sourcePublicationUuid]: Id of the publication where the offer has been displayed
- * @param [sourceDx]: DX parameter
  *
  * @see ContentMetadata
  * @see SupplierData
@@ -118,10 +125,8 @@ fun RingPublishingTracking.reportPurchaseEvent(
 fun RingPublishingTracking.reportShowMetricLimitEvent(
     contentMetadata: ContentMetadata,
     supplierData: SupplierData,
-    metricsData: MetricsData,
-    sourcePublicationUuid: String,
-    sourceDx: String,
-) = reportEvent(paidEventsFactory.createShowMetricLimitEvent(contentMetadata, supplierData, metricsData, sourcePublicationUuid, sourceDx))
+    metricsData: MetricsData
+) = reportEvent(paidEventsFactory.createShowMetricLimitEvent(contentMetadata, supplierData, metricsData))
 
 /**
  * Reports event of piano prediction of user likelihood to subscribe / cancel subscription
@@ -129,8 +134,6 @@ fun RingPublishingTracking.reportShowMetricLimitEvent(
  * @param [contentMetadata]: Content metadata
  * @param [supplierData]: Data regarding the supplier of sales
  * @param [likelihoodData]: Data regarding likelihood to subscribe / cancel subscription
- * @param [sourcePublicationUuid]: Id of the publication where the offer has been displayed
- * @param [sourceDx]: DX parameter
  *
  * @see ContentMetadata
  * @see SupplierData
@@ -139,22 +142,20 @@ fun RingPublishingTracking.reportShowMetricLimitEvent(
 fun RingPublishingTracking.reportLikelihoodScoringEvent(
     contentMetadata: ContentMetadata,
     supplierData: SupplierData,
-    likelihoodData: LikelihoodData,
-    sourcePublicationUuid: String,
-    sourceDx: String
-) = reportEvent(paidEventsFactory.createLikelihoodScoringEvent(contentMetadata, supplierData, likelihoodData, sourcePublicationUuid, sourceDx))
+    likelihoodData: LikelihoodData
+) = reportEvent(paidEventsFactory.createLikelihoodScoringEvent(contentMetadata, supplierData, likelihoodData))
 
 /**
- * Reports event about changing user data from fake to real
+ * Reports event about changing user data from temporary to real
  *
  * @param [contentMetadata]: Content metadata
- * @param [fakeUserId]: previous fake user id
+ * @param [temporaryUserId]: temporaryUserId
  * @param [realUserId]: new user id
  *
  * @see ContentMetadata
  */
-fun RingPublishingTracking.reportMobileAppFakeUserIdReplacedEvent(
+fun RingPublishingTracking.reportMobileAppTemporaryUserIdReplacedEvent(
     contentMetadata: ContentMetadata,
-    fakeUserId: String,
+    temporaryUserId: String,
     realUserId: String
-) = reportEvent(paidEventsFactory.createMobileAppFakeUserIdReplacedEvent(contentMetadata, fakeUserId, realUserId))
+) = reportEvent(paidEventsFactory.createMobileAppFakeUserIdReplacedEvent(contentMetadata, temporaryUserId, realUserId))
