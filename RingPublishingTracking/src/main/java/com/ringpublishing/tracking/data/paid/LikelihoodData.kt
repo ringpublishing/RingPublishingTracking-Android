@@ -5,13 +5,15 @@
  */
 package com.ringpublishing.tracking.data.paid
 
+import com.google.gson.annotations.SerializedName
+
 /**
  * Data regarding likelihood to subscribe / cancel subscription
  *
- * @param [lts]: likelihood to subscribe
- * @param [ltc]: likelihood to cancel
+ * @param [likelihoodToSubscribe]: likelihood to subscribe
+ * @param [likelihoodToCancel]: likelihood to cancel
  */
 data class LikelihoodData(
-    val lts: Int,
-    val ltc: Int
+    @SerializedName("lts") val likelihoodToSubscribe: Int,
+    @SerializedName("ltc") val likelihoodToCancel: Int
 )

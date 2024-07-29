@@ -30,8 +30,6 @@ val sampleOfferData = OfferData(
 
 val sampleOfferContextData = OfferContextData(
     source = "closedArticle",
-    sourcePublicationUuid = "b8b7ce67-63b8-43f6-ae47-bbfeac4002cf",
-    sourceDx = "PV,puls,lb6vvn5,2,a",
     closurePercentage = 50
 )
 
@@ -45,13 +43,13 @@ val sampleSubscriptionPaymentData = SubscriptionPaymentData(
 
 val sampleMetricsData = MetricsData(
     metricLimitName = "OnetMeter",
-    freePvCnt = 9,
-    freePvLimit = 10
+    freePageViewCount = 9,
+    freePageViewLimit = 10
 )
 
 val sampleLikelihoodData = LikelihoodData(
-    lts = 5,
-    ltc = 4
+    likelihoodToSubscribe = 5,
+    likelihoodToCancel = 4
 )
 
 val sampleContentMetadata = ContentMetadata(

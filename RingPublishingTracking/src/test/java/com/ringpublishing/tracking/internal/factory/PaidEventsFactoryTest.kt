@@ -19,6 +19,7 @@ import com.ringpublishing.tracking.data.paid.SupplierData
 import com.ringpublishing.tracking.internal.decorator.EventParam
 import com.ringpublishing.tracking.internal.factory.PaidEventsFactory
 import com.ringpublishing.tracking.internal.paid.PaidEventParam
+import com.ringpublishing.tracking.internal.util.buildToDX
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.slot
@@ -46,8 +47,6 @@ class PaidEventsFactoryTest
 
     private val sampleOfferContextData = OfferContextData(
         source = "closedArticle",
-        sourcePublicationUuid = "b8b7ce67-63b8-43f6-ae47-bbfeac4002cf",
-        sourceDx = "PV,puls,lb6vvn5,2,a",
         closurePercentage = 50
     )
 
@@ -61,13 +60,13 @@ class PaidEventsFactoryTest
 
     private val sampleMetricsData = MetricsData(
         metricLimitName = "OnetMeter",
-        freePvCnt = 9,
-        freePvLimit = 10
+        freePageViewCount = 9,
+        freePageViewLimit = 10
     )
 
     private val sampleLikelihoodData = LikelihoodData(
-        lts = 5,
-        ltc = 4
+        likelihoodToSubscribe = 5,
+        likelihoodToCancel = 4
     )
 
     private val sampleContentMetadata = ContentMetadata(
@@ -100,7 +99,7 @@ class PaidEventsFactoryTest
             contentMetadata = sampleContentMetadata,
             offerData = sampleOfferData,
             offerContextData = sampleOfferContextData,
-            tpcc = "hard_xmass_promoInline"
+            targetPromotionCampaignCode = "hard_xmass_promoInline"
         )
 
         Assert.assertTrue(event.parameters.isNotEmpty())
@@ -115,7 +114,7 @@ class PaidEventsFactoryTest
             contentMetadata = sampleContentMetadata,
             offerData = sampleOfferData,
             offerContextData = sampleOfferContextData,
-            tpcc = sampleTpcc
+            targetPromotionCampaignCode = sampleTpcc
         )
 
         Assert.assertTrue(event.parameters.isNotEmpty())
@@ -124,8 +123,8 @@ class PaidEventsFactoryTest
         Assert.assertEquals(event.parameters[PaidEventParam.PAYWALL_TEMPLATE_ID.text], sampleOfferData.paywallTemplateId)
         Assert.assertEquals(event.parameters[PaidEventParam.PAYWALL_VARIANT_ID.text], sampleOfferData.paywallVariantId)
         Assert.assertEquals(event.parameters[PaidEventParam.SOURCE.text], sampleOfferContextData.source)
-        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_PUBLICATION_UUID.text], sampleOfferContextData.sourcePublicationUuid)
-        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_DX.text], sampleOfferContextData.sourceDx)
+        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_PUBLICATION_UUID.text], sampleContentMetadata.publicationId)
+        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_DX.text], sampleContentMetadata.buildToDX())
         Assert.assertEquals(event.parameters[PaidEventParam.CLOSURE_PERCENTAGE.text], sampleOfferContextData.closurePercentage)
         Assert.assertEquals(event.parameters[PaidEventParam.TPCC.text], sampleTpcc)
         Assert.assertEquals(event.parameters[EventParam.MARKED_AS_PAID_DATA.text], mockRdlcnEncodingPaid())
@@ -140,7 +139,7 @@ class PaidEventsFactoryTest
             contentMetadata = sampleContentMetadata,
             offerData = sampleOfferData,
             offerContextData = sampleOfferContextData,
-            tpcc = sampleTpcc
+            targetPromotionCampaignCode = sampleTpcc
         )
 
         Assert.assertTrue(event.parameters.isNotEmpty())
@@ -149,8 +148,8 @@ class PaidEventsFactoryTest
         Assert.assertEquals(event.parameters[PaidEventParam.PAYWALL_TEMPLATE_ID.text], sampleOfferData.paywallTemplateId)
         Assert.assertEquals(event.parameters[PaidEventParam.PAYWALL_VARIANT_ID.text], sampleOfferData.paywallVariantId)
         Assert.assertEquals(event.parameters[PaidEventParam.SOURCE.text], sampleOfferContextData.source)
-        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_PUBLICATION_UUID.text], sampleOfferContextData.sourcePublicationUuid)
-        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_DX.text], sampleOfferContextData.sourceDx)
+        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_PUBLICATION_UUID.text], sampleContentMetadata.publicationId)
+        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_DX.text], sampleContentMetadata.buildToDX())
         Assert.assertEquals(event.parameters[PaidEventParam.CLOSURE_PERCENTAGE.text], sampleOfferContextData.closurePercentage)
         Assert.assertEquals(event.parameters[PaidEventParam.TPCC.text], sampleTpcc)
         Assert.assertEquals(event.parameters[EventParam.MARKED_AS_PAID_DATA.text], mockRdlcnEncodingPaid())
@@ -167,7 +166,7 @@ class PaidEventsFactoryTest
             offerData = sampleOfferData,
             offerContextData = sampleOfferContextData.copy(closurePercentage = null),
             termId = sampleTermId,
-            tpcc = sampleTpcc
+            targetPromotionCampaignCode = sampleTpcc
         )
 
         Assert.assertTrue(event.parameters.isNotEmpty())
@@ -176,8 +175,8 @@ class PaidEventsFactoryTest
         Assert.assertEquals(event.parameters[PaidEventParam.PAYWALL_TEMPLATE_ID.text], sampleOfferData.paywallTemplateId)
         Assert.assertEquals(event.parameters[PaidEventParam.PAYWALL_VARIANT_ID.text], sampleOfferData.paywallVariantId)
         Assert.assertEquals(event.parameters[PaidEventParam.SOURCE.text], sampleOfferContextData.source)
-        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_PUBLICATION_UUID.text], sampleOfferContextData.sourcePublicationUuid)
-        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_DX.text], sampleOfferContextData.sourceDx)
+        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_PUBLICATION_UUID.text], sampleContentMetadata.publicationId)
+        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_DX.text], sampleContentMetadata.buildToDX())
         Assert.assertEquals(event.parameters[PaidEventParam.CLOSURE_PERCENTAGE.text], null)
         Assert.assertEquals(event.parameters[PaidEventParam.TPCC.text], sampleTpcc)
         Assert.assertEquals(event.parameters[PaidEventParam.TERM_ID.text], sampleTermId)
@@ -200,7 +199,7 @@ class PaidEventsFactoryTest
             subscriptionPaymentData = sampleSubscriptionPaymentData,
             termId = sampleTermId,
             termConversionId = sampleTermConversionId,
-            tpcc = sampleTpcc,
+            targetPromotionCampaignCode = sampleTpcc,
             fakeUserId = sampleFakeUserId
         )
 
@@ -210,8 +209,8 @@ class PaidEventsFactoryTest
         Assert.assertEquals(event.parameters[PaidEventParam.PAYWALL_TEMPLATE_ID.text], sampleOfferData.paywallTemplateId)
         Assert.assertEquals(event.parameters[PaidEventParam.PAYWALL_VARIANT_ID.text], sampleOfferData.paywallVariantId)
         Assert.assertEquals(event.parameters[PaidEventParam.SOURCE.text], sampleOfferContextData.source)
-        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_PUBLICATION_UUID.text], sampleOfferContextData.sourcePublicationUuid)
-        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_DX.text], sampleOfferContextData.sourceDx)
+        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_PUBLICATION_UUID.text], sampleContentMetadata.publicationId)
+        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_DX.text], sampleContentMetadata.buildToDX())
         Assert.assertEquals(event.parameters[PaidEventParam.CLOSURE_PERCENTAGE.text], null)
         Assert.assertEquals(event.parameters[PaidEventParam.SUBSCRIPTION_BASE_PRICE.text], sampleSubscriptionPaymentData.subscriptionBasePrice)
         Assert.assertEquals(event.parameters[PaidEventParam.SUBSCRIPTION_PROMO_PRICE.text], sampleSubscriptionPaymentData.subscriptionPromoPrice)
@@ -233,18 +232,16 @@ class PaidEventsFactoryTest
             contentMetadata = sampleContentMetadata,
             metricsData = sampleMetricsData,
             supplierData = sampleSupplierData,
-            sourcePublicationUuid = sampleOfferContextData.sourcePublicationUuid!!,
-            sourceDx = sampleOfferContextData.sourceDx!!
         )
 
         Assert.assertTrue(event.parameters.isNotEmpty())
         Assert.assertEquals(event.parameters[PaidEventParam.METRIC_LIMIT_NAME.text], sampleMetricsData.metricLimitName)
-        Assert.assertEquals(event.parameters[PaidEventParam.FREE_PV_CNT.text], sampleMetricsData.freePvCnt)
-        Assert.assertEquals(event.parameters[PaidEventParam.FREE_PV_LIMIT.text], sampleMetricsData.freePvLimit)
+        Assert.assertEquals(event.parameters[PaidEventParam.FREE_PV_CNT.text], sampleMetricsData.freePageViewCount)
+        Assert.assertEquals(event.parameters[PaidEventParam.FREE_PV_LIMIT.text], sampleMetricsData.freePageViewLimit)
         Assert.assertEquals(event.parameters[PaidEventParam.SUPPLIER_APP_ID.text], sampleSupplierData.supplierAppId)
         Assert.assertEquals(event.parameters[PaidEventParam.PAYWALL_SUPPLIER.text], sampleSupplierData.paywallSupplier)
-        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_PUBLICATION_UUID.text], sampleOfferContextData.sourcePublicationUuid)
-        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_DX.text], sampleOfferContextData.sourceDx)
+        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_PUBLICATION_UUID.text], sampleContentMetadata.publicationId)
+        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_DX.text], sampleContentMetadata.buildToDX())
         Assert.assertEquals(event.parameters[EventParam.MARKED_AS_PAID_DATA.text], mockRdlcnEncodingPaid())
     }
 
@@ -252,20 +249,18 @@ class PaidEventsFactoryTest
     fun createLikelihoodScoringEvent_ThenProperParametersInEvent()
     {
         val eventsFactory = PaidEventsFactory(gson)
-        val sampleLikelihoodJson = "{\"lts\":${sampleLikelihoodData.lts},\"ltc\":${sampleLikelihoodData.ltc}}"
+        val sampleLikelihoodJson = "{\"lts\":${sampleLikelihoodData.likelihoodToSubscribe},\"ltc\":${sampleLikelihoodData.likelihoodToCancel}}"
         val event = eventsFactory.createLikelihoodScoringEvent(
             contentMetadata = sampleContentMetadata,
             supplierData = sampleSupplierData,
-            sourcePublicationUuid = sampleOfferContextData.sourcePublicationUuid!!,
-            sourceDx = sampleOfferContextData.sourceDx!!,
             likelihoodData = sampleLikelihoodData
         )
 
         Assert.assertTrue(event.parameters.isNotEmpty())
         Assert.assertEquals(event.parameters[PaidEventParam.SUPPLIER_APP_ID.text], sampleSupplierData.supplierAppId)
         Assert.assertEquals(event.parameters[PaidEventParam.PAYWALL_SUPPLIER.text], sampleSupplierData.paywallSupplier)
-        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_PUBLICATION_UUID.text], sampleOfferContextData.sourcePublicationUuid)
-        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_DX.text], sampleOfferContextData.sourceDx)
+        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_PUBLICATION_UUID.text], sampleContentMetadata.publicationId)
+        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_DX.text], sampleContentMetadata.buildToDX())
         Assert.assertEquals(event.parameters[PaidEventParam.EVENT_DETAILS.text], sampleLikelihoodJson)
         Assert.assertEquals(event.parameters[EventParam.MARKED_AS_PAID_DATA.text], mockRdlcnEncodingPaid())
     }
@@ -279,7 +274,7 @@ class PaidEventsFactoryTest
         val sampleUserJson = "{\"fake_user_id\":\"${sampleFakeUserId}\",\"real_user_id\":\"${sampleRealUserId}\"}"
         val event = eventsFactory.createMobileAppFakeUserIdReplacedEvent(
             contentMetadata = sampleContentMetadata,
-            fakeUserId = sampleFakeUserId,
+            temporaryUserId = sampleFakeUserId,
             realUserId = sampleRealUserId
         )
 
