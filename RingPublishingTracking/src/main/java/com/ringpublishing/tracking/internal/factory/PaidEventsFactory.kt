@@ -30,12 +30,14 @@ internal class PaidEventsFactory(private val gson: Gson) {
             this[PaidEventParam.SUPPLIER_APP_ID.text] = offerData.supplierData.supplierAppId
             this[PaidEventParam.PAYWALL_SUPPLIER.text] = offerData.supplierData.paywallSupplier
             this[PaidEventParam.PAYWALL_TEMPLATE_ID.text] = offerData.paywallTemplateId
-            this[PaidEventParam.PAYWALL_VARIANT_ID.text] = offerData.paywallVariantId
             this[PaidEventParam.DISPLAY_MODE.text] = offerData.displayMode.text
             this[PaidEventParam.SOURCE.text] = offerContextData.source
             this[PaidEventParam.SOURCE_DX.text] = contentMetadata.buildToDX()
             this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = contentMetadata.publicationId
 
+            offerData.paywallVariantId?.let {
+                this[PaidEventParam.PAYWALL_VARIANT_ID.text] = it
+            }
             offerContextData.closurePercentage?.let {
                 this[PaidEventParam.CLOSURE_PERCENTAGE.text] = it
             }
@@ -56,12 +58,14 @@ internal class PaidEventsFactory(private val gson: Gson) {
             this[PaidEventParam.SUPPLIER_APP_ID.text] = offerData.supplierData.supplierAppId
             this[PaidEventParam.PAYWALL_SUPPLIER.text] = offerData.supplierData.paywallSupplier
             this[PaidEventParam.PAYWALL_TEMPLATE_ID.text] = offerData.paywallTemplateId
-            this[PaidEventParam.PAYWALL_VARIANT_ID.text] = offerData.paywallVariantId
             this[PaidEventParam.DISPLAY_MODE.text] = offerData.displayMode.text
             this[PaidEventParam.SOURCE.text] = offerContextData.source
             this[PaidEventParam.SOURCE_DX.text] = contentMetadata.buildToDX()
             this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = contentMetadata.publicationId
 
+            offerData.paywallVariantId?.let {
+                this[PaidEventParam.PAYWALL_VARIANT_ID.text] = it
+            }
             offerContextData.closurePercentage?.let {
                 this[PaidEventParam.CLOSURE_PERCENTAGE.text] = it
             }
@@ -88,13 +92,15 @@ internal class PaidEventsFactory(private val gson: Gson) {
             this[PaidEventParam.SUPPLIER_APP_ID.text] = offerData.supplierData.supplierAppId
             this[PaidEventParam.PAYWALL_SUPPLIER.text] = offerData.supplierData.paywallSupplier
             this[PaidEventParam.PAYWALL_TEMPLATE_ID.text] = offerData.paywallTemplateId
-            this[PaidEventParam.PAYWALL_VARIANT_ID.text] = offerData.paywallVariantId
             this[PaidEventParam.DISPLAY_MODE.text] = offerData.displayMode.text
             this[PaidEventParam.SOURCE.text] = offerContextData.source
             this[PaidEventParam.TERM_ID.text] = termId
             this[PaidEventParam.SOURCE_DX.text] = contentMetadata.buildToDX()
             this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = contentMetadata.publicationId
 
+            offerData.paywallVariantId?.let {
+                this[PaidEventParam.PAYWALL_VARIANT_ID.text] = it
+            }
             targetPromotionCampaignCode?.let {
                 this[PaidEventParam.TPCC.text] = it
             }
@@ -121,7 +127,6 @@ internal class PaidEventsFactory(private val gson: Gson) {
             this[PaidEventParam.SUPPLIER_APP_ID.text] = offerData.supplierData.supplierAppId
             this[PaidEventParam.PAYWALL_SUPPLIER.text] = offerData.supplierData.paywallSupplier
             this[PaidEventParam.PAYWALL_TEMPLATE_ID.text] = offerData.paywallTemplateId
-            this[PaidEventParam.PAYWALL_VARIANT_ID.text] = offerData.paywallVariantId
             this[PaidEventParam.DISPLAY_MODE.text] = offerData.displayMode.text
             this[PaidEventParam.SOURCE.text] = offerContextData.source
             this[PaidEventParam.TERM_ID.text] = termId
@@ -132,6 +137,9 @@ internal class PaidEventsFactory(private val gson: Gson) {
             this[PaidEventParam.SOURCE_DX.text] = contentMetadata.buildToDX()
             this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = contentMetadata.publicationId
 
+            offerData.paywallVariantId?.let {
+                this[PaidEventParam.PAYWALL_VARIANT_ID.text] = it
+            }
             targetPromotionCampaignCode?.let {
                 this[PaidEventParam.TPCC.text] = it
             }

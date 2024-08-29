@@ -19,7 +19,7 @@ package com.ringpublishing.tracking.data.paid
 data class OfferData(
     val supplierData: SupplierData,
     val paywallTemplateId: String,
-    val paywallVariantId: String,
+    val paywallVariantId: String?,
     val displayMode: OfferDisplayMode,
 )
 

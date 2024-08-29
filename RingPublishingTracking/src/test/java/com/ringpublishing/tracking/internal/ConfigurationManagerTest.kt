@@ -85,7 +85,8 @@ class ConfigurationManagerTest
 		val configurationManager = ConfigurationManager()
 
 		configurationManager.updateSsoSystemName("sso")
-		configurationManager.updateUserData("userId", "email", true)
+        configurationManager.updateIsActiveSubscriber(true)
+		configurationManager.updateUserData("userId", "email")
 
 		val userData = configurationManager.getUserData()
 
@@ -110,10 +111,12 @@ class ConfigurationManagerTest
 		val configurationManager = ConfigurationManager()
 
         configurationManager.updateSsoSystemName("sso")
-        configurationManager.updateUserData("userId", "email", true)
+        configurationManager.updateIsActiveSubscriber(true)
+        configurationManager.updateUserData("userId", "email")
 
         configurationManager.updateSsoSystemName(null)
-        configurationManager.updateUserData(null, null, null)
+        configurationManager.updateIsActiveSubscriber(null)
+        configurationManager.updateUserData(null, null)
 
 		Assert.assertNull(configurationManager.getUserData().userId)
 		Assert.assertNull(configurationManager.getUserData().ssoName)
