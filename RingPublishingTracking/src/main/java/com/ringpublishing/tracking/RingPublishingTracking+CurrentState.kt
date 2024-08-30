@@ -32,7 +32,7 @@ fun RingPublishingTracking.updateSSO(ssoSystemName: String)
  *
  * @param isActiveSubscriber: Is user a subscriber
  */
-fun RingPublishingTracking.setActiveSubscriber(isActiveSubscriber: Boolean)
+fun RingPublishingTracking.updateActiveSubscriber(isActiveSubscriber: Boolean)
 {
     configurationManager.updateIsActiveSubscriber(isActiveSubscriber)
 }
@@ -41,15 +41,11 @@ fun RingPublishingTracking.setActiveSubscriber(isActiveSubscriber: Boolean)
  *
  * Update application user identifier for tracking purpose.
  *
- * @param ssoSystemName: Name of SSO system used to login
  * @param userId: User identifier
  * @param userEmail: User email address
- * @param isActiveSubscriber: Is user a subscriber
  */
-fun RingPublishingTracking.updateUserData(ssoSystemName: String, userId: String, userEmail: String?, isActiveSubscriber: Boolean)
+fun RingPublishingTracking.updateUserData(userId: String, userEmail: String?)
 {
-	configurationManager.updateSsoSystemName(ssoSystemName)
-    configurationManager.updateIsActiveSubscriber(isActiveSubscriber)
     configurationManager.updateUserData(userId, userEmail)
 }
 
