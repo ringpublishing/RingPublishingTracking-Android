@@ -14,6 +14,6 @@ import com.google.gson.annotations.SerializedName
  * @param [likelihoodToCancel]: likelihood to cancel
  */
 data class LikelihoodData(
-    @SerializedName("lts") val likelihoodToSubscribe: Int,
-    @SerializedName("ltc") val likelihoodToCancel: Int
+    @SerializedName("lts") val likelihoodToSubscribe: Int?,
+    @SerializedName("ltc") val likelihoodToCancel: Int?
 )

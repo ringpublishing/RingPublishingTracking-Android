@@ -76,12 +76,14 @@ internal class ConfigurationManager
         userData.ssoName = ssoSystemName
     }
 
-	fun updateUserData(userId: String?, userEmail: String?, isActiveSubscriber: Boolean?)
-	{
-		userData.userId = userId
-		userData.isActiveSubscriber = isActiveSubscriber
-		userEmail?.let { userData.emailMd5 = it.trim().lowercase().replace("[\n\r]", "").md5() }
-	}
+    fun updateIsActiveSubscriber(isActiveSubscriber: Boolean?) {
+        userData.isActiveSubscriber = isActiveSubscriber
+    }
+
+    fun updateUserData(userId: String?, userEmail: String?) {
+        userData.userId = userId
+        userEmail?.let { userData.emailMd5 = it.trim().lowercase().replace("[\n\r]", "").md5() }
+    }
 
 	fun updateAdvertisementArea(currentArea: String?)
 	{

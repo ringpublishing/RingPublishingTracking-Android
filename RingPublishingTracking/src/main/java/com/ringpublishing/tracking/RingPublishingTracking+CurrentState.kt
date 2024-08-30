@@ -6,18 +6,16 @@
 package com.ringpublishing.tracking
 
 /***
- * Dynamic tracking properties
  *
  * Setting user identifier data as null during logout
  *
  */
 fun RingPublishingTracking.logout()
 {
-    configurationManager.updateUserData(null, null, null)
+    configurationManager.updateUserData(null, null)
 }
 
 /***
- * Dynamic tracking properties
  *
  * Update SSO system name
  *
@@ -29,19 +27,26 @@ fun RingPublishingTracking.updateSSO(ssoSystemName: String)
 }
 
 /***
- * Dynamic tracking properties
+ *
+ * Update isActiveSubscriber property
+ *
+ * @param isActiveSubscriber: Is user a subscriber
+ */
+fun RingPublishingTracking.updateActiveSubscriber(isActiveSubscriber: Boolean)
+{
+    configurationManager.updateIsActiveSubscriber(isActiveSubscriber)
+}
+
+/***
  *
  * Update application user identifier for tracking purpose.
  *
- * @param ssoSystemName: Name of SSO system used to login
  * @param userId: User identifier
  * @param userEmail: User email address
- * @param isActiveSubscriber: Is user a subscriber
  */
-fun RingPublishingTracking.updateUserData(ssoSystemName: String, userId: String, userEmail: String?, isActiveSubscriber: Boolean)
+fun RingPublishingTracking.updateUserData(userId: String, userEmail: String?)
 {
-	configurationManager.updateSsoSystemName(ssoSystemName)
-    configurationManager.updateUserData(userId, userEmail, isActiveSubscriber)
+    configurationManager.updateUserData(userId, userEmail)
 }
 
 /**
