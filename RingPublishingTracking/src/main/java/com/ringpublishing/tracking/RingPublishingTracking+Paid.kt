@@ -27,7 +27,7 @@ import com.ringpublishing.tracking.data.paid.SupplierData
  * @see OfferContextData
  */
 fun RingPublishingTracking.reportShowOfferEvent(
-    contentMetadata: ContentMetadata,
+    contentMetadata: ContentMetadata?,
     offerData: OfferData,
     offerContextData: OfferContextData,
     targetPromotionCampaignCode: String?,
@@ -47,7 +47,7 @@ fun RingPublishingTracking.reportShowOfferEvent(
  * @see OfferContextData
  */
 fun RingPublishingTracking.reportShowOfferTeaserEvent(
-    contentMetadata: ContentMetadata,
+    contentMetadata: ContentMetadata?,
     offerData: OfferData,
     offerContextData: OfferContextData,
     targetPromotionCampaignCode: String?,
@@ -67,7 +67,7 @@ fun RingPublishingTracking.reportShowOfferTeaserEvent(
  * @see OfferContextData
  */
 fun RingPublishingTracking.reportPurchaseClickButtonEvent(
-    contentMetadata: ContentMetadata,
+    contentMetadata: ContentMetadata?,
     offerData: OfferData,
     offerContextData: OfferContextData,
     termId: String,
@@ -92,7 +92,7 @@ fun RingPublishingTracking.reportPurchaseClickButtonEvent(
  * @see SubscriptionPaymentData
  */
 fun RingPublishingTracking.reportPurchaseEvent(
-    contentMetadata: ContentMetadata,
+    contentMetadata: ContentMetadata?,
     offerData: OfferData,
     offerContextData: OfferContextData,
     subscriptionPaymentData: SubscriptionPaymentData,
@@ -123,7 +123,7 @@ fun RingPublishingTracking.reportPurchaseEvent(
  * @see MetricsData
  */
 fun RingPublishingTracking.reportShowMetricLimitEvent(
-    contentMetadata: ContentMetadata,
+    contentMetadata: ContentMetadata?,
     supplierData: SupplierData,
     metricsData: MetricsData
 ) = reportEvent(paidEventsFactory.createShowMetricLimitEvent(contentMetadata, supplierData, metricsData))
@@ -140,7 +140,7 @@ fun RingPublishingTracking.reportShowMetricLimitEvent(
  * @see LikelihoodData
  */
 fun RingPublishingTracking.reportLikelihoodScoringEvent(
-    contentMetadata: ContentMetadata,
+    contentMetadata: ContentMetadata?,
     supplierData: SupplierData,
     likelihoodData: LikelihoodData
 ) = reportEvent(paidEventsFactory.createLikelihoodScoringEvent(contentMetadata, supplierData, likelihoodData))
@@ -155,7 +155,7 @@ fun RingPublishingTracking.reportLikelihoodScoringEvent(
  * @see ContentMetadata
  */
 fun RingPublishingTracking.reportMobileAppTemporaryUserIdReplacedEvent(
-    contentMetadata: ContentMetadata,
+    contentMetadata: ContentMetadata?,
     temporaryUserId: String,
     realUserId: String
 ) = reportEvent(paidEventsFactory.createMobileAppFakeUserIdReplacedEvent(contentMetadata, temporaryUserId, realUserId))
