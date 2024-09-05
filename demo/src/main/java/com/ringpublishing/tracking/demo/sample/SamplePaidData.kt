@@ -38,7 +38,7 @@ val sampleSubscriptionPaymentData = SubscriptionPaymentData(
     subscriptionPromoPrice = "99.99",
     subscriptionPromoPriceDuration = "1w",
     subscriptionPriceCurrency = "usd",
-    paymentMethod = PaymentMethod.APP_STORE
+    paymentMethod = PaymentMethod.GOOGLE_PLAY
 )
 
 val sampleMetricsData = MetricsData(
