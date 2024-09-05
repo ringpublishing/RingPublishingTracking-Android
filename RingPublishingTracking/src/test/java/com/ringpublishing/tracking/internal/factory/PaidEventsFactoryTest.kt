@@ -273,14 +273,12 @@ class PaidEventsFactoryTest
         val sampleRealUserId = "real_001"
         val sampleUserJson = "{\"fake_user_id\":\"${sampleFakeUserId}\",\"real_user_id\":\"${sampleRealUserId}\"}"
         val event = eventsFactory.createMobileAppFakeUserIdReplacedEvent(
-            contentMetadata = sampleContentMetadata,
             temporaryUserId = sampleFakeUserId,
             realUserId = sampleRealUserId
         )
 
         Assert.assertTrue(event.parameters.isNotEmpty())
         Assert.assertEquals(event.parameters[PaidEventParam.EVENT_DETAILS.text], sampleUserJson)
-        Assert.assertEquals(event.parameters[EventParam.MARKED_AS_PAID_DATA.text], mockRdlcnEncodingPaid())
     }
 
     private fun mockRdlcnEncodingPaid() = encode(

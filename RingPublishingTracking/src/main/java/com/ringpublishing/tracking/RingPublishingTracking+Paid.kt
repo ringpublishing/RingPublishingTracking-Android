@@ -123,13 +123,13 @@ fun RingPublishingTracking.reportPurchaseEvent(
  * @see MetricsData
  */
 fun RingPublishingTracking.reportShowMetricLimitEvent(
-    contentMetadata: ContentMetadata?,
+    contentMetadata: ContentMetadata,
     supplierData: SupplierData,
     metricsData: MetricsData
 ) = reportEvent(paidEventsFactory.createShowMetricLimitEvent(contentMetadata, supplierData, metricsData))
 
 /**
- * Reports event of piano prediction of user likelihood to subscribe / cancel subscription
+ * Reports event of prediction of user likelihood to subscribe / cancel subscription
  *
  * @param [contentMetadata]: Content metadata
  * @param [supplierData]: Data regarding the supplier of sales
@@ -148,14 +148,12 @@ fun RingPublishingTracking.reportLikelihoodScoringEvent(
 /**
  * Reports event about changing user data from temporary to real
  *
- * @param [contentMetadata]: Content metadata
  * @param [temporaryUserId]: temporaryUserId
  * @param [realUserId]: new user id
  *
  * @see ContentMetadata
  */
 fun RingPublishingTracking.reportMobileAppTemporaryUserIdReplacedEvent(
-    contentMetadata: ContentMetadata?,
     temporaryUserId: String,
     realUserId: String
-) = reportEvent(paidEventsFactory.createMobileAppFakeUserIdReplacedEvent(contentMetadata, temporaryUserId, realUserId))
+) = reportEvent(paidEventsFactory.createMobileAppFakeUserIdReplacedEvent(temporaryUserId, realUserId))
