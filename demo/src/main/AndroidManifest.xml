@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.ringpublishing.tracking.demo">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
@@ -20,8 +20,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.Main">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,7 +30,8 @@
         </activity>
 
         <activity
-            android:name=".ArticleActivity"/>
+            android:name=".ArticleActivity"
+            android:theme="@style/AppTheme.Article" />
 
     </application>
 

@@ -6,10 +6,8 @@
 
 package com.ringpublishing.tracking.internal.keepalive
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.OnLifecycleEvent
 import com.google.gson.Gson
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.internal.EventsReporter
@@ -24,7 +22,7 @@ internal class KeepAliveReporter(
     screenSizeInfo: ScreenSizeInfo,
     private val lifecycleOwner: LifecycleOwner,
     gson: Gson
-) : KeepAliveSendTimerCallback, LifecycleObserver
+) : KeepAliveSendTimerCallback, DefaultLifecycleObserver
 {
 
 	private val timer = KeepAliveTimer(this)
@@ -176,39 +174,35 @@ internal class KeepAliveReporter(
 		}
 	}
 
-	@OnLifecycleEvent(Lifecycle.Event.ON_START)
-	fun onEnterForeground()
-	{
-		if (contentMetadata == null || isPaused || !isInBackground)
-		{
-			Logger.debug("KeepAliveReporter: onEnterForeground() ignored")
-			return
-		}
+    override fun onStart(owner: LifecycleOwner) {
+        if (contentMetadata == null || isPaused || !isInBackground)
+        {
+            Logger.debug("KeepAliveReporter: onEnterForeground() ignored")
+            return
+        }
 
-		isInBackground = false
+        isInBackground = false
 
-		Logger.debug("KeepAliveReporter: onEnterForeground()")
+        Logger.debug("KeepAliveReporter: onEnterForeground()")
 
-		timer.resumeBackground()
+        timer.resumeBackground()
 
-		takeMeasurements(KeepAliveMeasureType.DOCUMENT_ALIVE)
+        takeMeasurements(KeepAliveMeasureType.DOCUMENT_ALIVE)
 
-		timer.scheduleActivityTimer()
-		timer.scheduleSendTimer()
-	}
+        timer.scheduleActivityTimer()
+        timer.scheduleSendTimer()
+    }
 
-	@OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-	fun onEnterBackground()
-	{
-		if (contentMetadata == null || isPaused)
-		{
-			Logger.warn("KeepAliveReporter: onEnterBackground() ignored")
-			return
-		}
-		Logger.debug("KeepAliveReporter: onEnterBackground()")
+    override fun onStop(owner: LifecycleOwner) {
+        if (contentMetadata == null || isPaused)
+        {
+            Logger.warn("KeepAliveReporter: onEnterBackground() ignored")
+            return
+        }
+        Logger.debug("KeepAliveReporter: onEnterBackground()")
 
-		timer.pauseBackground()
-		takeMeasurements(KeepAliveMeasureType.DOCUMENT_INACTIVE)
-		isInBackground = true
-	}
+        timer.pauseBackground()
+        takeMeasurements(KeepAliveMeasureType.DOCUMENT_INACTIVE)
+        isInBackground = true
+    }
 }
