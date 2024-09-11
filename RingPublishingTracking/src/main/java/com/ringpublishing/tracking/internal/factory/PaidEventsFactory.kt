@@ -229,7 +229,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
     }
 
     private fun createPaidEvent(parameters: MutableMap<String, Any>) = Event(
-        analyticsSystemName = AnalyticsSystem.KROPKA_EVENTS.text,
+        analyticsSystemName = AnalyticsSystem.GENERIC.text,
         name = EventType.PAID.text,
         parameters = parameters
     )
