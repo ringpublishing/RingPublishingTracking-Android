@@ -76,7 +76,6 @@ class PaidController : ScreenController()
     )
 
     fun replaceFakeUser() = RingPublishingTracking.reportMobileAppTemporaryUserIdReplacedEvent(
-        contentMetadata = sampleContentMetadata,
         temporaryUserId = "fake_001",
         realUserId = "real_001"
     )

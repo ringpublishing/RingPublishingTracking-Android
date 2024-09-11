@@ -41,5 +41,5 @@ data class SupplierData(
  */
 enum class OfferDisplayMode(val text: String) {
     INLINE("inline"),
-    MODEL("modal"),
+    MODAL("modal"),
 }

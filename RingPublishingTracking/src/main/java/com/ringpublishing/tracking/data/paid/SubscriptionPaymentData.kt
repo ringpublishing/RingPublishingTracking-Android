@@ -30,6 +30,6 @@ data class SubscriptionPaymentData(
  * @param [text]: label
  */
 enum class PaymentMethod(val text: String) {
-    APP_STORE("app_store"),
+    GOOGLE_PLAY("google_play"),
     OTHER("other")
 }

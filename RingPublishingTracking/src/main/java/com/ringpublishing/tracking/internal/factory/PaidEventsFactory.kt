@@ -170,7 +170,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
         return createPaidEvent(parameters)
     }
 
-    fun createShowMetricLimitEvent(contentMetadata: ContentMetadata?, supplierData: SupplierData, metricsData: MetricsData): Event
+    fun createShowMetricLimitEvent(contentMetadata: ContentMetadata, supplierData: SupplierData, metricsData: MetricsData): Event
     {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "metric_limit"
@@ -180,11 +180,8 @@ internal class PaidEventsFactory(private val gson: Gson) {
             this[PaidEventParam.METRIC_LIMIT_NAME.text] = metricsData.metricLimitName
             this[PaidEventParam.FREE_PV_CNT.text] = metricsData.freePageViewCount
             this[PaidEventParam.FREE_PV_LIMIT.text] = metricsData.freePageViewLimit
-
-            contentMetadata?.let {
-                this[PaidEventParam.SOURCE_DX.text] = it.buildToDX()
-                this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = it.publicationId
-            }
+            this[PaidEventParam.SOURCE_DX.text] = contentMetadata.buildToDX()
+            this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = contentMetadata.publicationId
 
             createMarkedAsPaidParam(gson, contentMetadata)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
@@ -218,7 +215,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
         return createPaidEvent(parameters)
     }
 
-    fun createMobileAppFakeUserIdReplacedEvent(contentMetadata: ContentMetadata?, temporaryUserId: String, realUserId: String): Event
+    fun createMobileAppFakeUserIdReplacedEvent(temporaryUserId: String, realUserId: String): Event
     {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "mobile_app_fake_user_id_replaced"
@@ -226,14 +223,13 @@ internal class PaidEventsFactory(private val gson: Gson) {
             createUserIdJson(UserId(temporaryUserId, realUserId))?.let {
                 this[PaidEventParam.EVENT_DETAILS.text] = it
             }
-            createMarkedAsPaidParam(gson, contentMetadata)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
 
         return createPaidEvent(parameters)
     }
 
     private fun createPaidEvent(parameters: MutableMap<String, Any>) = Event(
-        analyticsSystemName = AnalyticsSystem.KROPKA_EVENTS.text,
+        analyticsSystemName = AnalyticsSystem.GENERIC.text,
         name = EventType.PAID.text,
         parameters = parameters
     )
