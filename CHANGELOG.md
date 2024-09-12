@@ -1,17 +1,3 @@
-1.4.3 Release notes (2024-09-12)
-=============================================================
-
-* Implemented paid events tracking
-* Changed user data tracking interface and added possibility to set if user is subscribed
-  * Added logout function
-  * Added updateSSO function
-  * Added updateActiveSubscriber function
-  * Changed updateUserData function
-
-### Changes
-
-* Update external libraries to latest versions
-
 1.4.2 Release notes (2023-12-29)
 =============================================================
 

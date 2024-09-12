@@ -34,8 +34,8 @@ val sampleOfferContextData = OfferContextData(
 )
 
 val sampleSubscriptionPaymentData = SubscriptionPaymentData(
-    subscriptionBasePrice = 100.0f,
-    subscriptionPromoPrice = 99.99f,
+    subscriptionBasePrice = 100.0F,
+    subscriptionPromoPrice = 99.99F,
     subscriptionPromoDuration = "1w",
     subscriptionPriceCurrency = "usd",
     paymentMethod = PaymentMethod.GOOGLE_PLAY
