@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <Button
+            android:id="@+id/showOffer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_show_offer"
+            app:layout_constraintEnd_toStartOf="@+id/showOfferTeaser"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/showOfferTeaser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_show_offer_teaser"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/showOffer"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/clickButton"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/button_click_button"
+            app:layout_constraintEnd_toStartOf="@+id/purchase"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/showOffer" />
+
+        <Button
+            android:id="@+id/purchase"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/button_purchase"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/clickButton"
+            app:layout_constraintTop_toBottomOf="@+id/showOfferTeaser" />
+
+
+        <Button
+            android:id="@+id/showMetricLimit"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/button_show_metric_limit"
+            app:layout_constraintEnd_toStartOf="@+id/likelihoodScoring"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clickButton" />
+
+        <Button
+            android:id="@+id/likelihoodScoring"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/button_likelihood_scoring"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/showMetricLimit"
+            app:layout_constraintTop_toBottomOf="@+id/purchase" />
+
+        <Button
+            android:id="@+id/fakeUserReplaced"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/button_fake_user_replaced"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/showMetricLimit" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

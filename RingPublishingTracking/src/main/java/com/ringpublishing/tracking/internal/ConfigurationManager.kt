@@ -72,12 +72,18 @@ internal class ConfigurationManager
 
 	fun isSendEventsBlocked() = operationMode.optOutEnabled || operationMode.debugEnabled
 
-	fun updateUserData(ssoSystemName: String?, userId: String?, userEmail: String?)
-	{
-		userData.ssoName = ssoSystemName
-		userData.userId = userId
-		userEmail?.let { userData.emailMd5 = it.trim().lowercase().replace("[\n\r]", "").md5() }
-	}
+    fun updateSsoSystemName(ssoSystemName: String?) {
+        userData.ssoName = ssoSystemName
+    }
+
+    fun updateIsActiveSubscriber(isActiveSubscriber: Boolean?) {
+        userData.isActiveSubscriber = isActiveSubscriber
+    }
+
+    fun updateUserData(userId: String?, userEmail: String?) {
+        userData.userId = userId
+        userEmail?.let { userData.emailMd5 = it.trim().lowercase().replace("[\n\r]", "").md5() }
+    }
 
 	fun updateAdvertisementArea(currentArea: String?)
 	{

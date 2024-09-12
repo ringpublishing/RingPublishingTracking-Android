@@ -12,9 +12,12 @@ import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.ContentPageViewSource
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.demo.data.ScreenTrackingData
+import com.ringpublishing.tracking.logout
 import com.ringpublishing.tracking.reportAureusOffersImpressions
 import com.ringpublishing.tracking.reportClick
 import com.ringpublishing.tracking.reportUserAction
+import com.ringpublishing.tracking.updateActiveSubscriber
+import com.ringpublishing.tracking.updateSSO
 import com.ringpublishing.tracking.updateUserData
 
 class ActionsController : ScreenController()
@@ -28,7 +31,9 @@ class ActionsController : ScreenController()
 	fun actionLogin(sender: View)
 	{
 		// When user log in we should update tracking module with his account information
-		RingPublishingTracking.updateUserData("RingPublishingTrackingSSO", "12345", "ssoUserEmail@example.com")
+		RingPublishingTracking.updateUserData("12345", "ssoUserEmail@example.com")
+		RingPublishingTracking.updateSSO("RingPublishingTrackingSSO")
+		RingPublishingTracking.updateActiveSubscriber(true)
 
 		// Each non content button click we can report using 'reportClick' method
 		reportButtonClickEvent(sender)
@@ -37,7 +42,7 @@ class ActionsController : ScreenController()
 	fun actionLogout(sender: View)
 	{
 		// When user log out from the application we should update tracking module
-		RingPublishingTracking.updateUserData("RingPublishingTrackingSSO", null, null)
+		RingPublishingTracking.logout()
 
 		// Each non content button click we can report using 'reportClick' method
 		reportButtonClickEvent(sender)

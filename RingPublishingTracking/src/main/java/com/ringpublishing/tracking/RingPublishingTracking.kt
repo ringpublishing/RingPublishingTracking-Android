@@ -23,6 +23,7 @@ import com.ringpublishing.tracking.internal.di.provideEventsService
 import com.ringpublishing.tracking.internal.di.provideGson
 import com.ringpublishing.tracking.internal.di.provideScreenSizeInfo
 import com.ringpublishing.tracking.internal.factory.EventsFactory
+import com.ringpublishing.tracking.internal.factory.PaidEventsFactory
 import com.ringpublishing.tracking.internal.factory.VideoEventsFactory
 import com.ringpublishing.tracking.internal.keepalive.KeepAliveDataSource
 import com.ringpublishing.tracking.internal.keepalive.KeepAliveReporter
@@ -89,7 +90,7 @@ object RingPublishingTracking : KeepAliveDataSource {
         configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
         Component.initComponent(application, configurationManager)
         eventsReporter = EventsReporter(Component.provideEventsService(configurationManager), Component.provideEventDecorator(configurationManager))
-        keepAliveReporter = KeepAliveReporter(eventsReporter, Component.provideScreenSizeInfo(), ProcessLifecycleOwner.get())
+        keepAliveReporter = KeepAliveReporter(eventsReporter, Component.provideScreenSizeInfo(), ProcessLifecycleOwner.get(), Component.provideGson())
         delegate = WeakReference(ringPublishingTrackingDelegate)
     }
 
@@ -161,6 +162,7 @@ object RingPublishingTracking : KeepAliveDataSource {
     internal lateinit var keepAliveReporter: KeepAliveReporter
     internal val eventsFactory = EventsFactory(Component.provideGson())
     internal val videoEventsFactory = VideoEventsFactory(Component.provideGson())
+    internal val paidEventsFactory = PaidEventsFactory(Component.provideGson())
     var delegate: WeakReference<RingPublishingTrackingDelegate>? = null
     internal var keepAliveDelegate: WeakReference<RingPublishingTrackingKeepAliveDataSource>? = null
 }
