@@ -17,8 +17,8 @@ package com.ringpublishing.tracking.data.paid
  * @see PaymentMethod
  */
 data class SubscriptionPaymentData(
-    val subscriptionBasePrice: String,
-    val subscriptionPromoPrice: String?,
+    val subscriptionBasePrice: Float,
+    val subscriptionPromoPrice: Float?,
     val subscriptionPromoDuration: String?,
     val subscriptionPriceCurrency: String,
     val paymentMethod: PaymentMethod,

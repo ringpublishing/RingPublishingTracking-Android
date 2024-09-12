@@ -51,8 +51,8 @@ class PaidEventsFactoryTest
     )
 
     private val sampleSubscriptionPaymentData = SubscriptionPaymentData(
-        subscriptionBasePrice = "100",
-        subscriptionPromoPrice = "99.99",
+        subscriptionBasePrice = 100.0f,
+        subscriptionPromoPrice = 99.99f,
         subscriptionPromoDuration = "1w",
         subscriptionPriceCurrency = "usd",
         paymentMethod = PaymentMethod.GOOGLE_PLAY
@@ -191,7 +191,8 @@ class PaidEventsFactoryTest
         val sampleTermId = "TMEVT00KVHV0"
         val sampleFakeUserId = "fake_001"
         val sampleTermConversionId = "TCCJTS9X87VB"
-        val sampleFakeUserJson = "{\"fake_user_id\":\"${sampleFakeUserId}\"}"
+        val sampleFakePurchaseJson =
+            "{\"subscription_base_price\":100.0,\"subscription_promo_price\":99.99,\"subscription_promo_duration\":\"1w\",\"subscription_price_currency\":\"usd\",\"fake_user_id\":\"fake_001\"}"
         val event = eventsFactory.createPurchaseEvent(
             contentMetadata = sampleContentMetadata,
             offerData = sampleOfferData,
@@ -216,7 +217,7 @@ class PaidEventsFactoryTest
         Assert.assertEquals(event.parameters[PaidEventParam.TPCC.text], sampleTpcc)
         Assert.assertEquals(event.parameters[PaidEventParam.TERM_ID.text], sampleTermId)
         Assert.assertEquals(event.parameters[PaidEventParam.TERM_CONVERSION_ID.text], sampleTermConversionId)
-        Assert.assertEquals(event.parameters[PaidEventParam.EVENT_DETAILS.text], sampleFakeUserJson)
+        Assert.assertEquals(event.parameters[PaidEventParam.EVENT_DETAILS.text], sampleFakePurchaseJson)
         Assert.assertEquals(event.parameters[EventParam.MARKED_AS_PAID_DATA.text], mockRdlcnEncodingPaid())
     }
 

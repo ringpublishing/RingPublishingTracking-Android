@@ -254,8 +254,8 @@ internal class PaidEventsFactory(private val gson: Gson) {
     )
 
     private class PurchaseEventDetailsData(
-        @SerializedName("subscription_base_price") val subscriptionBasePrice: String,
-        @SerializedName("subscription_promo_price") val subscriptionPromoPrice: String? = null,
+        @SerializedName("subscription_base_price") val subscriptionBasePrice: Float,
+        @SerializedName("subscription_promo_price") val subscriptionPromoPrice: Float? = null,
         @SerializedName("subscription_promo_duration") val subscriptionPromoDuration: String? = null,
         @SerializedName("subscription_price_currency") val subscriptionPriceCurrency: String? = null,
         @SerializedName("fake_user_id") val fakeUserId: String? = null,
