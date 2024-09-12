@@ -141,8 +141,6 @@ internal class PaidEventsFactory(private val gson: Gson) {
             this[PaidEventParam.TERM_ID.text] = termId
             this[PaidEventParam.TERM_CONVERSION_ID.text] = termConversionId
             this[PaidEventParam.PAYMENT_METHOD.text] = subscriptionPaymentData.paymentMethod.text
-            this[PaidEventParam.SUBSCRIPTION_BASE_PRICE.text] = subscriptionPaymentData.subscriptionBasePrice
-            this[PaidEventParam.SUBSCRIPTION_PRICE_CURRENCY.text] = subscriptionPaymentData.subscriptionPriceCurrency
 
             contentMetadata?.let {
                 this[PaidEventParam.SOURCE_DX.text] = it.buildToDX()
@@ -152,16 +150,20 @@ internal class PaidEventsFactory(private val gson: Gson) {
             offerData.paywallVariantId?.let {
                 this[PaidEventParam.PAYWALL_VARIANT_ID.text] = it
             }
+
             targetPromotionCampaignCode?.let {
                 this[PaidEventParam.TPCC.text] = it
             }
-            subscriptionPaymentData.subscriptionPromoPrice?.let {
-                this[PaidEventParam.SUBSCRIPTION_PROMO_PRICE.text] = it
-            }
-            subscriptionPaymentData.subscriptionPromoPriceDuration?.let {
-                this[PaidEventParam.SUBSCRIPTION_PROMO_PRICE_DURATION.text] = it
-            }
-            createUserIdJson(UserId(fakeUserId = fakeUserId))?.let {
+
+            createPurchaseEventDetailsData(
+                PurchaseEventDetailsData(
+                    subscriptionBasePrice = subscriptionPaymentData.subscriptionBasePrice,
+                    subscriptionPromoPrice = subscriptionPaymentData.subscriptionPromoPrice,
+                    subscriptionPromoDuration = subscriptionPaymentData.subscriptionPromoDuration,
+                    subscriptionPriceCurrency = subscriptionPaymentData.subscriptionPriceCurrency,
+                    fakeUserId = fakeUserId
+                )
+            )?.let {
                 this[PaidEventParam.EVENT_DETAILS.text] = it
             }
             createMarkedAsPaidParam(gson, contentMetadata)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
@@ -220,7 +222,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "mobile_app_fake_user_id_replaced"
             this[PaidEventParam.EVENT_ACTION.text] = "mobileAppFakeUserIdReplaced"
-            createUserIdJson(UserId(temporaryUserId, realUserId))?.let {
+            createUserIdEventDetailsDataJson(UserIdEventDetailsData(temporaryUserId, realUserId))?.let {
                 this[PaidEventParam.EVENT_DETAILS.text] = it
             }
         }
@@ -234,16 +236,28 @@ internal class PaidEventsFactory(private val gson: Gson) {
         parameters = parameters
     )
 
-    private fun createUserIdJson(userId: UserId) = runCatching {
-        gson.toJson(userId)
+    private fun createUserIdEventDetailsDataJson(data: UserIdEventDetailsData) = runCatching {
+        gson.toJson(data)
+    }.getOrNull()
+
+    private fun createPurchaseEventDetailsData(data: PurchaseEventDetailsData) = runCatching {
+        gson.toJson(data)
     }.getOrNull()
 
     private fun createLikelihoodDataJson(likelihoodData: LikelihoodData) = runCatching {
         gson.toJson(likelihoodData)
     }.getOrNull()
 
-    private class UserId(
+    private class UserIdEventDetailsData(
         @SerializedName("fake_user_id") val fakeUserId: String? = null,
         @SerializedName("real_user_id") val realUserId: String? = null
+    )
+
+    private class PurchaseEventDetailsData(
+        @SerializedName("subscription_base_price") val subscriptionBasePrice: Float,
+        @SerializedName("subscription_promo_price") val subscriptionPromoPrice: Float? = null,
+        @SerializedName("subscription_promo_duration") val subscriptionPromoDuration: String? = null,
+        @SerializedName("subscription_price_currency") val subscriptionPriceCurrency: String? = null,
+        @SerializedName("fake_user_id") val fakeUserId: String? = null,
     )
 }
