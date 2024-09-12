@@ -192,7 +192,8 @@ class PaidEventsFactoryTest
         val sampleFakeUserId = "fake_001"
         val sampleTermConversionId = "TCCJTS9X87VB"
         val sampleFakePurchaseJson =
-            "{\"subscription_base_price\":100.0,\"subscription_promo_price\":99.99,\"subscription_promo_duration\":\"1W\",\"subscription_price_currency\":\"usd\",\"fake_user_id\":\"fake_001\"}"
+            "{\"subscription_base_price\":100.0,\"subscription_promo_price\":99.99,\"subscription_promo_duration\":\"1W\",\"subscription_price_currency\":\"usd\"," +
+                    "\"fake_user_id\":\"fake_001\"}"
         val event = eventsFactory.createPurchaseEvent(
             contentMetadata = sampleContentMetadata,
             offerData = sampleOfferData,
