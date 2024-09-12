@@ -53,7 +53,7 @@ class PaidEventsFactoryTest
     private val sampleSubscriptionPaymentData = SubscriptionPaymentData(
         subscriptionBasePrice = 100.0F,
         subscriptionPromoPrice = 99.99F,
-        subscriptionPromoDuration = "1w",
+        subscriptionPromoDuration = "1W",
         subscriptionPriceCurrency = "usd",
         paymentMethod = PaymentMethod.GOOGLE_PLAY
     )
@@ -192,7 +192,7 @@ class PaidEventsFactoryTest
         val sampleFakeUserId = "fake_001"
         val sampleTermConversionId = "TCCJTS9X87VB"
         val sampleFakePurchaseJson =
-            "{\"subscription_base_price\":100.0,\"subscription_promo_price\":99.99,\"subscription_promo_duration\":\"1w\",\"subscription_price_currency\":\"usd\",\"fake_user_id\":\"fake_001\"}"
+            "{\"subscription_base_price\":100.0,\"subscription_promo_price\":99.99,\"subscription_promo_duration\":\"1W\",\"subscription_price_currency\":\"usd\",\"fake_user_id\":\"fake_001\"}"
         val event = eventsFactory.createPurchaseEvent(
             contentMetadata = sampleContentMetadata,
             offerData = sampleOfferData,
