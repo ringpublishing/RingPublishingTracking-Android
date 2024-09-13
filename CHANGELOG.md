@@ -1,3 +1,26 @@
+1.5.0 Release notes (2024-09-12)
+=============================================================
+
+* Implemented paid events tracking
+* Updated user data tracking with paid data
+
+### Changes
+
+* Changed user data tracking interface and added possibility to set if user is subscribed
+    * Added logout function
+    * Added updateSSO function
+    * Added updateActiveSubscriber function
+    * Changed updateUserData function
+
+* Added paid events tracking functions:
+    * reportShowOfferEvent
+    * reportShowOfferTeaserEvent
+    * reportPurchaseClickButtonEvent
+    * reportPurchaseEvent
+    * reportShowMetricLimitEvent
+    * reportLikelihoodScoringEvent
+    * reportMobileAppTemporaryUserIdReplacedEvent
+
 1.4.2 Release notes (2023-12-29)
 =============================================================
 
