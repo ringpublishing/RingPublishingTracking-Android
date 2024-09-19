@@ -174,7 +174,8 @@ internal class KeepAliveReporter(
 		}
 	}
 
-    override fun onStart(owner: LifecycleOwner) {
+    override fun onStart(owner: LifecycleOwner)
+    {
         if (contentMetadata == null || isPaused || !isInBackground)
         {
             Logger.debug("KeepAliveReporter: onEnterForeground() ignored")
@@ -193,7 +194,8 @@ internal class KeepAliveReporter(
         timer.scheduleSendTimer()
     }
 
-    override fun onStop(owner: LifecycleOwner) {
+    override fun onStop(owner: LifecycleOwner)
+    {
         if (contentMetadata == null || isPaused)
         {
             Logger.warn("KeepAliveReporter: onEnterBackground() ignored")

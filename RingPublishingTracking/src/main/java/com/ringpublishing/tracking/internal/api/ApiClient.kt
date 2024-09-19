@@ -27,6 +27,7 @@ internal class ApiClient(private val apiKey: String, private val apiUrl: URL, pr
 		.addConverterFactory(
 			GsonConverterFactory.create(
 				GsonBuilder()
+                    .disableHtmlEscaping()
 					.registerTypeAdapter(IdsMap::class.java, IdsMapDeserializer())
 					.create()
 			)
