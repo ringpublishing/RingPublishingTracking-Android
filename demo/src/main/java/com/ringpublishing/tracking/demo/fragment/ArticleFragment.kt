@@ -89,7 +89,7 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
     }
 
     private fun updateUI() {
-        articleTitle?.text = String.format(getString(R.string.list_is_from_push), isFromPush, data?.first)
+        articleTitle?.text = String.format(getString(R.string.list_is_from_push), isFromPush.toString(), data?.first)
         articleText?.text = data?.second
     }
 
