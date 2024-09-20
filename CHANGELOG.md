@@ -1,3 +1,19 @@
+1.5.1 Release notes (2024-09-12)
+=============================================================
+
+* Added SDK 35 support
+
+### Changes
+
+* Bumped Gradle version to 8.7
+* Bumped Gradle Plugin version to 8.6.0
+* Bumped Target SDK version to 35
+* Bumped Compile SDK version to 35
+* Bumped Build Tools version to 35.0.0
+* Updated demo application views and styles
+* Disabled html escaping during parsing requests
+
+
 1.5.0 Release notes (2024-09-12)
 =============================================================
 
