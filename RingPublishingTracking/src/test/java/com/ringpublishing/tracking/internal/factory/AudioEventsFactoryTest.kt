@@ -128,14 +128,13 @@ class AudioEventsFactoryTest {
         val eventsFactory = AudioEventsFactory(gson)
         val audioEvent = AudioEvent.START
         val event = eventsFactory.createAudioEvent(audioEvent, sampleAudioMetadata, sampleAudioState)
-        val sampleContentId = "${sampleAudioMetadata.contentId}.${sampleAudioMetadata.contentSeriesId}"
-        val sampleData = "audio:${sampleContentId},${sampleAudioMetadata.audioStreamFormat.text},360"
+        val sampleData = "audio:${sampleAudioMetadata.contentId},${sampleAudioMetadata.contentId},${sampleAudioMetadata.audioStreamFormat.text},360"
         val sampleContextJson = "{\"context\":{\"visible\":\"background\",\"audio\":{\"output\":\"bluetooth\"}}}"
         val sampleContextJsonEncoded = Base64.encodeToString(sampleContextJson.toByteArray(), Base64.NO_WRAP)
 
         Assert.assertEquals(event.parameters[AudioEventParam.SELECTED_ELEMENT_NAME.text], audioEvent.text)
         Assert.assertEquals(event.parameters[AudioEventParam.EVENT_TYPE.text], EventType.VIDEO.text)
-        Assert.assertEquals(event.parameters[AudioEventParam.CONTENT_ID.text], sampleContentId)
+        Assert.assertEquals(event.parameters[AudioEventParam.CONTENT_ID.text], sampleAudioMetadata.contentId)
         Assert.assertEquals(event.parameters[AudioEventParam.DURATION.text], sampleAudioMetadata.audioDuration)
         Assert.assertEquals(event.parameters[AudioEventParam.CURRENT_TIME.text], sampleAudioState.currentTime)
         Assert.assertEquals(event.parameters[AudioEventParam.AUDIO_PARAMETERS.text], sampleData)

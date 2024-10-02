@@ -29,7 +29,7 @@ internal class AudioEventsFactory(private val gson: Gson) {
         val parameters = mutableMapOf<String, Any>().apply {
             this[AudioEventParam.SELECTED_ELEMENT_NAME.text] = audioEvent.text
             this[AudioEventParam.EVENT_TYPE.text] = EventType.VIDEO.text
-            this[AudioEventParam.CONTENT_ID.text] = audioMetadata.getContentIdParam()
+            this[AudioEventParam.CONTENT_ID.text] = audioMetadata.contentId
             this[AudioEventParam.CURRENT_TIME.text] = audioState.currentTime
             this[AudioEventParam.AUDIO_PARAMETERS.text] = createAudioEventVCParameter(audioMetadata, audioState)
             this[AudioEventParam.TIMESTAMP.text] = getAndUpdateSessionTimestamp(audioMetadata.contentId, audioEvent)
@@ -65,7 +65,7 @@ internal class AudioEventsFactory(private val gson: Gson) {
      * Example: "audio:23345.275928614,23345.275928614,mp3,320"
      */
     private fun createAudioEventVCParameter(metadata: AudioMetadata, audioState: AudioState) =
-        "audio:${metadata.getContentIdParam()},${metadata.getContentIdParam()},${metadata.audioStreamFormat.text},${audioState.currentBitrate}"
+        "audio:${metadata.contentId},${metadata.contentId},${metadata.audioStreamFormat.text},${audioState.currentBitrate}"
 
     /**
      * Retrieves timestamp string from sessionTimestamps for given [contentId].
@@ -103,13 +103,6 @@ internal class AudioEventsFactory(private val gson: Gson) {
         ).let { json ->
             Base64.encodeToString(json.toByteArray(), Base64.NO_WRAP)
         }
-
-    /**
-     * Creates proper contentId param depending on contentId and contentSeriesId values
-     */
-    private fun AudioMetadata.getContentIdParam(): String {
-        return if (contentSeriesId.isNullOrEmpty()) contentId else "$contentId.$contentSeriesId"
-    }
 
     /**
      * Creates json string based on [AudioEventData] class structure
