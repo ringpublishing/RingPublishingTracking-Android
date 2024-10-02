@@ -6,7 +6,7 @@ internal enum class AudioEventParam(val text: String) {
     CONTENT_ID("PMU"),
     DURATION("VT"),
     CURRENT_TIME("VP"),
-    DATA("VC"),
+    AUDIO_PARAMETERS("VC"),
     TIMESTAMP("RR"),
     COUNTER("VEN"),
     FORMAT("VS"),

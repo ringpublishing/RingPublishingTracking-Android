@@ -11,7 +11,6 @@ import com.ringpublishing.tracking.data.audio.AudioPlayerVisibilityState
 import com.ringpublishing.tracking.data.audio.AudioState
 import com.ringpublishing.tracking.internal.audio.AudioEventParam
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
-import kotlin.math.roundToInt
 
 private const val START_MODE = "normal"
 
@@ -32,7 +31,7 @@ internal class AudioEventsFactory(private val gson: Gson) {
             this[AudioEventParam.EVENT_TYPE.text] = EventType.VIDEO.text
             this[AudioEventParam.CONTENT_ID.text] = audioMetadata.getContentIdParam()
             this[AudioEventParam.CURRENT_TIME.text] = audioState.currentTime
-            this[AudioEventParam.DATA.text] = createAudioEventVCParameter(audioMetadata, audioState)
+            this[AudioEventParam.AUDIO_PARAMETERS.text] = createAudioEventVCParameter(audioMetadata, audioState)
             this[AudioEventParam.TIMESTAMP.text] = getAndUpdateSessionTimestamp(audioMetadata.contentId, audioEvent)
             this[AudioEventParam.COUNTER.text] = getAndUpdateSessionCounter(audioMetadata.contentId, audioEvent)
             this[AudioEventParam.FORMAT.text] = audioMetadata.audioStreamFormat.text
@@ -63,16 +62,10 @@ internal class AudioEventsFactory(private val gson: Gson) {
     /**
      * Creates VC audio event parameter
      * Format: prefix:publicationId,type,bitrate
-     * Example: "audio:2334518.275928614,mp3,320"
+     * Example: "audio:23345.275928614,23345.275928614,mp3,320"
      */
-    private fun createAudioEventVCParameter(metadata: AudioMetadata, audioState: AudioState): String {
-        val bitrate = audioState
-            .currentBitrate
-            .toFloat()
-            .roundToInt()
-
-        return "audio:${metadata.getContentIdParam()},${metadata.audioStreamFormat.text},$bitrate"
-    }
+    private fun createAudioEventVCParameter(metadata: AudioMetadata, audioState: AudioState) =
+        "audio:${metadata.getContentIdParam()},${metadata.getContentIdParam()},${metadata.audioStreamFormat.text},${audioState.currentBitrate}"
 
     /**
      * Retrieves timestamp string from sessionTimestamps for given [contentId].

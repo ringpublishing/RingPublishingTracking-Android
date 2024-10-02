@@ -44,7 +44,7 @@ class AudioEventsFactoryTest {
 
     private val sampleAudioState = AudioState(
         currentTime = (System.currentTimeMillis() / 1000).toInt(),
-        currentBitrate = "360",
+        currentBitrate = 360,
         visibilityState = AudioPlayerVisibilityState.BACKGROUND,
         audioOutput = AudioOutput.BLUETOOTH
     )
@@ -138,7 +138,7 @@ class AudioEventsFactoryTest {
         Assert.assertEquals(event.parameters[AudioEventParam.CONTENT_ID.text], sampleContentId)
         Assert.assertEquals(event.parameters[AudioEventParam.DURATION.text], sampleAudioMetadata.audioDuration)
         Assert.assertEquals(event.parameters[AudioEventParam.CURRENT_TIME.text], sampleAudioState.currentTime)
-        Assert.assertEquals(event.parameters[AudioEventParam.DATA.text], sampleData)
+        Assert.assertEquals(event.parameters[AudioEventParam.AUDIO_PARAMETERS.text], sampleData)
         Assert.assertEquals(event.parameters[AudioEventParam.COUNTER.text], 0)
         Assert.assertEquals(event.parameters[AudioEventParam.FORMAT.text], sampleAudioMetadata.audioStreamFormat.text)
         Assert.assertEquals(event.parameters[AudioEventParam.START_MODE.text], "normal")

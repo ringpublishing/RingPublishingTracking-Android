@@ -28,7 +28,7 @@ val sampleAudioMetadata = AudioMetadata(
 
 val sampleAudioState = AudioState(
     currentTime = (System.currentTimeMillis() / 1000).toInt(),
-    currentBitrate = "360",
+    currentBitrate = 360,
     visibilityState = AudioPlayerVisibilityState.BACKGROUND,
     audioOutput = AudioOutput.BLUETOOTH
 )

@@ -9,7 +9,7 @@ package com.ringpublishing.tracking.data.audio
  */
 data class AudioState(
     val currentTime: Int,
-    val currentBitrate: String,
+    val currentBitrate: Int,
     val visibilityState: AudioPlayerVisibilityState,
     val audioOutput: AudioOutput
 )
