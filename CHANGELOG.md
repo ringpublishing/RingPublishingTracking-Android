@@ -1,3 +1,20 @@
+1.6.0 Release notes (2024-10-02)
+=============================================================
+
+Improvements to the 'RingPublishingTracking' module.
+
+### Features
+
+* Added possibility of reporting audio events through 'reportAudioEvent' method  in 'RingPublishingTracking'
+* Added classes used to describe reported video event:
+    - AudioState class
+    - AudioMetadata class
+    - AudioEvent enum class
+    - AudioContentCategory enum class
+    - AudioOutput enum class
+    - AudioStreamFormat enum class
+    - AudioPlayerVisibilityState enum class
+
 1.5.1 Release notes (2024-09-12)
 =============================================================
 
