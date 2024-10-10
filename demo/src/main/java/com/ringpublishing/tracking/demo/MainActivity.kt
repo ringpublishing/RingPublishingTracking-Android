@@ -11,6 +11,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayout
 import com.ringpublishing.tracking.demo.adapter.MainPagerAdapter
 import com.ringpublishing.tracking.demo.fragment.ActionsFragment
+import com.ringpublishing.tracking.demo.fragment.AudioActionsFragment
 import com.ringpublishing.tracking.demo.fragment.ListArticlesFragment
 import com.ringpublishing.tracking.demo.fragment.NoContentFragment
 import com.ringpublishing.tracking.demo.fragment.PaidFragment
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity()
 			addFragment("ARTICLES", ListArticlesFragment())
 			addFragment("ACTIONS", ActionsFragment())
             addFragment("VIDEO ACTIONS", VideoActionsFragment())
+            addFragment("AUDIO ACTIONS", AudioActionsFragment())
             addFragment("WEBVIEW", NoContentFragment())
             addFragment("PAID", PaidFragment())
 		}

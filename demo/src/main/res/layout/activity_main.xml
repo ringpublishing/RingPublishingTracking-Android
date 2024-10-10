@@ -25,7 +25,7 @@
             android:background="#0F9D58"
             app:tabIndicatorColor="#FFF"
             app:tabIndicatorHeight="3dp"
-            app:tabMode="fixed" />
+            app:tabMode="scrollable" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
