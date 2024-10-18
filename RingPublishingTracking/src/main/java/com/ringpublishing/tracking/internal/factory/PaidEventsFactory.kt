@@ -35,7 +35,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
 
             contentMetadata?.let {
                 this[PaidEventParam.SOURCE_DX.text] = it.buildToDX()
-                this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = it.publicationId
+                this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = it.contentId
             }
 
             offerData.paywallVariantId?.let {
@@ -66,7 +66,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
 
             contentMetadata?.let {
                 this[PaidEventParam.SOURCE_DX.text] = it.buildToDX()
-                this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = it.publicationId
+                this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = it.contentId
             }
 
             offerData.paywallVariantId?.let {
@@ -104,7 +104,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
 
             contentMetadata?.let {
                 this[PaidEventParam.SOURCE_DX.text] = it.buildToDX()
-                this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = it.publicationId
+                this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = it.contentId
             }
 
             offerData.paywallVariantId?.let {
@@ -144,7 +144,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
 
             contentMetadata?.let {
                 this[PaidEventParam.SOURCE_DX.text] = it.buildToDX()
-                this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = it.publicationId
+                this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = it.contentId
             }
 
             offerData.paywallVariantId?.let {
@@ -183,7 +183,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
             this[PaidEventParam.FREE_PV_CNT.text] = metricsData.freePageViewCount
             this[PaidEventParam.FREE_PV_LIMIT.text] = metricsData.freePageViewLimit
             this[PaidEventParam.SOURCE_DX.text] = contentMetadata.buildToDX()
-            this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = contentMetadata.publicationId
+            this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = contentMetadata.contentId
 
             createMarkedAsPaidParam(gson, contentMetadata)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
@@ -205,7 +205,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
 
             contentMetadata?.let {
                 this[PaidEventParam.SOURCE_DX.text] = it.buildToDX()
-                this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = it.publicationId
+                this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = it.contentId
             }
 
             createLikelihoodDataJson(likelihoodData)?.let {
