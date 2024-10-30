@@ -161,7 +161,8 @@ internal class PaidEventsFactory(private val gson: Gson) {
                     subscriptionPromoPrice = subscriptionPaymentData.subscriptionPromoPrice,
                     subscriptionPromoDuration = subscriptionPaymentData.subscriptionPromoDuration,
                     subscriptionPriceCurrency = subscriptionPaymentData.subscriptionPriceCurrency,
-                    fakeUserId = fakeUserId
+                    fakeUserId = fakeUserId,
+                    mobileOfferId = offerData.mobileOfferId
                 )
             )?.let {
                 this[PaidEventParam.EVENT_DETAILS.text] = it
@@ -259,5 +260,6 @@ internal class PaidEventsFactory(private val gson: Gson) {
         @SerializedName("subscription_promo_duration") val subscriptionPromoDuration: String? = null,
         @SerializedName("subscription_price_currency") val subscriptionPriceCurrency: String? = null,
         @SerializedName("fake_user_id") val fakeUserId: String? = null,
+        @SerializedName("mobile_offer_id") val mobileOfferId: String? = null,
     )
 }

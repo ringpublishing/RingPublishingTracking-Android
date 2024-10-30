@@ -25,7 +25,8 @@ val sampleOfferData = OfferData(
     supplierData = sampleSupplierData,
     paywallTemplateId = "OTT8ICJL3LWX",
     paywallVariantId = "OTVAEW37T5NG3",
-    displayMode = OfferDisplayMode.INLINE
+    displayMode = OfferDisplayMode.INLINE,
+    "standard-promo"
 )
 
 val sampleOfferContextData = OfferContextData(
