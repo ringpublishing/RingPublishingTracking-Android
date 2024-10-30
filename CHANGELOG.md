@@ -1,3 +1,11 @@
+1.6.2 Release notes (2024-10-29)
+================================
+
+### Changes
+
+* Add PaidEventParam with 'mobile_offer_id' from offerData used in PurchaseEvent
+
+
 1.6.1 Release notes (2024-10-18)
 ================================
 
