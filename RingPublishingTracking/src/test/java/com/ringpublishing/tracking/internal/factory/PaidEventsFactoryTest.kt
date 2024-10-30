@@ -6,7 +6,6 @@
 package com.ringpublishing.tracking.com.ringpublishing.tracking.internal.factory
 
 import android.util.Base64
-import android.util.Log
 import com.google.gson.GsonBuilder
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.paid.LikelihoodData
