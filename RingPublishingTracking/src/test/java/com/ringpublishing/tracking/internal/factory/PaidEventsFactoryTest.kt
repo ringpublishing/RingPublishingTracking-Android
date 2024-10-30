@@ -6,6 +6,7 @@
 package com.ringpublishing.tracking.com.ringpublishing.tracking.internal.factory
 
 import android.util.Base64
+import android.util.Log
 import com.google.gson.GsonBuilder
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.paid.LikelihoodData
@@ -42,7 +43,8 @@ class PaidEventsFactoryTest
         supplierData = sampleSupplierData,
         paywallTemplateId = "OTT8ICJL3LWX",
         paywallVariantId = "OTVAEW37T5NG3",
-        displayMode = OfferDisplayMode.INLINE
+        displayMode = OfferDisplayMode.INLINE,
+        mobileOfferId = "standard-promo"
     )
 
     private val sampleOfferContextData = OfferContextData(
@@ -191,9 +193,9 @@ class PaidEventsFactoryTest
         val sampleTermId = "TMEVT00KVHV0"
         val sampleFakeUserId = "fake_001"
         val sampleTermConversionId = "TCCJTS9X87VB"
-        val sampleFakePurchaseJson =
+        val sampleEventDetailsData =
             "{\"subscription_base_price\":100.0,\"subscription_promo_price\":99.99,\"subscription_promo_duration\":\"1W\",\"subscription_price_currency\":\"usd\"," +
-                    "\"fake_user_id\":\"fake_001\"}"
+                    "\"fake_user_id\":\"fake_001\",\"mobile_offer_id\":\"standard-promo\"}"
         val event = eventsFactory.createPurchaseEvent(
             contentMetadata = sampleContentMetadata,
             offerData = sampleOfferData,
@@ -218,7 +220,7 @@ class PaidEventsFactoryTest
         Assert.assertEquals(event.parameters[PaidEventParam.TPCC.text], sampleTpcc)
         Assert.assertEquals(event.parameters[PaidEventParam.TERM_ID.text], sampleTermId)
         Assert.assertEquals(event.parameters[PaidEventParam.TERM_CONVERSION_ID.text], sampleTermConversionId)
-        Assert.assertEquals(event.parameters[PaidEventParam.EVENT_DETAILS.text], sampleFakePurchaseJson)
+        Assert.assertEquals(event.parameters[PaidEventParam.EVENT_DETAILS.text], sampleEventDetailsData)
         Assert.assertEquals(event.parameters[EventParam.MARKED_AS_PAID_DATA.text], mockRdlcnEncodingPaid())
     }
 

@@ -12,6 +12,7 @@ package com.ringpublishing.tracking.data.paid
  * @param [paywallTemplateId]: offer template id
  * @param [paywallVariantId]: offer template variant id
  * @param [displayMode]: offer display mode (inline or modal)
+ * @param [mobileOfferId]: offer id from subscription base plan
  *
  * @see SupplierData
  * @see OfferDisplayMode
@@ -21,6 +22,7 @@ data class OfferData(
     val paywallTemplateId: String,
     val paywallVariantId: String?,
     val displayMode: OfferDisplayMode,
+    val mobileOfferId: String?,
 )
 
 /**
