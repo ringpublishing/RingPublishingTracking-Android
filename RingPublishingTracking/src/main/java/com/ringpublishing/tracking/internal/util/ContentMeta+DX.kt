@@ -11,5 +11,9 @@ import com.ringpublishing.tracking.data.ContentMetadata
 internal fun ContentMetadata.buildToDX(): String
 {
 	val paid = if (paidContent) "t" else "f"
+    if (publicationId.isEmpty())
+    {
+        return ""
+    }
 	return "PV_4,${sourceSystemName.trim().replace(" ", "_")},${publicationId.trim()},$contentPartIndex,$paid"
 }
