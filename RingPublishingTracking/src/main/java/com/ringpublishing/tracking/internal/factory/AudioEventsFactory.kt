@@ -41,7 +41,7 @@ internal class AudioEventsFactory(private val gson: Gson) {
             this[AudioEventParam.IS_MAIN_AUDIO.text] = MAIN_AUDIO
             this[AudioEventParam.AUDIO_CONTENT_CATEGORY.text] = audioMetadata.audioContentCategory.text
             this[AudioEventParam.CONTEXT.text] = createContextParam(audioState.visibilityState, audioState.audioOutput)
-            this[AudioEventParam.IS_CONTENT_FRAGMENT.text] = audioMetadata.isContentFragment
+            this[AudioEventParam.IS_CONTENT_FRAGMENT.text] = if (audioMetadata.isContentFragment) 1 else 0
 
             audioMetadata.audioDuration?.let {
                 this[AudioEventParam.DURATION.text] = it
