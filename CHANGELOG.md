@@ -1,3 +1,10 @@
+1.6.4 Release notes (2024-11-05)
+================================
+
+### Changes
+
+* FRA (IS_CONTENT_FRAGMENT) event field type has changed from Boolean to Integer
+
 1.6.3 Release notes (2024-10-31)
 ================================
 
