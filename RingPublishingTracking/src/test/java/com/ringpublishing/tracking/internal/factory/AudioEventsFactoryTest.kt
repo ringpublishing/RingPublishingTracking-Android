@@ -131,6 +131,7 @@ class AudioEventsFactoryTest {
         val sampleData = "audio:${sampleAudioMetadata.contentId},${sampleAudioMetadata.contentId},${sampleAudioMetadata.audioStreamFormat.text},360"
         val sampleContextJson = "{\"context\":{\"visible\":\"background\",\"audio\":{\"output\":\"bluetooth\"}}}"
         val sampleContextJsonEncoded = Base64.encodeToString(sampleContextJson.toByteArray(), Base64.NO_WRAP)
+        val isContentFragment = if (sampleAudioMetadata.isContentFragment) 1 else 0
 
         Assert.assertEquals(event.parameters[AudioEventParam.SELECTED_ELEMENT_NAME.text], audioEvent.text)
         Assert.assertEquals(event.parameters[AudioEventParam.EVENT_TYPE.text], EventType.VIDEO.text)
@@ -142,7 +143,7 @@ class AudioEventsFactoryTest {
         Assert.assertEquals(event.parameters[AudioEventParam.FORMAT.text], sampleAudioMetadata.audioStreamFormat.text)
         Assert.assertEquals(event.parameters[AudioEventParam.START_MODE.text], "normal")
         Assert.assertEquals(event.parameters[AudioEventParam.AUDIO_PLAYER_VERSION.text], sampleAudioMetadata.audioPlayerVersion)
-        Assert.assertEquals(event.parameters[AudioEventParam.IS_CONTENT_FRAGMENT.text], sampleAudioMetadata.isContentFragment)
+        Assert.assertEquals(event.parameters[AudioEventParam.IS_CONTENT_FRAGMENT.text], isContentFragment)
         Assert.assertEquals(event.parameters[AudioEventParam.PLAYER_TYPE.text], "player")
         Assert.assertEquals(event.parameters[AudioEventParam.IS_MAIN_AUDIO.text], "mainAudio")
         Assert.assertEquals(event.parameters[AudioEventParam.AUDIO_CONTENT_CATEGORY.text], sampleAudioMetadata.audioContentCategory.text)
