@@ -30,7 +30,7 @@ class AudioEventsFactoryTest {
     private val gson = GsonBuilder().create()
 
     private val sampleAudioMetadata = AudioMetadata(
-        contentId = "12167",
+        contentId = "66fb0c5a-f98b-49a2-bc20-ee6d9477ade5",
         contentTitle = "Bartosz Kwolek: siatkówka nie jest całym moim życiem",
         contentSeriesId = "67",
         contentSeriesTitle = "W cieniu sportu",
@@ -148,5 +148,23 @@ class AudioEventsFactoryTest {
         Assert.assertEquals(event.parameters[AudioEventParam.IS_MAIN_AUDIO.text], "mainAudio")
         Assert.assertEquals(event.parameters[AudioEventParam.AUDIO_CONTENT_CATEGORY.text], sampleAudioMetadata.audioContentCategory.text)
         Assert.assertEquals(event.parameters[AudioEventParam.CONTEXT.text], sampleContextJsonEncoded)
+    }
+
+    @Test
+    fun createAudioEvent_StringParametersContentIsUuid_ThenPmuParamNotNull() {
+        val eventsFactory = AudioEventsFactory(gson)
+        val audioEvent = AudioEvent.START
+        val event = eventsFactory.createAudioEvent(audioEvent, sampleAudioMetadata, sampleAudioState)
+
+        Assert.assertNotNull(event.parameters[AudioEventParam.CONTENT_ID.text])
+    }
+
+    @Test
+    fun createAudioEvent_StringParametersContentNotUuid_ThenPmuParamNull() {
+        val eventsFactory = AudioEventsFactory(gson)
+        val audioEvent = AudioEvent.START
+        val event = eventsFactory.createAudioEvent(audioEvent, sampleAudioMetadata.copy(contentId = "1234"), sampleAudioState)
+
+        Assert.assertNull(event.parameters[AudioEventParam.CONTENT_ID.text])
     }
 }

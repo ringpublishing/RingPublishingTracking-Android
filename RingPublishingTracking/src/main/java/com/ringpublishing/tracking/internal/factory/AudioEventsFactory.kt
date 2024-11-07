@@ -11,6 +11,7 @@ import com.ringpublishing.tracking.data.audio.AudioPlayerVisibilityState
 import com.ringpublishing.tracking.data.audio.AudioState
 import com.ringpublishing.tracking.internal.audio.AudioEventParam
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
+import java.util.UUID
 
 private const val START_MODE = "normal"
 
@@ -29,7 +30,6 @@ internal class AudioEventsFactory(private val gson: Gson) {
         val parameters = mutableMapOf<String, Any>().apply {
             this[AudioEventParam.SELECTED_ELEMENT_NAME.text] = audioEvent.text
             this[AudioEventParam.EVENT_TYPE.text] = EventType.VIDEO.text
-            this[AudioEventParam.CONTENT_ID.text] = audioMetadata.contentId
             this[AudioEventParam.CURRENT_TIME.text] = audioState.currentTime
             this[AudioEventParam.AUDIO_PARAMETERS.text] = createAudioEventVCParameter(audioMetadata, audioState)
             this[AudioEventParam.TIMESTAMP.text] = getAndUpdateSessionTimestamp(audioMetadata.contentId, audioEvent)
@@ -42,6 +42,10 @@ internal class AudioEventsFactory(private val gson: Gson) {
             this[AudioEventParam.AUDIO_CONTENT_CATEGORY.text] = audioMetadata.audioContentCategory.text
             this[AudioEventParam.CONTEXT.text] = createContextParam(audioState.visibilityState, audioState.audioOutput)
             this[AudioEventParam.IS_CONTENT_FRAGMENT.text] = if (audioMetadata.isContentFragment) 1 else 0
+
+            audioMetadata.contentId.asUuidOrNull()?.let {
+                this[AudioEventParam.CONTENT_ID.text] = it
+            }
 
             audioMetadata.audioDuration?.let {
                 this[AudioEventParam.DURATION.text] = it
@@ -116,6 +120,14 @@ internal class AudioEventsFactory(private val gson: Gson) {
             mediaType = mediaType
         )
     )
+
+    /**
+     * Checks if String is proper UUID format and returns it or null if it is not.
+     */
+    private fun String.asUuidOrNull() = runCatching {
+        UUID.fromString(this)
+        this
+    }.getOrNull()
 
     data class AudioContextParam(val context: AudioContext)
 
