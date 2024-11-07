@@ -14,7 +14,7 @@ import com.ringpublishing.tracking.data.audio.AudioState
 import com.ringpublishing.tracking.data.audio.AudioStreamFormat
 
 val sampleAudioMetadata = AudioMetadata(
-    contentId = "12167",
+    contentId = "66fb0c5a-f98b-49a2-bc20-ee6d9477ade5",
     contentTitle = "Bartosz Kwolek: siatkówka nie jest całym moim życiem",
     contentSeriesId = "67",
     contentSeriesTitle = "W cieniu sportu",
