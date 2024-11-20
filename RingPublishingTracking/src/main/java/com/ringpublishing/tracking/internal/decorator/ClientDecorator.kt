@@ -13,7 +13,6 @@ import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.data.Client
 import com.ringpublishing.tracking.internal.data.ClientPlatform
 import com.ringpublishing.tracking.internal.data.ClientType
-import com.ringpublishing.tracking.internal.data.Environment
 import com.ringpublishing.tracking.internal.log.Logger
 import java.io.UnsupportedEncodingException
 
