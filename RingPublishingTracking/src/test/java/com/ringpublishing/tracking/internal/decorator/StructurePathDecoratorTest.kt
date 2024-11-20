@@ -9,6 +9,7 @@ package com.ringpublishing.tracking.internal.decorator
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.internal.ConfigurationManager
+import com.ringpublishing.tracking.internal.data.Environment
 import org.junit.Assert
 import org.junit.Test
 import java.net.URL
@@ -26,7 +27,8 @@ class StructurePathDecoratorTest
 			URL("https://domain.com"),
 			"rootPath",
 			listOf("path1", "path2"),
-			"area"
+			"area",
+            environment = Environment.Development
 		)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		configurationManager.updateStructurePath(listOf("path3", "path4"), partiallyReloaded = false)
@@ -52,7 +54,8 @@ class StructurePathDecoratorTest
 			URL("https://domain.com"),
 			"rootPath",
 			listOf("path1", "path2"),
-			"area"
+			"area",
+            environment = Environment.Development
 		)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 
@@ -78,7 +81,8 @@ class StructurePathDecoratorTest
 			URL("https://domain.com"),
 			"rootPath/",
 			listOf("path1", "path2"),
-			"area"
+			"area",
+            environment = Environment.Development
 		)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		val decorator = StructurePathDecorator(configurationManager)

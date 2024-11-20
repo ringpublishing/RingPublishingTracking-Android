@@ -38,7 +38,7 @@ internal class EventDecorator(
 			add(ContentUrlDecorator(configurationManager))
 			add(StructurePathDecorator(configurationManager))
 			add(ReferrerDecorator(configurationManager))
-			add(ClientDecorator(gson))
+			add(ClientDecorator(gson, configurationManager))
 		}
 
 		Logger.debug("Decorators for event: $decorators")

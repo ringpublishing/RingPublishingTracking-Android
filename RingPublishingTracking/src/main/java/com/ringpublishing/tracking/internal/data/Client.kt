@@ -6,4 +6,5 @@
 
 package com.ringpublishing.tracking.internal.data
 
-class Client(val client: ClientType)
+class Client(val client: ClientType, val environment: Environment)
+

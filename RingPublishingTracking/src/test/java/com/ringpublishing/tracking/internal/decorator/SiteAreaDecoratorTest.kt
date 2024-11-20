@@ -9,6 +9,7 @@ package com.ringpublishing.tracking.internal.decorator
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.internal.ConfigurationManager
+import com.ringpublishing.tracking.internal.data.Environment
 import org.junit.Assert
 import org.junit.Test
 import java.net.URL
@@ -41,7 +42,8 @@ class SiteAreaDecoratorTest
 			URL("https://domain.com"),
 			"",
 			emptyList<String>(),
-			"defaultArea"
+			"defaultArea",
+            environment = Environment.Development
 		)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		val decorator = SiteAreaDecorator(configurationManager)
@@ -64,7 +66,8 @@ class SiteAreaDecoratorTest
 			URL("https://domain.com"),
 			"",
 			emptyList<String>(),
-			"defaultArea"
+			"defaultArea",
+            environment = Environment.Development
 		)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		configurationManager.updateAdvertisementArea("area")

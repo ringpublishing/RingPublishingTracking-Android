@@ -9,6 +9,7 @@ package com.ringpublishing.tracking.internal.decorator
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.internal.ConfigurationManager
+import com.ringpublishing.tracking.internal.data.Environment
 import com.ringpublishing.tracking.internal.log.Logger
 import io.mockk.MockKAnnotations
 import org.junit.Assert
@@ -36,7 +37,8 @@ class ContentUrlDecoratorTest
 			URL("https://domain.com"),
 			"rootPath",
 			listOf("path1", "path2"),
-			"area"
+			"area",
+            Environment.Development
 		)
 
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
@@ -62,7 +64,8 @@ class ContentUrlDecoratorTest
 			URL("https://domain.com"),
 			"rootPath",
 			listOf("path1", "path2", "path3", "path4", "path5"),
-			"area"
+			"area",
+            Environment.Development
 		)
 
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
@@ -88,7 +91,8 @@ class ContentUrlDecoratorTest
 			URL("https://domain.com"),
 			"rootPath/",
 			listOf("path1", "path2"),
-			"area"
+			"area",
+            Environment.Development
 		)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		val contentUrlDecorator = ContentUrlDecorator(configurationManager)
@@ -112,7 +116,8 @@ class ContentUrlDecoratorTest
 			URL("https://domain.com"),
 			"rootPath",
 			listOf("path1", "path2"),
-			"area"
+			"area",
+            Environment.Development
 		)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 
