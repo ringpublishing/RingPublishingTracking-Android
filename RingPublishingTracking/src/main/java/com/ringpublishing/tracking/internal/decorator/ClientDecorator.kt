@@ -9,15 +9,16 @@ package com.ringpublishing.tracking.internal.decorator
 import android.util.Base64
 import com.google.gson.Gson
 import com.ringpublishing.tracking.data.Event
+import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.data.Client
 import com.ringpublishing.tracking.internal.data.ClientPlatform
 import com.ringpublishing.tracking.internal.data.ClientType
 import com.ringpublishing.tracking.internal.log.Logger
 import java.io.UnsupportedEncodingException
 
-internal class ClientDecorator(private val gson: Gson) : BaseDecorator()
+internal class ClientDecorator(private val gson: Gson, configurationManager: ConfigurationManager) : BaseDecorator()
 {
-	private val client = Client(ClientType(ClientPlatform.native_app))
+	private val client = Client(ClientType(ClientPlatform.native_app), configurationManager.environment)
 
 	override fun decorate(event: Event)
 	{

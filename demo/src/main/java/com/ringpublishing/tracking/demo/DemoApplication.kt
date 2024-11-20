@@ -10,6 +10,7 @@ import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.data.TrackingIdentifier
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingDelegate
 import com.ringpublishing.tracking.demo.logger.DemoAppLogger
+import com.ringpublishing.tracking.internal.data.Environment
 
 class DemoApplication : MultiDexApplication()
 {
@@ -47,7 +48,8 @@ class DemoApplication : MultiDexApplication()
 			apiKey = apiKey,
 			applicationRootPath = applicationRootPath,
 			applicationDefaultStructurePath = applicationDefaultStructurePath,
-			applicationDefaultAdvertisementArea = applicationDefaultAdvertisementArea
+			applicationDefaultAdvertisementArea = applicationDefaultAdvertisementArea,
+            environment = Environment.Development
 		)
 
 		// Optional enable debug mode, that print debug logs

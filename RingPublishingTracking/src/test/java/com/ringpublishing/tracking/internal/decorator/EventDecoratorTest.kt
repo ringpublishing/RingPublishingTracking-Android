@@ -16,6 +16,7 @@ import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.api.response.ArtemisIdResponse
 import com.ringpublishing.tracking.internal.api.response.Id
 import com.ringpublishing.tracking.internal.api.response.User
+import com.ringpublishing.tracking.internal.data.Environment
 import com.ringpublishing.tracking.internal.data.UserData
 import com.ringpublishing.tracking.internal.device.WindowSizeInfo
 import com.ringpublishing.tracking.internal.log.Logger
@@ -205,6 +206,7 @@ internal class EventDecoratorTest
         every { configurationManager.currentContentUrl } returns "contentUrl"
         every { configurationManager.getFullStructurePath() } returns "structurePath"
         every { configurationManager.currentReferrer } returns "referrer"
+        every { configurationManager.environment } returns Environment.Development
         every { screenSizeInfo.getScreenSizeDpString() } returns "1x1"
         every { windowSizeInfo.getWindowSizeDpString() } returns "1x1"
         every { sharedPreferences.getString(any(), any()) } returns "preference"

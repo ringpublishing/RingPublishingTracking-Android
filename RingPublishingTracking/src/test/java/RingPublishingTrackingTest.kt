@@ -11,6 +11,7 @@ import android.view.Display
 import android.view.WindowManager
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingDelegate
+import com.ringpublishing.tracking.internal.data.Environment
 import com.ringpublishing.tracking.internal.log.Logger
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -89,6 +90,7 @@ internal class RingPublishingTrackingTest
 		every { ringPublishingTrackingConfiguration.applicationRootPath } returns ""
 		every { ringPublishingTrackingConfiguration.applicationDefaultAdvertisementArea } returns ""
 		every { ringPublishingTrackingConfiguration.applicationDefaultStructurePath } returns emptyList()
+        every { ringPublishingTrackingConfiguration.environment } returns Environment.Development
 
 		RingPublishingTracking.initialize(context, ringPublishingTrackingConfiguration, ringPublishingTrackingDelegate)
 	}

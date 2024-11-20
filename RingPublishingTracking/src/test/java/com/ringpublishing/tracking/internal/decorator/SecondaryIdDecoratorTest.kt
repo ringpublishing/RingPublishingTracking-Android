@@ -9,6 +9,7 @@ package com.ringpublishing.tracking.internal.decorator
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.internal.ConfigurationManager
+import com.ringpublishing.tracking.internal.data.Environment
 import com.ringpublishing.tracking.internal.log.Logger
 import io.mockk.MockKAnnotations
 import org.junit.Assert
@@ -35,6 +36,7 @@ class SecondaryIdDecoratorTest
 			"",
 			URL("https://domain.com"),
 			"rootPath",
+            environment = Environment.Development
 		)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		val secondaryIdDecorator = SecondaryIdDecorator(configurationManager)
@@ -55,6 +57,7 @@ class SecondaryIdDecoratorTest
 			"",
 			URL("https://domain.com"),
 			"rootPath",
+            environment = Environment.Development
 		)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		val secondaryIdDecorator = SecondaryIdDecorator(configurationManager)
@@ -78,6 +81,7 @@ class SecondaryIdDecoratorTest
 			"",
 			URL("https://domain.com"),
 			"rootPath",
+            environment = Environment.Development
 		)
 		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
 		val secondaryIdDecorator = SecondaryIdDecorator(configurationManager)

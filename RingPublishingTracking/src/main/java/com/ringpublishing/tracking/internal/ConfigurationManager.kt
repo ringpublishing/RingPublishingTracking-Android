@@ -20,7 +20,7 @@ import java.net.URL
 internal class ConfigurationManager
 {
 
-	internal lateinit var ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration
+    internal lateinit var ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration
 		private set
 
 	private val idGenerator = IdGenerator()
@@ -46,6 +46,8 @@ internal class ConfigurationManager
 	var primaryId: String? = null
 
 	var secondaryId: String? = null
+
+    val environment get() = ringPublishingTrackingConfiguration.environment
 
 	fun initializeConfiguration(ringPublishingTrackingConfiguration: RingPublishingTrackingConfiguration)
 	{
