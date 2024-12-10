@@ -224,6 +224,44 @@ class PaidEventsFactoryTest
     }
 
     @Test
+    fun createPurchaseEventEmptyOfferIdAndFakeUserId_ThenProperParametersInEvent()
+    {
+        val eventsFactory = PaidEventsFactory(gson)
+        val sampleTpcc = "hard_xmass_promoInline"
+        val sampleTermId = "TMEVT00KVHV0"
+        val sampleFakeUserId = ""
+        val sampleTermConversionId = "TCCJTS9X87VB"
+        val sampleEventDetailsData =
+            "{\"subscription_base_price\":100.0,\"subscription_promo_price\":99.99,\"subscription_promo_duration\":\"1W\",\"subscription_price_currency\":\"usd\"}"
+        val event = eventsFactory.createPurchaseEvent(
+            contentMetadata = sampleContentMetadata,
+            offerData = sampleOfferData.copy(mobileOfferId = ""),
+            offerContextData = sampleOfferContextData.copy(closurePercentage = null),
+            subscriptionPaymentData = sampleSubscriptionPaymentData,
+            termId = sampleTermId,
+            termConversionId = sampleTermConversionId,
+            targetPromotionCampaignCode = sampleTpcc,
+            fakeUserId = sampleFakeUserId
+        )
+
+        Assert.assertTrue(event.parameters.isNotEmpty())
+        Assert.assertEquals(event.parameters[PaidEventParam.SUPPLIER_APP_ID.text], sampleOfferData.supplierData.supplierAppId)
+        Assert.assertEquals(event.parameters[PaidEventParam.PAYWALL_SUPPLIER.text], sampleOfferData.supplierData.paywallSupplier)
+        Assert.assertEquals(event.parameters[PaidEventParam.PAYWALL_TEMPLATE_ID.text], sampleOfferData.paywallTemplateId)
+        Assert.assertEquals(event.parameters[PaidEventParam.PAYWALL_VARIANT_ID.text], sampleOfferData.paywallVariantId)
+        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE.text], sampleOfferContextData.source)
+        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_PUBLICATION_UUID.text], sampleContentMetadata.contentId)
+        Assert.assertEquals(event.parameters[PaidEventParam.SOURCE_DX.text], sampleContentMetadata.buildToDX())
+        Assert.assertEquals(event.parameters[PaidEventParam.CLOSURE_PERCENTAGE.text], null)
+        Assert.assertEquals(event.parameters[PaidEventParam.PAYMENT_METHOD.text], sampleSubscriptionPaymentData.paymentMethod.text)
+        Assert.assertEquals(event.parameters[PaidEventParam.TPCC.text], sampleTpcc)
+        Assert.assertEquals(event.parameters[PaidEventParam.TERM_ID.text], sampleTermId)
+        Assert.assertEquals(event.parameters[PaidEventParam.TERM_CONVERSION_ID.text], sampleTermConversionId)
+        Assert.assertEquals(event.parameters[PaidEventParam.EVENT_DETAILS.text], sampleEventDetailsData)
+        Assert.assertEquals(event.parameters[EventParam.MARKED_AS_PAID_DATA.text], mockRdlcnEncodingPaid())
+    }
+
+    @Test
     fun createShowMetricLimitEvent_ThenProperParametersInEvent()
     {
         val eventsFactory = PaidEventsFactory(gson)

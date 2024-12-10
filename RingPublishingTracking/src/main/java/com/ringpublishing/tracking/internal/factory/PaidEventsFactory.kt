@@ -161,8 +161,8 @@ internal class PaidEventsFactory(private val gson: Gson) {
                     subscriptionPromoPrice = subscriptionPaymentData.subscriptionPromoPrice,
                     subscriptionPromoDuration = subscriptionPaymentData.subscriptionPromoDuration,
                     subscriptionPriceCurrency = subscriptionPaymentData.subscriptionPriceCurrency,
-                    fakeUserId = fakeUserId,
-                    mobileOfferId = offerData.mobileOfferId
+                    fakeUserId = fakeUserId?.takeIf { it.isNotBlank() },
+                    mobileOfferId = offerData.mobileOfferId?.takeIf { it.isNotBlank() }
                 )
             )?.let {
                 this[PaidEventParam.EVENT_DETAILS.text] = it
@@ -223,7 +223,12 @@ internal class PaidEventsFactory(private val gson: Gson) {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "mobile_app_fake_user_id_replaced"
             this[PaidEventParam.EVENT_ACTION.text] = "mobileAppFakeUserIdReplaced"
-            createUserIdEventDetailsDataJson(UserIdEventDetailsData(temporaryUserId, realUserId))?.let {
+            createUserIdEventDetailsDataJson(
+                UserIdEventDetailsData(
+                    fakeUserId = temporaryUserId.takeIf { it.isNotBlank() },
+                    realUserId = realUserId.takeIf { it.isNotBlank() }
+                )
+            )?.let {
                 this[PaidEventParam.EVENT_DETAILS.text] = it
             }
         }
