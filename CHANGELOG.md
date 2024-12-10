@@ -1,3 +1,11 @@
+1.6.6 Release notes (2024-12-10)
+================================
+
+### Changes
+
+* fakeUserId and realUserId from MobileAppFakeUserIdReplacedEvent are being set as null if they are empty strings.
+* fakeUserId and mobileOfferId from PurchaseEvent are being set as null if they are empty strings.
+
 1.6.5 Release notes (2024-11-07)
 ================================
 
