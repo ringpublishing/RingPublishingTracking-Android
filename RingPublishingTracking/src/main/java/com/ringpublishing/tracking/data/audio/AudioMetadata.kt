@@ -6,7 +6,7 @@ package com.ringpublishing.tracking.data.audio
  * @param [contentTitle] - Content title in source system
  * @param [contentSeriesId] - Content series identifier
  * @param [contentSeriesTitle] -  Content series title
- * @param [mediaType] - Audio media type (tts / podcast / livestream etc.)
+ * @param [mediaType] - Audio media type @see [AudioMediaType]
  * @param [audioDuration] - Audio duration (in seconds)
  * @param [audioStreamFormat] - Type of audio stream format loaded into player @see [AudioStreamFormat]
  * @param [isContentFragment] - Is audio a part of a bigger content piece
@@ -18,7 +18,7 @@ data class AudioMetadata(
     val contentTitle: String,
     val contentSeriesId: String?,
     val contentSeriesTitle: String?,
-    val mediaType: String,
+    val mediaType: AudioMediaType,
     val audioDuration: Int?,
     val audioStreamFormat: AudioStreamFormat,
     val isContentFragment: Boolean,
