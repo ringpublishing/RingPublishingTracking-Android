@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.audio.AudioEvent
+import com.ringpublishing.tracking.data.audio.AudioMediaType
 import com.ringpublishing.tracking.data.audio.AudioMetadata
 import com.ringpublishing.tracking.data.audio.AudioOutput
 import com.ringpublishing.tracking.data.audio.AudioPlayerVisibilityState
@@ -68,8 +69,11 @@ internal class AudioEventsFactory(private val gson: Gson) {
      * Format: prefix:publicationId,type,bitrate
      * Example: "audio:23345.275928614,23345.275928614,mp3,320"
      */
-    private fun createAudioEventVCParameter(metadata: AudioMetadata, audioState: AudioState) =
-        "audio:${metadata.contentId},${metadata.contentId},${metadata.audioStreamFormat.text},${audioState.currentBitrate}"
+    private fun createAudioEventVCParameter(metadata: AudioMetadata, audioState: AudioState): String {
+        val contentId = if (metadata.mediaType == AudioMediaType.TTS) "6" else metadata.contentId
+        return "audio:${metadata.contentId},${contentId},${metadata.audioStreamFormat.text},${audioState.currentBitrate}"
+    }
+
 
     /**
      * Retrieves timestamp string from sessionTimestamps for given [contentId].
@@ -117,7 +121,7 @@ internal class AudioEventsFactory(private val gson: Gson) {
             contentSeriesId = contentSeriesId,
             title = contentTitle,
             seriesTitle = contentSeriesTitle,
-            mediaType = mediaType
+            mediaType = mediaType.text
         )
     )
 

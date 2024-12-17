@@ -10,6 +10,7 @@ import android.util.Base64
 import com.google.gson.GsonBuilder
 import com.ringpublishing.tracking.data.audio.AudioContentCategory
 import com.ringpublishing.tracking.data.audio.AudioEvent
+import com.ringpublishing.tracking.data.audio.AudioMediaType
 import com.ringpublishing.tracking.data.audio.AudioMetadata
 import com.ringpublishing.tracking.data.audio.AudioOutput
 import com.ringpublishing.tracking.data.audio.AudioPlayerVisibilityState
@@ -34,7 +35,7 @@ class AudioEventsFactoryTest {
         contentTitle = "Bartosz Kwolek: siatkówka nie jest całym moim życiem",
         contentSeriesId = "67",
         contentSeriesTitle = "W cieniu sportu",
-        mediaType = "podcast",
+        mediaType = AudioMediaType.PODCAST,
         audioDuration = 3722,
         audioStreamFormat = AudioStreamFormat.MP3,
         isContentFragment = false,
