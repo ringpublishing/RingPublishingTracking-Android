@@ -71,9 +71,8 @@ internal class AudioEventsFactory(private val gson: Gson) {
      */
     private fun createAudioEventVCParameter(metadata: AudioMetadata, audioState: AudioState): String {
         val contentId = if (metadata.mediaType == AudioMediaType.TTS) "6" else metadata.contentId
-        return "audio:${contentId},${contentId},${metadata.audioStreamFormat.text},${audioState.currentBitrate}"
+        return "audio:$contentId,$contentId,${metadata.audioStreamFormat.text},${audioState.currentBitrate}"
     }
-
 
     /**
      * Retrieves timestamp string from sessionTimestamps for given [contentId].
