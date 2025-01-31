@@ -218,10 +218,12 @@ internal class PaidEventsFactory(private val gson: Gson) {
         return createPaidEvent(parameters)
     }
 
-    fun createMobileAppFakeUserIdReplacedEvent(temporaryUserId: String,
-                                               realUserId: String,
-                                               fakeUserTermConversionId: String? = null,
-                                               realUserTermConversionId: String? = null): Event
+    fun createMobileAppFakeUserIdReplacedEvent(
+        temporaryUserId: String,
+        realUserId: String,
+        fakeUserTermConversionId: String? = null,
+        realUserTermConversionId: String? = null
+    ): Event
     {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "mobile_app_fake_user_id_replaced"
