@@ -218,7 +218,12 @@ internal class PaidEventsFactory(private val gson: Gson) {
         return createPaidEvent(parameters)
     }
 
-    fun createMobileAppFakeUserIdReplacedEvent(temporaryUserId: String, realUserId: String): Event
+    fun createMobileAppFakeUserIdReplacedEvent(
+        temporaryUserId: String,
+        realUserId: String,
+        fakeUserTermConversionId: String? = null,
+        realUserTermConversionId: String? = null
+    ): Event
     {
         val parameters = mutableMapOf<String, Any>().apply {
             this[PaidEventParam.EVENT_CATEGORY.text] = "mobile_app_fake_user_id_replaced"
@@ -226,7 +231,9 @@ internal class PaidEventsFactory(private val gson: Gson) {
             createUserIdEventDetailsDataJson(
                 UserIdEventDetailsData(
                     fakeUserId = temporaryUserId.takeIf { it.isNotBlank() },
-                    realUserId = realUserId.takeIf { it.isNotBlank() }
+                    realUserId = realUserId.takeIf { it.isNotBlank() },
+                    fakeUserTermConversionId = fakeUserTermConversionId,
+                    realUserTermConversionId = realUserTermConversionId
                 )
             )?.let {
                 this[PaidEventParam.EVENT_DETAILS.text] = it
@@ -256,7 +263,9 @@ internal class PaidEventsFactory(private val gson: Gson) {
 
     private class UserIdEventDetailsData(
         @SerializedName("fake_user_id") val fakeUserId: String? = null,
-        @SerializedName("real_user_id") val realUserId: String? = null
+        @SerializedName("real_user_id") val realUserId: String? = null,
+        @SerializedName("fake_user_term_conversion_id") val fakeUserTermConversionId: String? = null,
+        @SerializedName("real_user_term_conversion_id") val realUserTermConversionId: String? = null
     )
 
     private class PurchaseEventDetailsData(
