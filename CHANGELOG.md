@@ -1,3 +1,9 @@
+1.7.1 Release notes (2025-01-31)
+================================
+
+### Changes
+
+* Add new parameters 'fakeUserTermConversionId' and 'realUserTermConversionId' to 'UserIdEventDetailsData'
 1.7.0 Release notes (2024-12-17)
 ================================
 
