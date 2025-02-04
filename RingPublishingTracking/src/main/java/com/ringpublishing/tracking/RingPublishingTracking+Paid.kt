@@ -150,10 +150,14 @@ fun RingPublishingTracking.reportLikelihoodScoringEvent(
  *
  * @param [temporaryUserId]: temporaryUserId
  * @param [realUserId]: new user id
+ * @param [fakeUserTermConversionId]: fake user term conversion id
+ * @param [realUserTermConversionId]: real user term conversion id
  *
  * @see ContentMetadata
  */
 fun RingPublishingTracking.reportMobileAppTemporaryUserIdReplacedEvent(
     temporaryUserId: String,
-    realUserId: String
-) = reportEvent(paidEventsFactory.createMobileAppFakeUserIdReplacedEvent(temporaryUserId, realUserId))
+    realUserId: String,
+    fakeUserTermConversionId: String? = null,
+    realUserTermConversionId: String? = null
+) = reportEvent(paidEventsFactory.createMobileAppFakeUserIdReplacedEvent(temporaryUserId, realUserId, fakeUserTermConversionId, realUserTermConversionId))
