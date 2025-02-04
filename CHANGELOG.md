@@ -1,3 +1,9 @@
+1.7.2 Release notes (2025-02-04)
+================================
+
+### Changes
+
+* Extract conversion parameters to method 'reportMobileAppTemporaryUserIdReplacedEvent'
 1.7.1 Release notes (2025-01-31)
 ================================
 
