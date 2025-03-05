@@ -102,8 +102,16 @@ internal class ConfigurationManager
 	{
 		with(ringPublishingTrackingConfiguration)
 		{
-			val rootPath = if (applicationRootPath.endsWith("/")) applicationRootPath.removeSuffix("/") else applicationRootPath
-			return currentStructurePath.joinToString("/", "$rootPath${Constants.defaultRootPathSuffixDV}/").lowercase().replace(".", "_")
+            if (getSiteArea().isNullOrEmpty())
+            {
+                val rootPath = if (applicationRootPath.endsWith("/")) applicationRootPath.removeSuffix("/") else applicationRootPath
+                return currentStructurePath.joinToString("/", "$rootPath${Constants.defaultRootPathSuffixDV}/").lowercase().replace(".", "_")
+            }
+            else
+            {
+                val rootPath = getSiteArea()
+                return currentStructurePath.joinToString("/", "$rootPath/").lowercase().replace(".", "_")
+            }
 		}
 	}
 
