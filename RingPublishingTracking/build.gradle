@@ -7,6 +7,16 @@ plugins
 
 apply from: 'publish.gradle'
 
+ext
+{
+    //Applications common variables
+    MIN_SDK_VERSION = 28
+    COMPILE_SDK_VERSION = 35
+    TARGET_SDK_VERSION = 35
+
+    JVM_TARGET = '17'
+    JAVA_VERSION = JavaVersion.VERSION_17
+}
 android
 {
     namespace 'com.ringpublishing.tracking'
@@ -67,10 +77,6 @@ android
         warningsAsErrors false
     }
 
-    detekt
-    {
-        config = files("../detekt-config.yml")
-    }
 }
 
 dependencies
