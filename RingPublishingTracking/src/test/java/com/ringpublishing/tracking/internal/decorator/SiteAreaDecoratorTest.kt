@@ -36,7 +36,7 @@ class SiteAreaDecoratorTest
         every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns ""
         every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf()
         every { ringPublishingConfiguration.applicationRootPath } returns ""
-        every { ringPublishingConfiguration.advertisementSite } returns "test-site"
+        every { ringPublishingConfiguration.applicationAdvertisementSite } returns "test-site"
 
         val configurationManager = ConfigurationManager()
         configurationManager.initializeConfiguration(ringPublishingConfiguration)

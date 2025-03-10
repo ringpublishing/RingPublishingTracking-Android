@@ -96,7 +96,7 @@ internal class ConfigurationManager
 
 	fun getSiteArea(): String
     {
-        return if (ringPublishingTrackingConfiguration.advertisementSite.isNullOrEmpty())
+        return if (ringPublishingTrackingConfiguration.applicationAdvertisementSite.isNullOrEmpty())
         {
             currentAdvertisementArea ?: ""
         }
@@ -104,11 +104,11 @@ internal class ConfigurationManager
         {
             if (currentAdvertisementArea.isNullOrEmpty())
             {
-                "${ringPublishingTrackingConfiguration.advertisementSite}"
+                "${ringPublishingTrackingConfiguration.applicationAdvertisementSite}"
             }
             else
             {
-                "${ringPublishingTrackingConfiguration.advertisementSite}/$currentAdvertisementArea"
+                "${ringPublishingTrackingConfiguration.applicationAdvertisementSite}/$currentAdvertisementArea"
             }
         }
     }
@@ -118,14 +118,14 @@ internal class ConfigurationManager
 	fun getFullStructurePath(): String
 	{
 		with(ringPublishingTrackingConfiguration)
-		{   if (advertisementSite.isNullOrEmpty())
+		{   if (applicationAdvertisementSite.isNullOrEmpty())
             {
                 val rootPath = if (applicationRootPath.endsWith("/")) applicationRootPath.removeSuffix("/") else applicationRootPath
                 return currentStructurePath.joinToString("/", "$rootPath${Constants.defaultRootPathSuffixDV}/").lowercase().replace(".", "_")
             }
             else
             {
-                return currentStructurePath.joinToString("/", "$advertisementSite/").lowercase().replace(".", "_")
+                return currentStructurePath.joinToString("/", "$applicationAdvertisementSite/").lowercase().replace(".", "_")
             }
 		}
 	}
