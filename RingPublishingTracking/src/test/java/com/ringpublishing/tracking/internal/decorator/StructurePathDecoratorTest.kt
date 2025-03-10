@@ -16,6 +16,32 @@ import java.net.URL
 class StructurePathDecoratorTest
 {
 
+    @Test
+    fun decorate_WhenCurrentStructurePathUpdated_ThenUseUpdatedValueWithoutArea()
+    {
+        val ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+            "",
+            "",
+            URL("https://domain.com"),
+            "rootPath",
+            listOf("path1", "path2"),
+            ""
+        )
+        val configurationManager = ConfigurationManager()
+        configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
+        configurationManager.updateStructurePath(listOf("path3", "path4"), partiallyReloaded = false)
+
+        val decorator = StructurePathDecorator(configurationManager)
+
+        val event = Event()
+
+        decorator.decorate(event)
+
+        val result = event.parameters[EventParam.PUBLICATION_STRUCTURE_PATH.text] as String?
+
+        Assert.assertEquals("rootpath_app_android/path3/path4", result)
+    }
+
 	@Test
 	fun decorate_WhenCurrentStructurePathUpdated_ThenUseUpdatedValue()
 	{

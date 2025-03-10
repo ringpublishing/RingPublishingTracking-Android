@@ -94,16 +94,39 @@ internal class ConfigurationManager
 
 	fun getTenantId() = ringPublishingTrackingConfiguration.tenantId
 
-	fun getSiteArea() = currentAdvertisementArea
+	fun getSiteArea(): String
+    {
+        return if (ringPublishingTrackingConfiguration.applicationAdvertisementSite.isNullOrEmpty())
+        {
+            currentAdvertisementArea ?: ""
+        }
+        else
+        {
+            if (currentAdvertisementArea.isNullOrEmpty())
+            {
+                "${ringPublishingTrackingConfiguration.applicationAdvertisementSite}"
+            }
+            else
+            {
+                "${ringPublishingTrackingConfiguration.applicationAdvertisementSite}/$currentAdvertisementArea"
+            }
+        }
+    }
 
 	fun getStructurePath() = currentStructurePath
 
 	fun getFullStructurePath(): String
 	{
 		with(ringPublishingTrackingConfiguration)
-		{
-			val rootPath = if (applicationRootPath.endsWith("/")) applicationRootPath.removeSuffix("/") else applicationRootPath
-			return currentStructurePath.joinToString("/", "$rootPath${Constants.defaultRootPathSuffixDV}/").lowercase().replace(".", "_")
+		{   if (applicationAdvertisementSite.isNullOrEmpty())
+            {
+                val rootPath = if (applicationRootPath.endsWith("/")) applicationRootPath.removeSuffix("/") else applicationRootPath
+                return currentStructurePath.joinToString("/", "$rootPath${Constants.defaultRootPathSuffixDV}/").lowercase().replace(".", "_")
+            }
+            else
+            {
+                return currentStructurePath.joinToString("/", "$applicationAdvertisementSite/").lowercase().replace(".", "_")
+            }
 		}
 	}
 

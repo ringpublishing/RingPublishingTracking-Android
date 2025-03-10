@@ -37,6 +37,8 @@ class ConfigurationManagerTest
 		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns ""
 		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf()
 		every { ringPublishingConfiguration.applicationRootPath } returns ""
+        every { ringPublishingConfiguration.applicationAdvertisementSite } returns ""
+        every { ringPublishingConfiguration.applicationAdvertisementSite } returns "test-site"
 
 		configurationManager.initializeConfiguration(ringPublishingConfiguration)
 
@@ -100,9 +102,17 @@ class ConfigurationManagerTest
 	@Test
 	fun updateAdvertisementArea_WhenSet_ThenHaveValue()
 	{
+        every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns ""
+        every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf()
+        every { ringPublishingConfiguration.applicationRootPath } returns ""
+        every { ringPublishingConfiguration.applicationAdvertisementSite } returns ""
+        every { ringPublishingConfiguration.applicationAdvertisementSite } returns "test-site"
+
 		val configurationManager = ConfigurationManager()
+        configurationManager.initializeConfiguration(ringPublishingConfiguration)
 		configurationManager.updateAdvertisementArea("area")
-		Assert.assertEquals("area", configurationManager.getSiteArea())
+
+		Assert.assertEquals("test-site/area", configurationManager.getSiteArea())
 	}
 
 	@Test
@@ -130,6 +140,7 @@ class ConfigurationManagerTest
 		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf()
 		every { ringPublishingConfiguration.applicationRootPath } returns ""
 		every { ringPublishingConfiguration.tenantId } returns "tenantId"
+        every { ringPublishingConfiguration.applicationAdvertisementSite } returns "test-site"
 
 		val configurationManager = ConfigurationManager()
 
@@ -144,11 +155,12 @@ class ConfigurationManagerTest
 		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns "area"
 		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf()
 		every { ringPublishingConfiguration.applicationRootPath } returns ""
+        every { ringPublishingConfiguration.applicationAdvertisementSite } returns "test-site"
 
 		val configurationManager = ConfigurationManager()
 		configurationManager.initializeConfiguration(ringPublishingConfiguration)
 
-		Assert.assertEquals("area", configurationManager.getSiteArea())
+		Assert.assertEquals("test-site/area", configurationManager.getSiteArea())
 	}
 
 	@Test
@@ -157,6 +169,7 @@ class ConfigurationManagerTest
 		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns ""
 		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf()
 		every { ringPublishingConfiguration.applicationRootPath } returns ""
+        every { ringPublishingConfiguration.applicationAdvertisementSite } returns "test-site"
 
 		val configurationManager = ConfigurationManager()
 		configurationManager.initializeConfiguration(ringPublishingConfiguration)
@@ -171,6 +184,7 @@ class ConfigurationManagerTest
 		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns ""
 		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf("path1", "path2")
 		every { ringPublishingConfiguration.applicationRootPath } returns ""
+        every { ringPublishingConfiguration.applicationAdvertisementSite } returns "test-site"
 
 		val configurationManager = ConfigurationManager()
 		configurationManager.initializeConfiguration(ringPublishingConfiguration)
@@ -184,11 +198,12 @@ class ConfigurationManagerTest
 		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns ""
 		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf("path1", "path2")
 		every { ringPublishingConfiguration.applicationRootPath } returns "rootPath"
+        every { ringPublishingConfiguration.applicationAdvertisementSite } returns "test-site"
 
 		val configurationManager = ConfigurationManager()
 		configurationManager.initializeConfiguration(ringPublishingConfiguration)
 
-		Assert.assertEquals("rootpath_app_android/path1/path2", configurationManager.getFullStructurePath())
+		Assert.assertEquals("test-site/path1/path2", configurationManager.getFullStructurePath())
 	}
 
 	@Test
@@ -197,11 +212,12 @@ class ConfigurationManagerTest
 		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns ""
 		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf("pa.th1", "pa.th2")
 		every { ringPublishingConfiguration.applicationRootPath } returns "rootPath"
+        every { ringPublishingConfiguration.applicationAdvertisementSite } returns "test-site"
 
 		val configurationManager = ConfigurationManager()
 		configurationManager.initializeConfiguration(ringPublishingConfiguration)
 
-		Assert.assertEquals("rootpath_app_android/pa_th1/pa_th2", configurationManager.getFullStructurePath())
+		Assert.assertEquals("test-site/pa_th1/pa_th2", configurationManager.getFullStructurePath())
 	}
 
 	@Test
@@ -210,11 +226,12 @@ class ConfigurationManagerTest
 		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns ""
 		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf("PAth1", "PAth2")
 		every { ringPublishingConfiguration.applicationRootPath } returns "RootPath"
+        every { ringPublishingConfiguration.applicationAdvertisementSite } returns "test-site"
 
 		val configurationManager = ConfigurationManager()
 		configurationManager.initializeConfiguration(ringPublishingConfiguration)
 
-		Assert.assertEquals("rootpath_app_android/path1/path2", configurationManager.getFullStructurePath())
+		Assert.assertEquals("test-site/path1/path2", configurationManager.getFullStructurePath())
 	}
 
 	@Test
@@ -223,11 +240,12 @@ class ConfigurationManagerTest
 		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns ""
 		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf("path1", "path2")
 		every { ringPublishingConfiguration.applicationRootPath } returns "rootpath/"
+        every { ringPublishingConfiguration.applicationAdvertisementSite } returns "test-site"
 
 		val configurationManager = ConfigurationManager()
 		configurationManager.initializeConfiguration(ringPublishingConfiguration)
 
-		Assert.assertEquals("rootpath_app_android/path1/path2", configurationManager.getFullStructurePath())
+		Assert.assertEquals("test-site/path1/path2", configurationManager.getFullStructurePath())
 	}
 
 	@Test
@@ -236,6 +254,7 @@ class ConfigurationManagerTest
 		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns ""
 		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf()
 		every { ringPublishingConfiguration.applicationRootPath } returns ""
+        every { ringPublishingConfiguration.applicationAdvertisementSite } returns "test-site"
 
 		val configurationManager = ConfigurationManager()
 		configurationManager.initializeConfiguration(ringPublishingConfiguration)
@@ -254,6 +273,7 @@ class ConfigurationManagerTest
 		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns ""
 		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf()
 		every { ringPublishingConfiguration.applicationRootPath } returns ""
+        every { ringPublishingConfiguration.applicationAdvertisementSite } returns "test-site"
 
 		val configurationManager = ConfigurationManager()
 		configurationManager.initializeConfiguration(ringPublishingConfiguration)
