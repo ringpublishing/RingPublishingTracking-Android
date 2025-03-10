@@ -1,3 +1,9 @@
+1.7.3 Release notes (2025-03-10)
+================================
+
+### Changes
+
+* Update parameter DV path when area is set
 1.7.2 Release notes (2025-02-04)
 ================================
 
