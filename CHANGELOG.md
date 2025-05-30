@@ -1,3 +1,9 @@
+1.7.5 Release notes (2025-05-30)
+================================
+
+### Changes
+
+* Fixed issue with nullable typing during initialization check
 1.7.4 Release notes (2025-05-29)
 ================================
 
