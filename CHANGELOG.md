@@ -1,3 +1,9 @@
+1.7.4 Release notes (2025-05-29)
+================================
+
+### Changes
+
+* Prevented from reporting events if tracking has not been initialized yet
 1.7.3 Release notes (2025-03-10)
 ================================
 
