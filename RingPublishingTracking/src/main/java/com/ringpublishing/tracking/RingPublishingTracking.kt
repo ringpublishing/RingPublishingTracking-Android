@@ -165,12 +165,12 @@ object RingPublishingTracking : KeepAliveDataSource {
      * Checks if RingPublishingTracking is initialized and executes the block if it is or warns user otherwise
      */
     @Suppress("UNUSED_EXPRESSION")
-    internal inline fun <T> ifInitializedOrWarn(block: RingPublishingTracking.() -> T): T? {
+    internal inline fun <T> ifInitializedOrWarn(block: RingPublishingTracking.() -> T) {
         if (!isInitialized) {
             Logger.warn("RingPublishingTracking is not initialized.")
-            return null
+        } else {
+            block()
         }
-        return block()
     }
 
     override fun didAskForKeepAliveContentStatus(contentMetadata: ContentMetadata): KeepAliveContentStatus? {
