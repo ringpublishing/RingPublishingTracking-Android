@@ -76,6 +76,11 @@ object RingPublishingTracking : KeepAliveDataSource {
         }
 
     /**
+     * Property indicating if tracking module is initialized.
+     */
+    private var isInitialized = false
+
+    /**
      * Initialize all needed parameters needed to report events.
      * Should be called once in main point of application.
      *
@@ -93,10 +98,12 @@ object RingPublishingTracking : KeepAliveDataSource {
         eventsReporter = EventsReporter(Component.provideEventsService(configurationManager), Component.provideEventDecorator(configurationManager))
         keepAliveReporter = KeepAliveReporter(eventsReporter, Component.provideScreenSizeInfo(), ProcessLifecycleOwner.get(), Component.provideGson())
         delegate = WeakReference(ringPublishingTrackingDelegate)
+        isInitialized = true
+        Logger.debug("RingPublishingTracking initialized successfully")
     }
 
     /**
-     * Tur on or off debug mode
+     * Turn on or off debug mode
      * By default debug mode is disabled
      * Debug mode enable debug logs
      *
@@ -140,7 +147,7 @@ object RingPublishingTracking : KeepAliveDataSource {
      *
      * @param event: Event
      */
-    fun reportEvent(event: Event) {
+    fun reportEvent(event: Event) = ifInitializedOrWarn {
         eventsReporter.reportEvent(event)
     }
 
@@ -150,8 +157,20 @@ object RingPublishingTracking : KeepAliveDataSource {
      *
      * @param events: List of events
      */
-    fun reportEvents(events: List<Event>) {
+    fun reportEvents(events: List<Event>) = ifInitializedOrWarn {
         eventsReporter.reportEvents(events)
+    }
+
+    /**
+     * Checks if RingPublishingTracking is initialized and executes the block if it is or warns user otherwise
+     */
+    @Suppress("UNUSED_EXPRESSION")
+    internal inline fun <T> ifInitializedOrWarn(block: RingPublishingTracking.() -> T): T? {
+        if (!isInitialized) {
+            Logger.warn("RingPublishingTracking is not initialized.")
+            return null
+        }
+        return block()
     }
 
     override fun didAskForKeepAliveContentStatus(contentMetadata: ContentMetadata): KeepAliveContentStatus? {

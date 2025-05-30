@@ -89,18 +89,17 @@ fun RingPublishingTracking.reportUserAction(actionName: String, actionSubtypeNam
  *
  */
 @Suppress("unused", "unused_parameter")
-fun RingPublishingTracking.reportPageView(currentStructurePath: List<String>, partiallyReloaded: Boolean)
-{
-	keepAliveReporter.stop()
+fun RingPublishingTracking.reportPageView(currentStructurePath: List<String>, partiallyReloaded: Boolean) = ifInitializedOrWarn {
+    keepAliveReporter.stop()
 
-	with(configurationManager)
-	{
-		updateStructurePath(currentStructurePath, partiallyReloaded = partiallyReloaded)
-		updatePartiallyReloaded(partiallyReloaded)
-	}
+    with(configurationManager)
+    {
+        updateStructurePath(currentStructurePath, partiallyReloaded = partiallyReloaded)
+        updatePartiallyReloaded(partiallyReloaded)
+    }
 
-	val event = eventsFactory.createPageViewEvent()
-	reportEvent(event)
+    val event = eventsFactory.createPageViewEvent()
+    reportEvent(event)
 }
 
 /**
@@ -127,44 +126,40 @@ fun RingPublishingTracking.reportContentPageView(
     currentStructurePath: List<String>,
     partiallyReloaded: Boolean,
     contentKeepAliveDataSource: RingPublishingTrackingKeepAliveDataSource,
-)
-{
-	keepAliveDelegate = WeakReference(contentKeepAliveDataSource)
-	keepAliveReporter.start(contentMetadata, this, partiallyReloaded)
+) = ifInitializedOrWarn {
+    keepAliveDelegate = WeakReference(contentKeepAliveDataSource)
+    keepAliveReporter.start(contentMetadata, this, partiallyReloaded)
 
-	with(configurationManager)
-	{
-		updateStructurePath(currentStructurePath, contentMetadata.publicationUrl, contentPageViewSource, partiallyReloaded)
-		updatePartiallyReloaded(partiallyReloaded)
-	}
+    with(configurationManager)
+    {
+        updateStructurePath(currentStructurePath, contentMetadata.publicationUrl, contentPageViewSource, partiallyReloaded)
+        updatePartiallyReloaded(partiallyReloaded)
+    }
 
-	val event = eventsFactory.createPageViewEvent(contentMetadata.contentId, contentMetadata)
-	reportEvent(event)
+    val event = eventsFactory.createPageViewEvent(contentMetadata.contentId, contentMetadata)
+    reportEvent(event)
 }
 
 /**
  * Resumes tracking for currently displayed content
  */
 @Suppress("unused")
-fun RingPublishingTracking.resumeContentKeepAliveTracking()
-{
-	keepAliveReporter.resume()
+fun RingPublishingTracking.resumeContentKeepAliveTracking() = ifInitializedOrWarn {
+    keepAliveReporter.resume()
 }
 
 /**
  * Pauses tracking for currently displayed content
  */
 @Suppress("unused")
-fun RingPublishingTracking.pauseContentKeepAliveTracking()
-{
-	keepAliveReporter.pause()
+fun RingPublishingTracking.pauseContentKeepAliveTracking() = ifInitializedOrWarn {
+    keepAliveReporter.pause()
 }
 
 /**
  * Stops tracking for currently displayed content
  */
 @Suppress("unused")
-fun RingPublishingTracking.stopContentKeepAliveTracking()
-{
-	keepAliveReporter.stop()
+fun RingPublishingTracking.stopContentKeepAliveTracking() = ifInitializedOrWarn {
+    keepAliveReporter.stop()
 }

@@ -9,12 +9,17 @@ import android.content.res.Resources
 import android.hardware.display.DisplayManager
 import android.view.Display
 import android.view.WindowManager
+import com.ringpublishing.tracking.RingPublishingTracking.eventsFactory
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingDelegate
 import com.ringpublishing.tracking.internal.log.Logger
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.mockkObject
+import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
 import java.net.URL
@@ -92,4 +97,14 @@ internal class RingPublishingTrackingTest
 
 		RingPublishingTracking.initialize(context, ringPublishingTrackingConfiguration, ringPublishingTrackingDelegate)
 	}
+
+    @Test
+    fun reportEventBeforeInitialization_ThenWarning() {
+        mockkObject(Logger)
+        every { Logger.warn(any()) } just Runs
+
+        RingPublishingTracking.reportEvent(eventsFactory.createClickEvent(""))
+
+        verify { Logger.warn("RingPublishingTracking is not initialized.") }
+    }
 }
