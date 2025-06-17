@@ -9,6 +9,9 @@
     <string name="article_dialog_title">Article dialog title</string>
     <string name="article_dialog_message">Article dialog message</string>
     <string name="list_is_from_push">Is from push: %1$s\n\n%2$s</string>
+    <string name="epv_audio_button_text">report epv audio</string>
+    <string name="epv_video_button_text">report epv video</string>
+    <string name="epv_chat_button_text">report epv chat</string>
 
     <!-- Actions-->
     <string name="button_login">Login</string>

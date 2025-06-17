@@ -8,10 +8,13 @@ package com.ringpublishing.tracking.demo.controller
 
 import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.ContentMetadata
+import com.ringpublishing.tracking.data.effectivepageview.EffectivePageViewComponentSource
+import com.ringpublishing.tracking.data.effectivepageview.EffectivePageViewTriggerSource
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingKeepAliveDataSource
 import com.ringpublishing.tracking.demo.data.SampleArticle
 import com.ringpublishing.tracking.demo.data.ScreenTrackingData
 import com.ringpublishing.tracking.reportContentPageView
+import com.ringpublishing.tracking.reportEffectivePageView
 
 class ArticleController : ScreenController()
 {
@@ -65,6 +68,27 @@ class ArticleController : ScreenController()
 			contentKeepAliveDataSource
 		)
 	}
+
+    fun reportEffectivePageView(
+        effectivePageViewComponentSource: EffectivePageViewComponentSource,
+        effectivePageViewTriggerSource: EffectivePageViewTriggerSource,
+    ) {
+        val articleToReport = article ?: return
+
+        val contentMetadata = ContentMetadata(
+            articleToReport.publicationId,
+            articleToReport.publicationUrl,
+            articleToReport.sourceSystemName,
+            paidContent = articleToReport.contentWasPaidFor,
+            contentId = articleToReport.contentId
+        )
+
+        RingPublishingTracking.reportEffectivePageView(
+            contentMetadata,
+            effectivePageViewComponentSource,
+            effectivePageViewTriggerSource
+        )
+    }
 
 	fun loadArticle(newArticle: SampleArticle)
 	{

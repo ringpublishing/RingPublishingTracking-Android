@@ -23,6 +23,7 @@ import com.ringpublishing.tracking.internal.di.provideEventsService
 import com.ringpublishing.tracking.internal.di.provideGson
 import com.ringpublishing.tracking.internal.di.provideScreenSizeInfo
 import com.ringpublishing.tracking.internal.factory.AudioEventsFactory
+import com.ringpublishing.tracking.internal.factory.EffectivePageViewEventFactory
 import com.ringpublishing.tracking.internal.factory.EventsFactory
 import com.ringpublishing.tracking.internal.factory.PaidEventsFactory
 import com.ringpublishing.tracking.internal.factory.VideoEventsFactory
@@ -96,7 +97,18 @@ object RingPublishingTracking : KeepAliveDataSource {
         configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
         Component.initComponent(application, configurationManager)
         eventsReporter = EventsReporter(Component.provideEventsService(configurationManager), Component.provideEventDecorator(configurationManager))
-        keepAliveReporter = KeepAliveReporter(eventsReporter, Component.provideScreenSizeInfo(), ProcessLifecycleOwner.get(), Component.provideGson())
+        effectivePageViewEventFactory = EffectivePageViewEventFactory(
+            screenSizeInfo = Component.provideScreenSizeInfo(),
+            gson = Component.provideGson(),
+            configuration = configurationManager
+        )
+        keepAliveReporter = KeepAliveReporter(
+            eventsReporter = eventsReporter,
+            screenSizeInfo = Component.provideScreenSizeInfo(),
+            lifecycleOwner = ProcessLifecycleOwner.get(),
+            gson = Component.provideGson(),
+            effectivePageViewEventFactory = effectivePageViewEventFactory
+        )
         delegate = WeakReference(ringPublishingTrackingDelegate)
         isInitialized = true
         Logger.debug("RingPublishingTracking initialized successfully")
@@ -180,6 +192,7 @@ object RingPublishingTracking : KeepAliveDataSource {
     internal val configurationManager = ConfigurationManager()
     private lateinit var eventsReporter: EventsReporter
     internal lateinit var keepAliveReporter: KeepAliveReporter
+    internal lateinit var effectivePageViewEventFactory: EffectivePageViewEventFactory
     internal val eventsFactory = EventsFactory(Component.provideGson())
     internal val videoEventsFactory = VideoEventsFactory(Component.provideGson())
     internal val audioEventsFactory = AudioEventsFactory(Component.provideGson())

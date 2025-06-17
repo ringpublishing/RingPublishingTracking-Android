@@ -15,4 +15,5 @@ enum class EventType(val text: String)
 	VIDEO("VidEvent"),
 	ERROR("ErrEvent"),
 	PAID("PaidEvent"),
+	POLARIS("PolarisEvent"),
 }

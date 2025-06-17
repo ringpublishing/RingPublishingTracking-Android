@@ -41,7 +41,12 @@ class ListArticlesFragment : ListFragment(), OnItemClickListener
 	{
 		super.onAttach(context)
 		val sampleArticleBuilder = SampleArticleBuilder(context.resources)
-		articles = listOf(sampleArticleBuilder.build(0), sampleArticleBuilder.build(1), sampleArticleBuilder.build(2))
+		articles = listOf(
+            sampleArticleBuilder.build(0),
+            sampleArticleBuilder.build(1),
+            sampleArticleBuilder.build(2),
+            sampleArticleBuilder.build(3)
+        )
 	}
 
 	override fun onDetach()

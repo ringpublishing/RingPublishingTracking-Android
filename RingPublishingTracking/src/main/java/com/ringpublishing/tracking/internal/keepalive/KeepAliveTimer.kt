@@ -8,9 +8,17 @@ package com.ringpublishing.tracking.internal.keepalive
 
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.service.timer.KeepAliveSendTimerCallback
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.Timer
 import java.util.TimerTask
+
+private const val ACTIVITY_TIMER_INTERVAL = 1000L // 1 second
 
 class KeepAliveTimer(private val callback: KeepAliveSendTimerCallback)
 {
@@ -20,28 +28,15 @@ class KeepAliveTimer(private val callback: KeepAliveSendTimerCallback)
 	private var trackingStartDate: Date? = null
 
 	private val sendTimer = Timer("SendTimer")
-	private val activityTimer = Timer("ActivityTimer")
+
+	private var activityTimerJob: Job? = null
 
 	private val backgroundPeriods = mutableListOf<TimePeriod>()
 	private val pausedPeriods = mutableListOf<TimePeriod>()
 
-	private val activityTasks = mutableListOf<TimerTask>()
 	private val senderTasks = mutableListOf<TimerTask>()
 
-	fun start()
-	{
-		trackingStartDate = Date()
-		scheduleActivityTimer()
-		scheduleSendTimer()
-	}
-
-	fun stop()
-	{
-		trackingStartDate = null
-		stopTimers()
-		backgroundPeriods.clear()
-		pausedPeriods.clear()
-	}
+    private var nextActivityTimerMillis: Long? = null
 
 	fun scheduleSendTimer()
 	{
@@ -71,43 +66,57 @@ class KeepAliveTimer(private val callback: KeepAliveSendTimerCallback)
 		sendTimer.schedule(task, stepMillis)
 	}
 
-	fun scheduleActivityTimer()
-	{
-		if (activityTasks.isNotEmpty()) return
+    fun scheduleActivityTimer() {
+        activityTimerJob = CoroutineScope(Dispatchers.Default).launch {
+            while (isActive) {
+                handleActivityTimer()
+                handleEffectivePageViewTimer()
+                delay(ACTIVITY_TIMER_INTERVAL)
+            }
+        }
+    }
 
-		val timeFromStart = timeFromStartInForeground()
+    private fun handleActivityTimer() {
+        val nextTimer = nextActivityTimerMillis
+        val timeFromStart = timeFromStartInForeground() ?: run {
+            Logger.warn("KeepAliveTimer: handleActivityTimer() - timeFromStartInForeground is null")
+            stopTimers()
+            return
+        }
+        if (nextTimer == null || nextTimer <= timeFromStart) {
+            nextTimer?.let {
+                callback.onActivityTimer()
+            }
+            val interval = intervalsProvider.nextIntervalForActivityTrackingMillis(timeFromStart)
+            Logger.debug("KeepAliveTimer: scheduleActivityTimer() Time: ${timeFromStart / 1000L} step: ${interval / 1000L} seconds")
+            nextActivityTimerMillis = timeFromStart + interval
+        }
+    }
 
-		if (timeFromStart == null)
-		{
-			stopTimers()
-			return
-		}
+    private fun handleEffectivePageViewTimer() {
+        callback.onEffectivePageViewTimer()
+    }
 
-		val postIntervalMillis = intervalsProvider.nextIntervalForActivityTrackingMillis(timeFromStart)
+    private fun stopTimers() {
+        senderTasks.forEach { task -> task.cancel() }
+        senderTasks.clear()
 
-		val task = object : TimerTask()
-		{
-			override fun run()
-			{
-				activityTasks.remove(this)
-				callback.onActivityTimer()
-			}
-		}
+        activityTimerJob?.cancel()
+        nextActivityTimerMillis = null
+    }
 
-		Logger.debug("KeepAliveTimer: scheduleActivityTimer() Time: ${timeFromStart / 1000L} step: ${postIntervalMillis / 1000L} seconds")
+    fun start() {
+        trackingStartDate = Date()
+        scheduleActivityTimer()
+        scheduleSendTimer()
+    }
 
-		activityTasks.add(task)
-		activityTimer.schedule(task, postIntervalMillis)
-	}
-
-	private fun stopTimers()
-	{
-		activityTasks.forEach { task -> task.cancel() }
-		activityTasks.clear()
-
-		senderTasks.forEach { task -> task.cancel() }
-		senderTasks.clear()
-	}
+    fun stop() {
+        trackingStartDate = null
+        stopTimers()
+        backgroundPeriods.clear()
+        pausedPeriods.clear()
+    }
 
 	fun pause()
 	{

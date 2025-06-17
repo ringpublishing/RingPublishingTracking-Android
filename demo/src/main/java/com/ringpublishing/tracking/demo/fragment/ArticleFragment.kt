@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.view.ViewCompat
@@ -21,6 +22,8 @@ import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.ContentSize
 import com.ringpublishing.tracking.data.KeepAliveContentStatus
+import com.ringpublishing.tracking.data.effectivepageview.EffectivePageViewComponentSource
+import com.ringpublishing.tracking.data.effectivepageview.EffectivePageViewTriggerSource
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingKeepAliveDataSource
 import com.ringpublishing.tracking.demo.R
 import com.ringpublishing.tracking.demo.controller.ArticleController
@@ -43,6 +46,9 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
     private var scrollView: ScrollView? = null
     private var scrollViewContent: ViewGroup? = null
+    private var epvAudioButton: Button? = null
+    private var epvVideoButton: Button? = null
+    private var epvChatButton: Button? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -74,6 +80,10 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
             loadData()
             articleController.reloadContent(this)
         }
+        epvAudioButton = view?.findViewById(R.id.epvAudioButton)
+        epvVideoButton = view?.findViewById(R.id.epvVideoButton)
+        epvChatButton = view?.findViewById(R.id.epvChatButton)
+        initEpvButtonsListeners()
         initInsets()
         return view
     }
@@ -118,6 +128,27 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
                 KeepAliveContentStatus(it.scrollY, ContentSize(content.measuredWidth, content.measuredHeight))
             } ?: KeepAliveContentStatus(it.scrollY, ContentSize(0, 0))
         } ?: KeepAliveContentStatus(0, ContentSize(0, 0))
+    }
+
+    private fun initEpvButtonsListeners() {
+        epvAudioButton?.setOnClickListener {
+            articleController.reportEffectivePageView(
+                effectivePageViewComponentSource = EffectivePageViewComponentSource.AUDIO,
+                effectivePageViewTriggerSource = EffectivePageViewTriggerSource.PLAY
+            )
+        }
+        epvVideoButton?.setOnClickListener {
+            articleController.reportEffectivePageView(
+                effectivePageViewComponentSource = EffectivePageViewComponentSource.VIDEO,
+                effectivePageViewTriggerSource = EffectivePageViewTriggerSource.PLAY
+            )
+        }
+        epvAudioButton?.setOnClickListener {
+            articleController.reportEffectivePageView(
+                effectivePageViewComponentSource = EffectivePageViewComponentSource.ONET_CHAT,
+                effectivePageViewTriggerSource = EffectivePageViewTriggerSource.SUMMARY
+            )
+        }
     }
 
     private fun initInsets() {

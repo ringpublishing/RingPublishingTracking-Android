@@ -175,4 +175,6 @@ internal class ConfigurationManager
 
 		currentContentUrl = pathBuilder.buildCurrentContentUrl()
 	}
+
+    fun shouldReportEffectivePageViewEvent() = ringPublishingTrackingConfiguration.shouldReportEffectivePageViewEvent
 }
