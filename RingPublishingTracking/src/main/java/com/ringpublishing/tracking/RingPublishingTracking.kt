@@ -96,11 +96,15 @@ object RingPublishingTracking : KeepAliveDataSource {
     ) {
         configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
         Component.initComponent(application, configurationManager)
-        eventsReporter = EventsReporter(Component.provideEventsService(configurationManager), Component.provideEventDecorator(configurationManager))
+        eventsReporter = EventsReporter(
+            eventsService = Component.provideEventsService(configurationManager),
+            eventDecorator = Component.provideEventDecorator(configurationManager),
+            screenSizeInfo = Component.provideScreenSizeInfo(),
+            configuration = configurationManager
+        )
         effectivePageViewEventFactory = EffectivePageViewEventFactory(
             screenSizeInfo = Component.provideScreenSizeInfo(),
             gson = Component.provideGson(),
-            configuration = configurationManager
         )
         keepAliveReporter = KeepAliveReporter(
             eventsReporter = eventsReporter,
@@ -190,7 +194,7 @@ object RingPublishingTracking : KeepAliveDataSource {
     }
 
     internal val configurationManager = ConfigurationManager()
-    private lateinit var eventsReporter: EventsReporter
+    internal lateinit var eventsReporter: EventsReporter
     internal lateinit var keepAliveReporter: KeepAliveReporter
     internal lateinit var effectivePageViewEventFactory: EffectivePageViewEventFactory
     internal val eventsFactory = EventsFactory(Component.provideGson())

@@ -8,8 +8,6 @@ package com.ringpublishing.tracking.demo.controller
 
 import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.ContentMetadata
-import com.ringpublishing.tracking.data.effectivepageview.EffectivePageViewComponentSource
-import com.ringpublishing.tracking.data.effectivepageview.EffectivePageViewTriggerSource
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingKeepAliveDataSource
 import com.ringpublishing.tracking.demo.data.SampleArticle
 import com.ringpublishing.tracking.demo.data.ScreenTrackingData
@@ -70,8 +68,8 @@ class ArticleController : ScreenController()
 	}
 
     fun reportEffectivePageView(
-        effectivePageViewComponentSource: EffectivePageViewComponentSource,
-        effectivePageViewTriggerSource: EffectivePageViewTriggerSource,
+        effectivePageViewComponentSource: String,
+        effectivePageViewTriggerSource: String,
     ) {
         val articleToReport = article ?: return
 

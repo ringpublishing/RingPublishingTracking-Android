@@ -22,8 +22,6 @@ import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.ContentSize
 import com.ringpublishing.tracking.data.KeepAliveContentStatus
-import com.ringpublishing.tracking.data.effectivepageview.EffectivePageViewComponentSource
-import com.ringpublishing.tracking.data.effectivepageview.EffectivePageViewTriggerSource
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingKeepAliveDataSource
 import com.ringpublishing.tracking.demo.R
 import com.ringpublishing.tracking.demo.controller.ArticleController
@@ -133,20 +131,20 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
     private fun initEpvButtonsListeners() {
         epvAudioButton?.setOnClickListener {
             articleController.reportEffectivePageView(
-                effectivePageViewComponentSource = EffectivePageViewComponentSource.AUDIO,
-                effectivePageViewTriggerSource = EffectivePageViewTriggerSource.PLAY
+                effectivePageViewComponentSource = "audio",
+                effectivePageViewTriggerSource = "play"
             )
         }
         epvVideoButton?.setOnClickListener {
             articleController.reportEffectivePageView(
-                effectivePageViewComponentSource = EffectivePageViewComponentSource.VIDEO,
-                effectivePageViewTriggerSource = EffectivePageViewTriggerSource.PLAY
+                effectivePageViewComponentSource = "video",
+                effectivePageViewTriggerSource = "play"
             )
         }
         epvAudioButton?.setOnClickListener {
             articleController.reportEffectivePageView(
-                effectivePageViewComponentSource = EffectivePageViewComponentSource.ONET_CHAT,
-                effectivePageViewTriggerSource = EffectivePageViewTriggerSource.SUMMARY
+                effectivePageViewComponentSource = "chat",
+                effectivePageViewTriggerSource = "summary"
             )
         }
     }

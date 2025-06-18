@@ -1,11 +1,11 @@
-package com.ringpublishing.tracking.data.effectivepageview
+package com.ringpublishing.tracking.internal.effectivepageview
 
 import com.ringpublishing.tracking.data.KeepAliveContentStatus
 
 /**
  * Metadata for an effective page view.
  * @param [componentSource] - Source of an effective page view. @see [EffectivePageViewComponentSource]
- * @param [componentSource] - Code of the source of an effective page view. @see [EffectivePageViewTriggerSource]
+ * @param [triggerSource] - Code of the source of an effective page view. @see [EffectivePageViewTriggerSource]
  * @param [measurement] - Keep alive measurement data. @see [KeepAliveContentStatus]
  */
 data class EffectivePageViewMetadata(

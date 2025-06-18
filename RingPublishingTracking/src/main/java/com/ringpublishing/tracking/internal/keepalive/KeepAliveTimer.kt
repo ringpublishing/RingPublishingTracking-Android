@@ -18,7 +18,7 @@ import java.util.Date
 import java.util.Timer
 import java.util.TimerTask
 
-private const val ACTIVITY_TIMER_INTERVAL = 1000L // 1 second
+private const val ACTIVITY_TIMER_INTERVAL_MILLIS = 1000L // 1 second
 
 class KeepAliveTimer(private val callback: KeepAliveSendTimerCallback)
 {
@@ -71,7 +71,7 @@ class KeepAliveTimer(private val callback: KeepAliveSendTimerCallback)
             while (isActive) {
                 handleActivityTimer()
                 handleEffectivePageViewTimer()
-                delay(ACTIVITY_TIMER_INTERVAL)
+                delay(ACTIVITY_TIMER_INTERVAL_MILLIS)
             }
         }
     }

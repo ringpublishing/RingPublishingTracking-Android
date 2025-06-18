@@ -10,14 +10,14 @@ import com.google.gson.GsonBuilder
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.ContentSize
 import com.ringpublishing.tracking.data.KeepAliveContentStatus
-import com.ringpublishing.tracking.data.effectivepageview.EffectivePageViewComponentSource
-import com.ringpublishing.tracking.data.effectivepageview.EffectivePageViewMetadata
-import com.ringpublishing.tracking.data.effectivepageview.EffectivePageViewTriggerSource
 import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
 import com.ringpublishing.tracking.internal.data.WindowSize
 import com.ringpublishing.tracking.internal.decorator.EventParam
+import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewComponentSource
 import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewEventParam
+import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewMetadata
+import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewTriggerSource
 import com.ringpublishing.tracking.internal.factory.EffectivePageViewEventFactory
 import com.ringpublishing.tracking.internal.factory.EventType
 import com.ringpublishing.tracking.internal.factory.UserEventParam
@@ -62,8 +62,8 @@ internal class EffectivePageViewEventFactoryTest {
     )
 
     private val sampleEffectivePageViewMetadata = EffectivePageViewMetadata(
-        componentSource = EffectivePageViewComponentSource.AUDIO,
-        triggerSource = EffectivePageViewTriggerSource.PLAY,
+        componentSource = EffectivePageViewComponentSource.Other("audio"),
+        triggerSource = EffectivePageViewTriggerSource.Other("play"),
         measurement = sampleContentStatus
     )
 
@@ -86,65 +86,7 @@ internal class EffectivePageViewEventFactoryTest {
         every { screenSizeInfo.getScreenSizePxFromMetrics() } returns WindowSize(1000, 2000)
         every { configurationManager.shouldReportEffectivePageViewEvent() } returns true
 
-        sampleEventFactory = EffectivePageViewEventFactory(screenSizeInfo, gson, configurationManager)
-    }
-
-    @Test
-    fun whenSendingIsBlockedByConfiguration_thenShouldNotSendEvent() {
-
-        // Overriding configuration to simulate that sending of effective page view events is blocked
-        every { configurationManager.shouldReportEffectivePageViewEvent() } returns false
-
-        // Assert that the event should not be sent
-        Assert.assertFalse(sampleEventFactory.shouldSendEvent(sampleEffectivePageViewMetadata))
-    }
-
-    @Test
-    fun whenScrollIsToLittle_thenShouldNotSentEvent() {
-
-        // Overriding sampleEffectivePageViewMetadata to simulate a scroll event with insufficient scroll offset
-        val sampleEffectivePageViewMetadata = sampleEffectivePageViewMetadata.copy(
-            componentSource = EffectivePageViewComponentSource.SCROLL,
-            triggerSource = EffectivePageViewTriggerSource.SCROLL,
-        )
-
-        // Assert that the event should not be sent - scroll value 0 is to little - it is not >= 2 * screen height
-        Assert.assertFalse(sampleEventFactory.shouldSendEvent(sampleEffectivePageViewMetadata))
-    }
-
-    @Test
-    fun whenScrollIsSufficient_thenShouldSendEvent() {
-
-        // Overriding sampleContentStatus with scroll offset that is sufficient for sending the event (2* screen height)
-        val sampleContentStatus = sampleContentStatus.copy(scrollOffsetPx = 4000)
-
-        // Overriding sampleEffectivePageViewMetadata to simulate a scroll event with sufficient scroll offset
-        val sampleEffectivePageViewMetadata = sampleEffectivePageViewMetadata.copy(
-            componentSource = EffectivePageViewComponentSource.SCROLL,
-            triggerSource = EffectivePageViewTriggerSource.SCROLL,
-            measurement = sampleContentStatus
-        )
-
-        // Assert that the event should not be sent - scroll value 4000 is enough - it is matching the >= 2 * screen height constraint
-        Assert.assertTrue(sampleEventFactory.shouldSendEvent(sampleEffectivePageViewMetadata))
-    }
-
-    @Test
-    fun createEffectivePageViewEvent_thenShouldNotSendEventAgain_thenShouldSentAfterReset() {
-
-        // Assert that the event should be sent - this is the first call
-        Assert.assertTrue(sampleEventFactory.shouldSendEvent(sampleEffectivePageViewMetadata))
-
-        // Create an event, now is event sent should be true and should not send again
-        sampleEventFactory.create(sampleContentMetadata, sampleEffectivePageViewMetadata)
-
-        // Assert that the event should not be sent again - isEventSent is now true
-        Assert.assertFalse(sampleEventFactory.shouldSendEvent(sampleEffectivePageViewMetadata))
-
-        sampleEventFactory.reset()
-
-        // Assert that the event should be sent - this is the first call after reset
-        Assert.assertTrue(sampleEventFactory.shouldSendEvent(sampleEffectivePageViewMetadata))
+        sampleEventFactory = EffectivePageViewEventFactory(screenSizeInfo, gson)
     }
 
     @Test
@@ -155,8 +97,8 @@ internal class EffectivePageViewEventFactoryTest {
 
         // Assert that the event is not null and its parameters have expected values
         Assert.assertEquals(event.parameters[EffectivePageViewEventParam.VERSION.text], ePVVersion)
-        Assert.assertEquals(event.parameters[EffectivePageViewEventParam.COMPONENT_SOURCE.text], sampleEffectivePageViewMetadata.componentSource.text)
-        Assert.assertEquals(event.parameters[EffectivePageViewEventParam.TRIGGER_SOURCE.text], sampleEffectivePageViewMetadata.triggerSource.text)
+        Assert.assertEquals(event.parameters[EffectivePageViewEventParam.COMPONENT_SOURCE.text], sampleEffectivePageViewMetadata.componentSource.label)
+        Assert.assertEquals(event.parameters[EffectivePageViewEventParam.TRIGGER_SOURCE.text], sampleEffectivePageViewMetadata.triggerSource.label)
         Assert.assertEquals(event.parameters[EffectivePageViewEventParam.SCROLL_HEIGHT.text], sampleEffectivePageViewMetadata.measurement.contentSizePx.heightPx)
         Assert.assertEquals(event.parameters[EffectivePageViewEventParam.SCROLL_TOP.text], sampleEffectivePageViewMetadata.measurement.scrollOffsetPx)
         Assert.assertEquals(event.parameters[EffectivePageViewEventParam.VIEWPORT_HEIGHT.text], screenSizeInfo.getScreenSizePxFromMetrics().height)

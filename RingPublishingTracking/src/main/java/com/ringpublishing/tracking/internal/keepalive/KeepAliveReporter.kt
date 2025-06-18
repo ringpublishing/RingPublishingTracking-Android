@@ -11,10 +11,10 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.gson.Gson
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.KeepAliveContentStatus
-import com.ringpublishing.tracking.data.effectivepageview.EffectivePageViewComponentSource
-import com.ringpublishing.tracking.data.effectivepageview.EffectivePageViewMetadata
-import com.ringpublishing.tracking.data.effectivepageview.EffectivePageViewTriggerSource
 import com.ringpublishing.tracking.internal.EventsReporter
+import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewComponentSource
+import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewMetadata
+import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewTriggerSource
 import com.ringpublishing.tracking.internal.factory.EffectivePageViewEventFactory
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.service.timer.KeepAliveSendTimerCallback
@@ -49,29 +49,27 @@ internal class KeepAliveReporter(
 
     var lastContentStatus: KeepAliveContentStatus? = null
 
-	fun start(contentMetadata: ContentMetadata, contentKeepAliveDataSource: KeepAliveDataSource, partiallyReloaded: Boolean)
-	{
-		Logger.debug("KeepAliveReporter: start()")
+    fun start(contentMetadata: ContentMetadata, contentKeepAliveDataSource: KeepAliveDataSource, partiallyReloaded: Boolean) {
+        Logger.debug("KeepAliveReporter: start()")
 
-		if (partiallyReloaded && contentMetadata == this.contentMetadata)
-		{
-			dataSourceDelegate = WeakReference(contentKeepAliveDataSource)
-			resume()
-			return
-		}
+        if (partiallyReloaded && contentMetadata == this.contentMetadata) {
+            dataSourceDelegate = WeakReference(contentKeepAliveDataSource)
+            resume()
+            return
+        }
 
-		stop()
+        stop()
 
-		this.contentMetadata = contentMetadata
-		dataSourceDelegate = WeakReference(contentKeepAliveDataSource)
+        this.contentMetadata = contentMetadata
+        dataSourceDelegate = WeakReference(contentKeepAliveDataSource)
 
-		timer.start()
-		isWorking = true
-		isPaused = false
-		isInBackground = false
-		lifecycleOwner.lifecycle.addObserver(this)
-        effectivePageViewEventFactory.reset()
-	}
+        timer.start()
+        isWorking = true
+        isPaused = false
+        isInBackground = false
+        lifecycleOwner.lifecycle.addObserver(this)
+        eventsReporter.resetEPVEventSentState()
+    }
 
 	fun pause()
 	{
@@ -109,15 +107,15 @@ internal class KeepAliveReporter(
 			sendMeasurements()
 		}
 
-		collectedData.clear()
-		isPaused = false
-		isWorking = false
-		isInBackground = false
-		timer.stop()
-		contentMetadata = null
+        collectedData.clear()
+        isPaused = false
+        isWorking = false
+        isInBackground = false
+        timer.stop()
+        contentMetadata = null
         lastContentStatus = null
-		dataSourceDelegate = null
-		lifecycleOwner.lifecycle.removeObserver(this)
+        dataSourceDelegate = null
+        lifecycleOwner.lifecycle.removeObserver(this)
 	}
 
 	@Synchronized
@@ -208,12 +206,12 @@ internal class KeepAliveReporter(
         lastContentStatus = data.contentStatus
 
         val effectivePageViewMetadata = EffectivePageViewMetadata(
-            componentSource = EffectivePageViewComponentSource.SCROLL,
-            triggerSource = EffectivePageViewTriggerSource.SCROLL,
+            componentSource = EffectivePageViewComponentSource.Scroll,
+            triggerSource = EffectivePageViewTriggerSource.Scroll,
             measurement = data.contentStatus
         )
 
-        if(!effectivePageViewEventFactory.shouldSendEvent(effectivePageViewMetadata)) {
+        if(!eventsReporter.shouldReportEPVEvent(effectivePageViewMetadata)) {
             return
         }
 

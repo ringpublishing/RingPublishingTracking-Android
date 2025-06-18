@@ -69,7 +69,7 @@ internal class KeepAliveReporterTest
 		every { contentMetadata.contentId } returns "1"
 
 		every { keepAliveDataSource.toString() } returns ""
-        every { effectivePageViewEventFactory.shouldSendEvent(any()) } returns false
+        every { eventsReporter.shouldReportEPVEvent(any()) } returns false
 
 		val cycle = object : Lifecycle()
 		{
@@ -167,7 +167,7 @@ internal class KeepAliveReporterTest
     {
         val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner, gson, effectivePageViewEventFactory)
 
-        every { effectivePageViewEventFactory.shouldSendEvent(any()) } returns true andThen false
+        every { eventsReporter.shouldReportEPVEvent(any()) } returns true andThen false
         every { effectivePageViewEventFactory.create(any(), any()) } returns Event(AnalyticsSystem.KROPKA_STATS.text, EventType.POLARIS.text)
 
         keepAliveReporter.start(contentMetadata, keepAliveDataSource, false)
