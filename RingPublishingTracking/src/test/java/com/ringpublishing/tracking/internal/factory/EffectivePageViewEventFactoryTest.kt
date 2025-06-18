@@ -105,7 +105,7 @@ internal class EffectivePageViewEventFactoryTest {
         Assert.assertEquals(event.parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text], sampleContentMetadata.buildToDX())
         Assert.assertEquals(event.parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text], sampleContentMetadata.contentId)
         Assert.assertEquals(event.parameters[EventParam.MARKED_AS_PAID_DATA.text], mockRDLCNEncodingPaid())
-        Assert.assertEquals(event.analyticsSystemName, AnalyticsSystem.KROPKA_STATS.text)
+        Assert.assertEquals(event.analyticsSystemName, AnalyticsSystem.GENERIC.text)
         Assert.assertEquals(event.name, EventType.POLARIS.text)
     }
 

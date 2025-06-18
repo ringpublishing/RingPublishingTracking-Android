@@ -25,7 +25,7 @@ internal class EffectivePageViewEventFactory(
 ) {
 
     fun create(contentMetadata: ContentMetadata?, effectivePageViewMetadata: EffectivePageViewMetadata): Event {
-        return Event(AnalyticsSystem.KROPKA_STATS.text, EventType.POLARIS.text).apply {
+        return Event(AnalyticsSystem.GENERIC.text, EventType.POLARIS.text).apply {
             addContentMetaDataParams(contentMetadata)
             addEffectivePageViewMetadataParams(effectivePageViewMetadata)
         }

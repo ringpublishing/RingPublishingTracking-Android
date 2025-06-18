@@ -168,7 +168,7 @@ internal class KeepAliveReporterTest
         val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner, gson, effectivePageViewEventFactory)
 
         every { eventsReporter.shouldReportEPVEvent(any()) } returns true andThen false
-        every { effectivePageViewEventFactory.create(any(), any()) } returns Event(AnalyticsSystem.KROPKA_STATS.text, EventType.POLARIS.text)
+        every { effectivePageViewEventFactory.create(any(), any()) } returns Event(AnalyticsSystem.GENERIC.text, EventType.POLARIS.text)
 
         keepAliveReporter.start(contentMetadata, keepAliveDataSource, false)
 

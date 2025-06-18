@@ -141,7 +141,7 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
                 effectivePageViewTriggerSource = "play"
             )
         }
-        epvAudioButton?.setOnClickListener {
+        epvChatButton?.setOnClickListener {
             articleController.reportEffectivePageView(
                 effectivePageViewComponentSource = "chat",
                 effectivePageViewTriggerSource = "summary"
