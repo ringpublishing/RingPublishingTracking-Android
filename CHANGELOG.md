@@ -10,12 +10,6 @@
 ### Changes
 
 * Implementation of Effective page view event
-1.8.0 Release notes (2025-06-18)
-================================
-
-### Changes
-
-* Implementation of Effective page view event
 1.7.5 Release notes (2025-05-30)
 ================================
 
