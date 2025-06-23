@@ -5,24 +5,28 @@
         <item>0</item>
         <item>0</item>
         <item>1</item>
+        <item>1</item>
     </integer-array>
 
     <string-array name="articles_titles">
         <item>Making Ratings and Reviews better for users and developers</item>
         <item>The Firebase guide to building stable, high-performing apps</item>
         <item>Android 12 Beta: Designed for you</item>
+        <item>Developer preview: Enhanced Android desktop experiences with connected displays</item>
     </string-array>
 
     <string-array name="articles_content_ids">
         <item>111</item>
         <item>222</item>
         <item>333</item>
+        <item>444</item>
     </string-array>
 
     <string-array name="articles_url">
         <item>https://android-developers.googleblog.com/2021/08/making-ratings-and-reviews-better-for.html</item>
         <item>https://firebase.googleblog.com/2021/07/the-firebase-guide-to-building-stable-high-performing-apps.html</item>
         <item>https://blog.google/products/android/android-12-beta/</item>
+        <item>https://android-developers.googleblog.com/2025/06/developer-preview-enhanced-android-desktop-experiences-connected-displays.html</item>
     </string-array>
 
 
@@ -74,6 +78,147 @@
             Android 12 builds on everything you love about Android, and focuses on building a deeply personal phone that adapts to you,
             developing an operating system that is secure by default and private by design, and making all your devices work better together.\n\n
             Today, we’re releasing the first beta of Android 12, and giving you a look into some of the features that will be available in future releases.\n\n
+        </item>
+
+        <item>Today, Android is launching a few updates across the platform! This includes the start of Android 16\'s rollout, with details for both developers and \n
+            users, a Developer Preview for enhanced Android desktop experiences with connected displays, and updates for Android users across Google apps and \n
+            more, plus the June Pixel Drop. We\'re also recapping all the Google I/O updates for Android developers focused on building excellent, adaptive \n
+            Android apps.
+
+            Android has continued to evolve to enable users to be more productive on large screens.
+            Today, we’re excited to share that connected displays support on compatible Android devices is now in developer preview with the Android 16
+            Beta 2 release. As shown at Google I/O 2025, connected displays enable users to attach an external display to their Android device and transform
+            a small screen device into a powerful tool with a large screen. This evolution gives users the ability to move apps beyond a single screen to
+            unlock Android’s full productivity potential on external displays.
+            The connected display update builds on our desktop windowing experience, a capability we previewed last year. Desktop windowing is set to launch
+            later this year for users on compatible tablets running Android 16. Desktop windowing enables users to run multiple apps simultaneously and resize
+            windows for optimal multitasking. This new windowing capability works seamlessly with split screen and other multitasking features users already
+            love on Android and doesn\'t require switching to a special mode.
+            Google and Samsung have collaborated to bring a more seamless and powerful desktop windowing experience to large screen devices and phones
+            with connected displays in Android 16 across the Android ecosystem. These advancements will enhance Samsung DeX, and also extend to other
+            Android devices.
+            For developers, connected displays and desktop windowing present new opportunities for building more engaging and more productive app experiences
+            that seamlessly adapt across form factors. You can try out these features today on your connected display with the
+            Android 16 Beta 2 on select Pixel devices.
+
+            When a supported Android phone or foldable is connected to an external display through a DisplayPort connection, a new desktop session starts
+            on the connected display. The phone and the external display operate independently, and apps are specific to the display on which they’re running.
+            The experience on the connected display is similar to the experience on a desktop, including a task bar that shows running apps and lets users
+            pin apps for quick access. Users are able to run multiple apps side by side simultaneously in freely resizable windows on the connected display.
+
+            When a desktop windowing enabled device (like a tablet) is connected to an external display, the desktop session is extended across both displays,
+            unlocking an even more expansive workspace. The two displays then function as one continuous system, allowing app windows, content, and the cursor
+            to move freely between the displays.
+
+            A cornerstone of this effort is the evolution of desktop windowing, which is stable in Android 16 and is packed with improvements and new capabilities.
+
+            Android can now better maintain window sizes, positions, and states across different desktops.
+            This means users can set up their preferred workspace and have it restored across sessions, offering a more consistent and efficient workflow.
+
+            Today, Android is launching a few updates across the platform! This includes the start of Android 16\'s rollout, with details for both developers and \n
+            users, a Developer Preview for enhanced Android desktop experiences with connected displays, and updates for Android users across Google apps and \n
+            more, plus the June Pixel Drop. We\'re also recapping all the Google I/O updates for Android developers focused on building excellent, adaptive \n
+            Android apps.
+
+            Android has continued to evolve to enable users to be more productive on large screens.
+            Today, we’re excited to share that connected displays support on compatible Android devices is now in developer preview with the Android 16
+            Beta 2 release. As shown at Google I/O 2025, connected displays enable users to attach an external display to their Android device and transform
+            a small screen device into a powerful tool with a large screen. This evolution gives users the ability to move apps beyond a single screen to
+            unlock Android’s full productivity potential on external displays.
+            The connected display update builds on our desktop windowing experience, a capability we previewed last year. Desktop windowing is set to launch
+            later this year for users on compatible tablets running Android 16. Desktop windowing enables users to run multiple apps simultaneously and resize
+            windows for optimal multitasking. This new windowing capability works seamlessly with split screen and other multitasking features users already
+            love on Android and doesn\'t require switching to a special mode.
+            Google and Samsung have collaborated to bring a more seamless and powerful desktop windowing experience to large screen devices and phones
+            with connected displays in Android 16 across the Android ecosystem. These advancements will enhance Samsung DeX, and also extend to other
+            Android devices.
+            For developers, connected displays and desktop windowing present new opportunities for building more engaging and more productive app experiences
+            that seamlessly adapt across form factors. You can try out these features today on your connected display with the
+            Android 16 Beta 2 on select Pixel devices.
+
+            When a supported Android phone or foldable is connected to an external display through a DisplayPort connection, a new desktop session starts
+            on the connected display. The phone and the external display operate independently, and apps are specific to the display on which they’re running.
+            The experience on the connected display is similar to the experience on a desktop, including a task bar that shows running apps and lets users
+            pin apps for quick access. Users are able to run multiple apps side by side simultaneously in freely resizable windows on the connected display.
+
+            When a desktop windowing enabled device (like a tablet) is connected to an external display, the desktop session is extended across both displays,
+            unlocking an even more expansive workspace. The two displays then function as one continuous system, allowing app windows, content, and the cursor
+            to move freely between the displays.
+
+            A cornerstone of this effort is the evolution of desktop windowing, which is stable in Android 16 and is packed with improvements and new capabilities.
+
+            Android can now better maintain window sizes, positions, and states across different desktops.
+            This means users can set up their preferred workspace and have it restored across sessions, offering a more consistent and efficient workflow.
+
+            Today, Android is launching a few updates across the platform! This includes the start of Android 16\'s rollout, with details for both developers and \n
+            users, a Developer Preview for enhanced Android desktop experiences with connected displays, and updates for Android users across Google apps and \n
+            more, plus the June Pixel Drop. We\'re also recapping all the Google I/O updates for Android developers focused on building excellent, adaptive \n
+            Android apps.
+
+            Android has continued to evolve to enable users to be more productive on large screens.
+            Today, we’re excited to share that connected displays support on compatible Android devices is now in developer preview with the Android 16
+            Beta 2 release. As shown at Google I/O 2025, connected displays enable users to attach an external display to their Android device and transform
+            a small screen device into a powerful tool with a large screen. This evolution gives users the ability to move apps beyond a single screen to
+            unlock Android’s full productivity potential on external displays.
+            The connected display update builds on our desktop windowing experience, a capability we previewed last year. Desktop windowing is set to launch
+            later this year for users on compatible tablets running Android 16. Desktop windowing enables users to run multiple apps simultaneously and resize
+            windows for optimal multitasking. This new windowing capability works seamlessly with split screen and other multitasking features users already
+            love on Android and doesn\'t require switching to a special mode.
+            Google and Samsung have collaborated to bring a more seamless and powerful desktop windowing experience to large screen devices and phones
+            with connected displays in Android 16 across the Android ecosystem. These advancements will enhance Samsung DeX, and also extend to other
+            Android devices.
+            For developers, connected displays and desktop windowing present new opportunities for building more engaging and more productive app experiences
+            that seamlessly adapt across form factors. You can try out these features today on your connected display with the
+            Android 16 Beta 2 on select Pixel devices.
+
+            When a supported Android phone or foldable is connected to an external display through a DisplayPort connection, a new desktop session starts
+            on the connected display. The phone and the external display operate independently, and apps are specific to the display on which they’re running.
+            The experience on the connected display is similar to the experience on a desktop, including a task bar that shows running apps and lets users
+            pin apps for quick access. Users are able to run multiple apps side by side simultaneously in freely resizable windows on the connected display.
+
+            When a desktop windowing enabled device (like a tablet) is connected to an external display, the desktop session is extended across both displays,
+            unlocking an even more expansive workspace. The two displays then function as one continuous system, allowing app windows, content, and the cursor
+            to move freely between the displays.
+
+            A cornerstone of this effort is the evolution of desktop windowing, which is stable in Android 16 and is packed with improvements and new capabilities.
+
+            Android can now better maintain window sizes, positions, and states across different desktops.
+            This means users can set up their preferred workspace and have it restored across sessions, offering a more consistent and efficient workflow.
+
+            Today, Android is launching a few updates across the platform! This includes the start of Android 16\'s rollout, with details for both developers and \n
+            users, a Developer Preview for enhanced Android desktop experiences with connected displays, and updates for Android users across Google apps and \n
+            more, plus the June Pixel Drop. We\'re also recapping all the Google I/O updates for Android developers focused on building excellent, adaptive \n
+            Android apps.
+
+            Android has continued to evolve to enable users to be more productive on large screens.
+            Today, we’re excited to share that connected displays support on compatible Android devices is now in developer preview with the Android 16
+            Beta 2 release. As shown at Google I/O 2025, connected displays enable users to attach an external display to their Android device and transform
+            a small screen device into a powerful tool with a large screen. This evolution gives users the ability to move apps beyond a single screen to
+            unlock Android’s full productivity potential on external displays.
+            The connected display update builds on our desktop windowing experience, a capability we previewed last year. Desktop windowing is set to launch
+            later this year for users on compatible tablets running Android 16. Desktop windowing enables users to run multiple apps simultaneously and resize
+            windows for optimal multitasking. This new windowing capability works seamlessly with split screen and other multitasking features users already
+            love on Android and doesn\'t require switching to a special mode.
+            Google and Samsung have collaborated to bring a more seamless and powerful desktop windowing experience to large screen devices and phones
+            with connected displays in Android 16 across the Android ecosystem. These advancements will enhance Samsung DeX, and also extend to other
+            Android devices.
+            For developers, connected displays and desktop windowing present new opportunities for building more engaging and more productive app experiences
+            that seamlessly adapt across form factors. You can try out these features today on your connected display with the
+            Android 16 Beta 2 on select Pixel devices.
+
+            When a supported Android phone or foldable is connected to an external display through a DisplayPort connection, a new desktop session starts
+            on the connected display. The phone and the external display operate independently, and apps are specific to the display on which they’re running.
+            The experience on the connected display is similar to the experience on a desktop, including a task bar that shows running apps and lets users
+            pin apps for quick access. Users are able to run multiple apps side by side simultaneously in freely resizable windows on the connected display.
+
+            When a desktop windowing enabled device (like a tablet) is connected to an external display, the desktop session is extended across both displays,
+            unlocking an even more expansive workspace. The two displays then function as one continuous system, allowing app windows, content, and the cursor
+            to move freely between the displays.
+
+            A cornerstone of this effort is the evolution of desktop windowing, which is stable in Android 16 and is packed with improvements and new capabilities.
+
+            Android can now better maintain window sizes, positions, and states across different desktops.
+            This means users can set up their preferred workspace and have it restored across sessions, offering a more consistent and efficient workflow.
         </item>
     </string-array>
 

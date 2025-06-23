@@ -7,9 +7,9 @@
 
     <ScrollView
         android:id="@+id/scrollView"
-        android:clipToPadding="false"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipToPadding="false">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/scrollViewContent"
@@ -34,6 +34,24 @@
                 android:layout_marginTop="20dp"
                 android:textIsSelectable="true"
                 tools:text="Article text" />
+
+            <Button
+                android:id="@+id/epvAudioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/epv_audio_button_text" />
+
+            <Button
+                android:id="@+id/epvVideoButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/epv_video_button_text" />
+
+            <Button
+                android:id="@+id/epvChatButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/epv_chat_button_text" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 

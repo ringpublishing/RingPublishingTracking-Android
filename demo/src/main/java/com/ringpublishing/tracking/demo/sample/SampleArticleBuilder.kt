@@ -14,7 +14,7 @@ import java.net.URL
 
 class SampleArticleBuilder(private val resources: Resources)
 {
-	fun build(@Size(min = 1, max = 3) position: Int): SampleArticle
+	fun build(@Size(min = 1, max = 4) position: Int): SampleArticle
 	{
 		return SampleArticle(
 			resources.getStringArray(R.array.articles_titles)[position],

@@ -13,4 +13,5 @@ internal enum class KeepAliveMeasureType(val text: String)
 	DOCUMENT_ALIVE("A"),
 	DOCUMENT_INACTIVE("I"),
 	ERROR("E"),
+	EFFECTIVE_PAGE_VIEW("EPV"),
 }

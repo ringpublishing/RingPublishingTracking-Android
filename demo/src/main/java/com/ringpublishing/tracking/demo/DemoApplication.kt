@@ -42,13 +42,14 @@ class DemoApplication : MultiDexApplication()
 		val applicationDefaultStructurePath = listOf("Default")
 		val applicationDefaultAdvertisementArea = "DemoAdvertisementArea"
 
-		val ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
-			tenantId = tenantId,
-			apiKey = apiKey,
-			applicationRootPath = applicationRootPath,
-			applicationDefaultStructurePath = applicationDefaultStructurePath,
-			applicationDefaultAdvertisementArea = applicationDefaultAdvertisementArea
-		)
+        val ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+            tenantId = tenantId,
+            apiKey = apiKey,
+            applicationRootPath = applicationRootPath,
+            applicationDefaultStructurePath = applicationDefaultStructurePath,
+            applicationDefaultAdvertisementArea = applicationDefaultAdvertisementArea,
+            shouldReportEffectivePageViewEvent = true
+        )
 
 		// Optional enable debug mode, that print debug logs
 		RingPublishingTracking.setDebugMode(BuildConfig.DEBUG)

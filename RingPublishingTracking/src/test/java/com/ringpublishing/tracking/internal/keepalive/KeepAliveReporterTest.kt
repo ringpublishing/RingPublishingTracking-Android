@@ -13,13 +13,19 @@ import com.google.gson.GsonBuilder
 import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.ContentSize
+import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.data.KeepAliveContentStatus
 import com.ringpublishing.tracking.internal.EventsReporter
+import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
+import com.ringpublishing.tracking.internal.factory.EffectivePageViewEventFactory
+import com.ringpublishing.tracking.internal.factory.EventType
 import com.ringpublishing.tracking.internal.util.ScreenSizeInfo
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
+import junit.framework.TestCase.assertNotNull
+import junit.framework.TestCase.assertNull
 import org.junit.Before
 import org.junit.Test
 
@@ -39,6 +45,9 @@ internal class KeepAliveReporterTest
 
 	@MockK
 	lateinit var keepAliveDataSource: KeepAliveDataSource
+
+    @MockK
+    lateinit var effectivePageViewEventFactory: EffectivePageViewEventFactory
 
 	private lateinit var lifecycleOwner: LifecycleOwner
 
@@ -60,6 +69,7 @@ internal class KeepAliveReporterTest
 		every { contentMetadata.contentId } returns "1"
 
 		every { keepAliveDataSource.toString() } returns ""
+        every { eventsReporter.shouldReportEPVEvent(any()) } returns false
 
 		val cycle = object : Lifecycle()
 		{
@@ -84,7 +94,7 @@ internal class KeepAliveReporterTest
 	@Test
 	fun start_WhenStartedCollectingEvents_ThenEventAfterTimeIsSend()
 	{
-        val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner, gson)
+        val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner, gson, effectivePageViewEventFactory)
 
 		keepAliveReporter.start(contentMetadata, keepAliveDataSource, false)
 
@@ -94,7 +104,7 @@ internal class KeepAliveReporterTest
 	@Test
 	fun pause_WhenCollectingEventsPaused_ThenAnyEventSend()
 	{
-        val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner, gson)
+        val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner, gson, effectivePageViewEventFactory)
 
 		keepAliveReporter.start(contentMetadata, keepAliveDataSource, false)
 
@@ -106,7 +116,7 @@ internal class KeepAliveReporterTest
 	@Test
 	fun resume_WhenReportStartedAndPaused_ThenResumeWillSendCollectedEvents()
 	{
-        val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner, gson)
+        val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner, gson, effectivePageViewEventFactory)
 
 		keepAliveReporter.start(contentMetadata, keepAliveDataSource, false)
 
@@ -119,7 +129,7 @@ internal class KeepAliveReporterTest
 	@Test
 	fun stop_WhenStartedAndEventsCollected_ThenSendEventsBeforeStop()
 	{
-        val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner, gson)
+        val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner, gson, effectivePageViewEventFactory)
 
 		keepAliveReporter.start(contentMetadata, keepAliveDataSource, false)
 
@@ -128,4 +138,42 @@ internal class KeepAliveReporterTest
 
 		verify(timeout = 10000, atLeast = 1) { eventsReporter.reportEvent(any()) }
 	}
+
+    @Test
+    fun startKeepAliveReporter_ThenLastContentStatusIsNotNull() {
+        val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner, gson, effectivePageViewEventFactory)
+        assertNull(keepAliveReporter.lastContentStatus)
+        keepAliveReporter.start(contentMetadata, keepAliveDataSource, false)
+
+        Thread.sleep(2000)
+
+        assertNotNull(keepAliveReporter.lastContentStatus)
+    }
+
+    @Test
+    fun stopKeepAliveReporter_ThenLastContentStatusIsNotNull() {
+        val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner, gson, effectivePageViewEventFactory)
+        assertNull(keepAliveReporter.lastContentStatus)
+        keepAliveReporter.start(contentMetadata, keepAliveDataSource, false)
+
+        Thread.sleep(2000)
+        keepAliveReporter.stop()
+
+        assertNull(keepAliveReporter.lastContentStatus)
+    }
+
+    @Test
+    fun startKeepAliveReporter_ThenEffectivePageViewEventCalledOnce()
+    {
+        val keepAliveReporter = KeepAliveReporter(eventsReporter, screenSizeInfo, lifecycleOwner, gson, effectivePageViewEventFactory)
+
+        every { eventsReporter.shouldReportEPVEvent(any()) } returns true andThen false
+        every { effectivePageViewEventFactory.create(any(), any()) } returns Event(AnalyticsSystem.GENERIC.text, EventType.POLARIS.text)
+
+        keepAliveReporter.start(contentMetadata, keepAliveDataSource, false)
+
+        verify(timeout = 5000, exactly = 1) { eventsReporter.reportEvent(match {
+            it.name == EventType.POLARIS.text
+        }) }
+    }
 }

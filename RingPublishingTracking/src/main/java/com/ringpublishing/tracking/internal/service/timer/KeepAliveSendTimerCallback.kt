@@ -10,4 +10,5 @@ interface KeepAliveSendTimerCallback
 {
 	fun onSendTimer()
 	fun onActivityTimer()
+	fun onEffectivePageViewTimer()
 }

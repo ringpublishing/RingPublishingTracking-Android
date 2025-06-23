@@ -10,7 +10,12 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.google.gson.Gson
 import com.ringpublishing.tracking.data.ContentMetadata
+import com.ringpublishing.tracking.data.KeepAliveContentStatus
 import com.ringpublishing.tracking.internal.EventsReporter
+import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewComponentSource
+import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewMetadata
+import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewTriggerSource
+import com.ringpublishing.tracking.internal.factory.EffectivePageViewEventFactory
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.service.timer.KeepAliveSendTimerCallback
 import com.ringpublishing.tracking.internal.util.ScreenSizeInfo
@@ -21,7 +26,8 @@ internal class KeepAliveReporter(
     private val eventsReporter: EventsReporter,
     screenSizeInfo: ScreenSizeInfo,
     private val lifecycleOwner: LifecycleOwner,
-    gson: Gson
+    gson: Gson,
+    private val effectivePageViewEventFactory: EffectivePageViewEventFactory
 ) : KeepAliveSendTimerCallback, DefaultLifecycleObserver
 {
 
@@ -41,28 +47,29 @@ internal class KeepAliveReporter(
 
 	private var dataSourceDelegate: WeakReference<KeepAliveDataSource>? = null
 
-	fun start(contentMetadata: ContentMetadata, contentKeepAliveDataSource: KeepAliveDataSource, partiallyReloaded: Boolean)
-	{
-		Logger.debug("KeepAliveReporter: start()")
+    var lastContentStatus: KeepAliveContentStatus? = null
 
-		if (partiallyReloaded && contentMetadata == this.contentMetadata)
-		{
-			dataSourceDelegate = WeakReference(contentKeepAliveDataSource)
-			resume()
-			return
-		}
+    fun start(contentMetadata: ContentMetadata, contentKeepAliveDataSource: KeepAliveDataSource, partiallyReloaded: Boolean) {
+        Logger.debug("KeepAliveReporter: start()")
 
-		stop()
+        if (partiallyReloaded && contentMetadata == this.contentMetadata) {
+            dataSourceDelegate = WeakReference(contentKeepAliveDataSource)
+            resume()
+            return
+        }
 
-		this.contentMetadata = contentMetadata
-		dataSourceDelegate = WeakReference(contentKeepAliveDataSource)
+        stop()
 
-		timer.start()
-		isWorking = true
-		isPaused = false
-		isInBackground = false
-		lifecycleOwner.lifecycle.addObserver(this)
-	}
+        this.contentMetadata = contentMetadata
+        dataSourceDelegate = WeakReference(contentKeepAliveDataSource)
+
+        timer.start()
+        isWorking = true
+        isPaused = false
+        isInBackground = false
+        lifecycleOwner.lifecycle.addObserver(this)
+        eventsReporter.resetEPVEventSentState()
+    }
 
 	fun pause()
 	{
@@ -100,14 +107,15 @@ internal class KeepAliveReporter(
 			sendMeasurements()
 		}
 
-		collectedData.clear()
-		isPaused = false
-		isWorking = false
-		isInBackground = false
-		timer.stop()
-		contentMetadata = null
-		dataSourceDelegate = null
-		lifecycleOwner.lifecycle.removeObserver(this)
+        collectedData.clear()
+        isPaused = false
+        isWorking = false
+        isInBackground = false
+        timer.stop()
+        contentMetadata = null
+        lastContentStatus = null
+        dataSourceDelegate = null
+        lifecycleOwner.lifecycle.removeObserver(this)
 	}
 
 	@Synchronized
@@ -129,9 +137,16 @@ internal class KeepAliveReporter(
 		if (isWorking)
 		{
 			takeMeasurements(KeepAliveMeasureType.ACTIVITY_TIMER)
-			timer.scheduleActivityTimer()
 		}
 	}
+
+    @Synchronized
+    override fun onEffectivePageViewTimer() {
+        Logger.debug("KeepAliveReporter: onEffectivePageViewTimer() time. Start take measurement isWorking $isWorking")
+        if (isWorking) {
+            takeMeasurements(KeepAliveMeasureType.EFFECTIVE_PAGE_VIEW)
+        }
+    }
 
 	@Synchronized
 	private fun sendMeasurements()
@@ -150,29 +165,69 @@ internal class KeepAliveReporter(
 		collectedData.clear()
 	}
 
-	@Synchronized
-	private fun takeMeasurements(measureType: KeepAliveMeasureType)
-	{
-		val timeFromStart = timer.timeFromStartInForeground()
-		val dataSourceDelegate = dataSourceDelegate?.get()
-		val currentContentMetadata = contentMetadata
+    @Synchronized
+    private fun takeMeasurements(measureType: KeepAliveMeasureType) {
+        getKeepAliveMetadata(measureType)?.let { metadata ->
+            handleMeasurement(metadata)
+        } ?: run {
+            Logger.warn("KeepAliveReporter: Failed to take measurement for type $measureType")
+        }
+    }
 
-		if (timeFromStart == null || dataSourceDelegate == null || currentContentMetadata == null)
-		{
-			Logger.warn("KeepAliveReporter: Wrong measurement $timeFromStart $dataSourceDelegate $currentContentMetadata")
-			return
-		}
+    @Synchronized
+    private fun getKeepAliveMetadata(measureType: KeepAliveMeasureType): KeepAliveMetadata? {
+        val timeFromStart = timer.timeFromStartInForeground()
+        val dataSourceDelegate = dataSourceDelegate?.get()
+        val currentContentMetadata = contentMetadata
 
-		val contentStatus = dataSourceDelegate.didAskForKeepAliveContentStatus(currentContentMetadata)
+        if (timeFromStart == null || dataSourceDelegate == null || currentContentMetadata == null) {
+            Logger.warn("KeepAliveReporter: Wrong measurement $timeFromStart $dataSourceDelegate $currentContentMetadata")
+            return null
+        }
 
-		contentStatus?.let { status ->
-			val data = KeepAliveMetadata(status, timeFromStart, true, measureType)
-			Logger.debug("KeepAliveReporter: Add data: $data")
-			collectedData.add(data)
-		} ?: run {
-			Logger.warn("KeepAliveReporter: Wrong data for take measurement. ContentStatus is null")
-		}
-	}
+        val contentStatus = dataSourceDelegate.didAskForKeepAliveContentStatus(currentContentMetadata)
+
+        return contentStatus?.let { status ->
+            KeepAliveMetadata(status, timeFromStart, true, measureType)
+        } ?: run {
+            Logger.warn("KeepAliveReporter: Wrong data for take measurement. ContentStatus is null")
+            null
+        }
+    }
+
+    private fun handleMeasurement(data: KeepAliveMetadata) {
+        when (data.measureType) {
+            KeepAliveMeasureType.EFFECTIVE_PAGE_VIEW -> handleEffectivePageViewMeasurement(data)
+            else -> handlePageViewMeasurement(data)
+        }
+    }
+
+    private fun handleEffectivePageViewMeasurement(data: KeepAliveMetadata) {
+        lastContentStatus = data.contentStatus
+
+        val effectivePageViewMetadata = EffectivePageViewMetadata(
+            componentSource = EffectivePageViewComponentSource.Scroll,
+            triggerSource = EffectivePageViewTriggerSource.Scroll,
+            measurement = data.contentStatus
+        )
+
+        if(!eventsReporter.shouldReportEPVEvent(effectivePageViewMetadata)) {
+            return
+        }
+
+        val event = effectivePageViewEventFactory.create(
+            contentMetadata = contentMetadata,
+            effectivePageViewMetadata = effectivePageViewMetadata
+        )
+
+        Logger.info("KeepAliveReporter: Sending effectivePageView event $event")
+        eventsReporter.reportEvent(event)
+    }
+
+    private fun handlePageViewMeasurement(data: KeepAliveMetadata) {
+        Logger.debug("KeepAliveReporter: Add data: $data")
+        collectedData.add(data)
+    }
 
     override fun onStart(owner: LifecycleOwner)
     {

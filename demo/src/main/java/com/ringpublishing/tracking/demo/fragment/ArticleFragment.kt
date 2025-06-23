@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.view.ViewCompat
@@ -43,6 +44,9 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
     private var scrollView: ScrollView? = null
     private var scrollViewContent: ViewGroup? = null
+    private var epvAudioButton: Button? = null
+    private var epvVideoButton: Button? = null
+    private var epvChatButton: Button? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -74,6 +78,10 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
             loadData()
             articleController.reloadContent(this)
         }
+        epvAudioButton = view?.findViewById(R.id.epvAudioButton)
+        epvVideoButton = view?.findViewById(R.id.epvVideoButton)
+        epvChatButton = view?.findViewById(R.id.epvChatButton)
+        initEpvButtonsListeners()
         initInsets()
         return view
     }
@@ -118,6 +126,27 @@ class ArticleFragment : Fragment(R.layout.fragment_article), RingPublishingTrack
                 KeepAliveContentStatus(it.scrollY, ContentSize(content.measuredWidth, content.measuredHeight))
             } ?: KeepAliveContentStatus(it.scrollY, ContentSize(0, 0))
         } ?: KeepAliveContentStatus(0, ContentSize(0, 0))
+    }
+
+    private fun initEpvButtonsListeners() {
+        epvAudioButton?.setOnClickListener {
+            articleController.reportEffectivePageView(
+                effectivePageViewComponentSource = "audio",
+                effectivePageViewTriggerSource = "play"
+            )
+        }
+        epvVideoButton?.setOnClickListener {
+            articleController.reportEffectivePageView(
+                effectivePageViewComponentSource = "video",
+                effectivePageViewTriggerSource = "play"
+            )
+        }
+        epvChatButton?.setOnClickListener {
+            articleController.reportEffectivePageView(
+                effectivePageViewComponentSource = "chat",
+                effectivePageViewTriggerSource = "summary"
+            )
+        }
     }
 
     private fun initInsets() {
