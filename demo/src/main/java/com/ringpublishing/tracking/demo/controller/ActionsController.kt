@@ -11,9 +11,11 @@ import android.widget.Button
 import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.ContentPageViewSource
 import com.ringpublishing.tracking.data.Event
+import com.ringpublishing.tracking.data.aureus.AureusEventContext
+import com.ringpublishing.tracking.data.aureus.AureusTeaser
 import com.ringpublishing.tracking.demo.data.ScreenTrackingData
 import com.ringpublishing.tracking.logout
-import com.ringpublishing.tracking.reportAureusOffersImpressions
+import com.ringpublishing.tracking.reportAureusImpression
 import com.ringpublishing.tracking.reportClick
 import com.ringpublishing.tracking.reportUserAction
 import com.ringpublishing.tracking.updateActiveSubscriber
@@ -129,9 +131,34 @@ class ActionsController : ScreenController()
 		// If you have recommendations delivered by personalization engine (Aureus) you should report
 		// when those items are displayed to the user
 
-		val offerIds = listOf("123", "456", "789")
-		RingPublishingTracking.reportAureusOffersImpressions(offerIds)
-	}
+        val teasers = listOf(
+            AureusTeaser("teaserId", "offerId", "contentId"),
+            AureusTeaser("teaserId_2", "offerId_2", "contentId_2"),
+            AureusTeaser("teaserId_3", "offerId_3", "contentId_3"),
+        )
+
+        val aureusEventContext = AureusEventContext(
+            variantUuid = "4f37f85f-a8ad-4e6c-a426-5a42fce67ecc",
+            batchId = "g9fewcisss",
+            recommendationId = "a5uam4ufuu",
+            segmentId = "uuid_word2vec_artemis_id_bisect_50_10.8",
+            impressionEventType = "AUREUS_IMPRESSION_EVENT_AND_USER_ACTION",
+        )
+
+        RingPublishingTracking.reportAureusImpression(
+            teasers = teasers,
+            eventContext = aureusEventContext
+        )
+
+        val aureusEventContextNew = aureusEventContext.copy(
+            impressionEventType = "AUREUS_IMPRESSION_EVENT"
+        )
+
+        RingPublishingTracking.reportAureusImpression(
+            teasers = teasers,
+            eventContext = aureusEventContextNew
+        )
+    }
 
 	private fun reportButtonClickEvent(sender: View)
 	{

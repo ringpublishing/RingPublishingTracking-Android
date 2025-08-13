@@ -16,4 +16,5 @@ enum class EventType(val text: String)
 	ERROR("ErrEvent"),
 	PAID("PaidEvent"),
 	POLARIS("PolarisEvent"),
+    AUREUS_IMPRESSION_EVENT("AureusImpressionEvent"),
 }
