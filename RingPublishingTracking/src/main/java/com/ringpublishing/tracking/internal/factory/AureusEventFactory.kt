@@ -23,7 +23,10 @@ class AureusEventFactory(
         eventContext: AureusEventContext
     ): Event {
         val displayedItemsJsonArray = runCatching {
-            snakeCaseGson.fromJson(snakeCaseGson.toJson(teasers), JsonArray::class.java)
+            snakeCaseGson.fromJson(
+                snakeCaseGson.toJson(teasers.map { AureusEventTeaserWrapper(it) }),
+                JsonArray::class.java
+            )
         }.getOrNull()
 
         val events = mutableMapOf<String, Any>(
@@ -105,6 +108,17 @@ class AureusEventFactory(
             Logger.warn("Parse AureusContext UnsupportedEncodingException ${it.localizedMessage}")
             null
         }
+    }
+
+    @Suppress("unused")
+    private class AureusEventTeaserWrapper(
+        val teaserId: String?,
+        val contentId: String
+    ) {
+        constructor(teaser: AureusTeaser) : this(
+            teaserId = teaser.teaserId,
+            contentId = teaser.contentId
+        )
     }
 
     @Suppress("unused")
