@@ -22,6 +22,9 @@ class AureusEventFactory(
         teasers: List<AureusTeaser>,
         eventContext: AureusEventContext
     ): Event {
+
+        val parameters = mutableMapOf<String, Any>()
+
         val displayedItemsJsonArray = runCatching {
             snakeCaseGson.fromJson(
                 snakeCaseGson.toJson(teasers.map { AureusEventTeaserWrapper(it) }),
@@ -40,9 +43,16 @@ class AureusEventFactory(
             }
         }
 
-        val parameters = mutableMapOf<String, Any>(
-            AureusEventParam.EVENTS.text to events
-        )
+        val eventsJsonArray = runCatching {
+            snakeCaseGson.fromJson(
+                snakeCaseGson.toJson(listOf(events)),
+                JsonArray::class.java
+            )
+        }.getOrNull()
+
+        eventsJsonArray?.let {
+            parameters.put(AureusEventParam.EVENTS.text, it)
+        }
 
         return Event(
             analyticsSystemName = AnalyticsSystem.GENERIC.text,
@@ -111,7 +121,7 @@ class AureusEventFactory(
     }
 
     @Suppress("unused")
-    private class AureusEventTeaserWrapper(
+    internal class AureusEventTeaserWrapper(
         val teaserId: String?,
         val contentId: String
     ) {

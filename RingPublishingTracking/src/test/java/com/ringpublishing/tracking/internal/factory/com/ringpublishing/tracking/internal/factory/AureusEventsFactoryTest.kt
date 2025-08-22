@@ -57,6 +57,10 @@ class AureusEventsFactoryTest {
             AureusTeaser("teaserId_2", "offerId_2", "contentId_2"),
         )
 
+        val teaserWrappers = teasers.map {
+            AureusEventFactory.AureusEventTeaserWrapper(it)
+        }
+
         val aureusEventContext = AureusEventContext(
             variantUuid = "4f37f85f-a8ad-4e6c-a426-5a42fce67ecc",
             batchId = "g9fewcisss",
@@ -66,15 +70,16 @@ class AureusEventsFactoryTest {
         )
 
         val event = eventsFactory.createNewAureusImpressionEvent(teasers, aureusEventContext)
-        val parameters = event.parameters[AureusEventParam.EVENTS.text] as Map<*, *>
+        val parameters = event.parameters[AureusEventParam.EVENTS.text] as JsonArray
+        val parametersObject = parameters[0].asJsonObject
 
         Assert.assertEquals(AnalyticsSystem.GENERIC.text, event.analyticsSystemName)
         Assert.assertEquals(EventType.AUREUS_IMPRESSION_EVENT.text, event.name)
-        Assert.assertEquals(parameters[AureusEventParam.DISPLAYED_ITEMS.text], snakeCaseGson.fromJson(snakeCaseGson.toJson(teasers), JsonArray::class.java))
-        Assert.assertEquals(parameters[AureusEventParam.VARIANT_UUID.text], aureusEventContext.variantUuid)
-        Assert.assertEquals(parameters[AureusEventParam.SEGMENT_ID.text], aureusEventContext.segmentId)
-        Assert.assertEquals(parameters[AureusEventParam.BATCH_ID.text], aureusEventContext.batchId)
-        Assert.assertEquals(parameters[AureusEventParam.RECOMMENDATION_ID.text], aureusEventContext.recommendationId)
+        Assert.assertEquals(parametersObject.get(AureusEventParam.VARIANT_UUID.text).asString, aureusEventContext.variantUuid)
+        Assert.assertEquals(parametersObject.get(AureusEventParam.SEGMENT_ID.text).asString, aureusEventContext.segmentId)
+        Assert.assertEquals(parametersObject.get(AureusEventParam.BATCH_ID.text).asString, aureusEventContext.batchId)
+        Assert.assertEquals(parametersObject.get(AureusEventParam.RECOMMENDATION_ID.text).asString, aureusEventContext.recommendationId)
+        Assert.assertEquals(parametersObject.get(AureusEventParam.DISPLAYED_ITEMS.text).asJsonArray, snakeCaseGson.fromJson(snakeCaseGson.toJson(teaserWrappers), JsonArray::class.java))
     }
 
     @Test
