@@ -16,10 +16,10 @@
     </string-array>
 
     <string-array name="articles_content_ids">
-        <item>111</item>
-        <item>222</item>
-        <item>333</item>
-        <item>444</item>
+        <item>abc</item>
+        <item>def</item>
+        <item>ghi</item>
+        <item>jkl</item>
     </string-array>
 
     <string-array name="articles_url">

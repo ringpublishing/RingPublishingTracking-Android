@@ -28,7 +28,7 @@ class EventsFactory(private val gson: Gson)
 
 		publicationUrl?.let { parameters[UserEventParam.TARGET_URL.text] = it.toString() }
 
-		contentIdentifier?.let { parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = it }
+		contentIdentifier?.let { parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = it.lowercase() }
 
 		return Event(AnalyticsSystem.KROPKA_EVENTS.text, EventType.CLICK.text, parameters)
 	}
@@ -62,7 +62,7 @@ class EventsFactory(private val gson: Gson)
         val parameters = mutableMapOf<String, Any>()
 
         contentIdentifier?.let {
-            parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = it
+            parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = it.lowercase()
         }
         contentMetadata?.let { metadata ->
             parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text] = metadata.buildToDX()

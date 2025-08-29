@@ -111,7 +111,7 @@ class AureusEventsFactoryTest {
         Assert.assertEquals(EventType.CLICK.text, event.name)
         Assert.assertEquals(event.parameters[UserEventParam.SELECTED_ELEMENT_NAME.text], eventName)
         Assert.assertEquals(event.parameters[UserEventParam.TARGET_URL.text], publicationUrl)
-        Assert.assertEquals(event.parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text], teaser.contentId)
+        Assert.assertEquals(event.parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text], teaser.contentId.lowercase())
         Assert.assertEquals(event.parameters[AureusEventParam.EI.text], teaser.offerId)
         Assert.assertEquals(event.parameters[AureusEventParam.ECX.text], prepareEncodedAureusEventContext())
     }

@@ -34,7 +34,7 @@ internal class EffectivePageViewEventFactory(
     private fun Event.addContentMetaDataParams(contentMetadata: ContentMetadata?) {
         contentMetadata?.let {
             parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text] = contentMetadata.buildToDX()
-            parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = contentMetadata.contentId.trim()
+            parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = contentMetadata.contentId.trim().lowercase()
             createMarkedAsPaidParam(gson, contentMetadata)?.let { param -> parameters[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
     }
