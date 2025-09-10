@@ -11,8 +11,8 @@ ext
 {
     //Applications common variables
     MIN_SDK_VERSION = 28
-    COMPILE_SDK_VERSION = 36
-    TARGET_SDK_VERSION = 36
+    COMPILE_SDK_VERSION = 35
+    TARGET_SDK_VERSION = 35
 
     JVM_TARGET = '17'
     JAVA_VERSION = JavaVersion.VERSION_17
