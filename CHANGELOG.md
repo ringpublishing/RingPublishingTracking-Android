@@ -1,5 +1,3 @@
-1.9.1 Release notes - No changelog provided
-
 1.8.0 Release notes (2025-06-18)
 ================================
 
