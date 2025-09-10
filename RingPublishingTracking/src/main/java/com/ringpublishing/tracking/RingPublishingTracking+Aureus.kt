@@ -5,46 +5,67 @@
  */
 package com.ringpublishing.tracking
 
+import com.ringpublishing.tracking.data.aureus.AureusEventContext
+import com.ringpublishing.tracking.data.aureus.AureusTeaser
+import com.ringpublishing.tracking.internal.aureus.ImpressionEventType
+import com.ringpublishing.tracking.internal.log.Logger
 import java.net.URL
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 /**
  * Aureus events
  *
- * Reports 'Aureus' offers impression event
+ * Reports 'Aureus' impression event
  *
- * @param offerIds list aureus offers
+ * @param teasers list of AureusTeaser instances
+ * @param eventContext AureusContext instance
  */
-@Suppress("unused", "unused_parameter")
-fun RingPublishingTracking.reportAureusOffersImpressions(offerIds: List<String>)
-{
-	var encoded: String? = null
+@Suppress("unused")
+fun RingPublishingTracking.reportAureusImpression(
+    teasers: List<AureusTeaser>,
+    eventContext: AureusEventContext
+) {
+    Logger.debug("Reporting 'Aureus' offers impression event for teasers: $teasers")
+    when (eventContext.impressionEventType.uppercase()) {
+        ImpressionEventType.USER_ACTION.name -> {
+            reportEvent(
+                event = aureusEventFactory.createLegacyAureusImpressionEvent(teasers)
+            )
+        }
 
-	if (offerIds.isNotEmpty())
-	{
-		encoded = URLEncoder.encode(offerIds.joinToString(",", "[", "]") { "\"$it\"" }, StandardCharsets.UTF_8.name())
-	}
+        ImpressionEventType.AUREUS_IMPRESSION_EVENT_AND_USER_ACTION.name -> {
+            reportEvent(
+                event = aureusEventFactory.createLegacyAureusImpressionEvent(teasers)
+            )
+            reportEvent(
+                event = aureusEventFactory.createNewAureusImpressionEvent(teasers, eventContext)
+            )
+        }
 
-	val event = eventsFactory.createUserActionEvent("aureusOfferImpressions", "offerIds", encoded)
-
-	reportEvent(event)
+        else -> reportEvent(
+            event = aureusEventFactory.createNewAureusImpressionEvent(teasers, eventContext)
+        )
+    }
 }
 
 /**
  * Reports 'Aureus' click event which leads to content page
  *
- * @param selectedElementName that user click
- * @param publicationUrl of content
- * @param contentId content identifier in source system (CMS)
- * @param aureusOfferId identifier
+ * @param selectedElementName name of the element that user clicked
+ * @param publicationUrl url of content
+ * @param teaser AureusTeaser instance
+ * @param eventContext AureusContext instance
  */
-@Suppress("unused", "unused_parameter")
-fun RingPublishingTracking.reportContentClick(selectedElementName: String, publicationUrl: URL, contentId: String, aureusOfferId: String)
-{
-	val clickEvent = eventsFactory.createClickEvent(selectedElementName, publicationUrl, contentId)
-
-	clickEvent.parameters["EI"] = aureusOfferId
-
-	reportEvent(clickEvent)
+fun RingPublishingTracking.reportContentClick(
+    selectedElementName: String,
+    publicationUrl: URL,
+    teaser: AureusTeaser,
+    eventContext: AureusEventContext
+) {
+    val clickEvent = aureusEventFactory.createAureusClickEvent(
+        selectedElementName = selectedElementName,
+        publicationUrl = publicationUrl,
+        teaser = teaser,
+        eventContext = eventContext
+    )
+    reportEvent(clickEvent)
 }
