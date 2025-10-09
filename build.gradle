@@ -9,7 +9,7 @@ buildscript
 
     dependencies
     {
-        classpath "com.android.tools.build:gradle:8.6.0"
+        classpath "com.android.tools.build:gradle:8.12.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0"
     }
 }
@@ -37,9 +37,9 @@ ext
     JAVA_VERSION = JavaVersion.VERSION_17
 
     MIN_SDK_VERSION = 28
-    TARGET_SDK_VERSION = 35
-    COMPILE_SDK_VERSION = 35
-    BUILD_TOOLS_VERSION = '35.0.0'
+    TARGET_SDK_VERSION = 36
+    COMPILE_SDK_VERSION = 36
+    BUILD_TOOLS_VERSION = '36.0.0'
 }
 
 allprojects {

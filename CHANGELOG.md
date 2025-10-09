@@ -1,3 +1,13 @@
+1.10.0 Release notes (2025-10-09)
+================================
+
+Improvements to the 'RingPublishingTracking' module.
+
+### Changes
+
+* Compile / target sdk = 36
+* Gradle 8.14.3
+
 1.9.0 Release notes (2025-08-13)
 ================================
 
@@ -11,6 +21,7 @@ Improvements to the 'RingPublishingTracking' module.
 * Changed 'reportAureusOffersImpressions' method:
     - method was renamed to 'reportAureusImpression'
     - method now now accepts 'AureusTeaser' array and 'AureusEventContext' as parameters
+
 1.8.0 Release notes (2025-06-18)
 ================================
 
