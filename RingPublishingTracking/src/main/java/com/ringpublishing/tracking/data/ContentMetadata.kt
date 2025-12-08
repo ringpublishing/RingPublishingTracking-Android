@@ -16,6 +16,7 @@ import java.net.URL
  * @param contentPartIndex: Index of displayed content part (applies only if given content can be consumed in parts).
  * @param paidContent: Is content marked on CMS as paid
  * @param contentId: Content identifier in source system (CMS)
+ * @param contentSpaceUuid: Content space UUID where the content is located
  */
 data class ContentMetadata(
     val publicationId: String,
@@ -24,4 +25,5 @@ data class ContentMetadata(
     val contentPartIndex: Int = 1,
     val paidContent: Boolean,
     val contentId: String,
+    val contentSpaceUuid: String
 )

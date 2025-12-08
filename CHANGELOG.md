@@ -1,4 +1,11 @@
-1.10.0 Release notes - No changelog provided
+1.11.0 Release notes (2025-12-08)
+================================
+
+Improvements to the 'RingPublishingTracking' module.
+
+### Changes
+
+* Used ContentMetadata contentSpaceUuid as Source param with RDLCN
 
 1.10.0 Release notes (2025-10-09)
 ================================

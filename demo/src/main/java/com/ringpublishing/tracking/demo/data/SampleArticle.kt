@@ -14,7 +14,8 @@ data class SampleArticle(
     val content: String,
     val publicationUrl: URL,
     val contentWasPaidFor: Boolean,
-    val contentId: String
+    val contentId: String,
+    val contentSpaceUuid: String
 )
 {
     val publicationId = UUID.randomUUID().toString()

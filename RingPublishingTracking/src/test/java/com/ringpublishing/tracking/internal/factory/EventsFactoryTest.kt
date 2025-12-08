@@ -133,8 +133,9 @@ class EventsFactoryTest
 			"sourceSystemName",
 			1,
 			false,
-			"my-unique-content-id-1234"
-		)
+			"my-unique-content-id-1234",
+            "my-unique-content-space-uuid-1234"
+        )
 
 		val event = eventsFactory.createPageViewEvent("publicationId", contentMetadata)
 
@@ -152,8 +153,9 @@ class EventsFactoryTest
 			"source System_Name",
 			1,
 			true,
-			"my-unique-content-id-1234"
-		)
+			"my-unique-content-id-1234",
+            "my-unique-content-space-uuid-1234"
+        )
 
 		val event = eventsFactory.createPageViewEvent("publicationId", contentMetadata)
 
@@ -162,11 +164,11 @@ class EventsFactoryTest
     }
 
     private fun mockRdlcnEncodingPaid() = encode(
-        "{\"publication\":{\"premium\":true},\"source\":{\"id\":\"my-unique-content-id-1234\",\"system\":\"source System_Name\"}}"
+        "{\"publication\":{\"premium\":true},\"source\":{\"id\":\"my-unique-content-space-uuid-1234\",\"system\":\"source System_Name\"}}"
     )
 
     private fun mockRdlcnEncodingNotPaid() = encode(
-        "{\"publication\":{\"premium\":false},\"source\":{\"id\":\"my-unique-content-id-1234\",\"system\":\"sourceSystemName\"}}"
+        "{\"publication\":{\"premium\":false},\"source\":{\"id\":\"my-unique-content-space-uuid-1234\",\"system\":\"sourceSystemName\"}}"
     )
 
     private fun encode(input: String): String {

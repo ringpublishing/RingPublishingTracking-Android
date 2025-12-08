@@ -67,6 +67,7 @@ internal class KeepAliveReporterTest
 		every { contentMetadata.publicationId } returns ""
 		every { contentMetadata.contentPartIndex } returns 1
 		every { contentMetadata.contentId } returns "1"
+		every { contentMetadata.contentSpaceUuid } returns "1"
 
 		every { keepAliveDataSource.toString() } returns ""
         every { eventsReporter.shouldReportEPVEvent(any()) } returns false
