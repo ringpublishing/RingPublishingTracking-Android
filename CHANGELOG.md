@@ -1,3 +1,5 @@
+1.11.0 Release notes - No changelog provided
+
 1.11.0 Release notes (2025-12-08)
 ================================
 
