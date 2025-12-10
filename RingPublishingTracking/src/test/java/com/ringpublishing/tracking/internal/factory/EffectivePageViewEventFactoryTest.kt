@@ -58,7 +58,8 @@ internal class EffectivePageViewEventFactoryTest {
         "source System_Name",
         1,
         true,
-        "my-unique-content-id-1234"
+        "my-unique-content-id-1234",
+        "my-unique-content-space-uuid-1234"
     )
 
     private val sampleEffectivePageViewMetadata = EffectivePageViewMetadata(
@@ -113,7 +114,7 @@ internal class EffectivePageViewEventFactoryTest {
      * Mocks RDLCN param value
      */
     private fun mockRDLCNEncodingPaid() = encode(
-        "{\"publication\":{\"premium\":${sampleContentMetadata.paidContent}},\"source\":{\"id\":\"${sampleContentMetadata.contentId}\"" +
+        "{\"publication\":{\"premium\":${sampleContentMetadata.paidContent}},\"source\":{\"id\":\"${sampleContentMetadata.contentSpaceUuid}\"" +
                 ",\"system\":\"${sampleContentMetadata.sourceSystemName}\"}}"
     )
 

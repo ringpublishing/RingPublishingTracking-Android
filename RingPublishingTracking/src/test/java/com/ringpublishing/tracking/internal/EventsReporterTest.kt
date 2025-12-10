@@ -57,7 +57,8 @@ internal class EventsReporterTest
         "source System_Name",
         1,
         true,
-        "my-unique-content-id-1234"
+        "my-unique-content-id-1234",
+        "my-unique-content-space-uuid-1234"
     )
 
     private val sampleEffectivePageViewMetadata = EffectivePageViewMetadata(

@@ -87,6 +87,7 @@ internal class KeepAliveEventBuilderTest
 		every { contentMetadata.publicationId } returns "publicationId"
 		every { contentMetadata.contentPartIndex } returns 50
 		every { contentMetadata.contentId } returns "1"
+		every { contentMetadata.contentSpaceUuid } returns "1"
 
         val builder = KeepAliveEventBuilder(screenSizeInfo, gson)
 

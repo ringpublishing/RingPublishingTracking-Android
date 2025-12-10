@@ -11,7 +11,7 @@ internal fun createMarkedAsPaidParam(gson: Gson, contentMetadata: ContentMetadat
 
     val markedAsPaidData = MarkedAsPaidData(
         publication = Publication(contentMetadata.paidContent),
-        source = Source(contentMetadata.contentId, contentMetadata.sourceSystemName)
+        source = Source(contentMetadata.contentSpaceUuid, contentMetadata.sourceSystemName)
     )
 
     return encodePaidContentData(

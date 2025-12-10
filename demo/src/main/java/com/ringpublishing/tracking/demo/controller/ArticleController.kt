@@ -56,7 +56,8 @@ class ArticleController : ScreenController()
 			articleToReport.publicationUrl,
 			articleToReport.sourceSystemName,
 			paidContent = articleToReport.contentWasPaidFor,
-			contentId = articleToReport.contentId)
+			contentId = articleToReport.contentId,
+            contentSpaceUuid = articleToReport.contentSpaceUuid)
 
 		RingPublishingTracking.reportContentPageView(
 			contentMetadata,
@@ -78,7 +79,8 @@ class ArticleController : ScreenController()
             articleToReport.publicationUrl,
             articleToReport.sourceSystemName,
             paidContent = articleToReport.contentWasPaidFor,
-            contentId = articleToReport.contentId
+            contentId = articleToReport.contentId,
+            contentSpaceUuid = articleToReport.contentSpaceUuid
         )
 
         RingPublishingTracking.reportEffectivePageView(

@@ -76,7 +76,8 @@ class PaidEventsFactoryTest
         sourceSystemName = "source System_Name",
         contentPartIndex = 1,
         paidContent = true,
-        contentId = "my-unique-content-id-1234"
+        contentId = "my-unique-content-id-1234",
+        "my-unique-content-space-uuid-1234"
     )
 
     @Before
@@ -319,7 +320,7 @@ class PaidEventsFactoryTest
     }
 
     private fun mockRdlcnEncodingPaid() = encode(
-        "{\"publication\":{\"premium\":${sampleContentMetadata.paidContent}},\"source\":{\"id\":\"${sampleContentMetadata.contentId}\"" +
+        "{\"publication\":{\"premium\":${sampleContentMetadata.paidContent}},\"source\":{\"id\":\"${sampleContentMetadata.contentSpaceUuid}\"" +
                 ",\"system\":\"${sampleContentMetadata.sourceSystemName}\"}}"
     )
 
