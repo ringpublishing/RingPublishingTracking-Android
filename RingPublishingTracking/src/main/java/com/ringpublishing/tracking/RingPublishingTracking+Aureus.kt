@@ -5,6 +5,7 @@
  */
 package com.ringpublishing.tracking
 
+import com.ringpublishing.tracking.data.aureus.AureusDeboostingStrategy
 import com.ringpublishing.tracking.data.aureus.AureusEventContext
 import com.ringpublishing.tracking.data.aureus.AureusTeaser
 import com.ringpublishing.tracking.internal.aureus.ImpressionEventType
@@ -68,4 +69,21 @@ fun RingPublishingTracking.reportContentClick(
         eventContext = eventContext
     )
     reportEvent(clickEvent)
+}
+
+/**
+ * Reports 'Aureus' deboosting event
+ *
+ * @param strategy deboosting strategy
+ * @param teasers list of AureusTeaser instances
+ */
+fun RingPublishingTracking.reportAureusDeboostingEvent(
+    strategy: AureusDeboostingStrategy,
+    teasers: List<AureusTeaser>,
+) {
+    val deboostingEvent = aureusEventFactory.createAureusDeboostingEvent(
+        strategy = strategy,
+        teasers = teasers
+    )
+    reportEvent(deboostingEvent)
 }

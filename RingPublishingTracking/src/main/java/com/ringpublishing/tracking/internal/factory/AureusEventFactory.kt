@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.ringpublishing.tracking.RingPublishingTracking.eventsFactory
 import com.ringpublishing.tracking.data.Event
+import com.ringpublishing.tracking.data.aureus.AureusDeboostingStrategy
 import com.ringpublishing.tracking.data.aureus.AureusEventContext
 import com.ringpublishing.tracking.data.aureus.AureusTeaser
 import com.ringpublishing.tracking.internal.aureus.AureusEventParam
@@ -25,12 +26,7 @@ class AureusEventFactory(
 
         val parameters = mutableMapOf<String, Any>()
 
-        val displayedItemsJsonArray = runCatching {
-            snakeCaseGson.fromJson(
-                snakeCaseGson.toJson(teasers.map { AureusEventTeaserWrapper(it) }),
-                JsonArray::class.java
-            )
-        }.getOrNull()
+        val displayedItemsJsonArray = teasers.prepareJsonArray()
 
         val events = mutableMapOf<String, Any>(
             AureusEventParam.VARIANT_UUID.text to eventContext.variantUuid,
@@ -104,6 +100,41 @@ class AureusEventFactory(
         return clickEvent
     }
 
+    fun createAureusDeboostingEvent(
+        strategy: AureusDeboostingStrategy,
+        teasers: List<AureusTeaser>,
+    ): Event {
+        val parameters = mutableMapOf<String, Any>()
+
+        val displayedItemsJsonArray = teasers.prepareJsonArray()
+
+        val events = mutableMapOf<String, Any>(
+            AureusEventParam.TYPE.text to "deboosting",
+            AureusEventParam.STRATEGY.text to strategy.text,
+        ).apply {
+            displayedItemsJsonArray?.let {
+                this[AureusEventParam.ITEMS.text] = it
+            }
+        }
+
+        runCatching {
+            snakeCaseGson.fromJson(
+                snakeCaseGson.toJson(listOf(events)),
+                JsonArray::class.java
+            )
+        }.getOrNull()?.let {
+            parameters[AureusEventParam.EVENTS.text] = it
+        }
+
+        parameters[AureusEventParam.VERSION.text] = "1.0.0"
+
+        return Event(
+            analyticsSystemName = AnalyticsSystem.GENERIC.text,
+            name = EventType.AUREUS_EVENT.text,
+            parameters = parameters,
+        )
+    }
+
     private fun AureusEventContext.prepareEcxParameter(): String? {
         val parameter = AureusEventContextWrapper(
             context = AureusContext(
@@ -119,6 +150,13 @@ class AureusEventFactory(
             null
         }
     }
+
+    private fun List<AureusTeaser>.prepareJsonArray(): JsonArray? = runCatching {
+        snakeCaseGson.fromJson(
+            snakeCaseGson.toJson(this.map { AureusEventTeaserWrapper(it) }),
+            JsonArray::class.java
+        )
+    }.getOrNull()
 
     @Suppress("unused")
     internal class AureusEventTeaserWrapper(

@@ -11,10 +11,12 @@ import android.widget.Button
 import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.ContentPageViewSource
 import com.ringpublishing.tracking.data.Event
+import com.ringpublishing.tracking.data.aureus.AureusDeboostingStrategy
 import com.ringpublishing.tracking.data.aureus.AureusEventContext
 import com.ringpublishing.tracking.data.aureus.AureusTeaser
 import com.ringpublishing.tracking.demo.data.ScreenTrackingData
 import com.ringpublishing.tracking.logout
+import com.ringpublishing.tracking.reportAureusDeboostingEvent
 import com.ringpublishing.tracking.reportAureusImpression
 import com.ringpublishing.tracking.reportClick
 import com.ringpublishing.tracking.reportUserAction
@@ -160,17 +162,33 @@ class ActionsController : ScreenController()
         )
     }
 
-	private fun reportButtonClickEvent(sender: View)
-	{
-		// If our click action does not have a name, we can omit it
-		val actionName = when (sender)
-		{
-			is Button -> sender.text.toString()
-			else -> null
-		}
+    fun actionReportAureusDeboosting() {
+        val teasers = listOf(
+            AureusTeaser("teaserId", "offerId", "contentId"),
+            AureusTeaser("teaserId_2", "offerId_2", "contentId_2"),
+            AureusTeaser("teaserId_3", "offerId_3", "contentId_3"),
+        )
 
-		actionName?.let {
-			RingPublishingTracking.reportClick(actionName)
-		}
-	}
+        RingPublishingTracking.reportAureusDeboostingEvent(
+            teasers = teasers,
+            strategy = AureusDeboostingStrategy.CLICK
+        )
+
+        RingPublishingTracking.reportAureusDeboostingEvent(
+            teasers = teasers,
+            strategy = AureusDeboostingStrategy.VIEW
+        )
+    }
+
+    private fun reportButtonClickEvent(sender: View) {
+        // If our click action does not have a name, we can omit it
+        val actionName = when (sender) {
+            is Button -> sender.text.toString()
+            else -> null
+        }
+
+        actionName?.let {
+            RingPublishingTracking.reportClick(actionName)
+        }
+    }
 }
