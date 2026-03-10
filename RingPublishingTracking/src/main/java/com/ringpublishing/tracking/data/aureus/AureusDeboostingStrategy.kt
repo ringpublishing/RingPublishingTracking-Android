@@ -13,5 +13,10 @@ enum class AureusDeboostingStrategy(val text: String) {
     /**
      * User saw content multiple times but never interacted with it
      */
-    VIEW("view");
+    VIEWABILITY("viewability"),
+
+    /**
+     * User saw video content
+     */
+    VIDEO_VIEWS("video_views");
 }

@@ -176,7 +176,12 @@ class ActionsController : ScreenController()
 
         RingPublishingTracking.reportAureusDeboostingEvent(
             teasers = teasers,
-            strategy = AureusDeboostingStrategy.VIEW
+            strategy = AureusDeboostingStrategy.VIEWABILITY
+        )
+
+        RingPublishingTracking.reportAureusDeboostingEvent(
+            teasers = teasers,
+            strategy = AureusDeboostingStrategy.VIDEO_VIEWS
         )
     }
 

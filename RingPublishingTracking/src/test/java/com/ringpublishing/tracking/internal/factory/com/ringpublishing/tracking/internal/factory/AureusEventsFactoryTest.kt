@@ -51,7 +51,7 @@ class AureusEventsFactoryTest {
 
     @Test
     fun createNewAureusImpressionEvent_ThenCorrectResult() {
-        val eventsFactory = AureusEventFactory(snakeCaseGson, eventsFactory)
+        val eventsFactory = AureusEventFactory(gson, snakeCaseGson, eventsFactory)
 
         val teasers = listOf(
             AureusTeaser("teaserId", "offerId", "contentId"),
@@ -88,7 +88,7 @@ class AureusEventsFactoryTest {
 
     @Test
     fun createClickEvent_ThenCorrectResult() {
-        val eventsFactory = AureusEventFactory(snakeCaseGson, eventsFactory)
+        val eventsFactory = AureusEventFactory(gson, snakeCaseGson, eventsFactory)
 
         val eventName = "eventName"
 
@@ -122,7 +122,7 @@ class AureusEventsFactoryTest {
 
     @Test
     fun createDeboostingEvent_ThenCorrectResult() {
-        val eventsFactory = AureusEventFactory(snakeCaseGson, eventsFactory)
+        val eventsFactory = AureusEventFactory(gson, snakeCaseGson, eventsFactory)
 
         val teasers = listOf(
             AureusTeaser("teaserId", "offerId", "contentId"),
@@ -130,12 +130,12 @@ class AureusEventsFactoryTest {
         )
 
         val teaserWrappers = teasers.map {
-            AureusEventFactory.AureusEventTeaserWrapper(it)
+            AureusEventFactory.AureusDeboostingEventTeaserWrapper(it)
         }
 
         val event = eventsFactory.createAureusDeboostingEvent(
             teasers = teasers,
-            strategy = AureusDeboostingStrategy.VIEW,
+            strategy = AureusDeboostingStrategy.CLICK,
         )
 
         val parameters = event.parameters[AureusEventParam.EVENTS.text] as JsonArray
@@ -143,12 +143,12 @@ class AureusEventsFactoryTest {
 
         Assert.assertEquals(event.analyticsSystemName, AnalyticsSystem.GENERIC.text)
         Assert.assertEquals(event.name, EventType.AUREUS_EVENT.text)
-        Assert.assertEquals(event.parameters[AureusEventParam.VERSION.text], "1.0.0")
+        Assert.assertEquals(event.parameters[AureusEventParam.VERSION.text], "1.0.1")
         Assert.assertEquals(parametersObject.get(AureusEventParam.TYPE.text).asString, "deboosting")
-        Assert.assertEquals(parametersObject.get(AureusEventParam.STRATEGY.text).asString, AureusDeboostingStrategy.VIEW.text)
+        Assert.assertEquals(parametersObject.get(AureusEventParam.STRATEGY.text).asString, AureusDeboostingStrategy.CLICK.text)
         Assert.assertEquals(
             parametersObject.get(AureusEventParam.ITEMS.text).asJsonArray,
-            snakeCaseGson.fromJson(snakeCaseGson.toJson(teaserWrappers), JsonArray::class.java)
+            gson.fromJson(gson.toJson(teaserWrappers), JsonArray::class.java)
         )
     }
 

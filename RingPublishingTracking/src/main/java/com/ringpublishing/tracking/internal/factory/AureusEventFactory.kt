@@ -16,6 +16,7 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 class AureusEventFactory(
+    private val gson: Gson,
     private val snakeCaseGson: Gson,
     private val eventFactory: EventsFactory
 ) {
@@ -106,7 +107,12 @@ class AureusEventFactory(
     ): Event {
         val parameters = mutableMapOf<String, Any>()
 
-        val displayedItemsJsonArray = teasers.prepareJsonArray()
+        val displayedItemsJsonArray = runCatching {
+            gson.fromJson(
+                gson.toJson(teasers.map { AureusDeboostingEventTeaserWrapper(it) }),
+                JsonArray::class.java
+            )
+        }.getOrNull()
 
         val events = mutableMapOf<String, Any>(
             AureusEventParam.TYPE.text to "deboosting",
@@ -126,7 +132,8 @@ class AureusEventFactory(
             parameters[AureusEventParam.EVENTS.text] = it
         }
 
-        parameters[AureusEventParam.VERSION.text] = "1.0.0"
+        // Version 1.0.1 assuming that ArtemisId is always used by SDK
+        parameters[AureusEventParam.VERSION.text] = "1.0.1"
 
         return Event(
             analyticsSystemName = AnalyticsSystem.GENERIC.text,
@@ -165,6 +172,17 @@ class AureusEventFactory(
     ) {
         constructor(teaser: AureusTeaser) : this(
             teaserId = teaser.teaserId,
+            contentId = teaser.contentId
+        )
+    }
+
+    @Suppress("unused")
+    internal class AureusDeboostingEventTeaserWrapper(
+        val offerId: String?,
+        val contentId: String,
+    ) {
+        constructor(teaser: AureusTeaser) : this(
+            offerId = teaser.offerId,
             contentId = teaser.contentId
         )
     }
