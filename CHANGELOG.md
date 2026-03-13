@@ -1,3 +1,11 @@
+1.12.0 Release notes (2026-03-09)
+================================
+
+Improvements to the 'RingPublishingTracking' module.
+
+### Changes
+
+* Added new public method to report Aureus deboosting event
 1.11.0 Release notes - No changelog provided
 
 1.11.0 Release notes (2025-12-08)
