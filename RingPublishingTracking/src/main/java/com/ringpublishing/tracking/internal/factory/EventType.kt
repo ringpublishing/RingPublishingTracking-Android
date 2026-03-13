@@ -6,15 +6,15 @@
 
 package com.ringpublishing.tracking.internal.factory
 
-enum class EventType(val text: String)
-{
-	CLICK("ClkEvent"),
-	USER_ACTION("UserAction"),
-	PAGE_VIEW("PageView"),
-	KEEP_ALIVE("KeepAlive"),
-	VIDEO("VidEvent"),
-	ERROR("ErrEvent"),
-	PAID("PaidEvent"),
-	POLARIS("PolarisEvent"),
+enum class EventType(val text: String) {
+    CLICK("ClkEvent"),
+    USER_ACTION("UserAction"),
+    PAGE_VIEW("PageView"),
+    KEEP_ALIVE("KeepAlive"),
+    VIDEO("VidEvent"),
+    ERROR("ErrEvent"),
+    PAID("PaidEvent"),
+    POLARIS("PolarisEvent"),
     AUREUS_IMPRESSION_EVENT("AureusImpressionEvent"),
+    AUREUS_EVENT("AureusEvent"),
 }

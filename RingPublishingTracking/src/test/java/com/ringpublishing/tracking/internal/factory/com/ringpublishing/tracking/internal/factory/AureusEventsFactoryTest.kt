@@ -10,6 +10,7 @@ import android.util.Base64
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
+import com.ringpublishing.tracking.data.aureus.AureusDeboostingStrategy
 import com.ringpublishing.tracking.data.aureus.AureusEventContext
 import com.ringpublishing.tracking.data.aureus.AureusTeaser
 import com.ringpublishing.tracking.internal.aureus.AureusEventParam
@@ -50,7 +51,7 @@ class AureusEventsFactoryTest {
 
     @Test
     fun createNewAureusImpressionEvent_ThenCorrectResult() {
-        val eventsFactory = AureusEventFactory(snakeCaseGson, eventsFactory)
+        val eventsFactory = AureusEventFactory(gson, snakeCaseGson, eventsFactory)
 
         val teasers = listOf(
             AureusTeaser("teaserId", "offerId", "contentId"),
@@ -79,12 +80,15 @@ class AureusEventsFactoryTest {
         Assert.assertEquals(parametersObject.get(AureusEventParam.SEGMENT_ID.text).asString, aureusEventContext.segmentId)
         Assert.assertEquals(parametersObject.get(AureusEventParam.BATCH_ID.text).asString, aureusEventContext.batchId)
         Assert.assertEquals(parametersObject.get(AureusEventParam.RECOMMENDATION_ID.text).asString, aureusEventContext.recommendationId)
-        Assert.assertEquals(parametersObject.get(AureusEventParam.DISPLAYED_ITEMS.text).asJsonArray, snakeCaseGson.fromJson(snakeCaseGson.toJson(teaserWrappers), JsonArray::class.java))
+        Assert.assertEquals(
+            parametersObject.get(AureusEventParam.DISPLAYED_ITEMS.text).asJsonArray,
+            snakeCaseGson.fromJson(snakeCaseGson.toJson(teaserWrappers), JsonArray::class.java)
+        )
     }
 
     @Test
     fun createClickEvent_ThenCorrectResult() {
-        val eventsFactory = AureusEventFactory(snakeCaseGson, eventsFactory)
+        val eventsFactory = AureusEventFactory(gson, snakeCaseGson, eventsFactory)
 
         val eventName = "eventName"
 
@@ -114,6 +118,38 @@ class AureusEventsFactoryTest {
         Assert.assertEquals(event.parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text], teaser.contentId.lowercase())
         Assert.assertEquals(event.parameters[AureusEventParam.EI.text], teaser.offerId)
         Assert.assertEquals(event.parameters[AureusEventParam.ECX.text], prepareEncodedAureusEventContext())
+    }
+
+    @Test
+    fun createDeboostingEvent_ThenCorrectResult() {
+        val eventsFactory = AureusEventFactory(gson, snakeCaseGson, eventsFactory)
+
+        val teasers = listOf(
+            AureusTeaser("teaserId", "offerId", "contentId"),
+            AureusTeaser("teaserId1", "offerId1", "contentId1")
+        )
+
+        val teaserWrappers = teasers.map {
+            AureusEventFactory.AureusDeboostingEventTeaserWrapper(it)
+        }
+
+        val event = eventsFactory.createAureusDeboostingEvent(
+            teasers = teasers,
+            strategy = AureusDeboostingStrategy.CLICK,
+        )
+
+        val parameters = event.parameters[AureusEventParam.EVENTS.text] as JsonArray
+        val parametersObject = parameters[0].asJsonObject
+
+        Assert.assertEquals(event.analyticsSystemName, AnalyticsSystem.GENERIC.text)
+        Assert.assertEquals(event.name, EventType.AUREUS_EVENT.text)
+        Assert.assertEquals(event.parameters[AureusEventParam.VERSION.text], "1.0.1")
+        Assert.assertEquals(parametersObject.get(AureusEventParam.TYPE.text).asString, "deboosting")
+        Assert.assertEquals(parametersObject.get(AureusEventParam.STRATEGY.text).asString, AureusDeboostingStrategy.CLICK.text)
+        Assert.assertEquals(
+            parametersObject.get(AureusEventParam.ITEMS.text).asJsonArray,
+            gson.fromJson(gson.toJson(teaserWrappers), JsonArray::class.java)
+        )
     }
 
     private fun prepareEncodedAureusEventContext(): String? {

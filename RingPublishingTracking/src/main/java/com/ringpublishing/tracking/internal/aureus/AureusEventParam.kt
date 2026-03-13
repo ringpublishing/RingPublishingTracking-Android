@@ -9,4 +9,8 @@ internal enum class AureusEventParam(val text: String) {
     EVENTS("events"),
     EI("EI"),
     ECX("ECX"),
+    VERSION("version"),
+    TYPE("type"),
+    STRATEGY("strategy"),
+    ITEMS("items")
 }

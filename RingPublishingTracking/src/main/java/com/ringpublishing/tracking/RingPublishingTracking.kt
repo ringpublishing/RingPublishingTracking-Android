@@ -203,7 +203,11 @@ object RingPublishingTracking : KeepAliveDataSource {
     internal val videoEventsFactory = VideoEventsFactory(Component.provideGson())
     internal val audioEventsFactory = AudioEventsFactory(Component.provideGson())
     internal val paidEventsFactory = PaidEventsFactory(Component.provideGson())
-    internal val aureusEventFactory = AureusEventFactory(Component.provideSnakeCaseGson(), eventsFactory)
+    internal val aureusEventFactory = AureusEventFactory(
+        gson = Component.provideGson(),
+        snakeCaseGson = Component.provideSnakeCaseGson(),
+        eventFactory = eventsFactory
+    )
     var delegate: WeakReference<RingPublishingTrackingDelegate>? = null
     internal var keepAliveDelegate: WeakReference<RingPublishingTrackingKeepAliveDataSource>? = null
 }

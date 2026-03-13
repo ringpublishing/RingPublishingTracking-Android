@@ -70,6 +70,7 @@ class ActionsFragment : Fragment(R.layout.fragment_actions)
 				actionDisableOptOutMode.setOnClickListener { actionDisableOptOutMode() }
 
 				actionReportAureusImpression.setOnClickListener { actionReportAureusImpression() }
+				actionReportAureusDeboosting.setOnClickListener { actionReportAureusDeboosting() }
 			}
 		}
 	}
