@@ -31,10 +31,13 @@ class AureusEventFactory(
 
         val events = mutableMapOf<String, Any>(
             AureusEventParam.VARIANT_UUID.text to eventContext.variantUuid,
-            AureusEventParam.SEGMENT_ID.text to eventContext.segmentId,
             AureusEventParam.BATCH_ID.text to eventContext.batchId,
             AureusEventParam.RECOMMENDATION_ID.text to eventContext.recommendationId
         ).apply {
+            eventContext.segmentId?.let {
+                this[AureusEventParam.SEGMENT_ID.text] = it
+            }
+
             displayedItemsJsonArray?.let {
                 this[AureusEventParam.DISPLAYED_ITEMS.text] = it
             }
@@ -202,7 +205,7 @@ class AureusEventFactory(
         private val variantUuid: String,
         private val batchId: String,
         private val recommendationId: String,
-        private val segmentId: String,
+        private val segmentId: String?,
         private val teaserId: String?
     ) {
         constructor(context: AureusEventContext) : this(
