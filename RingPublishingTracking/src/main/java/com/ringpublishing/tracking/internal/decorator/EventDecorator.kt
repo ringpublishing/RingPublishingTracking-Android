@@ -24,12 +24,15 @@ internal class EventDecorator(
 {
 	private val decorators = mutableListOf<Decorator>()
 
+	private val clientDecorator = ClientDecorator(gson)
+
 	init
 	{
 		with(decorators)
 		{
 			add(PrimaryIdDecorator(configurationManager))
 			add(SecondaryIdDecorator(configurationManager))
+			add(SessionIdentifierDecorator())
 			add(UserIdentifierDataDecorator(configurationManager, apiRepository, gson))
 			add(TenantIdDecorator(configurationManager))
 			add(SiteAreaDecorator(configurationManager))
@@ -38,7 +41,8 @@ internal class EventDecorator(
 			add(ContentUrlDecorator(configurationManager))
 			add(StructurePathDecorator(configurationManager))
 			add(ReferrerDecorator(configurationManager))
-			add(ClientDecorator(gson))
+			add(clientDecorator)
+			add(SequenceDecorator())
 		}
 
 		Logger.debug("Decorators for event: $decorators")
@@ -46,7 +50,15 @@ internal class EventDecorator(
 
 	fun decorate(event: Event): Event
 	{
-		decorators.forEach { decorator -> decorator.decorate(event) }
+		decorators.forEach { decorator ->
+			decorator.decorate(event)
+			decorator.eventDecorated()
+		}
 		return event
+	}
+
+	fun updateVariantExternalParameters(parameters: Map<String, String>)
+	{
+		clientDecorator.updateVariantExternalParameters(parameters)
 	}
 }
