@@ -5,6 +5,8 @@
  */
 package com.ringpublishing.tracking
 
+import com.ringpublishing.tracking.internal.log.Logger
+
 /***
  *
  * Setting user identifier data as null during logout
@@ -57,4 +59,15 @@ fun RingPublishingTracking.updateUserData(userId: String, userEmail: String?)
 fun RingPublishingTracking.updateApplicationAdvertisementArea(currentAdvertisementArea: String)
 {
 	configurationManager.updateAdvertisementArea(currentAdvertisementArea)
+}
+
+/**
+ * Update variant.external parameters reported inside RDLC; rejected (unchanged) over 10 keys or 10 chars each.
+ *
+ * @param parameters: Map of variant.external parameters
+ */
+fun RingPublishingTracking.updateVariantExternalParameters(parameters: Map<String, String>) = ifInitializedOrWarn {
+	Logger.debug("Updating variant external parameters: '$parameters'")
+
+	eventsReporter.updateVariantExternalParameters(parameters)
 }

@@ -44,6 +44,10 @@ internal class EventsReporter(
         isEPVEventSent = false
     }
 
+    fun updateVariantExternalParameters(parameters: Map<String, String>) {
+        eventDecorator.updateVariantExternalParameters(parameters)
+    }
+
     private fun handleEPVEventReport(event: Event) {
         if (event.name == EventType.POLARIS.text) {
             isEPVEventSent = true

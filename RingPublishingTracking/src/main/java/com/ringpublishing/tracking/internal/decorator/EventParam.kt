@@ -21,4 +21,6 @@ internal enum class EventParam(val text: String)
 	WINDOW_SIZE("CW"),
 	CLIENT_ID("RDLC"),
 	MARKED_AS_PAID_DATA("RDLCN"),
+	SESSION_ID("IS"),
+	SEQUENCE("SQ"),
 }

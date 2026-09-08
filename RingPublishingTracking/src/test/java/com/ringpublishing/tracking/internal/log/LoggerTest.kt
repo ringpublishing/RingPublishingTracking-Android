@@ -11,6 +11,7 @@ import com.ringpublishing.tracking.listener.LogListener
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -35,6 +36,12 @@ class LoggerTest
         MockKAnnotations.init(this, relaxUnitFun = true)
 	    Logger.addLogListener(logListener)
 	    Logger.debugLogEnabled(false)
+    }
+
+    @After
+    fun after()
+    {
+        Logger.removeLogListener(logListener)
     }
 
     @Test
