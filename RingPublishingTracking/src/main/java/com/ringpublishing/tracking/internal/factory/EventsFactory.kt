@@ -57,7 +57,16 @@ class EventsFactory(private val gson: Gson)
 		return Event(AnalyticsSystem.KROPKA_EVENTS.text, EventType.USER_ACTION.text, parameters)
 	}
 
-	fun createPageViewEvent(contentIdentifier: String? = null, contentMetadata: ContentMetadata? = null): Event
+    fun createPageViewEvent(
+        contentIdentifier: String? = null,
+        contentMetadata: ContentMetadata? = null,
+    ): Event = createPageViewEvent(contentIdentifier, contentMetadata, null)
+
+    fun createPageViewEvent(
+        contentIdentifier: String?,
+        contentMetadata: ContentMetadata?,
+        clientData: String?,
+    ): Event
 	{
         val parameters = mutableMapOf<String, Any>()
 
@@ -68,6 +77,7 @@ class EventsFactory(private val gson: Gson)
             parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text] = metadata.buildToDX()
             createMarkedAsPaidParam(gson, metadata)?.let { param -> parameters[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
+        clientData?.let { parameters[EventParam.CLIENT_ID.text] = it }
 
         return Event(AnalyticsSystem.KROPKA_STATS.text, EventType.PAGE_VIEW.text, parameters)
 	}

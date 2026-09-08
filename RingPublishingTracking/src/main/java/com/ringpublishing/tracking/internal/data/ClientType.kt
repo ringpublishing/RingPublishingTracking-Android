@@ -6,4 +6,7 @@
 
 package com.ringpublishing.tracking.internal.data
 
-class ClientType(val type: ClientPlatform)
+class ClientType @JvmOverloads constructor(
+    val type: ClientPlatform,
+    val viewType: String? = null,
+)

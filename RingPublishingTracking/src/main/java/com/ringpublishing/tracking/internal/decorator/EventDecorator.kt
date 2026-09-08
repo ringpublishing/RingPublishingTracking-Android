@@ -7,6 +7,7 @@
 package com.ringpublishing.tracking.internal.decorator
 
 import com.google.gson.Gson
+import com.ringpublishing.tracking.data.ContentViewType
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.device.WindowSizeInfo
@@ -61,4 +62,6 @@ internal class EventDecorator(
 	{
 		clientDecorator.updateVariantExternalParameters(parameters)
 	}
+
+	fun clientData(viewType: ContentViewType): String = clientDecorator.clientData(viewType)
 }

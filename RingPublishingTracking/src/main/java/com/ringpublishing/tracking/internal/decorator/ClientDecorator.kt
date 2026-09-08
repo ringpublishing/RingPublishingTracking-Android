@@ -6,15 +6,15 @@
 
 package com.ringpublishing.tracking.internal.decorator
 
-import android.util.Base64
 import com.google.gson.Gson
+import com.ringpublishing.tracking.data.ContentViewType
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.data.Client
 import com.ringpublishing.tracking.internal.data.ClientPlatform
 import com.ringpublishing.tracking.internal.data.ClientType
 import com.ringpublishing.tracking.internal.data.ClientVariant
+import com.ringpublishing.tracking.internal.data.toRdlc
 import com.ringpublishing.tracking.internal.log.Logger
-import java.io.UnsupportedEncodingException
 
 internal class ClientDecorator(private val gson: Gson) : BaseDecorator()
 {
@@ -23,12 +23,10 @@ internal class ClientDecorator(private val gson: Gson) : BaseDecorator()
 
 	override fun decorate(event: Event)
 	{
-		val variant = variantExternalParameters?.let { ClientVariant(it) }
-		val client = Client(ClientType(ClientPlatform.native_app), variant)
-
-		val clientId = encodeClientId(client)
-		clientId.let { event.add(EventParam.CLIENT_ID, it) }
+		event.add(EventParam.CLIENT_ID, createClientData())
 	}
+
+	fun clientData(viewType: ContentViewType): String = createClientData(viewType)
 
 	/**
 	 * Sets variant.external keys reported inside RDLC; rejected (unchanged) over 10 keys or 10 chars each.
@@ -56,21 +54,11 @@ internal class ClientDecorator(private val gson: Gson) : BaseDecorator()
 		}
 	}
 
-	private fun encodeClientId(client: Client): String?
+	private fun createClientData(viewType: ContentViewType? = null): String
 	{
-		val jsonClient = gson.toJson(client)
-
-		val data: ByteArray?
-
-		try
-		{
-			data = jsonClient.toByteArray(Charsets.UTF_8)
-		} catch (e: UnsupportedEncodingException)
-		{
-			Logger.warn("Parse jsonClient UnsupportedEncodingException $e")
-			return null
-		}
-		return Base64.encodeToString(data, Base64.NO_WRAP)
+		val clientType = ClientType(ClientPlatform.native_app, viewType?.value)
+		val variant = variantExternalParameters?.let { ClientVariant(it) }
+		return Client(clientType, variant).toRdlc(gson)
 	}
 
 	private companion object
