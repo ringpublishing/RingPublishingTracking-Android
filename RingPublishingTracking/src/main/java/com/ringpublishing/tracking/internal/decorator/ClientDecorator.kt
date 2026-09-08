@@ -23,10 +23,15 @@ internal class ClientDecorator(private val gson: Gson) : BaseDecorator()
 
 	override fun decorate(event: Event)
 	{
-		event.add(EventParam.CLIENT_ID, createClientData())
+		event.add(EventParam.CLIENT_ID, clientData())
 	}
 
-	fun clientData(viewType: ContentViewType): String = createClientData(viewType)
+	fun clientData(viewType: ContentViewType? = null): String
+	{
+		val clientType = ClientType(ClientPlatform.native_app, viewType?.value)
+		val variant = variantExternalParameters?.let { ClientVariant(it) }
+		return Client(clientType, variant).toRdlc(gson)
+	}
 
 	/**
 	 * Sets variant.external keys reported inside RDLC; rejected (unchanged) over 10 keys or 10 chars each.
@@ -52,13 +57,6 @@ internal class ClientDecorator(private val gson: Gson) : BaseDecorator()
 		return parameters.all { (key, value) ->
 			key.length <= MAX_VARIANT_EXTERNAL_PARAMETER_LENGTH && value.length <= MAX_VARIANT_EXTERNAL_PARAMETER_LENGTH
 		}
-	}
-
-	private fun createClientData(viewType: ContentViewType? = null): String
-	{
-		val clientType = ClientType(ClientPlatform.native_app, viewType?.value)
-		val variant = variantExternalParameters?.let { ClientVariant(it) }
-		return Client(clientType, variant).toRdlc(gson)
 	}
 
 	private companion object
