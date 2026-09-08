@@ -87,6 +87,30 @@ class AureusEventsFactoryTest {
     }
 
     @Test
+    fun createNewAureusImpressionEvent_segmentIdNull_segmentIdKeyOmitted() {
+        val eventsFactory = AureusEventFactory(gson, snakeCaseGson, eventsFactory)
+
+        val teasers = listOf(
+            AureusTeaser("teaserId", "offerId", "contentId"),
+        )
+
+        val aureusEventContext = AureusEventContext(
+            variantUuid = "4f37f85f-a8ad-4e6c-a426-5a42fce67ecc",
+            batchId = "g9fewcisss",
+            recommendationId = "a5uam4ufuu",
+            segmentId = null,
+            impressionEventType = "AUREUS_IMPRESSION_EVENT_AND_USER_ACTION",
+        )
+
+        val event = eventsFactory.createNewAureusImpressionEvent(teasers, aureusEventContext)
+        val parameters = event.parameters[AureusEventParam.EVENTS.text] as JsonArray
+        val parametersObject = parameters[0].asJsonObject
+
+        Assert.assertFalse(parametersObject.has(AureusEventParam.SEGMENT_ID.text))
+        Assert.assertEquals(parametersObject.get(AureusEventParam.VARIANT_UUID.text).asString, aureusEventContext.variantUuid)
+    }
+
+    @Test
     fun createClickEvent_ThenCorrectResult() {
         val eventsFactory = AureusEventFactory(gson, snakeCaseGson, eventsFactory)
 

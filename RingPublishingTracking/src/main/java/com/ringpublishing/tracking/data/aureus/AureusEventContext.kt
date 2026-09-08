@@ -6,14 +6,14 @@ package com.ringpublishing.tracking.data.aureus
  * @param variantUuid: Aureus variant UUID. Corresponds to the unique 'recipe' which was used to generate this particular recommendation
  * @param batchId: Query identifier executed to Aureus
  * @param recommendationId: Identifier of single recommendation. A batch contains one or more recommendations
- * @param segmentId: Segment identifier of given end user
+ * @param segmentId: Segment identifier of given end user, nullable
  * @param impressionEventType: Type of event which is expected to be reported by Aureus
  */
 data class AureusEventContext(
     val variantUuid: String,
     val batchId: String,
     val recommendationId: String,
-    val segmentId: String,
+    val segmentId: String?,
     val impressionEventType: String
 )
 {
