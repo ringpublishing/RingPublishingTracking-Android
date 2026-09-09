@@ -7,6 +7,8 @@ Improvements to the 'RingPublishingTracking' module.
 
 * Added IS (session identifier) field to every tracking event
 * Extended RDLC field with variant.external custom parameters
+* Added content view type to RDLC for content page view events
+* Made content keep-alive data source optional when reporting content page views
 * Added SQ (sequence) field to every tracking event
 * 'segmentId' field of 'AureusEventContext' is now nullable
     - passing null omits the 'segment_id' key from the reported event instead of sending an empty value

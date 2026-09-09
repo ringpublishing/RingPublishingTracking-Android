@@ -6,4 +6,12 @@
 
 package com.ringpublishing.tracking.internal.data
 
-class Client(val client: ClientType, val variant: ClientVariant? = null)
+import android.util.Base64
+import com.google.gson.Gson
+
+class Client @JvmOverloads constructor(val client: ClientType, val variant: ClientVariant? = null)
+
+internal fun Client.toRdlc(gson: Gson): String = Base64.encodeToString(
+	gson.toJson(this).toByteArray(Charsets.UTF_8),
+	Base64.NO_WRAP,
+)

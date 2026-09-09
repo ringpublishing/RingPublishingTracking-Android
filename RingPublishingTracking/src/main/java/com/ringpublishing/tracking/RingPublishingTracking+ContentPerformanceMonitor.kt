@@ -7,6 +7,7 @@ package com.ringpublishing.tracking
 
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.ContentPageViewSource
+import com.ringpublishing.tracking.data.ContentViewType
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingKeepAliveDataSource
 import java.lang.ref.WeakReference
 import java.net.URL
@@ -103,22 +104,58 @@ fun RingPublishingTracking.reportPageView(currentStructurePath: List<String>, pa
 }
 
 /**
- * Content page view event & keep alive
+ * Content page view event & optional keep alive
  *
- * Reports content page view event and immediately starts content keep alive tracking.
+ * Reports content page view event and optionally starts content keep alive tracking.
  *
  * - Use this method if you want to report article content page view event.
  * - Only one content at the time can be tracked.
- * - Reporting new content page view stops current tracking and start tracking for new content.
+ * - Reporting new content page view stops current tracking and starts tracking for new content when
+ * contentKeepAliveDataSource is provided.
  *
  * Parameters:
  * @param contentMetadata: ContentMetadata
+ * @param viewType: optional [ContentViewType] describing the displayed content,
+ * or null when the type is not reported
  * @param contentPageViewSource: ContentPageViewSource
  * @param currentStructurePath: Current application structure path used to identify application screen
  * For example "home/sport_list_screen"
  * @param partiallyReloaded: Pass true if you content was partially reloaded, for example content was refreshed after in app purchase
- * @param contentKeepAliveDataSource: RingPublishingTrackingKeepAliveDataSource which will be set as WeakReference
+ * @param contentKeepAliveDataSource: RingPublishingTrackingKeepAliveDataSource which will be set as WeakReference,
+ * or null to report the page view without keep alive tracking
  */
+@Suppress("LongParameterList")
+fun RingPublishingTracking.reportContentPageView(
+    contentMetadata: ContentMetadata,
+    viewType: ContentViewType? = null,
+    contentPageViewSource: ContentPageViewSource = ContentPageViewSource.DEFAULT,
+    currentStructurePath: List<String>,
+    partiallyReloaded: Boolean,
+    contentKeepAliveDataSource: RingPublishingTrackingKeepAliveDataSource?,
+) = ifInitializedOrWarn {
+    if (contentKeepAliveDataSource != null) {
+        keepAliveDelegate = WeakReference(contentKeepAliveDataSource)
+        keepAliveReporter.start(contentMetadata, this, partiallyReloaded)
+    } else {
+        keepAliveReporter.stop()
+        keepAliveDelegate = null
+    }
+
+    with(configurationManager)
+    {
+        updateStructurePath(currentStructurePath, contentMetadata.publicationUrl, contentPageViewSource, partiallyReloaded)
+        updatePartiallyReloaded(partiallyReloaded)
+    }
+
+    val event = eventsFactory.createPageViewEvent(
+        contentIdentifier = contentMetadata.contentId,
+        contentMetadata = contentMetadata,
+        clientData = viewType?.let(eventsReporter::clientData),
+    )
+    reportEvent(event)
+}
+
+/** Reports content page view event and immediately starts content keep alive tracking. */
 @Suppress("unused", "unused_parameter")
 fun RingPublishingTracking.reportContentPageView(
     contentMetadata: ContentMetadata,
@@ -127,17 +164,14 @@ fun RingPublishingTracking.reportContentPageView(
     partiallyReloaded: Boolean,
     contentKeepAliveDataSource: RingPublishingTrackingKeepAliveDataSource,
 ) = ifInitializedOrWarn {
-    keepAliveDelegate = WeakReference(contentKeepAliveDataSource)
-    keepAliveReporter.start(contentMetadata, this, partiallyReloaded)
-
-    with(configurationManager)
-    {
-        updateStructurePath(currentStructurePath, contentMetadata.publicationUrl, contentPageViewSource, partiallyReloaded)
-        updatePartiallyReloaded(partiallyReloaded)
-    }
-
-    val event = eventsFactory.createPageViewEvent(contentMetadata.contentId, contentMetadata)
-    reportEvent(event)
+    reportContentPageView(
+        contentMetadata = contentMetadata,
+        contentPageViewSource = contentPageViewSource,
+        currentStructurePath = currentStructurePath,
+        partiallyReloaded = partiallyReloaded,
+        contentKeepAliveDataSource = contentKeepAliveDataSource,
+        viewType = null
+    )
 }
 
 /**

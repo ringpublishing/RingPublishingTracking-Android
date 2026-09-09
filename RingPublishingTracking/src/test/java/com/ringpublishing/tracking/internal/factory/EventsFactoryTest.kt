@@ -9,11 +9,9 @@ package com.ringpublishing.tracking.internal.factory
 import android.util.Base64
 import com.google.gson.GsonBuilder
 import com.ringpublishing.tracking.data.ContentMetadata
+import com.ringpublishing.tracking.internal.mockAndroidBase64Encoding
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
 import com.ringpublishing.tracking.internal.decorator.EventParam
-import io.mockk.every
-import io.mockk.mockkStatic
-import io.mockk.slot
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -26,14 +24,7 @@ class EventsFactoryTest
 
     @Before
     fun `Bypass android_util_Base64 to java_util_Base64`() {
-        mockkStatic(Base64::class)
-        val arraySlot = slot<ByteArray>()
-
-        every {
-            Base64.encodeToString(capture(arraySlot), Base64.NO_WRAP)
-        } answers {
-            java.util.Base64.getEncoder().encodeToString(arraySlot.captured)
-        }
+        mockAndroidBase64Encoding()
     }
 
 	@Test
@@ -161,6 +152,26 @@ class EventsFactoryTest
 
 		Assert.assertEquals("PV_4,source_System_Name,publicationId,1,t", event.parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text])
         Assert.assertEquals(mockRdlcnEncodingPaid(), event.parameters[EventParam.MARKED_AS_PAID_DATA.text])
+    }
+
+    @Test
+    fun createPageViewEvent_WhenClientDataProvided_ThenEventOwnsRdlc()
+    {
+        val event = EventsFactory(gson).createPageViewEvent(
+            contentIdentifier = null,
+            contentMetadata = null,
+            clientData = "encoded-client-data",
+        )
+
+        Assert.assertEquals("encoded-client-data", event.parameters[EventParam.CLIENT_ID.text])
+    }
+
+    @Test
+    fun createPageViewEvent_WhenViewTypeMissing_ThenRdlcIsLeftToDecorator()
+    {
+        val event = EventsFactory(gson).createPageViewEvent()
+
+        Assert.assertFalse(event.parameters.containsKey(EventParam.CLIENT_ID.text))
     }
 
     private fun mockRdlcnEncodingPaid() = encode(

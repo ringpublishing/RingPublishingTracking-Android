@@ -11,21 +11,23 @@ import android.content.SharedPreferences
 import android.util.Base64
 import com.google.gson.Gson
 import com.google.gson.JsonElement
+import com.ringpublishing.tracking.data.ContentViewType
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.ConfigurationManager
+import com.ringpublishing.tracking.internal.decodeRdlc
+import com.ringpublishing.tracking.internal.mockAndroidBase64Encoding
 import com.ringpublishing.tracking.internal.api.response.ArtemisIdResponse
 import com.ringpublishing.tracking.internal.api.response.Id
 import com.ringpublishing.tracking.internal.api.response.User
 import com.ringpublishing.tracking.internal.data.UserData
 import com.ringpublishing.tracking.internal.device.WindowSizeInfo
+import com.ringpublishing.tracking.internal.factory.EventsFactory
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.repository.ApiRepository
 import com.ringpublishing.tracking.internal.util.ScreenSizeInfo
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockkStatic
-import io.mockk.slot
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -69,14 +71,7 @@ internal class EventDecoratorTest
 
     @Before
     fun `Bypass android_util_Base64 to java_util_Base64`() {
-        mockkStatic(Base64::class)
-        val arraySlot = slot<ByteArray>()
-
-        every {
-            Base64.encodeToString(capture(arraySlot), Base64.NO_WRAP)
-        } answers {
-            java.util.Base64.getEncoder().encodeToString(arraySlot.captured)
-        }
+        mockAndroidBase64Encoding()
     }
 
 	@Test
@@ -97,6 +92,7 @@ internal class EventDecoratorTest
 		with(eventDecorated)
 		{
             Assert.assertEquals("name", this.name)
+			Assert.assertEquals("""{"client":{"type":"native_app"}}""", decodeRdlc())
 			Assert.assertEquals("primaryId", this.parameters["IP"])
 			Assert.assertEquals("secondaryId", this.parameters["IV"])
 			Assert.assertEquals("tenantId", this.parameters["TID"])
@@ -192,6 +188,68 @@ internal class EventDecoratorTest
         {
             Assert.assertEquals(mockRdluArtemisEncodingWithSubscription(), this.parameters["RDLU"])
         }
+    }
+
+    @Test
+    fun decorate_ContentPageViewWithViewType_PreservesVariantAndDoesNotLeakViewType() {
+        mockDefaultParameters()
+
+        every { userData.userId } returns null
+        every { userData.emailMd5 } returns null
+        every { userData.ssoName } returns null
+        every { userData.isActiveSubscriber } returns null
+        every { apiRepository.readArtemisId() } returns null
+
+        val eventDecorator = EventDecorator(
+            configurationManager,
+            apiRepository,
+            Gson(),
+            windowSizeInfo,
+            screenSizeInfo,
+        )
+        eventDecorator.updateVariantExternalParameters(mapOf("experiment" to "a"))
+
+        val contentPageViewEvent = EventsFactory(Gson()).createPageViewEvent(
+            contentIdentifier = null,
+            contentMetadata = null,
+            clientData = eventDecorator.clientData(ContentViewType.TEXT),
+        )
+        val decoratedContentPageViewEvent = eventDecorator.decorate(contentPageViewEvent)
+        val nextEvent = eventDecorator.decorate(Event())
+
+        Assert.assertEquals(
+            """{"client":{"type":"native_app","viewType":"text"},"variant":{"external":{"experiment":"a"}}}""",
+            decoratedContentPageViewEvent.decodeRdlc(),
+        )
+        Assert.assertEquals(
+            """{"client":{"type":"native_app"},"variant":{"external":{"experiment":"a"}}}""",
+            nextEvent.decodeRdlc(),
+        )
+    }
+
+    @Test
+    fun decorate_WhenEventAlreadyOwnsRdlc_ThenDecoratorDoesNotOverwriteIt()
+    {
+        mockDefaultParameters()
+
+        every { userData.userId } returns null
+        every { userData.emailMd5 } returns null
+        every { userData.ssoName } returns null
+        every { userData.isActiveSubscriber } returns null
+        every { apiRepository.readArtemisId() } returns null
+
+        val event = Event(parameters = mutableMapOf(EventParam.CLIENT_ID.text to "event-rdlc"))
+        val eventDecorator = EventDecorator(
+            configurationManager,
+            apiRepository,
+            Gson(),
+            windowSizeInfo,
+            screenSizeInfo,
+        )
+
+        val decoratedEvent = eventDecorator.decorate(event)
+
+        Assert.assertEquals("event-rdlc", decoratedEvent.parameters[EventParam.CLIENT_ID.text])
     }
 
     private fun mockDefaultParameters() {

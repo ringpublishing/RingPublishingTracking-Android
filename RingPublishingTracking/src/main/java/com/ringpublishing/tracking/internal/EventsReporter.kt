@@ -1,5 +1,6 @@
 package com.ringpublishing.tracking.internal
 
+import com.ringpublishing.tracking.data.ContentViewType
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewMetadata
 import com.ringpublishing.tracking.internal.decorator.EventDecorator
@@ -35,9 +36,9 @@ internal class EventsReporter(
         val offset = metadata.measurement.scrollOffsetPx
         val triggerSource = metadata.triggerSource
 
-        return configuration.shouldReportEffectivePageViewEvent()
-                && !isEPVEventSent
-                && (triggerSource != EffectivePageViewTriggerSource.Scroll || (offset >= 2 * viewportHeight))
+        return configuration.shouldReportEffectivePageViewEvent() &&
+                !isEPVEventSent &&
+                (triggerSource != EffectivePageViewTriggerSource.Scroll || (offset >= 2 * viewportHeight))
     }
 
     fun resetEPVEventSentState() {
@@ -47,6 +48,8 @@ internal class EventsReporter(
     fun updateVariantExternalParameters(parameters: Map<String, String>) {
         eventDecorator.updateVariantExternalParameters(parameters)
     }
+
+    fun clientData(viewType: ContentViewType): String = eventDecorator.clientData(viewType)
 
     private fun handleEPVEventReport(event: Event) {
         if (event.name == EventType.POLARIS.text) {
