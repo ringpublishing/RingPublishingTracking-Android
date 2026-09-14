@@ -29,6 +29,9 @@ internal class EventsService(
         eventsServiceTimer.flushCallback = this
     }
 
+    private var isFlushing = false
+    private var flushPending = false
+
 	@Synchronized
     fun addEvent(event: Event)
     {
@@ -60,13 +63,26 @@ internal class EventsService(
 	@Synchronized
 	private fun flush()
 	{
+		if (isFlushing)
+		{
+			flushPending = true
+			return
+		}
+
+		isFlushing = true
+		flushPending = false
+
 		CoroutineScope(SupervisorJob() + Dispatchers.IO).launch(Dispatchers.IO) {
 
 			val eventsToSend = eventsQueue.getMaximumEventsToSend()
 
 			Logger.debug("EventsService: Flush ${eventsToSend.size} events $eventsToSend")
 
-			if (eventsToSend.isEmpty()) return@launch
+			if (eventsToSend.isEmpty())
+			{
+				onFlushFinished()
+				return@launch
+			}
 
 			val reportEventsResult = apiService.reportEvents(eventsToSend)
 
@@ -82,7 +98,7 @@ internal class EventsService(
 					if (eventsQueue.hasEventsToSend())
 					{
 						Logger.debug("EventsService: Events queue have more events to send")
-						flush()
+						flushPending = true
 					} else Logger.debug("EventsService: Queue is empty")
 				}
 				ReportEventStatus.ERROR_NETWORK,
@@ -99,6 +115,20 @@ internal class EventsService(
 					} else Logger.error("EventsService: Events not send! Wrong events! Wait for identify")
 				}
 			}
+
+			onFlushFinished()
+		}
+	}
+
+	@Synchronized
+	private fun onFlushFinished()
+	{
+		isFlushing = false
+
+		if (flushPending)
+		{
+			flushPending = false
+			flush()
 		}
 	}
 
