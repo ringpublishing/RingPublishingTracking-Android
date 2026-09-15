@@ -5,10 +5,7 @@ import com.ringpublishing.tracking.internal.constants.Constants
 import com.ringpublishing.tracking.internal.log.Logger
 import java.util.concurrent.CopyOnWriteArrayList
 
-internal class EventsQueue(
-    private val eventSizeCalculator: EventSizeCalculator,
-    private val tooBigEventReplacement: TooBigEventReplacement
-)
+internal class EventsQueue(private val eventSizeCalculator: EventSizeCalculator, private val tooBigEventReplacement: TooBigEventReplacement)
 {
 
     private val queue = CopyOnWriteArrayList<Event>()

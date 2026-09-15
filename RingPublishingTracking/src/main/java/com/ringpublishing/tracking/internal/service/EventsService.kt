@@ -78,11 +78,7 @@ internal class EventsService(
 
 			Logger.debug("EventsService: Flush ${eventsToSend.size} events $eventsToSend")
 
-			if (eventsToSend.isEmpty())
-			{
-				onFlushFinished()
-				return@launch
-			}
+			if (eventsToSend.isEmpty()) { onFlushFinished(); return@launch }
 
 			val reportEventsResult = apiService.reportEvents(eventsToSend)
 

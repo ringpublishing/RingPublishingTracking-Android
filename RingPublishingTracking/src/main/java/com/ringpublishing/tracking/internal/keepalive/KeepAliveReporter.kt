@@ -211,7 +211,7 @@ internal class KeepAliveReporter(
             measurement = data.contentStatus
         )
 
-        if (!eventsReporter.shouldReportEPVEvent(effectivePageViewMetadata)) {
+        if(!eventsReporter.shouldReportEPVEvent(effectivePageViewMetadata)) {
             return
         }
 
