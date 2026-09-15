@@ -24,7 +24,7 @@ internal class SequenceDecoratorTest
 	}
 
 	@Test
-	fun decorate_WhenEventDecoratedCalled_ThenValueIncrementsPerCall()
+	fun decorate_WhenCalledMultipleTimes_ThenValueIncrementsPerCall()
 	{
 		val decorator = SequenceDecorator()
 
@@ -32,13 +32,9 @@ internal class SequenceDecoratorTest
 		decorator.decorate(firstEvent)
 		Assert.assertEquals(0, firstEvent.parameters["SQ"])
 
-		decorator.eventDecorated()
-
 		val secondEvent = Event()
 		decorator.decorate(secondEvent)
 		Assert.assertEquals(1, secondEvent.parameters["SQ"])
-
-		decorator.eventDecorated()
 
 		val thirdEvent = Event()
 		decorator.decorate(thirdEvent)
@@ -46,28 +42,16 @@ internal class SequenceDecoratorTest
 	}
 
 	@Test
-	fun decorate_WhenEventDecoratedNotCalled_ThenValueStaysConstant()
-	{
-		val decorator = SequenceDecorator()
-
-		val firstEvent = Event()
-		decorator.decorate(firstEvent)
-		Assert.assertEquals(0, firstEvent.parameters["SQ"])
-
-		val secondEvent = Event()
-		decorator.decorate(secondEvent)
-		Assert.assertEquals(0, secondEvent.parameters["SQ"])
-	}
-
-	@Test
 	fun decorate_WhenMaxValueReached_ThenValueWrapsToZero()
 	{
 		val decorator = SequenceDecorator(sequence = Int.MAX_VALUE)
 
-		decorator.eventDecorated()
+		val firstEvent = Event()
+		decorator.decorate(firstEvent)
+		Assert.assertEquals(Int.MAX_VALUE, firstEvent.parameters["SQ"])
 
-		val event = Event()
-		decorator.decorate(event)
-		Assert.assertEquals(0, event.parameters["SQ"])
+		val secondEvent = Event()
+		decorator.decorate(secondEvent)
+		Assert.assertEquals(0, secondEvent.parameters["SQ"])
 	}
 }

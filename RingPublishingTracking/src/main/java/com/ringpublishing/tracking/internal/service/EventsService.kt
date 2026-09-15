@@ -29,6 +29,9 @@ internal class EventsService(
         eventsServiceTimer.flushCallback = this
     }
 
+    private var isFlushing = false
+    private var flushPending = false
+
 	@Synchronized
     fun addEvent(event: Event)
     {
@@ -60,45 +63,73 @@ internal class EventsService(
 	@Synchronized
 	private fun flush()
 	{
+		if (isFlushing)
+		{
+			flushPending = true
+			return
+		}
+
+		isFlushing = true
+		flushPending = false
+
 		CoroutineScope(SupervisorJob() + Dispatchers.IO).launch(Dispatchers.IO) {
 
-			val eventsToSend = eventsQueue.getMaximumEventsToSend()
-
-			Logger.debug("EventsService: Flush ${eventsToSend.size} events $eventsToSend")
-
-			if (eventsToSend.isEmpty()) return@launch
-
-			val reportEventsResult = apiService.reportEvents(eventsToSend)
-
-			reportEventsResult.postInterval?.let { eventsServiceTimer.postInterval = it }
-
-			when (reportEventsResult.status)
+			try
 			{
-				ReportEventStatus.SUCCESS ->
-				{
-					Logger.debug("EventsService: Events send success. Remove ${eventsToSend.size} events from queue.")
-					eventsQueue.removeAll(eventsToSend)
+				val eventsToSend = eventsQueue.getMaximumEventsToSend()
 
-					if (eventsQueue.hasEventsToSend())
-					{
-						Logger.debug("EventsService: Events queue have more events to send")
-						flush()
-					} else Logger.debug("EventsService: Queue is empty")
-				}
-				ReportEventStatus.ERROR_NETWORK,
-				ReportEventStatus.ERROR_BAD_RESPONSE ->
+				Logger.debug("EventsService: Flush ${eventsToSend.size} events $eventsToSend")
+
+				if (eventsToSend.isEmpty()) return@launch
+
+				val reportEventsResult = apiService.reportEvents(eventsToSend)
+
+				reportEventsResult.postInterval?.let { eventsServiceTimer.postInterval = it }
+
+				when (reportEventsResult.status)
 				{
-					Logger.warn("EventsService: Events not send! Network error! Try next time")
-				}
-				ReportEventStatus.ERROR_BAD_REQUEST ->
-				{
-					if (apiService.hasIdentify())
+					ReportEventStatus.SUCCESS ->
 					{
+						Logger.debug("EventsService: Events send success. Remove ${eventsToSend.size} events from queue.")
 						eventsQueue.removeAll(eventsToSend)
-						Logger.error("EventsService: Events not send! Wrong events! Remove from queue")
-					} else Logger.error("EventsService: Events not send! Wrong events! Wait for identify")
+
+						if (eventsQueue.hasEventsToSend())
+						{
+							Logger.debug("EventsService: Events queue have more events to send")
+							synchronized(this@EventsService) { flushPending = true }
+						} else Logger.debug("EventsService: Queue is empty")
+					}
+					ReportEventStatus.ERROR_NETWORK,
+					ReportEventStatus.ERROR_BAD_RESPONSE ->
+					{
+						Logger.warn("EventsService: Events not send! Network error! Try next time")
+					}
+					ReportEventStatus.ERROR_BAD_REQUEST ->
+					{
+						if (apiService.hasIdentify())
+						{
+							eventsQueue.removeAll(eventsToSend)
+							Logger.error("EventsService: Events not send! Wrong events! Remove from queue")
+						} else Logger.error("EventsService: Events not send! Wrong events! Wait for identify")
+					}
 				}
 			}
+			finally
+			{
+				onFlushFinished()
+			}
+		}
+	}
+
+	@Synchronized
+	private fun onFlushFinished()
+	{
+		isFlushing = false
+
+		if (flushPending)
+		{
+			flushPending = false
+			flush()
 		}
 	}
 

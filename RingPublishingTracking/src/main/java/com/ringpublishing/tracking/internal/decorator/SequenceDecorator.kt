@@ -11,13 +11,11 @@ import com.ringpublishing.tracking.data.Event
 internal class SequenceDecorator(private var sequence: Int = 0) : BaseDecorator()
 {
 
-	override fun decorate(event: Event)
+	private val lock = Any()
+
+	override fun decorate(event: Event) = synchronized(lock)
 	{
 		event.add(EventParam.SEQUENCE, sequence)
-	}
-
-	override fun eventDecorated()
-	{
 		sequence = nextValue(sequence)
 	}
 
