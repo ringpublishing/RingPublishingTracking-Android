@@ -12,3 +12,4 @@ Improvements to the 'RingPublishingTracking' module.
 * Added SQ (sequence) field to every tracking event
 * 'segmentId' field of 'AureusEventContext' is now nullable
     - passing null omits the 'segment_id' key from the reported event instead of sending an empty value
+* Added public method 'updateApplicationAdvertisementSite' to change the advertisement site at runtime

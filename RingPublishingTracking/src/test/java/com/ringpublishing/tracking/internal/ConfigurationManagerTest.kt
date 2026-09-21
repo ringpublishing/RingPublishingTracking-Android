@@ -292,6 +292,7 @@ class ConfigurationManagerTest
 		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns ""
 		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf("path1")
 		every { ringPublishingConfiguration.applicationRootPath } returns ""
+		every { ringPublishingConfiguration.applicationAdvertisementSite } returns null
 
 		val configurationManager = ConfigurationManager()
 		configurationManager.initializeConfiguration(ringPublishingConfiguration)
@@ -299,5 +300,92 @@ class ConfigurationManagerTest
 		configurationManager.updateStructurePath(listOf("newPath"), partiallyReloaded = false)
 
 		Assert.assertEquals(listOf("newPath"), configurationManager.getStructurePath())
+	}
+
+	@Test
+	fun updateAdvertisementSite_WhenChangedAfterInitialize_ThenSiteAreaAndFullStructurePathUseNewSite()
+	{
+		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns "area"
+		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf("path1", "path2")
+		every { ringPublishingConfiguration.applicationRootPath } returns "rootPath"
+		every { ringPublishingConfiguration.applicationAdvertisementSite } returns "initial-site"
+
+		val configurationManager = ConfigurationManager()
+		configurationManager.initializeConfiguration(ringPublishingConfiguration)
+
+		configurationManager.updateAdvertisementSite("other-site")
+
+		Assert.assertEquals("other-site/area", configurationManager.getSiteArea())
+		Assert.assertEquals("other-site/path1/path2", configurationManager.getFullStructurePath())
+	}
+
+	@Test
+	fun updateAdvertisementSite_WhenConfigurationHasNoSite_ThenSiteSetAfterInitializeIsUsed()
+	{
+		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns "area"
+		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf("path1", "path2")
+		every { ringPublishingConfiguration.applicationRootPath } returns "rootPath"
+		every { ringPublishingConfiguration.applicationAdvertisementSite } returns null
+
+		val configurationManager = ConfigurationManager()
+		configurationManager.initializeConfiguration(ringPublishingConfiguration)
+
+		Assert.assertEquals("area", configurationManager.getSiteArea())
+		Assert.assertEquals("rootpath_app_android/path1/path2", configurationManager.getFullStructurePath())
+
+		configurationManager.updateAdvertisementSite("runtime-site")
+
+		Assert.assertEquals("runtime-site/area", configurationManager.getSiteArea())
+		Assert.assertEquals("runtime-site/path1/path2", configurationManager.getFullStructurePath())
+	}
+
+	@Test
+	fun updateAdvertisementSite_WhenSetToNull_ThenAreaAloneAndRootPathPrefixAreRestored()
+	{
+		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns "area"
+		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf("path1", "path2")
+		every { ringPublishingConfiguration.applicationRootPath } returns "rootPath"
+		every { ringPublishingConfiguration.applicationAdvertisementSite } returns "test-site"
+
+		val configurationManager = ConfigurationManager()
+		configurationManager.initializeConfiguration(ringPublishingConfiguration)
+
+		configurationManager.updateAdvertisementSite(null)
+
+		Assert.assertEquals("area", configurationManager.getSiteArea())
+		Assert.assertEquals("rootpath_app_android/path1/path2", configurationManager.getFullStructurePath())
+	}
+
+	@Test
+	fun updateAdvertisementSite_WhenSetToEmpty_ThenAreaAloneAndRootPathPrefixAreRestored()
+	{
+		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns "area"
+		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf("path1", "path2")
+		every { ringPublishingConfiguration.applicationRootPath } returns "rootPath"
+		every { ringPublishingConfiguration.applicationAdvertisementSite } returns "test-site"
+
+		val configurationManager = ConfigurationManager()
+		configurationManager.initializeConfiguration(ringPublishingConfiguration)
+
+		configurationManager.updateAdvertisementSite("")
+
+		Assert.assertEquals("area", configurationManager.getSiteArea())
+		Assert.assertEquals("rootpath_app_android/path1/path2", configurationManager.getFullStructurePath())
+	}
+
+	@Test
+	fun updateAdvertisementSite_WhenSiteSetAndAreaEmpty_ThenSiteAreaIsSiteAlone()
+	{
+		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns ""
+		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf()
+		every { ringPublishingConfiguration.applicationRootPath } returns ""
+		every { ringPublishingConfiguration.applicationAdvertisementSite } returns null
+
+		val configurationManager = ConfigurationManager()
+		configurationManager.initializeConfiguration(ringPublishingConfiguration)
+
+		configurationManager.updateAdvertisementSite("runtime-site")
+
+		Assert.assertEquals("runtime-site", configurationManager.getSiteArea())
 	}
 }

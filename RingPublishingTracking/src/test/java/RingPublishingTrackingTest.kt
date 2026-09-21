@@ -94,6 +94,7 @@ internal class RingPublishingTrackingTest
 		every { ringPublishingTrackingConfiguration.applicationRootPath } returns ""
 		every { ringPublishingTrackingConfiguration.applicationDefaultAdvertisementArea } returns ""
 		every { ringPublishingTrackingConfiguration.applicationDefaultStructurePath } returns emptyList()
+		every { ringPublishingTrackingConfiguration.applicationAdvertisementSite } returns null
 
 		RingPublishingTracking.initialize(context, ringPublishingTrackingConfiguration, ringPublishingTrackingDelegate)
 	}
