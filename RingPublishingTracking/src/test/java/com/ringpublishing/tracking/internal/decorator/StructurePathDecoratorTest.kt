@@ -117,4 +117,58 @@ class StructurePathDecoratorTest
 
 		Assert.assertEquals("rootpath_app_android/path1/path2", result)
 	}
+
+	@Test
+	fun decorate_WhenSiteUpdatedAfterInitialize_ThenSiteReplacesRootPathPrefix()
+	{
+		val configurationManager = ConfigurationManager()
+		val ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+			"",
+			"",
+			URL("https://domain.com"),
+			"rootPath",
+			listOf("path1", "path2"),
+			"area",
+			"configured-site"
+		)
+		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
+		configurationManager.updateAdvertisementSite("runtime-site")
+
+		val decorator = StructurePathDecorator(configurationManager)
+
+		val event = Event()
+
+		decorator.decorate(event)
+
+		val result = event.parameters[EventParam.PUBLICATION_STRUCTURE_PATH.text] as String?
+
+		Assert.assertEquals("runtime-site/path1/path2", result)
+	}
+
+	@Test
+	fun decorate_WhenSiteClearedAfterInitialize_ThenRootPathPrefixIsRestored()
+	{
+		val configurationManager = ConfigurationManager()
+		val ringPublishingTrackingConfiguration = RingPublishingTrackingConfiguration(
+			"",
+			"",
+			URL("https://domain.com"),
+			"rootPath",
+			listOf("path1", "path2"),
+			"area",
+			"configured-site"
+		)
+		configurationManager.initializeConfiguration(ringPublishingTrackingConfiguration)
+		configurationManager.updateAdvertisementSite(null)
+
+		val decorator = StructurePathDecorator(configurationManager)
+
+		val event = Event()
+
+		decorator.decorate(event)
+
+		val result = event.parameters[EventParam.PUBLICATION_STRUCTURE_PATH.text] as String?
+
+		Assert.assertEquals("rootpath_app_android/path1/path2", result)
+	}
 }

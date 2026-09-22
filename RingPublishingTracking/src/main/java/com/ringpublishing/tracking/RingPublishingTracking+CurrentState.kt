@@ -62,6 +62,17 @@ fun RingPublishingTracking.updateApplicationAdvertisementArea(currentAdvertiseme
 }
 
 /**
+ * Update ad site name of the application, for example "superapp_konto_android"
+ * Null or empty site restores the 'applicationRootPath' prefix in the reported structure path.
+ *
+ * @param currentAdvertisementSite: String?
+ */
+fun RingPublishingTracking.updateApplicationAdvertisementSite(currentAdvertisementSite: String?)
+{
+	configurationManager.updateAdvertisementSite(currentAdvertisementSite)
+}
+
+/**
  * Update variant.external parameters reported inside RDLC; rejected (unchanged) over 10 keys or 10 chars each.
  *
  * @param parameters: Map of variant.external parameters
