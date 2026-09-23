@@ -6,6 +6,8 @@
 package com.ringpublishing.tracking
 
 import com.ringpublishing.tracking.data.ContentMetadata
+import com.ringpublishing.tracking.data.ContentSize
+import com.ringpublishing.tracking.data.KeepAliveContentStatus
 import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewComponentSource
 import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewMetadata
 import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewTriggerSource
@@ -39,10 +41,8 @@ fun RingPublishingTracking.reportEffectivePageView(
     val metadata = EffectivePageViewMetadata(
         componentSource = EffectivePageViewComponentSource.Other(effectivePageViewComponentSource),
         triggerSource = EffectivePageViewTriggerSource.Other(effectivePageViewTriggerSource),
-        measurement = keepAliveReporter.lastContentStatus ?: run {
-            Logger.warn("EffectivePageView event is not sent because last content status is null.")
-            return
-        }
+        measurement = keepAliveReporter.lastContentStatus
+            ?: KeepAliveContentStatus(scrollOffsetPx = 0, contentSizePx = ContentSize(0, 0)),
     )
     if (!eventsReporter.shouldReportEPVEvent(metadata)) {
         Logger.warn("EffectivePageView event is not sent because it does not meet the criteria for sending.")

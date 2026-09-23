@@ -9,7 +9,6 @@ internal class EventsQueue(private val eventSizeCalculator: EventSizeCalculator,
 {
 
     private val queue = CopyOnWriteArrayList<Event>()
-    private val eventsToSend = CopyOnWriteArrayList<Event>()
 
 	fun add(event: Event)
 	{
@@ -28,9 +27,9 @@ internal class EventsQueue(private val eventSizeCalculator: EventSizeCalculator,
 	@Synchronized
 	fun getMaximumEventsToSend(): List<Event>
 	{
-		eventsToSend.clear()
 		eventSizeCalculator.calculateBodyElementsSize()
 
+		val eventsToSend = mutableListOf<Event>()
 		var eventsToSendSize = 0L
 
 		queue.forEach {

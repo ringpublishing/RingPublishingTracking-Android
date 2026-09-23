@@ -33,6 +33,8 @@ internal class ConfigurationManager
 
 	private var currentAdvertisementArea: String? = null
 
+	private var currentAdvertisementSite: String? = null
+
 	var currentReferrer: String? = null
 
 	var currentPublicationUrl: URL? = null
@@ -51,6 +53,7 @@ internal class ConfigurationManager
 	{
 		this.ringPublishingTrackingConfiguration = ringPublishingTrackingConfiguration
 		currentAdvertisementArea = ringPublishingTrackingConfiguration.applicationDefaultAdvertisementArea
+		currentAdvertisementSite = ringPublishingTrackingConfiguration.applicationAdvertisementSite
 		currentStructurePath = ringPublishingTrackingConfiguration.applicationDefaultStructurePath.toMutableList()
 		currentContentUrl = pathBuilder.buildCurrentContentUrl()
 		newPrimaryId()
@@ -90,43 +93,43 @@ internal class ConfigurationManager
 		currentAdvertisementArea = currentArea
 	}
 
+	fun updateAdvertisementSite(currentSite: String?)
+	{
+		currentAdvertisementSite = currentSite
+	}
+
 	fun getUserData() = userData
 
 	fun getTenantId() = ringPublishingTrackingConfiguration.tenantId
 
 	fun getSiteArea(): String
-    {
-        return if (ringPublishingTrackingConfiguration.applicationAdvertisementSite.isNullOrEmpty())
-        {
-            currentAdvertisementArea ?: ""
-        }
-        else
-        {
-            if (currentAdvertisementArea.isNullOrEmpty())
-            {
-                "${ringPublishingTrackingConfiguration.applicationAdvertisementSite}"
-            }
-            else
-            {
-                "${ringPublishingTrackingConfiguration.applicationAdvertisementSite}/$currentAdvertisementArea"
-            }
-        }
-    }
+	{
+		val site = currentAdvertisementSite
+		val area = currentAdvertisementArea
+
+		if (site.isNullOrEmpty())
+		{
+			return area ?: ""
+		}
+
+		return if (area.isNullOrEmpty()) site else "$site/$area"
+	}
 
 	fun getStructurePath() = currentStructurePath
 
 	fun getFullStructurePath(): String
 	{
+		val site = currentAdvertisementSite
+
+		if (!site.isNullOrEmpty())
+		{
+			return currentStructurePath.joinToString("/", "$site/").lowercase().replace(".", "_")
+		}
+
 		with(ringPublishingTrackingConfiguration)
-		{   if (applicationAdvertisementSite.isNullOrEmpty())
-            {
-                val rootPath = if (applicationRootPath.endsWith("/")) applicationRootPath.removeSuffix("/") else applicationRootPath
-                return currentStructurePath.joinToString("/", "$rootPath${Constants.defaultRootPathSuffixDV}/").lowercase().replace(".", "_")
-            }
-            else
-            {
-                return currentStructurePath.joinToString("/", "$applicationAdvertisementSite/").lowercase().replace(".", "_")
-            }
+		{
+			val rootPath = if (applicationRootPath.endsWith("/")) applicationRootPath.removeSuffix("/") else applicationRootPath
+			return currentStructurePath.joinToString("/", "$rootPath${Constants.defaultRootPathSuffixDV}/").lowercase().replace(".", "_")
 		}
 	}
 

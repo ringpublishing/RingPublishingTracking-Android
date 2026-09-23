@@ -99,4 +99,50 @@ class SiteAreaDecoratorTest
 
 		Assert.assertSame("area", result)
 	}
+
+	@Test
+	fun decorate_WhenSiteUpdatedAfterInitialize_ThenNewSiteIsInResult()
+	{
+		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns ""
+		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf()
+		every { ringPublishingConfiguration.applicationRootPath } returns ""
+		every { ringPublishingConfiguration.applicationAdvertisementSite } returns "test-site"
+
+		val configurationManager = ConfigurationManager()
+		configurationManager.initializeConfiguration(ringPublishingConfiguration)
+		configurationManager.updateAdvertisementArea("area")
+		configurationManager.updateAdvertisementSite("other-site")
+
+		val decorator = SiteAreaDecorator(configurationManager)
+
+		val event = Event()
+		decorator.decorate(event)
+
+		val result = event.parameters[EventParam.SITE_AREA.text] as String?
+
+		Assert.assertEquals("other-site/area", result)
+	}
+
+	@Test
+	fun decorate_WhenSiteClearedAfterInitialize_ThenOnlyAreaIsInResult()
+	{
+		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns ""
+		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf()
+		every { ringPublishingConfiguration.applicationRootPath } returns ""
+		every { ringPublishingConfiguration.applicationAdvertisementSite } returns "test-site"
+
+		val configurationManager = ConfigurationManager()
+		configurationManager.initializeConfiguration(ringPublishingConfiguration)
+		configurationManager.updateAdvertisementArea("area")
+		configurationManager.updateAdvertisementSite(null)
+
+		val decorator = SiteAreaDecorator(configurationManager)
+
+		val event = Event()
+		decorator.decorate(event)
+
+		val result = event.parameters[EventParam.SITE_AREA.text] as String?
+
+		Assert.assertEquals("area", result)
+	}
 }

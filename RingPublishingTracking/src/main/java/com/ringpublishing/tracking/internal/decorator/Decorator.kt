@@ -12,4 +12,9 @@ internal interface Decorator
 {
 
 	fun decorate(event: Event)
+
+	/**
+	 * Called after this decorator's parameters have been applied to a decorated event
+	 */
+	fun eventDecorated() {}
 }

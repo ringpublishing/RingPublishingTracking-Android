@@ -8,6 +8,7 @@ package com.ringpublishing.tracking.demo.controller
 
 import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.ContentMetadata
+import com.ringpublishing.tracking.data.ContentViewType
 import com.ringpublishing.tracking.delegate.RingPublishingTrackingKeepAliveDataSource
 import com.ringpublishing.tracking.demo.data.SampleArticle
 import com.ringpublishing.tracking.demo.data.ScreenTrackingData
@@ -60,11 +61,12 @@ class ArticleController : ScreenController()
             contentSpaceUuid = articleToReport.contentSpaceUuid)
 
 		RingPublishingTracking.reportContentPageView(
-			contentMetadata,
-			pageViewSource,
-			screenTrackingData.structurePath,
-			partiallyReloaded,
-			contentKeepAliveDataSource
+			contentMetadata = contentMetadata,
+			viewType = ContentViewType.TEXT,
+			contentPageViewSource = pageViewSource,
+			currentStructurePath = screenTrackingData.structurePath,
+			partiallyReloaded = partiallyReloaded,
+			contentKeepAliveDataSource = contentKeepAliveDataSource,
 		)
 	}
 

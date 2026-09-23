@@ -23,6 +23,7 @@ import com.ringpublishing.tracking.reportUserAction
 import com.ringpublishing.tracking.updateActiveSubscriber
 import com.ringpublishing.tracking.updateSSO
 import com.ringpublishing.tracking.updateUserData
+import com.ringpublishing.tracking.updateVariantExternalParameters
 
 class ActionsController : ScreenController()
 {
@@ -183,6 +184,17 @@ class ActionsController : ScreenController()
             teasers = teasers,
             strategy = AureusDeboostingStrategy.VIDEO_VIEWS
         )
+    }
+
+    fun actionUpdateVariantExternalParameters() {
+        // If you want to report additional variant.external parameters inside RDLC events, you can update them here.
+        // Rejected (and left unchanged) if more than 10 keys are passed, or any key/value exceeds 10 characters.
+        val parameters = mapOf(
+            "abTest" to "variantA",
+            "flavor" to "premium"
+        )
+
+        RingPublishingTracking.updateVariantExternalParameters(parameters)
     }
 
     private fun reportButtonClickEvent(sender: View) {

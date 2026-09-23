@@ -71,6 +71,8 @@ class ActionsFragment : Fragment(R.layout.fragment_actions)
 
 				actionReportAureusImpression.setOnClickListener { actionReportAureusImpression() }
 				actionReportAureusDeboosting.setOnClickListener { actionReportAureusDeboosting() }
+
+				actionUpdateVariantExternalParameters.setOnClickListener { actionUpdateVariantExternalParameters() }
 			}
 		}
 	}
