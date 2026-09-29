@@ -21,6 +21,7 @@ internal class EventDecorator(
     gson: Gson,
     windowSizeInfo: WindowSizeInfo,
     screenSizeInfo: ScreenSizeInfo,
+    sessionIdentifierDecorator: SessionIdentifierDecorator,
 )
 {
 	private val decorators = mutableListOf<Decorator>()
@@ -33,7 +34,7 @@ internal class EventDecorator(
 		{
 			add(PrimaryIdDecorator(configurationManager))
 			add(SecondaryIdDecorator(configurationManager))
-			add(SessionIdentifierDecorator())
+			add(sessionIdentifierDecorator)
 			add(UserIdentifierDataDecorator(configurationManager, apiRepository, gson))
 			add(TenantIdDecorator(configurationManager))
 			add(SiteAreaDecorator(configurationManager))

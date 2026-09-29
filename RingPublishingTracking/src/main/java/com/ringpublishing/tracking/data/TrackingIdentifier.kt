@@ -13,10 +13,12 @@ import java.util.Date
  *
  * @param eaUUID base tracking identifier
  * @param artemisID artemis tracking identifier
+ * @param sessionIdentifier session identifier ("IS"), the same value the module reports with every event
  */
 data class TrackingIdentifier(
     val eaUUID: Identifier,
-    val artemisID: Identifier
+    val artemisID: Identifier,
+    val sessionIdentifier: String
 )
 
 data class Identifier(val value: String, val expirationDate: Date)

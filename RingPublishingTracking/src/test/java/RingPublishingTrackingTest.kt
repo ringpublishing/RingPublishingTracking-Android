@@ -97,6 +97,8 @@ internal class RingPublishingTrackingTest
 		every { ringPublishingTrackingConfiguration.applicationAdvertisementSite } returns null
 
 		RingPublishingTracking.initialize(context, ringPublishingTrackingConfiguration, ringPublishingTrackingDelegate)
+
+		verify(exactly = 1) { ringPublishingTrackingDelegate.ringPublishingTrackingDidAssignSessionIdentifier(RingPublishingTracking, any()) }
 	}
 
     @Test

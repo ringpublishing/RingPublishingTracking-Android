@@ -41,6 +41,17 @@ internal class SessionIdentifierDecoratorTest
 	}
 
 	@Test
+	fun currentIdentifier_WhenEventDecorated_ThenMatchesReportedSessionId()
+	{
+		val decorator = SessionIdentifierDecorator()
+
+		val event = Event()
+		decorator.decorate(event)
+
+		Assert.assertEquals(decorator.currentIdentifier, event.parameters["IS"])
+	}
+
+	@Test
 	fun decorate_WhenNewSessionNotStarted_ThenValueStaysConstant()
 	{
 		val decorator = SessionIdentifierDecorator()

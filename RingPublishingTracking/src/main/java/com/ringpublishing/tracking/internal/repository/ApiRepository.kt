@@ -102,12 +102,12 @@ internal class ApiRepository(private val repository: DataRepository)
         else Identifier(id, date!!)
     }
 
-    fun readTrackingIdentifier(): TrackingIdentifier?
+    fun readTrackingIdentifier(sessionIdentifier: String): TrackingIdentifier?
     {
         val userIdentifier = readUserIdentifier()
         val artemisIdentifier = readArtemisIdentifier()
 
         return if (userIdentifier == null || artemisIdentifier == null) null
-        else TrackingIdentifier(userIdentifier, artemisIdentifier)
+        else TrackingIdentifier(userIdentifier, artemisIdentifier, sessionIdentifier)
     }
 }
