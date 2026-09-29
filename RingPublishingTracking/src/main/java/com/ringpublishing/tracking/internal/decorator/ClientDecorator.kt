@@ -28,9 +28,9 @@ internal class ClientDecorator(private val gson: Gson) : BaseDecorator()
 
 	fun clientData(viewType: ContentViewType? = null): String
 	{
-		val clientType = ClientType(ClientPlatform.native_app, viewType?.value)
+		val clientType = ClientType(ClientPlatform.native_app)
 		val variant = variantExternalParameters?.let { ClientVariant(it) }
-		return Client(clientType, variant).toRdlc(gson)
+		return Client(clientType, viewType?.value, variant).toRdlc(gson)
 	}
 
 	/**
