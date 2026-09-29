@@ -86,7 +86,7 @@ internal class EventDecoratorTest
         every { apiRepository.readArtemisId() } returns artemisIdResponse
         every { artemisIdResponse.user } returns mockArtemisIdUser()
 
-		val eventDecorator = EventDecorator(configurationManager, apiRepository, Gson(), windowSizeInfo, screenSizeInfo)
+		val eventDecorator = EventDecorator(configurationManager, apiRepository, Gson(), windowSizeInfo, screenSizeInfo, SessionIdentifierDecorator())
 		val eventDecorated = eventDecorator.decorate(event)
 
 		with(eventDecorated)
@@ -118,7 +118,7 @@ internal class EventDecoratorTest
         every { apiRepository.readArtemisId() } returns null
         every { artemisIdResponse.user } returns null
 
-        val eventDecorator = EventDecorator(configurationManager, apiRepository, Gson(), windowSizeInfo, screenSizeInfo)
+        val eventDecorator = EventDecorator(configurationManager, apiRepository, Gson(), windowSizeInfo, screenSizeInfo, SessionIdentifierDecorator())
         val eventDecorated = eventDecorator.decorate(event)
 
         with(eventDecorated)
@@ -139,7 +139,7 @@ internal class EventDecoratorTest
         every { apiRepository.readArtemisId() } returns null
         every { artemisIdResponse.user } returns null
 
-        val eventDecorator = EventDecorator(configurationManager, apiRepository, Gson(), windowSizeInfo, screenSizeInfo)
+        val eventDecorator = EventDecorator(configurationManager, apiRepository, Gson(), windowSizeInfo, screenSizeInfo, SessionIdentifierDecorator())
         val eventDecorated = eventDecorator.decorate(event)
 
         with(eventDecorated)
@@ -160,7 +160,7 @@ internal class EventDecoratorTest
         every { apiRepository.readArtemisId() } returns artemisIdResponse
         every { artemisIdResponse.user } returns mockArtemisIdUser()
 
-        val eventDecorator = EventDecorator(configurationManager, apiRepository, Gson(), windowSizeInfo, screenSizeInfo)
+        val eventDecorator = EventDecorator(configurationManager, apiRepository, Gson(), windowSizeInfo, screenSizeInfo, SessionIdentifierDecorator())
         val eventDecorated = eventDecorator.decorate(event)
 
         with(eventDecorated)
@@ -181,7 +181,7 @@ internal class EventDecoratorTest
         every { apiRepository.readArtemisId() } returns artemisIdResponse
         every { artemisIdResponse.user } returns mockArtemisIdUser()
 
-        val eventDecorator = EventDecorator(configurationManager, apiRepository, Gson(), windowSizeInfo, screenSizeInfo)
+        val eventDecorator = EventDecorator(configurationManager, apiRepository, Gson(), windowSizeInfo, screenSizeInfo, SessionIdentifierDecorator())
         val eventDecorated = eventDecorator.decorate(event)
 
         with(eventDecorated)
@@ -206,6 +206,7 @@ internal class EventDecoratorTest
             Gson(),
             windowSizeInfo,
             screenSizeInfo,
+            SessionIdentifierDecorator(),
         )
         eventDecorator.updateVariantExternalParameters(mapOf("experiment" to "a"))
 
@@ -245,6 +246,7 @@ internal class EventDecoratorTest
             Gson(),
             windowSizeInfo,
             screenSizeInfo,
+            SessionIdentifierDecorator(),
         )
 
         val decoratedEvent = eventDecorator.decorate(event)

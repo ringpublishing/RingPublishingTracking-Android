@@ -10,6 +10,7 @@ import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.api.ApiClient
+import com.ringpublishing.tracking.internal.decorator.SessionIdentifierDecorator
 import com.ringpublishing.tracking.internal.api.data.User
 import com.ringpublishing.tracking.internal.api.response.ArtemisIdResponse
 import com.ringpublishing.tracking.internal.api.response.IdentifyResponse
@@ -80,6 +81,7 @@ class ApiServiceTest {
             userRepository = userRepository,
             configurationManager = configurationManager,
             apiRepository = apiRepository,
+            sessionIdentifierDecorator = SessionIdentifierDecorator(),
         )
 
         val events = mutableListOf(event)
@@ -111,6 +113,7 @@ class ApiServiceTest {
             userRepository = userRepository,
             configurationManager = configurationManager,
             apiRepository = apiRepository,
+            sessionIdentifierDecorator = SessionIdentifierDecorator(),
         )
 
         val events = mutableListOf(event)
@@ -139,6 +142,7 @@ class ApiServiceTest {
             userRepository = userRepository,
             configurationManager = configurationManager,
             apiRepository = apiRepository,
+            sessionIdentifierDecorator = SessionIdentifierDecorator(),
         )
 
         val events = mutableListOf(event)
@@ -166,7 +170,7 @@ class ApiServiceTest {
         coEvery { configurationManager.getUserData().userId } returns null
         coEvery { configurationManager.getTenantId() } returns "0123"
         coEvery { artemisIdResponse.getValidDate(any()) } returns expiryDate
-        coEvery { apiRepository.readTrackingIdentifier() } returns null
+        coEvery { apiRepository.readTrackingIdentifier(any()) } returns null
 
         val apiService = ApiService(
             apiClient = apiClient,
@@ -174,6 +178,7 @@ class ApiServiceTest {
             userRepository = userRepository,
             configurationManager = configurationManager,
             apiRepository = apiRepository,
+            sessionIdentifierDecorator = SessionIdentifierDecorator(),
         )
 
         val events = mutableListOf(event)
@@ -205,6 +210,7 @@ class ApiServiceTest {
             userRepository = userRepository,
             configurationManager = configurationManager,
             apiRepository = apiRepository,
+            sessionIdentifierDecorator = SessionIdentifierDecorator(),
         )
 
         val events = mutableListOf(event)

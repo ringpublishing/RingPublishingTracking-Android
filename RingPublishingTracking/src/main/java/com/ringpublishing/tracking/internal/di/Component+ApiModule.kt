@@ -31,6 +31,7 @@ internal fun Component.provideApiService(ringPublishingTrackingConfiguration: Ri
             Component.provideUserRepository(),
             Component.provideConfigurationManager(),
             Component.provideApiRepository(),
+            Component.provideSessionIdentifierDecorator(),
         )
 	}
 

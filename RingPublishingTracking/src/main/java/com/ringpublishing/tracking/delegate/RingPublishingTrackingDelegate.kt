@@ -27,4 +27,13 @@ interface RingPublishingTrackingDelegate
 	 * @param error: TrackingIdentifierError
 	 */
 	fun ringPublishingTrackingDidFailToRetrieveTrackingIdentifier(ringPublishingTracking: RingPublishingTracking, error: TrackingIdentifierError)
+
+	/**
+	 * Delegate method informing that RingPublishingTracking module generated the session identifier ("IS").
+	 * Called synchronously during 'initialize', without waiting for the backend identifiers.
+	 * The value is the same one later delivered in 'TrackingIdentifier.sessionIdentifier'.
+	 * @param ringPublishingTracking object
+	 * @param identifier Session identifier
+	 */
+	fun ringPublishingTrackingDidAssignSessionIdentifier(ringPublishingTracking: RingPublishingTracking, identifier: String) {}
 }

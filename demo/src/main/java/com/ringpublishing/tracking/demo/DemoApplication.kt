@@ -25,6 +25,11 @@ class DemoApplication : MultiDexApplication()
 		{
 			Log.w("Demo", "RingPublishingTracking: ApiService: did fail to retrieve tracking identifier: $error")
 		}
+
+		override fun ringPublishingTrackingDidAssignSessionIdentifier(ringPublishingTracking: RingPublishingTracking, identifier: String)
+		{
+			Log.i("Demo", "RingPublishingTracking: received session identifier: $identifier")
+		}
 	}
 
 	override fun onCreate()

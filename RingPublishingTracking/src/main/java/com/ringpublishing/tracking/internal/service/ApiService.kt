@@ -4,6 +4,7 @@ import com.ringpublishing.tracking.RingPublishingTracking
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.api.ApiClient
+import com.ringpublishing.tracking.internal.decorator.SessionIdentifierDecorator
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.repository.ApiRepository
 import com.ringpublishing.tracking.internal.repository.UserRepository
@@ -25,6 +26,7 @@ internal class ApiService(
     private val userRepository: UserRepository,
     configurationManager: ConfigurationManager,
     private val apiRepository: ApiRepository,
+    private val sessionIdentifierDecorator: SessionIdentifierDecorator,
 ) {
 
     private val identifyProvider = IdentifyProvider(
@@ -96,7 +98,7 @@ internal class ApiService(
 
     private fun updateTrackingIdentifier()
     {
-        RingPublishingTracking.trackingIdentifier = apiRepository.readTrackingIdentifier()
+        RingPublishingTracking.trackingIdentifier = apiRepository.readTrackingIdentifier(sessionIdentifierDecorator.currentIdentifier)
         RingPublishingTracking.trackingIdentifierError = null
     }
 
