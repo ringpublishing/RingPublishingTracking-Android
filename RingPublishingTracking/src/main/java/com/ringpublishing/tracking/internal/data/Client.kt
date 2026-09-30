@@ -11,7 +11,7 @@ import com.google.gson.Gson
 
 class Client @JvmOverloads constructor(
 	val client: ClientType,
-	val view: String? = null,
+	val view: ViewType? = null,
 	val variant: ClientVariant? = null,
 )
 

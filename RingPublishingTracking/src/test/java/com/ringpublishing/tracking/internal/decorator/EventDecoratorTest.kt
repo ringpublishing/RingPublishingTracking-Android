@@ -219,7 +219,7 @@ internal class EventDecoratorTest
         val nextEvent = eventDecorator.decorate(Event())
 
         Assert.assertEquals(
-            """{"client":{"type":"native_app"},"view":"text","variant":{"external":{"experiment":"a"}}}""",
+            """{"client":{"type":"native_app"},"view":{"type":"text"},"variant":{"external":{"experiment":"a"}}}""",
             decoratedContentPageViewEvent.decodeRdlc(),
         )
         Assert.assertEquals(

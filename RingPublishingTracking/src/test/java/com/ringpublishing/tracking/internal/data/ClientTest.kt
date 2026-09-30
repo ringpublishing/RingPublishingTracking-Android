@@ -17,12 +17,12 @@ internal class ClientTest
     @Test
     fun toRdlc_WhenViewTypeProvided_ThenEncodesClientData()
     {
-        val client = Client(ClientType(ClientPlatform.native_app), "text")
+        val client = Client(ClientType(ClientPlatform.native_app), ViewType("text"))
 
         val result = client.toRdlc(Gson())
 
         Assert.assertEquals(
-            "eyJjbGllbnQiOnsidHlwZSI6Im5hdGl2ZV9hcHAifSwidmlldyI6InRleHQifQ==",
+            "eyJjbGllbnQiOnsidHlwZSI6Im5hdGl2ZV9hcHAifSwidmlldyI6eyJ0eXBlIjoidGV4dCJ9fQ==",
             result,
         )
     }
