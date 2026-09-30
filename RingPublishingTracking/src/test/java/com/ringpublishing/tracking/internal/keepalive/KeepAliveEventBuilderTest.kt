@@ -16,13 +16,18 @@ import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
 import com.ringpublishing.tracking.internal.decodeRdlcnObjectId
 import com.ringpublishing.tracking.internal.decorator.EventParam
 import com.ringpublishing.tracking.internal.factory.EventType
+import com.ringpublishing.tracking.internal.factory.EventsFactory
+import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.rdlcnObjectIdVectors
 import com.ringpublishing.tracking.internal.util.ScreenSizeInfo
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.slot
+import io.mockk.unmockkObject
+import io.mockk.verify
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -117,6 +122,29 @@ internal class KeepAliveEventBuilderTest
             val event = KeepAliveEventBuilder(screenSizeInfo, gson).create(content, emptyList())
 
             Assert.assertEquals("contentId '$contentId'", expectedObjectId, event.decodeRdlcnObjectId())
+        }
+    }
+
+    @Test
+    fun create_WhenNonUuidContentIdRepeats_ThenWarningLoggedOncePerId()
+    {
+        // Ids no other test uses, because the ids already warned about are kept for the whole JVM.
+        val content = sampleContentMetadata("repeated-not-a-uuid")
+        val otherContent = sampleContentMetadata("other-not-a-uuid")
+        val builder = KeepAliveEventBuilder(screenSizeInfo, gson)
+        mockkObject(Logger)
+
+        try
+        {
+            repeat(3) { builder.create(content, emptyList()) }
+            EventsFactory(gson).createPageViewEvent(content.contentId, content)
+            builder.create(otherContent, emptyList())
+
+            verify(exactly = 1) { Logger.warn(match { it.contains("'repeated-not-a-uuid'") }) }
+            verify(exactly = 1) { Logger.warn(match { it.contains("'other-not-a-uuid'") }) }
+        } finally
+        {
+            unmockkObject(Logger)
         }
     }
 

@@ -12,5 +12,6 @@ internal val rdlcnObjectIdVectors: List<Pair<String, String?>> = listOf(
     "my-unique-content-id-1234" to null,
     "e0be23e3a1004d4fa3470635de46bfc4" to null,
     "" to null,
-    "   " to null
+    "   " to null,
+    "\u0085e0be23e3-a100-4d4f-a347-0635de46bfc4\u0085" to null
 )

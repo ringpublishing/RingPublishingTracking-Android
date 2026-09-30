@@ -5,8 +5,15 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.internal.log.Logger
+import java.util.concurrent.ConcurrentHashMap
 
 private val uuidRegex = Regex("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
+
+// Explicit set: Kotlin trim() and iOS whitespacesAndNewlines disagree on characters such as U+0085.
+private val asciiWhitespace = setOf(' ', '\t', '\n', '\r', '\u000B', '\u000C')
+
+// Raw content ids already warned about, so each one is logged once while the SDK (a process-wide object) lives.
+private val contentIdsWarnedAsNotUuid: MutableSet<String> = ConcurrentHashMap.newKeySet()
 
 internal fun createMarkedAsPaidParam(gson: Gson, contentMetadata: ContentMetadata?): String?
 {
@@ -24,16 +31,19 @@ internal fun createMarkedAsPaidParam(gson: Gson, contentMetadata: ContentMetadat
 }
 
 /**
- * 'object.id' is the content id trimmed and lowercased, reported only when it is a UUID. The iOS SDK applies the
- * same rule, so every event and both platforms report one value per content, whatever the 'PU' of the event is.
+ * 'object.id' is the content id with ASCII whitespace trimmed, lowercased, and reported only when it is a UUID. The iOS
+ * SDK applies the same rule, so every event and both platforms report one value per content, whatever the 'PU' is.
  */
 private fun createContentObject(contentId: String): ContentObject?
 {
-    val objectId = contentId.trim().lowercase()
+    val objectId = contentId.trim { it in asciiWhitespace }.lowercase()
 
     if (!uuidRegex.matches(objectId))
     {
-        Logger.warn("RDLCN: content id '$contentId' is not a UUID, 'object' is omitted")
+        if (contentIdsWarnedAsNotUuid.add(contentId))
+        {
+            Logger.warn("RDLCN: content id '$contentId' is not a UUID, 'object' is omitted")
+        }
         return null
     }
 

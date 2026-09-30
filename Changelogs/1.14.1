@@ -6,7 +6,7 @@ Improvements to the 'RingPublishingTracking' module.
 ### Changes
 
 * Added 'object.id' to the 'RDLCN' parameter (e.g. {"object":{"id":"e0be23e3-a100-4d4f-a347-0635de46bfc4"}})
-    - the value is 'contentId' of 'ContentMetadata' trimmed and lowercased, the same for every event that reports 'RDLCN' (page view, effective page view, keep-alive and paid events)
-    - 'object' is sent only when that value is a UUID (lowercase hex digits in the 8-4-4-4-12 layout), otherwise it is omitted and a warning is logged
+    - the value is 'contentId' of 'ContentMetadata' with ASCII whitespace trimmed (space, tab, line feed, carriage return, vertical tab, form feed) and then lowercased, the same for every event that reports 'RDLCN' (page view, effective page view, keep-alive and paid events)
+    - 'object' is sent only when that value is a UUID (lowercase hex digits in the 8-4-4-4-12 layout), otherwise it is omitted and a warning is logged, once per content id
     - the iOS SDK applies the same rule, so both platforms report the same 'object.id' for the same content
     - 'PU', 'publication' and 'source' are unchanged, public API is unchanged

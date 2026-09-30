@@ -14,11 +14,7 @@ import com.ringpublishing.tracking.internal.decodeRdlcnObjectId
 import com.ringpublishing.tracking.internal.mockAndroidBase64Encoding
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
 import com.ringpublishing.tracking.internal.decorator.EventParam
-import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.internal.rdlcnObjectIdVectors
-import io.mockk.mockkObject
-import io.mockk.unmockkObject
-import io.mockk.verify
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -208,19 +204,25 @@ class EventsFactoryTest
     }
 
     @Test
-    fun createPageViewEvent_WhenContentIdNotUuid_ThenWarningLogged()
+    fun createPageViewEvent_WhenContentIdPaddedWithAsciiWhitespace_ThenRdlcnObjectIdIsTrimmed()
     {
-        val contentMetadata = sampleContentMetadata(contentId = "12345")
-        mockkObject(Logger)
+        val contentId = " \t\n\r\u000B\u000Ce0be23e3-a100-4d4f-a347-0635de46bfc4\u000C\u000B\r\n\t "
+        val contentMetadata = sampleContentMetadata(contentId)
 
-        try
-        {
-            EventsFactory(gson).createPageViewEvent(contentMetadata.contentId, contentMetadata)
+        val event = EventsFactory(gson).createPageViewEvent(contentMetadata.contentId, contentMetadata)
 
-            verify { Logger.warn(match { it.contains("12345") }) }
-        } finally
-        {
-            unmockkObject(Logger)
+        Assert.assertEquals("e0be23e3-a100-4d4f-a347-0635de46bfc4", event.decodeRdlcnObjectId())
+    }
+
+    @Test
+    fun createPageViewEvent_WhenContentIdPaddedWithWhitespaceOutsideTrimSet_ThenRdlcnHasNoObject()
+    {
+        listOf('\u00A0', '\u2003', '\u001F').forEach { padding ->
+            val contentMetadata = sampleContentMetadata("${padding}e0be23e3-a100-4d4f-a347-0635de46bfc4$padding")
+
+            val event = EventsFactory(gson).createPageViewEvent(contentMetadata.contentId, contentMetadata)
+
+            Assert.assertNull("padding U+%04X".format(padding.code), event.decodeRdlcnObjectId())
         }
     }
 
