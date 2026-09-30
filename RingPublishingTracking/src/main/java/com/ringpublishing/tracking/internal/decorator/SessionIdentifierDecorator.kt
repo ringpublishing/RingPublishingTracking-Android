@@ -17,6 +17,9 @@ internal class SessionIdentifierDecorator : BaseDecorator()
 
 	private var sessionIdentifier = generateSessionIdentifier()
 
+	val currentIdentifier: String
+		get() = sessionIdentifier
+
 	override fun decorate(event: Event)
 	{
 		event.add(EventParam.SESSION_ID, sessionIdentifier)

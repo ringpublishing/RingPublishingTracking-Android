@@ -22,6 +22,7 @@ import com.ringpublishing.tracking.internal.di.provideEventDecorator
 import com.ringpublishing.tracking.internal.di.provideEventsService
 import com.ringpublishing.tracking.internal.di.provideGson
 import com.ringpublishing.tracking.internal.di.provideScreenSizeInfo
+import com.ringpublishing.tracking.internal.di.provideSessionIdentifierDecorator
 import com.ringpublishing.tracking.internal.di.provideSnakeCaseGson
 import com.ringpublishing.tracking.internal.factory.AudioEventsFactory
 import com.ringpublishing.tracking.internal.factory.AureusEventFactory
@@ -69,7 +70,7 @@ object RingPublishingTracking : KeepAliveDataSource {
         }
         get() {
             if (!Component.initialized) return null
-            return Component.provideApiRepository().readTrackingIdentifier()
+            return Component.provideApiRepository().readTrackingIdentifier(Component.provideSessionIdentifierDecorator().currentIdentifier)
         }
 
     internal var trackingIdentifierError: TrackingIdentifierError? = null
@@ -117,6 +118,7 @@ object RingPublishingTracking : KeepAliveDataSource {
         )
         delegate = WeakReference(ringPublishingTrackingDelegate)
         isInitialized = true
+        delegate?.get()?.ringPublishingTrackingDidAssignSessionIdentifier(this, Component.provideSessionIdentifierDecorator().currentIdentifier)
         Logger.debug("RingPublishingTracking initialized successfully")
     }
 
