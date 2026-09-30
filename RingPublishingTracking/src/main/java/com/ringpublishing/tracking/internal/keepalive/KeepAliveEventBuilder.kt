@@ -46,9 +46,10 @@ internal class KeepAliveEventBuilder(
 		with(event)
 		{
 			content?.let {
+                val resourceIdentifier = content.contentId.trim()
                 parameters["DX"] = content.buildToDX()
-                parameters["PU"] = content.contentId.trim()
-                createMarkedAsPaidParam(gson, content)?.let { param -> parameters[EventParam.MARKED_AS_PAID_DATA.text] = param }
+                parameters["PU"] = resourceIdentifier
+                createMarkedAsPaidParam(gson, content, objectId = resourceIdentifier)?.let { param -> parameters[EventParam.MARKED_AS_PAID_DATA.text] = param }
             }
 
 			parameters["KTA"] = 1

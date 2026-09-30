@@ -13,6 +13,7 @@ import com.ringpublishing.tracking.data.KeepAliveContentStatus
 import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
 import com.ringpublishing.tracking.internal.data.WindowSize
+import com.ringpublishing.tracking.internal.decodeRdlcn
 import com.ringpublishing.tracking.internal.decorator.EventParam
 import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewComponentSource
 import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewEventParam
@@ -110,11 +111,27 @@ internal class EffectivePageViewEventFactoryTest {
         Assert.assertEquals(event.name, EventType.POLARIS.text)
     }
 
+    @Test
+    fun createEffectivePageViewEvent_WhenContentIdNotNormalized_ThenRdlcnObjectIdEqualsPu() {
+        val contentMetadata = sampleContentMetadata.copy(contentId = " E0BE23E3-A100-4D4F-A347-0635DE46BFC4 ")
+
+        val event = sampleEventFactory.create(contentMetadata, sampleEffectivePageViewMetadata)
+
+        val resourceIdentifier = event.parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text]
+        Assert.assertEquals("e0be23e3-a100-4d4f-a347-0635de46bfc4", resourceIdentifier)
+        Assert.assertEquals(
+            "{\"object\":{\"id\":\"$resourceIdentifier\"},\"publication\":{\"premium\":true}," +
+                    "\"source\":{\"id\":\"my-unique-content-space-uuid-1234\",\"system\":\"source System_Name\"}}",
+            event.decodeRdlcn()
+        )
+    }
+
     /**
      * Mocks RDLCN param value
      */
     private fun mockRDLCNEncodingPaid() = encode(
-        "{\"publication\":{\"premium\":${sampleContentMetadata.paidContent}},\"source\":{\"id\":\"${sampleContentMetadata.contentSpaceUuid}\"" +
+        "{\"object\":{\"id\":\"${sampleContentMetadata.contentId}\"}," +
+                "\"publication\":{\"premium\":${sampleContentMetadata.paidContent}},\"source\":{\"id\":\"${sampleContentMetadata.contentSpaceUuid}\"" +
                 ",\"system\":\"${sampleContentMetadata.sourceSystemName}\"}}"
     )
 

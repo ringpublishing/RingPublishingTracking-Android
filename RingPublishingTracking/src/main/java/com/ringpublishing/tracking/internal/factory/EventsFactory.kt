@@ -69,13 +69,14 @@ class EventsFactory(private val gson: Gson)
     ): Event
 	{
         val parameters = mutableMapOf<String, Any>()
+        val resourceIdentifier = contentIdentifier?.lowercase()
 
-        contentIdentifier?.let {
-            parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = it.lowercase()
+        resourceIdentifier?.let {
+            parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text] = it
         }
         contentMetadata?.let { metadata ->
             parameters[UserEventParam.PAGE_VIEW_CONTENT_INFO.text] = metadata.buildToDX()
-            createMarkedAsPaidParam(gson, metadata)?.let { param -> parameters[EventParam.MARKED_AS_PAID_DATA.text] = param }
+            createMarkedAsPaidParam(gson, metadata, objectId = resourceIdentifier)?.let { param -> parameters[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
         clientData?.let { parameters[EventParam.CLIENT_ID.text] = it }
 

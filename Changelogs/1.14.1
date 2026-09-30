@@ -1,0 +1,12 @@
+1.14.1 Release notes (2026-09-30)
+================================
+
+Improvements to the 'RingPublishingTracking' module.
+
+### Changes
+
+* Added 'object.id' to the 'RDLCN' parameter (e.g. {"object":{"id":"e0be23e3-a100-4d4f-a347-0635de46bfc4"}})
+    - the value is the 'contentId' of 'ContentMetadata', normalized the same way as the 'PU' of the same event, so 'object.id' always equals 'PU'
+    - paid events report no 'PU' and send 'contentId' as is, the same value as their 'source_publication_uuid'
+    - 'object' is omitted when the content identifier is blank
+    - 'publication' and 'source' are unchanged, public API is unchanged

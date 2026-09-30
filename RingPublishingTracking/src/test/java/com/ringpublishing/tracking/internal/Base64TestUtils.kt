@@ -24,3 +24,9 @@ internal fun Event.decodeRdlc(): String
     val encodedRdlc = parameters[EventParam.CLIENT_ID.text] as String
     return String(java.util.Base64.getDecoder().decode(encodedRdlc))
 }
+
+internal fun Event.decodeRdlcn(): String
+{
+    val encodedRdlcn = parameters[EventParam.MARKED_AS_PAID_DATA.text] as String
+    return String(java.util.Base64.getDecoder().decode(encodedRdlcn))
+}

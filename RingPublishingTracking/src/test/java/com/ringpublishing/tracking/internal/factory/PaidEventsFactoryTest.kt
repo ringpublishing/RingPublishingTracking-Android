@@ -320,7 +320,8 @@ class PaidEventsFactoryTest
     }
 
     private fun mockRdlcnEncodingPaid() = encode(
-        "{\"publication\":{\"premium\":${sampleContentMetadata.paidContent}},\"source\":{\"id\":\"${sampleContentMetadata.contentSpaceUuid}\"" +
+        "{\"object\":{\"id\":\"${sampleContentMetadata.contentId}\"}," +
+                "\"publication\":{\"premium\":${sampleContentMetadata.paidContent}},\"source\":{\"id\":\"${sampleContentMetadata.contentSpaceUuid}\"" +
                 ",\"system\":\"${sampleContentMetadata.sourceSystemName}\"}}"
     )
 
