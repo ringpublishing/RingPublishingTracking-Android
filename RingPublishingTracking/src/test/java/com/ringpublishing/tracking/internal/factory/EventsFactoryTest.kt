@@ -10,9 +10,15 @@ import android.util.Base64
 import com.google.gson.GsonBuilder
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.internal.decodeRdlcn
+import com.ringpublishing.tracking.internal.decodeRdlcnObjectId
 import com.ringpublishing.tracking.internal.mockAndroidBase64Encoding
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
 import com.ringpublishing.tracking.internal.decorator.EventParam
+import com.ringpublishing.tracking.internal.log.Logger
+import com.ringpublishing.tracking.internal.rdlcnObjectIdVectors
+import io.mockk.mockkObject
+import io.mockk.unmockkObject
+import io.mockk.verify
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -176,33 +182,46 @@ class EventsFactoryTest
     }
 
     @Test
-    fun createPageViewEvent_WhenContentIdHasUpperCase_ThenRdlcnObjectIdEqualsPu()
+    fun createPageViewEvent_WhenContentIdIsUuid_ThenRdlcnStartsWithCanonicalObject()
     {
-        val contentMetadata = sampleContentMetadata(contentId = "E0BE23E3-A100-4D4F-A347-0635DE46BFC4")
+        val contentMetadata = sampleContentMetadata(contentId = "  E0BE23E3-A100-4D4F-A347-0635DE46BFC4  ")
 
         val event = EventsFactory(gson).createPageViewEvent(contentMetadata.contentId, contentMetadata)
 
-        val resourceIdentifier = event.parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text]
-        Assert.assertEquals("e0be23e3-a100-4d4f-a347-0635de46bfc4", resourceIdentifier)
         Assert.assertEquals(
-            "{\"object\":{\"id\":\"$resourceIdentifier\"},\"publication\":{\"premium\":false}," +
+            "{\"object\":{\"id\":\"e0be23e3-a100-4d4f-a347-0635de46bfc4\"},\"publication\":{\"premium\":false}," +
                     "\"source\":{\"id\":\"my-unique-content-space-uuid-1234\",\"system\":\"sourceSystemName\"}}",
             event.decodeRdlcn()
         )
     }
 
     @Test
-    fun createPageViewEvent_WhenContentIdBlank_ThenRdlcnHasNoObject()
+    fun createPageViewEvent_WhenSharedContentIdVectors_ThenRdlcnObjectIdIsCanonical()
     {
-        val contentMetadata = sampleContentMetadata(contentId = " ")
+        rdlcnObjectIdVectors.forEach { (contentId, expectedObjectId) ->
+            val contentMetadata = sampleContentMetadata(contentId)
 
-        val event = EventsFactory(gson).createPageViewEvent(contentMetadata.contentId, contentMetadata)
+            val event = EventsFactory(gson).createPageViewEvent(contentMetadata.contentId, contentMetadata)
 
-        Assert.assertEquals(
-            "{\"publication\":{\"premium\":false}," +
-                    "\"source\":{\"id\":\"my-unique-content-space-uuid-1234\",\"system\":\"sourceSystemName\"}}",
-            event.decodeRdlcn()
-        )
+            Assert.assertEquals("contentId '$contentId'", expectedObjectId, event.decodeRdlcnObjectId())
+        }
+    }
+
+    @Test
+    fun createPageViewEvent_WhenContentIdNotUuid_ThenWarningLogged()
+    {
+        val contentMetadata = sampleContentMetadata(contentId = "12345")
+        mockkObject(Logger)
+
+        try
+        {
+            EventsFactory(gson).createPageViewEvent(contentMetadata.contentId, contentMetadata)
+
+            verify { Logger.warn(match { it.contains("12345") }) }
+        } finally
+        {
+            unmockkObject(Logger)
+        }
     }
 
     private fun sampleContentMetadata(contentId: String) = ContentMetadata(
@@ -215,11 +234,11 @@ class EventsFactoryTest
     )
 
     private fun mockRdlcnEncodingPaid() = encode(
-        "{\"object\":{\"id\":\"publicationid\"},\"publication\":{\"premium\":true},\"source\":{\"id\":\"my-unique-content-space-uuid-1234\",\"system\":\"source System_Name\"}}"
+        "{\"publication\":{\"premium\":true},\"source\":{\"id\":\"my-unique-content-space-uuid-1234\",\"system\":\"source System_Name\"}}"
     )
 
     private fun mockRdlcnEncodingNotPaid() = encode(
-        "{\"object\":{\"id\":\"publicationid\"},\"publication\":{\"premium\":false},\"source\":{\"id\":\"my-unique-content-space-uuid-1234\",\"system\":\"sourceSystemName\"}}"
+        "{\"publication\":{\"premium\":false},\"source\":{\"id\":\"my-unique-content-space-uuid-1234\",\"system\":\"sourceSystemName\"}}"
     )
 
     private fun encode(input: String): String {

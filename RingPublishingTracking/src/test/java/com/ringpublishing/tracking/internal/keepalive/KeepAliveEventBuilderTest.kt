@@ -13,9 +13,10 @@ import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.ContentSize
 import com.ringpublishing.tracking.data.KeepAliveContentStatus
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
-import com.ringpublishing.tracking.internal.decodeRdlcn
+import com.ringpublishing.tracking.internal.decodeRdlcnObjectId
 import com.ringpublishing.tracking.internal.decorator.EventParam
 import com.ringpublishing.tracking.internal.factory.EventType
+import com.ringpublishing.tracking.internal.rdlcnObjectIdVectors
 import com.ringpublishing.tracking.internal.util.ScreenSizeInfo
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -108,33 +109,15 @@ internal class KeepAliveEventBuilderTest
     }
 
     @Test
-    fun create_WhenContentIdHasWhitespace_ThenRdlcnObjectIdEqualsPu()
+    fun create_WhenSharedContentIdVectors_ThenRdlcnObjectIdIsCanonical()
     {
-        val content = sampleContentMetadata(contentId = "  e0be23e3-a100-4d4f-a347-0635de46bfc4 ")
+        rdlcnObjectIdVectors.forEach { (contentId, expectedObjectId) ->
+            val content = sampleContentMetadata(contentId)
 
-        val event = KeepAliveEventBuilder(screenSizeInfo, gson).create(content, emptyList())
+            val event = KeepAliveEventBuilder(screenSizeInfo, gson).create(content, emptyList())
 
-        val resourceIdentifier = event.parameters["PU"]
-        Assert.assertEquals("e0be23e3-a100-4d4f-a347-0635de46bfc4", resourceIdentifier)
-        Assert.assertEquals(
-            "{\"object\":{\"id\":\"$resourceIdentifier\"},\"publication\":{\"premium\":false}," +
-                    "\"source\":{\"id\":\"content-space-uuid\",\"system\":\"sourceSystemName\"}}",
-            event.decodeRdlcn()
-        )
-    }
-
-    @Test
-    fun create_WhenContentIdBlank_ThenRdlcnHasNoObject()
-    {
-        val content = sampleContentMetadata(contentId = "   ")
-
-        val event = KeepAliveEventBuilder(screenSizeInfo, gson).create(content, emptyList())
-
-        Assert.assertEquals(
-            "{\"publication\":{\"premium\":false}," +
-                    "\"source\":{\"id\":\"content-space-uuid\",\"system\":\"sourceSystemName\"}}",
-            event.decodeRdlcn()
-        )
+            Assert.assertEquals("contentId '$contentId'", expectedObjectId, event.decodeRdlcnObjectId())
+        }
     }
 
     private fun sampleContentMetadata(contentId: String) = ContentMetadata(
@@ -147,8 +130,7 @@ internal class KeepAliveEventBuilderTest
     )
 
     private fun mockRdlcnEncodingNotPaid() = encode(
-        "{\"object\":{\"id\":\"1\"},\"publication\":{\"premium\":false}," +
-                "\"source\":{\"id\":\"1\",\"system\":\"sourceSystemName\"}}"
+        "{\"publication\":{\"premium\":false},\"source\":{\"id\":\"1\",\"system\":\"sourceSystemName\"}}"
     )
 
     private fun encode(input: String): String {

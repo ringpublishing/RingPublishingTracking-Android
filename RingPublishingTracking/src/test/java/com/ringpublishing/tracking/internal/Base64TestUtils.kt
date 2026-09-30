@@ -1,6 +1,8 @@
 package com.ringpublishing.tracking.internal
 
 import android.util.Base64
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.decorator.EventParam
 import io.mockk.every
@@ -29,4 +31,10 @@ internal fun Event.decodeRdlcn(): String
 {
     val encodedRdlcn = parameters[EventParam.MARKED_AS_PAID_DATA.text] as String
     return String(java.util.Base64.getDecoder().decode(encodedRdlcn))
+}
+
+internal fun Event.decodeRdlcnObjectId(): String?
+{
+    val rdlcn = Gson().fromJson(decodeRdlcn(), JsonObject::class.java)
+    return if (rdlcn.has("object")) rdlcn.getAsJsonObject("object").get("id").asString else null
 }

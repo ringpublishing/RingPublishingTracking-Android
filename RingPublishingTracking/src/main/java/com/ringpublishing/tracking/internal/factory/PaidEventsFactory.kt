@@ -47,7 +47,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
             targetPromotionCampaignCode?.let {
                 this[PaidEventParam.TPCC.text] = it
             }
-            createMarkedAsPaidParam(gson, contentMetadata, objectId = contentMetadata?.contentId)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
+            createMarkedAsPaidParam(gson, contentMetadata)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
 
         return createPaidEvent(parameters)
@@ -78,7 +78,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
             targetPromotionCampaignCode?.let {
                 this[PaidEventParam.TPCC.text] = it
             }
-            createMarkedAsPaidParam(gson, contentMetadata, objectId = contentMetadata?.contentId)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
+            createMarkedAsPaidParam(gson, contentMetadata)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
 
         return createPaidEvent(parameters)
@@ -113,7 +113,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
             targetPromotionCampaignCode?.let {
                 this[PaidEventParam.TPCC.text] = it
             }
-            createMarkedAsPaidParam(gson, contentMetadata, objectId = contentMetadata?.contentId)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
+            createMarkedAsPaidParam(gson, contentMetadata)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
 
         return createPaidEvent(parameters)
@@ -167,7 +167,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
             )?.let {
                 this[PaidEventParam.EVENT_DETAILS.text] = it
             }
-            createMarkedAsPaidParam(gson, contentMetadata, objectId = contentMetadata?.contentId)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
+            createMarkedAsPaidParam(gson, contentMetadata)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
 
         return createPaidEvent(parameters)
@@ -186,7 +186,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
             this[PaidEventParam.SOURCE_DX.text] = contentMetadata.buildToDX()
             this[PaidEventParam.SOURCE_PUBLICATION_UUID.text] = contentMetadata.contentId
 
-            createMarkedAsPaidParam(gson, contentMetadata, objectId = contentMetadata.contentId)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
+            createMarkedAsPaidParam(gson, contentMetadata)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
 
         return createPaidEvent(parameters)
@@ -212,7 +212,7 @@ internal class PaidEventsFactory(private val gson: Gson) {
             createLikelihoodDataJson(likelihoodData)?.let {
                 this[PaidEventParam.EVENT_DETAILS.text] = it
             }
-            createMarkedAsPaidParam(gson, contentMetadata, objectId = contentMetadata?.contentId)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
+            createMarkedAsPaidParam(gson, contentMetadata)?.let { param -> this[EventParam.MARKED_AS_PAID_DATA.text] = param }
         }
 
         return createPaidEvent(parameters)

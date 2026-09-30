@@ -13,7 +13,7 @@ import com.ringpublishing.tracking.data.KeepAliveContentStatus
 import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
 import com.ringpublishing.tracking.internal.data.WindowSize
-import com.ringpublishing.tracking.internal.decodeRdlcn
+import com.ringpublishing.tracking.internal.decodeRdlcnObjectId
 import com.ringpublishing.tracking.internal.decorator.EventParam
 import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewComponentSource
 import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewEventParam
@@ -22,6 +22,7 @@ import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewT
 import com.ringpublishing.tracking.internal.factory.EffectivePageViewEventFactory
 import com.ringpublishing.tracking.internal.factory.EventType
 import com.ringpublishing.tracking.internal.factory.UserEventParam
+import com.ringpublishing.tracking.internal.rdlcnObjectIdVectors
 import com.ringpublishing.tracking.internal.util.ScreenSizeInfo
 import com.ringpublishing.tracking.internal.util.buildToDX
 import io.mockk.MockKAnnotations
@@ -112,26 +113,21 @@ internal class EffectivePageViewEventFactoryTest {
     }
 
     @Test
-    fun createEffectivePageViewEvent_WhenContentIdNotNormalized_ThenRdlcnObjectIdEqualsPu() {
-        val contentMetadata = sampleContentMetadata.copy(contentId = " E0BE23E3-A100-4D4F-A347-0635DE46BFC4 ")
+    fun createEffectivePageViewEvent_WhenSharedContentIdVectors_ThenRdlcnObjectIdIsCanonical() {
+        rdlcnObjectIdVectors.forEach { (contentId, expectedObjectId) ->
+            val contentMetadata = sampleContentMetadata.copy(contentId = contentId)
 
-        val event = sampleEventFactory.create(contentMetadata, sampleEffectivePageViewMetadata)
+            val event = sampleEventFactory.create(contentMetadata, sampleEffectivePageViewMetadata)
 
-        val resourceIdentifier = event.parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text]
-        Assert.assertEquals("e0be23e3-a100-4d4f-a347-0635de46bfc4", resourceIdentifier)
-        Assert.assertEquals(
-            "{\"object\":{\"id\":\"$resourceIdentifier\"},\"publication\":{\"premium\":true}," +
-                    "\"source\":{\"id\":\"my-unique-content-space-uuid-1234\",\"system\":\"source System_Name\"}}",
-            event.decodeRdlcn()
-        )
+            Assert.assertEquals("contentId '$contentId'", expectedObjectId, event.decodeRdlcnObjectId())
+        }
     }
 
     /**
      * Mocks RDLCN param value
      */
     private fun mockRDLCNEncodingPaid() = encode(
-        "{\"object\":{\"id\":\"${sampleContentMetadata.contentId}\"}," +
-                "\"publication\":{\"premium\":${sampleContentMetadata.paidContent}},\"source\":{\"id\":\"${sampleContentMetadata.contentSpaceUuid}\"" +
+        "{\"publication\":{\"premium\":${sampleContentMetadata.paidContent}},\"source\":{\"id\":\"${sampleContentMetadata.contentSpaceUuid}\"" +
                 ",\"system\":\"${sampleContentMetadata.sourceSystemName}\"}}"
     )
 
