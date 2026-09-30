@@ -7,6 +7,7 @@ import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.internal.log.Logger
 import java.util.concurrent.ConcurrentHashMap
 
+// Use matches(), not find(): '$' also matches before a trailing line terminator such as U+0085.
 private val uuidRegex = Regex("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 
 // Explicit set: Kotlin trim() and iOS whitespacesAndNewlines disagree on characters such as U+0085.
