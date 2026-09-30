@@ -13,6 +13,7 @@ import com.ringpublishing.tracking.internal.data.Client
 import com.ringpublishing.tracking.internal.data.ClientPlatform
 import com.ringpublishing.tracking.internal.data.ClientType
 import com.ringpublishing.tracking.internal.data.ClientVariant
+import com.ringpublishing.tracking.internal.data.ViewType
 import com.ringpublishing.tracking.internal.data.toRdlc
 import com.ringpublishing.tracking.internal.log.Logger
 
@@ -28,9 +29,9 @@ internal class ClientDecorator(private val gson: Gson) : BaseDecorator()
 
 	fun clientData(viewType: ContentViewType? = null): String
 	{
-		val clientType = ClientType(ClientPlatform.native_app, viewType?.value)
+		val clientType = ClientType(ClientPlatform.native_app)
 		val variant = variantExternalParameters?.let { ClientVariant(it) }
-		return Client(clientType, variant).toRdlc(gson)
+		return Client(clientType, viewType?.let { ViewType(it.value) }, variant).toRdlc(gson)
 	}
 
 	/**
