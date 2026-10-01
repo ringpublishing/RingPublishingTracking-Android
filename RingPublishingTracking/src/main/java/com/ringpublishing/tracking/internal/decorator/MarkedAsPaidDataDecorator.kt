@@ -5,16 +5,12 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.internal.log.Logger
-import java.util.concurrent.ConcurrentHashMap
 
 // Use matches(), not find(): '$' also matches before a trailing line terminator such as U+0085.
 private val uuidRegex = Regex("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 
 // Explicit set: Kotlin trim() and iOS whitespacesAndNewlines disagree on characters such as U+0085.
 private val asciiWhitespace = setOf(' ', '\t', '\n', '\r', '\u000B', '\u000C')
-
-// Raw content ids already warned about, so each one is logged once while the SDK (a process-wide object) lives.
-private val contentIdsWarnedAsNotUuid: MutableSet<String> = ConcurrentHashMap.newKeySet()
 
 internal fun createMarkedAsPaidParam(gson: Gson, contentMetadata: ContentMetadata?): String?
 {
@@ -41,10 +37,7 @@ private fun createContentObject(contentId: String): ContentObject?
 
     if (!uuidRegex.matches(objectId))
     {
-        if (contentIdsWarnedAsNotUuid.add(contentId))
-        {
-            Logger.warn("RDLCN: content id '$contentId' is not a UUID, 'object' is omitted")
-        }
+        Logger.warn("RDLCN: content id '$contentId' is not a UUID, 'object' is omitted")
         return null
     }
 

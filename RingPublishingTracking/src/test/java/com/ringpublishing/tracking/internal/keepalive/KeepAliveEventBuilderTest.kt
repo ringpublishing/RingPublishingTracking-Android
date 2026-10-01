@@ -126,9 +126,8 @@ internal class KeepAliveEventBuilderTest
     }
 
     @Test
-    fun create_WhenNonUuidContentIdRepeats_ThenWarningLoggedOncePerId()
+    fun create_WhenNonUuidContentIdRepeats_ThenWarningLoggedEachTime()
     {
-        // Ids no other test uses, because the ids already warned about are kept for the whole JVM.
         val content = sampleContentMetadata("repeated-not-a-uuid")
         val otherContent = sampleContentMetadata("other-not-a-uuid")
         val builder = KeepAliveEventBuilder(screenSizeInfo, gson)
@@ -140,7 +139,7 @@ internal class KeepAliveEventBuilderTest
             EventsFactory(gson).createPageViewEvent(content.contentId, content)
             builder.create(otherContent, emptyList())
 
-            verify(exactly = 1) { Logger.warn(match { it.contains("'repeated-not-a-uuid'") }) }
+            verify(exactly = 4) { Logger.warn(match { it.contains("'repeated-not-a-uuid'") }) }
             verify(exactly = 1) { Logger.warn(match { it.contains("'other-not-a-uuid'") }) }
         } finally
         {
