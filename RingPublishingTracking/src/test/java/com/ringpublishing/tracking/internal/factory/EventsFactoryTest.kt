@@ -9,9 +9,12 @@ package com.ringpublishing.tracking.internal.factory
 import android.util.Base64
 import com.google.gson.GsonBuilder
 import com.ringpublishing.tracking.data.ContentMetadata
+import com.ringpublishing.tracking.internal.decodeRdlcn
+import com.ringpublishing.tracking.internal.decodeRdlcnObjectId
 import com.ringpublishing.tracking.internal.mockAndroidBase64Encoding
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
 import com.ringpublishing.tracking.internal.decorator.EventParam
+import com.ringpublishing.tracking.internal.rdlcnObjectIdVectors
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -173,6 +176,64 @@ class EventsFactoryTest
 
         Assert.assertFalse(event.parameters.containsKey(EventParam.CLIENT_ID.text))
     }
+
+    @Test
+    fun createPageViewEvent_WhenContentIdIsUuid_ThenRdlcnStartsWithCanonicalObject()
+    {
+        val contentMetadata = sampleContentMetadata(contentId = "  E0BE23E3-A100-4D4F-A347-0635DE46BFC4  ")
+
+        val event = EventsFactory(gson).createPageViewEvent(contentMetadata.contentId, contentMetadata)
+
+        Assert.assertEquals(
+            "{\"object\":{\"id\":\"e0be23e3-a100-4d4f-a347-0635de46bfc4\"},\"publication\":{\"premium\":false}," +
+                    "\"source\":{\"id\":\"my-unique-content-space-uuid-1234\",\"system\":\"sourceSystemName\"}}",
+            event.decodeRdlcn()
+        )
+    }
+
+    @Test
+    fun createPageViewEvent_WhenSharedContentIdVectors_ThenRdlcnObjectIdIsCanonical()
+    {
+        rdlcnObjectIdVectors.forEach { (contentId, expectedObjectId) ->
+            val contentMetadata = sampleContentMetadata(contentId)
+
+            val event = EventsFactory(gson).createPageViewEvent(contentMetadata.contentId, contentMetadata)
+
+            Assert.assertEquals("contentId '$contentId'", expectedObjectId, event.decodeRdlcnObjectId())
+        }
+    }
+
+    @Test
+    fun createPageViewEvent_WhenContentIdPaddedWithAsciiWhitespace_ThenRdlcnObjectIdIsTrimmed()
+    {
+        val contentId = " \t\n\r\u000B\u000Ce0be23e3-a100-4d4f-a347-0635de46bfc4\u000C\u000B\r\n\t "
+        val contentMetadata = sampleContentMetadata(contentId)
+
+        val event = EventsFactory(gson).createPageViewEvent(contentMetadata.contentId, contentMetadata)
+
+        Assert.assertEquals("e0be23e3-a100-4d4f-a347-0635de46bfc4", event.decodeRdlcnObjectId())
+    }
+
+    @Test
+    fun createPageViewEvent_WhenContentIdPaddedWithWhitespaceOutsideTrimSet_ThenRdlcnHasNoObject()
+    {
+        listOf('\u00A0', '\u2003', '\u001F').forEach { padding ->
+            val contentMetadata = sampleContentMetadata("${padding}e0be23e3-a100-4d4f-a347-0635de46bfc4$padding")
+
+            val event = EventsFactory(gson).createPageViewEvent(contentMetadata.contentId, contentMetadata)
+
+            Assert.assertNull("padding U+%04X".format(padding.code), event.decodeRdlcnObjectId())
+        }
+    }
+
+    private fun sampleContentMetadata(contentId: String) = ContentMetadata(
+        publicationId = "publicationId",
+        publicationUrl = URL("https://domain.com"),
+        sourceSystemName = "sourceSystemName",
+        paidContent = false,
+        contentId = contentId,
+        contentSpaceUuid = "my-unique-content-space-uuid-1234"
+    )
 
     private fun mockRdlcnEncodingPaid() = encode(
         "{\"publication\":{\"premium\":true},\"source\":{\"id\":\"my-unique-content-space-uuid-1234\",\"system\":\"source System_Name\"}}"

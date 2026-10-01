@@ -13,17 +13,25 @@ import com.ringpublishing.tracking.data.ContentMetadata
 import com.ringpublishing.tracking.data.ContentSize
 import com.ringpublishing.tracking.data.KeepAliveContentStatus
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
+import com.ringpublishing.tracking.internal.decodeRdlcnObjectId
 import com.ringpublishing.tracking.internal.decorator.EventParam
 import com.ringpublishing.tracking.internal.factory.EventType
+import com.ringpublishing.tracking.internal.factory.EventsFactory
+import com.ringpublishing.tracking.internal.log.Logger
+import com.ringpublishing.tracking.internal.rdlcnObjectIdVectors
 import com.ringpublishing.tracking.internal.util.ScreenSizeInfo
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.slot
+import io.mockk.unmockkObject
+import io.mockk.verify
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import java.net.URL
 
 internal class KeepAliveEventBuilderTest
 {
@@ -104,6 +112,49 @@ internal class KeepAliveEventBuilderTest
 		Assert.assertEquals(5L, (event.parameters["KTP"] as Array<*>)[0])
         Assert.assertEquals(mockRdlcnEncodingNotPaid(), event.parameters[EventParam.MARKED_AS_PAID_DATA.text])
     }
+
+    @Test
+    fun create_WhenSharedContentIdVectors_ThenRdlcnObjectIdIsCanonical()
+    {
+        rdlcnObjectIdVectors.forEach { (contentId, expectedObjectId) ->
+            val content = sampleContentMetadata(contentId)
+
+            val event = KeepAliveEventBuilder(screenSizeInfo, gson).create(content, emptyList())
+
+            Assert.assertEquals("contentId '$contentId'", expectedObjectId, event.decodeRdlcnObjectId())
+        }
+    }
+
+    @Test
+    fun create_WhenNonUuidContentIdRepeats_ThenWarningLoggedEachTime()
+    {
+        val content = sampleContentMetadata("repeated-not-a-uuid")
+        val otherContent = sampleContentMetadata("other-not-a-uuid")
+        val builder = KeepAliveEventBuilder(screenSizeInfo, gson)
+        mockkObject(Logger)
+
+        try
+        {
+            repeat(3) { builder.create(content, emptyList()) }
+            EventsFactory(gson).createPageViewEvent(content.contentId, content)
+            builder.create(otherContent, emptyList())
+
+            verify(exactly = 4) { Logger.warn(match { it.contains("'repeated-not-a-uuid'") }) }
+            verify(exactly = 1) { Logger.warn(match { it.contains("'other-not-a-uuid'") }) }
+        } finally
+        {
+            unmockkObject(Logger)
+        }
+    }
+
+    private fun sampleContentMetadata(contentId: String) = ContentMetadata(
+        publicationId = "publicationId",
+        publicationUrl = URL("https://domain.com"),
+        sourceSystemName = "sourceSystemName",
+        paidContent = false,
+        contentId = contentId,
+        contentSpaceUuid = "content-space-uuid"
+    )
 
     private fun mockRdlcnEncodingNotPaid() = encode(
         "{\"publication\":{\"premium\":false},\"source\":{\"id\":\"1\",\"system\":\"sourceSystemName\"}}"

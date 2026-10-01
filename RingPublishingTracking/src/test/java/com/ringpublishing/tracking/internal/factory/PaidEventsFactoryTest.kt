@@ -16,9 +16,11 @@ import com.ringpublishing.tracking.data.paid.OfferDisplayMode
 import com.ringpublishing.tracking.data.paid.PaymentMethod
 import com.ringpublishing.tracking.data.paid.SubscriptionPaymentData
 import com.ringpublishing.tracking.data.paid.SupplierData
+import com.ringpublishing.tracking.internal.decodeRdlcnObjectId
 import com.ringpublishing.tracking.internal.decorator.EventParam
 import com.ringpublishing.tracking.internal.factory.PaidEventsFactory
 import com.ringpublishing.tracking.internal.paid.PaidEventParam
+import com.ringpublishing.tracking.internal.rdlcnObjectIdVectors
 import com.ringpublishing.tracking.internal.util.buildToDX
 import io.mockk.every
 import io.mockk.mockkStatic
@@ -317,6 +319,21 @@ class PaidEventsFactoryTest
 
         Assert.assertTrue(event.parameters.isNotEmpty())
         Assert.assertEquals(event.parameters[PaidEventParam.EVENT_DETAILS.text], sampleUserJson)
+    }
+
+    @Test
+    fun createShowOfferEvent_WhenSharedContentIdVectors_ThenRdlcnObjectIdIsCanonical()
+    {
+        rdlcnObjectIdVectors.forEach { (contentId, expectedObjectId) ->
+            val event = PaidEventsFactory(gson).createShowOfferEvent(
+                contentMetadata = sampleContentMetadata.copy(contentId = contentId),
+                offerData = sampleOfferData,
+                offerContextData = sampleOfferContextData,
+                targetPromotionCampaignCode = null
+            )
+
+            Assert.assertEquals("contentId '$contentId'", expectedObjectId, event.decodeRdlcnObjectId())
+        }
     }
 
     private fun mockRdlcnEncodingPaid() = encode(

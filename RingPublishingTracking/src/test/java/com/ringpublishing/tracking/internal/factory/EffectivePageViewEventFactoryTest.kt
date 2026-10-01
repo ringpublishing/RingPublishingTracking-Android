@@ -13,6 +13,7 @@ import com.ringpublishing.tracking.data.KeepAliveContentStatus
 import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
 import com.ringpublishing.tracking.internal.data.WindowSize
+import com.ringpublishing.tracking.internal.decodeRdlcnObjectId
 import com.ringpublishing.tracking.internal.decorator.EventParam
 import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewComponentSource
 import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewEventParam
@@ -21,6 +22,7 @@ import com.ringpublishing.tracking.internal.effectivepageview.EffectivePageViewT
 import com.ringpublishing.tracking.internal.factory.EffectivePageViewEventFactory
 import com.ringpublishing.tracking.internal.factory.EventType
 import com.ringpublishing.tracking.internal.factory.UserEventParam
+import com.ringpublishing.tracking.internal.rdlcnObjectIdVectors
 import com.ringpublishing.tracking.internal.util.ScreenSizeInfo
 import com.ringpublishing.tracking.internal.util.buildToDX
 import io.mockk.MockKAnnotations
@@ -108,6 +110,17 @@ internal class EffectivePageViewEventFactoryTest {
         Assert.assertEquals(event.parameters[EventParam.MARKED_AS_PAID_DATA.text], mockRDLCNEncodingPaid())
         Assert.assertEquals(event.analyticsSystemName, AnalyticsSystem.GENERIC.text)
         Assert.assertEquals(event.name, EventType.POLARIS.text)
+    }
+
+    @Test
+    fun createEffectivePageViewEvent_WhenSharedContentIdVectors_ThenRdlcnObjectIdIsCanonical() {
+        rdlcnObjectIdVectors.forEach { (contentId, expectedObjectId) ->
+            val contentMetadata = sampleContentMetadata.copy(contentId = contentId)
+
+            val event = sampleEventFactory.create(contentMetadata, sampleEffectivePageViewMetadata)
+
+            Assert.assertEquals("contentId '$contentId'", expectedObjectId, event.decodeRdlcnObjectId())
+        }
     }
 
     /**
