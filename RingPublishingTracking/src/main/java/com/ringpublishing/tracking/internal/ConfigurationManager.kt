@@ -180,4 +180,6 @@ internal class ConfigurationManager
 	}
 
     fun shouldReportEffectivePageViewEvent() = ringPublishingTrackingConfiguration.shouldReportEffectivePageViewEvent
+
+    fun isTestData() = ringPublishingTrackingConfiguration.testData
 }

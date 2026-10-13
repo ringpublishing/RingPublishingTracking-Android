@@ -26,7 +26,7 @@ internal class EventDecorator(
 {
 	private val decorators = mutableListOf<Decorator>()
 
-	private val clientDecorator = ClientDecorator(gson)
+	private val clientDecorator = ClientDecorator(configurationManager, gson)
 
 	init
 	{

@@ -9,15 +9,21 @@ package com.ringpublishing.tracking.internal.decorator
 import com.google.gson.Gson
 import com.ringpublishing.tracking.data.ContentViewType
 import com.ringpublishing.tracking.data.Event
+import com.ringpublishing.tracking.internal.ConfigurationManager
 import com.ringpublishing.tracking.internal.data.Client
 import com.ringpublishing.tracking.internal.data.ClientPlatform
+import com.ringpublishing.tracking.internal.data.ClientTracking
+import com.ringpublishing.tracking.internal.data.ClientTrackingEnv
 import com.ringpublishing.tracking.internal.data.ClientType
 import com.ringpublishing.tracking.internal.data.ClientVariant
 import com.ringpublishing.tracking.internal.data.ViewType
 import com.ringpublishing.tracking.internal.data.toRdlc
 import com.ringpublishing.tracking.internal.log.Logger
 
-internal class ClientDecorator(private val gson: Gson) : BaseDecorator()
+internal class ClientDecorator(
+    private val configurationManager: ConfigurationManager,
+    private val gson: Gson,
+) : BaseDecorator()
 {
 
 	private var variantExternalParameters: Map<String, String>? = null
@@ -31,7 +37,13 @@ internal class ClientDecorator(private val gson: Gson) : BaseDecorator()
 	{
 		val clientType = ClientType(ClientPlatform.native_app)
 		val variant = variantExternalParameters?.let { ClientVariant(it) }
-		return Client(clientType, viewType?.let { ViewType(it.value) }, variant).toRdlc(gson)
+		val tracking = ClientTracking(
+            env = ClientTrackingEnv(stage = true)
+        ).takeIf {
+            configurationManager.isTestData()
+        }
+
+		return Client(clientType, viewType?.let { ViewType(it.value) }, variant, tracking).toRdlc(gson)
 	}
 
 	/**
