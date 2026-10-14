@@ -229,6 +229,70 @@ internal class EventDecoratorTest
     }
 
     @Test
+    fun decorate_WhenTestDataEnabled_ThenRdlcContainsTrackingStage()
+    {
+        mockDefaultParameters()
+
+        every { configurationManager.isTestData() } returns true
+        every { userData.userId } returns null
+        every { userData.emailMd5 } returns null
+        every { userData.ssoName } returns null
+        every { userData.isActiveSubscriber } returns null
+        every { apiRepository.readArtemisId() } returns null
+
+        val eventDecorator = EventDecorator(
+            configurationManager,
+            apiRepository,
+            Gson(),
+            windowSizeInfo,
+            screenSizeInfo,
+            SessionIdentifierDecorator(),
+        )
+        val eventDecorated = eventDecorator.decorate(Event())
+
+        Assert.assertEquals(
+            """{"client":{"type":"native_app"},"tracking":{"env":{"stage":true}}}""",
+            eventDecorated.decodeRdlc(),
+        )
+    }
+
+    @Test
+    fun decorate_ContentPageViewWithViewType_WhenTestDataEnabled_ThenRdlcContainsTrackingNextToViewAndVariant()
+    {
+        mockDefaultParameters()
+
+        every { configurationManager.isTestData() } returns true
+        every { userData.userId } returns null
+        every { userData.emailMd5 } returns null
+        every { userData.ssoName } returns null
+        every { userData.isActiveSubscriber } returns null
+        every { apiRepository.readArtemisId() } returns null
+
+        val eventDecorator = EventDecorator(
+            configurationManager,
+            apiRepository,
+            Gson(),
+            windowSizeInfo,
+            screenSizeInfo,
+            SessionIdentifierDecorator(),
+        )
+        eventDecorator.updateVariantExternalParameters(mapOf("experiment" to "a"))
+
+        val contentPageViewEvent = EventsFactory(Gson()).createPageViewEvent(
+            contentIdentifier = null,
+            contentMetadata = null,
+            clientData = eventDecorator.clientData(ContentViewType.TEXT),
+        )
+        val decoratedContentPageViewEvent = eventDecorator.decorate(contentPageViewEvent)
+
+        Assert.assertEquals(
+            """{"client":{"type":"native_app"},"view":{"type":"text"},"variant":{"external":{"experiment":"a"}},""" +
+                """"tracking":{"env":{"stage":true}}}""",
+            decoratedContentPageViewEvent.decodeRdlc(),
+        )
+    }
+
+    @Test
     fun decorate_WhenEventAlreadyOwnsRdlc_ThenDecoratorDoesNotOverwriteIt()
     {
         mockDefaultParameters()
@@ -265,6 +329,7 @@ internal class EventDecoratorTest
         every { configurationManager.currentContentUrl } returns "contentUrl"
         every { configurationManager.getFullStructurePath() } returns "structurePath"
         every { configurationManager.currentReferrer } returns "referrer"
+        every { configurationManager.isTestData() } returns false
         every { screenSizeInfo.getScreenSizeDpString() } returns "1x1"
         every { windowSizeInfo.getWindowSizeDpString() } returns "1x1"
         every { sharedPreferences.getString(any(), any()) } returns "preference"

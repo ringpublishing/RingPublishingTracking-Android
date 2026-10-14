@@ -10,9 +10,10 @@ import android.util.Base64
 import com.google.gson.Gson
 
 class Client @JvmOverloads constructor(
-	val client: ClientType,
-	val view: ViewType? = null,
-	val variant: ClientVariant? = null,
+    val client: ClientType,
+    val view: ViewType? = null,
+    val variant: ClientVariant? = null,
+    val tracking: ClientTracking? = null,
 )
 
 internal fun Client.toRdlc(gson: Gson): String = Base64.encodeToString(

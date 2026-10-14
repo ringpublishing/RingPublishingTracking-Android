@@ -20,6 +20,7 @@ import java.net.URL
  * @property applicationAdvertisementSite Default ad space name of the application,
  * For example "ads/list/sport", "undefined" by default
  * @property shouldReportEffectivePageViewEvent Flag indicating whether the effective page view event should be reported
+ * @property testData Flag marking reported events as test data, so they are stored apart from production data.
  */
 data class RingPublishingTrackingConfiguration(
     val tenantId: String,
@@ -30,4 +31,5 @@ data class RingPublishingTrackingConfiguration(
     val applicationDefaultAdvertisementArea: String = Constants.applicationDefaultAdvertisementArea,
     val applicationAdvertisementSite: String? = null,
     val shouldReportEffectivePageViewEvent: Boolean = false,
+    val testData: Boolean = false,
 )
