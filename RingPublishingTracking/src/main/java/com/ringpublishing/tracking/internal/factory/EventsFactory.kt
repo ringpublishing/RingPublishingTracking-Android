@@ -20,11 +20,18 @@ import java.net.URL
 class EventsFactory(private val gson: Gson)
 {
 
-	fun createClickEvent(selectedEventName: String? = null, publicationUrl: URL? = null, contentIdentifier: String? = null): Event
+    fun createClickEvent(
+        selectedEventName: String? = null,
+        publicationUrl: URL? = null,
+        contentIdentifier: String? = null,
+        clickContext: String? = null,
+    ): Event
 	{
 		val parameters = mutableMapOf<String, Any>()
 
 		selectedEventName?.let { parameters[UserEventParam.SELECTED_ELEMENT_NAME.text] = it }
+
+		clickContext?.let { parameters[UserEventParam.CLICK_CONTEXT.text] = it }
 
 		publicationUrl?.let { parameters[UserEventParam.TARGET_URL.text] = it.toString() }
 

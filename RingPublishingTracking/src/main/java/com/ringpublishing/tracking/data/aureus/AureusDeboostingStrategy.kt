@@ -18,5 +18,10 @@ enum class AureusDeboostingStrategy(val text: String) {
     /**
      * User saw video content
      */
-    VIDEO_VIEWS("video_views");
+    VIDEO_VIEWS("video_views"),
+
+    /**
+     * User saw smart shorts content
+     */
+    SMART_SHORTS("smartshorts");
 }

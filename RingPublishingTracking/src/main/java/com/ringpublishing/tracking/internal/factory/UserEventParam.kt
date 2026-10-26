@@ -10,6 +10,7 @@ internal enum class UserEventParam(val text: String)
 {
 	SELECTED_ELEMENT_NAME("VE"),
 	TARGET_URL("VU"),
+	CLICK_CONTEXT("VC"),
 	USER_ACTION_CATEGORY_NAME("VE"),
 	USER_ACTION_SUBTYPE_NAME("VC"),
 	USER_ACTION_PAYLOAD("VM"),

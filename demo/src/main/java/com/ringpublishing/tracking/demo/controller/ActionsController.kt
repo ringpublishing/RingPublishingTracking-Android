@@ -184,6 +184,11 @@ class ActionsController : ScreenController()
             teasers = teasers,
             strategy = AureusDeboostingStrategy.VIDEO_VIEWS
         )
+
+        RingPublishingTracking.reportAureusDeboostingEvent(
+            teasers = teasers,
+            strategy = AureusDeboostingStrategy.SMART_SHORTS
+        )
     }
 
     fun actionUpdateVariantExternalParameters() {

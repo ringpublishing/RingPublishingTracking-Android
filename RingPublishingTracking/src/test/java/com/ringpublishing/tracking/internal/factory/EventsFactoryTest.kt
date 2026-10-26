@@ -80,6 +80,22 @@ class EventsFactoryTest
 		Assert.assertEquals(EventType.CLICK.text, event.name)
 		Assert.assertEquals("eventName", event.parameters[UserEventParam.SELECTED_ELEMENT_NAME.text])
 		Assert.assertEquals("https://domain.com", event.parameters[UserEventParam.TARGET_URL.text])
+		Assert.assertTrue(event.parameters[UserEventParam.CLICK_CONTEXT.text] == null)
+	}
+
+	@Test
+	fun createClickEvent_WhenClickContext_ThenVeVcVuPuInParameters()
+	{
+		val eventsFactory = EventsFactory(gson)
+
+		val event = eventsFactory.createClickEvent("eventName", URL("https://domain.com"), "ABC-123", "context")
+
+		Assert.assertEquals(AnalyticsSystem.KROPKA_EVENTS.text, event.analyticsSystemName)
+		Assert.assertEquals(EventType.CLICK.text, event.name)
+		Assert.assertEquals("eventName", event.parameters[UserEventParam.SELECTED_ELEMENT_NAME.text])
+		Assert.assertEquals("context", event.parameters[UserEventParam.CLICK_CONTEXT.text])
+		Assert.assertEquals("https://domain.com", event.parameters[UserEventParam.TARGET_URL.text])
+		Assert.assertEquals("abc-123", event.parameters[UserEventParam.PAGE_VIEW_RESOURCE_IDENTIFIER.text])
 	}
 
 	@Test
