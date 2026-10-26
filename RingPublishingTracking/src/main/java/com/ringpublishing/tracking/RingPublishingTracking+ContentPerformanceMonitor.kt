@@ -47,6 +47,27 @@ fun RingPublishingTracking.reportContentClick(selectedElementName: String, publi
 }
 
 /**
+ * Content click event with click context
+ * Reports click event which leads to content page
+ *
+ * @param selectedElementName that user click
+ * @param clickContext context of the click
+ * @param publicationUrl of content
+ * @param contentId content identifier in source system (CMS)
+ */
+@Suppress("unused", "unused_parameter")
+fun RingPublishingTracking.reportContentClick(
+    selectedElementName: String,
+    clickContext: String,
+    publicationUrl: URL,
+    contentId: String,
+)
+{
+	val event = eventsFactory.createClickEvent(selectedElementName, publicationUrl, contentId, clickContext)
+	reportEvent(event)
+}
+
+/**
  * Reports user action event
  * Passed Map with parameters will be encoded to JSON
  *

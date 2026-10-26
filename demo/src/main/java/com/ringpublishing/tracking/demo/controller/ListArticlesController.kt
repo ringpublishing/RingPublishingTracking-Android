@@ -50,5 +50,13 @@ class ListArticlesController : ScreenController()
             teaser = teaser,
             eventContext = aureusEventContextNew
         )
+
+        // Content click can also be reported with additional click context, e.g. section code
+        RingPublishingTracking.reportContentClick(
+            selectedElementName = title,
+            clickContext = "selected_for_you",
+            publicationUrl = publicationUrl,
+            contentId = contentId
+        )
 	}
 }

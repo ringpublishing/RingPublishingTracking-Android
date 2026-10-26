@@ -1,0 +1,12 @@
+1.14.3 Release notes (2026-10-26)
+================================
+
+Improvements to the 'RingPublishingTracking' module.
+
+### Changes
+
+* Added 'reportContentClick' overload with 'clickContext'
+    - the value is reported as the 'VC' parameter of the click event, next to 'VE', 'VU' and 'PU'
+    - the existing 'reportContentClick' without 'clickContext' works as before and does not send 'VC'
+* Added 'SMART_SHORTS' to 'AureusDeboostingStrategy'
+    - reported as 'smartshorts'
