@@ -1,0 +1,11 @@
+1.14.4 Release notes (2026-11-12)
+================================
+
+Improvements to the 'RingPublishingTracking' module.
+
+### Changes
+
+* Fixed the date part of 'IP' and 'IV'
+    - the hour was taken from the 12-hour field, so a page view at 14:05 was reported as 02:05
+    - the year followed the device's default calendar, so e.g. a Thai locale (Buddhist calendar) gave 2069 instead of 2026
+    - both now use the Gregorian calendar and the 24-hour clock, matching 'IS' and the iOS SDK
