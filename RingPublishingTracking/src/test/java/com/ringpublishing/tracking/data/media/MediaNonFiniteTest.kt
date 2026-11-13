@@ -117,7 +117,8 @@ class MediaNonFiniteTest {
             call()
             assertEquals("$method sends one event", before + 1, events.size)
             assertFalse("$method leaves position out", events.last().parameters.containsKey("position_sec"))
-            assertTrue("$method warns once: $warnings", warnings.size == 1 && warnings[0].contains("$method: 'positionSec'"))
+            assertEquals("$method warns once: $warnings", 1, warnings.size)
+            assertTrue(warnings[0].contains("$method: 'positionSec'"))
         }
         assertNoNonFinite()
     }

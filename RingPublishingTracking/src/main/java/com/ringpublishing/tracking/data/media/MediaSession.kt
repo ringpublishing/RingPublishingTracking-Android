@@ -201,15 +201,19 @@ class MediaSession internal constructor(
                 outbox.toList().also { outbox.clear() }
             }
 
-            for ((index, event) in batch.withIndex()) {
-                try {
+            var delivered = 0
+            try {
+                for (event in batch) {
                     eventSink(event)
-                } catch (error: Throwable) {
+                    delivered += 1
+                }
+            } finally {
+                if (delivered < batch.size) {
+                    // The sink threw. Keep the events after the failed one for the next delivery.
                     synchronized(lock) {
-                        batch.drop(index + 1).asReversed().forEach { outbox.addFirst(it) }
+                        batch.drop(delivered + 1).asReversed().forEach { outbox.addFirst(it) }
                         delivering = false
                     }
-                    throw error
                 }
             }
         }

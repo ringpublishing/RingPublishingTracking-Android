@@ -19,7 +19,8 @@ import com.ringpublishing.tracking.data.media.MediaType
  * session.end()
  * ```
  *
- * The session sends events through the same path as [reportEvent], so an event reported before the module is initialized is dropped with a warning.
+ * The session sends events through the same path as [reportEvent], so an event reported before the module is
+ * initialized is dropped with a warning.
  * Every method of the session can be called from any thread.
  *
  * @param [mediaType]: Kind of the player

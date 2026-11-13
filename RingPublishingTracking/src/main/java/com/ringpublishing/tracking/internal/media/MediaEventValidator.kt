@@ -36,14 +36,11 @@ internal object MediaEventValidator {
     /**
      * Returns [value], or null with a warning when it is NaN or infinite. JSON cannot carry such a number.
      */
-    fun finiteOrNull(method: String, name: String, value: Double?): Double? {
-        if (value == null) return null
-        if (!value.isFinite()) {
-            warn(method, "'$name' must be a finite number, got $value")
-            return null
+    fun finiteOrNull(method: String, name: String, value: Double?): Double? =
+        value?.takeIf { it.isFinite() } ?: run {
+            if (value != null) warn(method, "'$name' must be a finite number, got $value")
+            null
         }
-        return value
-    }
 
     /**
      * Position to report: null when [value] is not finite, a negative finite value is reported with a warning.
