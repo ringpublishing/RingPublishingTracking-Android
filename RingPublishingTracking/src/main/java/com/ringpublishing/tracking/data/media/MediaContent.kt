@@ -197,7 +197,8 @@ class MediaContent internal constructor(
         targetSec: Double? = null,
         userEngaged: Boolean? = null
     ) = session.locked {
-        if (!isIn(Mode.PLAYING, Mode.PAUSED) || seeking) return@locked ignored("seekStart")
+        if (!isIn(Mode.PLAYING, Mode.PAUSED)) return@locked ignored("seekStart")
+        if (seeking) return@locked ignored("seekStart", "a seek is already in progress")
 
         val position = position("seekStart", positionSec, contentPosition())
         val target = finiteOrNull("seekStart", "targetSec", targetSec)

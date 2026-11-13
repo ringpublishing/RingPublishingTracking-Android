@@ -258,6 +258,19 @@ class MediaSessionBehaviorTest {
     }
 
     @Test
+    fun seekStartWhileSeekIsOpen_LogsSeekInProgressAsReason() {
+        val content = session().createMediaContent()
+        content.playingStart(start())
+        content.seekStart(1.0, 5.0)
+
+        content.seekStart(2.0, 6.0)
+
+        val reason = "seekStart ignored: a seek is already in progress"
+        assertTrue(debugs.toString(), debugs.any { it.endsWith(reason) })
+        assertTrue(debugs.toString(), debugs.none { it.contains("not allowed in state") })
+    }
+
+    @Test
     fun mute_SetsUserEngagedFalseAndUnmuteTrueUnlessPassed() {
         val content = session().createMediaContent()
         content.playingStart(start())
