@@ -22,7 +22,9 @@ import java.util.UUID
  * only reports what happens in the player.
  *
  * A call that is not allowed in the current state of the session or content sends nothing and changes nothing.
- * Every method can be called from any thread.
+ * Every method can be called from any thread. Events are created under a session lock, which fixes their order, and
+ * delivered to the sink after the lock is released, in that order. When another thread is already delivering, the call
+ * returns without waiting for it.
  *
  * @see MediaContent
  */
@@ -34,6 +36,9 @@ class MediaSession internal constructor(
 ) {
 
     internal val lock = Any()
+
+    private val outbox = ArrayDeque<Event>()
+    private var delivering = false
 
     private val state = MediaSessionState(UUID.randomUUID().toString(), mediaType, playerVariant)
     private var started = false
@@ -97,7 +102,7 @@ class MediaSession internal constructor(
     @JvmOverloads
     fun createMediaContent(
         configuration: MediaContentConfiguration = MediaContentConfiguration()
-    ): MediaContent = synchronized(lock) {
+    ): MediaContent = locked {
         checkRange("createMediaContent", "playbackRate", configuration.playbackRate, 0.0, PLAYBACK_RATE_MAX)
 
         configuration.audioOutput?.let { state.audioOutput = it }
@@ -116,10 +121,10 @@ class MediaSession internal constructor(
      *
      * @param [playbackRate]: Playback speed, 1.0 is the normal speed. Expected range is 0 to 16
      */
-    fun updatePlaybackRate(playbackRate: Double) = synchronized(lock) {
+    fun updatePlaybackRate(playbackRate: Double) = locked {
         if (ended) {
             ignored("updatePlaybackRate", "session has ended")
-            return@synchronized
+            return@locked
         }
 
         checkRange("updatePlaybackRate", "playbackRate", playbackRate, 0.0, PLAYBACK_RATE_MAX)
@@ -130,10 +135,10 @@ class MediaSession internal constructor(
      * Ends the session. Reports 'MEDIA_SESSION_END' when the session has started. Every content of the session becomes
      * inert. Calling it again does nothing.
      */
-    fun end() = synchronized(lock) {
+    fun end() = locked {
         if (ended) {
             ignored("end", "session has ended")
-            return@synchronized
+            return@locked
         }
 
         contents.toList().forEach { it.closePendingSeek() }
@@ -162,7 +167,49 @@ class MediaSession internal constructor(
     internal fun send(playback: MediaContentState?, eventType: MediaEventType, details: MediaEventDetails) {
         lastPlayback = playback ?: lastPlayback
         state.eventOrdinal += 1
-        eventSink(eventsFactory.createMediaEvent(eventType, state, playback, details))
+        outbox.addLast(eventsFactory.createMediaEvent(eventType, state, playback, details))
+    }
+
+    /**
+     * Runs [block] under the lock, then delivers the events it queued. No SDK or host code runs under the lock.
+     */
+    internal fun <T> locked(block: () -> T): T {
+        val result = synchronized(lock, block)
+        deliverPending()
+        return result
+    }
+
+    /**
+     * Only one thread delivers at a time. A call made meanwhile, also from inside the sink, leaves its events in the
+     * outbox for the running loop.
+     */
+    private fun deliverPending() {
+        synchronized(lock) {
+            if (delivering || outbox.isEmpty()) return
+            delivering = true
+        }
+
+        while (true) {
+            val batch = synchronized(lock) {
+                if (outbox.isEmpty()) {
+                    delivering = false
+                    return
+                }
+                outbox.toList().also { outbox.clear() }
+            }
+
+            for ((index, event) in batch.withIndex()) {
+                try {
+                    eventSink(event)
+                } catch (error: Throwable) {
+                    synchronized(lock) {
+                        batch.drop(index + 1).asReversed().forEach { outbox.addFirst(it) }
+                        delivering = false
+                    }
+                    throw error
+                }
+            }
+        }
     }
 
     private fun start(content: MediaContent) {
