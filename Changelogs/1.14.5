@@ -1,0 +1,10 @@
+1.14.5 Release notes (2026-11-13)
+================================
+
+Improvements to the 'RingPublishingTracking' module.
+
+### Changes
+
+* 'OfferContextData.source' is nullable, as in the iOS SDK
+    - a paid event without a source no longer sends an empty 'source', it leaves the parameter out
+    - the PaidEvent schema types 'source' as string or null

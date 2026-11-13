@@ -8,10 +8,10 @@ package com.ringpublishing.tracking.data.paid
 /**
  * Data regarding the offer context / content
  *
- * @param [source]: place where the offer has been displayed
+ * @param [source]: place where the offer has been displayed, null when unknown. Left out of the event when null.
  * @param [closurePercentage]: Percentage of offer being hidden by the paywall
  */
 data class OfferContextData(
-    val source: String,
+    val source: String?,
     val closurePercentage: Int?,
 )

@@ -135,6 +135,36 @@ class PaidEventsFactoryTest
     }
 
     @Test
+    fun createOfferEvents_WhenSourceIsNull_ThenSourceNotInEvent()
+    {
+        val eventsFactory = PaidEventsFactory(gson)
+        val offerContextData = sampleOfferContextData.copy(source = null)
+        val events = listOf(
+            eventsFactory.createShowOfferEvent(sampleContentMetadata, sampleOfferData, offerContextData, null),
+            eventsFactory.createShowOfferTeaserEvent(sampleContentMetadata, sampleOfferData, offerContextData, null),
+            eventsFactory.createPurchaseClickButtonEvent(
+                contentMetadata = sampleContentMetadata,
+                offerData = sampleOfferData,
+                offerContextData = offerContextData,
+                termId = "TMEVT00KVHV0",
+                targetPromotionCampaignCode = null
+            ),
+            eventsFactory.createPurchaseEvent(
+                contentMetadata = sampleContentMetadata,
+                offerData = sampleOfferData,
+                offerContextData = offerContextData,
+                subscriptionPaymentData = sampleSubscriptionPaymentData,
+                termId = "TMEVT00KVHV0",
+                termConversionId = "TCCJTS9X87VB",
+                targetPromotionCampaignCode = null,
+                fakeUserId = null
+            ),
+        )
+
+        events.forEach { event -> Assert.assertFalse(event.parameters.containsKey(PaidEventParam.SOURCE.text)) }
+    }
+
+    @Test
     fun createShowOfferTeaserEvent_ThenProperParametersInEvent()
     {
         val eventsFactory = PaidEventsFactory(gson)
