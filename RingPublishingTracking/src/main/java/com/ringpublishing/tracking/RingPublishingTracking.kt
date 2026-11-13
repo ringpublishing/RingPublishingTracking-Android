@@ -28,6 +28,7 @@ import com.ringpublishing.tracking.internal.factory.AudioEventsFactory
 import com.ringpublishing.tracking.internal.factory.AureusEventFactory
 import com.ringpublishing.tracking.internal.factory.EffectivePageViewEventFactory
 import com.ringpublishing.tracking.internal.factory.EventsFactory
+import com.ringpublishing.tracking.internal.factory.MediaEventsFactory
 import com.ringpublishing.tracking.internal.factory.PaidEventsFactory
 import com.ringpublishing.tracking.internal.factory.VideoEventsFactory
 import com.ringpublishing.tracking.internal.keepalive.KeepAliveDataSource
@@ -205,6 +206,7 @@ object RingPublishingTracking : KeepAliveDataSource {
     internal val videoEventsFactory = VideoEventsFactory(Component.provideGson())
     internal val audioEventsFactory = AudioEventsFactory(Component.provideGson())
     internal val paidEventsFactory = PaidEventsFactory(Component.provideGson())
+    internal val mediaEventsFactory = MediaEventsFactory()
     internal val aureusEventFactory = AureusEventFactory(
         gson = Component.provideGson(),
         snakeCaseGson = Component.provideSnakeCaseGson(),
