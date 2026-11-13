@@ -121,6 +121,19 @@ class MediaSessionBehaviorTest {
     }
 
     @Test
+    fun validation_LengthCountsCodePointsNotUtf16Units() {
+        val content = session().createMediaContent()
+        // 30 emoji are 60 UTF-16 units but 30 code points, within the limit of 36.
+        content.playingStart(start(mediaId = "\uD83D\uDE00".repeat(30)))
+        assertTrue(warnings.none { it.contains("mediaId") })
+
+        // 37 emoji exceed the limit by code points.
+        content.playingEnd(0.0, MediaPlaybackEndReason.USER_STOPPED)
+        content.playingStart(start(mediaId = "\uD83D\uDE00".repeat(37)))
+        assertTrue(warnings.any { it.contains("'mediaId' must have 1 to 36 characters, got 37") })
+    }
+
+    @Test
     fun validation_AdWithoutSubtypeAndRelatedMedia_WarnsAndStillSends() {
         val content = session().createMediaContent()
 

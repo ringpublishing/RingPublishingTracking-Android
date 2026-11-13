@@ -19,7 +19,8 @@ internal object MediaEventValidator {
 
     fun checkText(method: String, name: String, value: String?, min: Int, max: Int) {
         if (value == null) return
-        if (value.length !in min..max) warn(method, "'$name' must have $min to $max characters, got ${value.length}")
+        val length = value.codePointCount(0, value.length)
+        if (length !in min..max) warn(method, "'$name' must have $min to $max characters, got $length")
     }
 
     fun checkNotNegative(method: String, name: String, value: Double?) {
