@@ -69,20 +69,124 @@ class MediaNonFiniteTest {
 
     private fun assertSingleWarning() = assertEquals(warnings.toString(), 1, warnings.size)
 
+    private fun assertSchemaPositions() {
+        val required = setOf(
+            "MEDIA_PLAYING_START", "MEDIA_PLAYING_PROGRESS", "MEDIA_PLAYING_END", "MEDIA_PAUSE", "MEDIA_RESUME",
+            "MEDIA_SEEK_START", "MEDIA_SEEK_END", "MEDIA_ERROR"
+        )
+        events.filter { it.parameters["event_type"] in required }.forEach {
+            assertTrue("no position_sec in ${it.parameters}", it.parameters["position_sec"] is Double)
+        }
+    }
+
     @Test
-    fun positionSec_NaN_SendsEventWithoutPositionAndKeepsLastPosition() {
+    fun positionSec_NaN_UsesLastPositionOfContent() {
         val content = playing()
         content.playingProgress(12.0)
 
         content.playingProgress(Double.NaN)
 
         assertEquals("MEDIA_PLAYING_PROGRESS", events.last().parameters["event_type"])
-        assertFalse(events.last().parameters.containsKey("position_sec"))
+        assertEquals(12.0, events.last().parameters["position_sec"])
         assertWarned("playingProgress", "positionSec", Double.NaN)
         assertSingleWarning()
         assertNoNonFinite()
+        assertSchemaPositions()
+    }
 
-        // The last position stays 12.0, an ad pausing the content reports it.
+    @Test
+    fun positionSec_NonFinite_InEveryMethod_UsesSubstitute() {
+        val content = playing()
+        content.playingProgress(12.0)
+        val calls = listOf<Pair<String, () -> Unit>>(
+            "playingProgress" to { content.playingProgress(Double.POSITIVE_INFINITY) },
+            "mute" to { content.mute(Double.NaN) },
+            "unmute" to { content.unmute(Double.NaN) },
+            "outputChange" to { content.outputChange(Double.NaN, MediaAudioOutput.CAR) },
+            "visibilityChange" to { content.visibilityChange(Double.NaN, MediaVisibilityState.PIP) },
+            "error" to { content.error(Double.NaN, "E1", "boom") },
+            "seekStart" to { content.seekStart(Double.NEGATIVE_INFINITY) },
+            "seekEnd" to { content.seekEnd(Double.NaN) },
+            "pause" to { content.pause(Double.NaN, MediaPauseReason.USER_ACTION) },
+            "resume" to { content.resume(Double.NaN) },
+            "playingEnd" to { content.playingEnd(Double.NaN, MediaPlaybackEndReason.USER_STOPPED) }
+        )
+
+        calls.forEach { (method, call) ->
+            val before = events.size
+            warnings.clear()
+            call()
+            assertEquals("$method sends one event", before + 1, events.size)
+            assertEquals("$method position", 12.0, events.last().parameters["position_sec"])
+            assertEquals("$method warns once: $warnings", 1, warnings.size)
+            assertTrue(warnings[0].contains("$method: 'positionSec' must be a finite number"))
+        }
+        assertNoNonFinite()
+        assertSchemaPositions()
+    }
+
+    @Test
+    fun positionSec_NaN_InPlayingStart_IsZeroForContentWithoutPosition() {
+        val content = session().createMediaContent()
+
+        content.playingStart(start(position = Double.NaN))
+
+        assertEquals("MEDIA_PLAYING_START", events.last().parameters["event_type"])
+        assertEquals(0.0, events.last().parameters["position_sec"])
+        assertWarned("playingStart", "positionSec", Double.NaN)
+        assertSingleWarning()
+        assertNoNonFinite()
+    }
+
+    @Test
+    fun positionSec_NaN_SubstituteBecomesLastPosition() {
+        val content = playing()
+        content.playingProgress(Double.NaN)
+        content.playingProgress(Double.NaN)
+
+        assertEquals(listOf(0.0, 0.0), events.takeLast(2).map { it.parameters["position_sec"] })
+
+        content.playingProgress(30.0)
+        content.pause(Double.NaN, MediaPauseReason.USER_ACTION)
+        assertEquals(30.0, events.last().parameters["position_sec"])
+    }
+
+    @Test
+    fun positionSec_NaN_InSeekEnd_LandsOnSeekTargetAndHeldResumeFollows() {
+        val content = playing()
+        content.playingProgress(5.0)
+        content.pause(6.0, MediaPauseReason.USER_ACTION)
+        content.seekStart(6.0, targetSec = 40.0)
+        content.resume(Double.NaN)
+        warnings.clear()
+        val before = events.size
+
+        content.seekEnd(Double.NaN)
+
+        val sent = events.drop(before)
+        assertEquals(listOf("MEDIA_SEEK_END", "MEDIA_RESUME"), sent.map { it.parameters["event_type"] })
+        sent.forEach { assertEquals(40.0, it.parameters["position_sec"]) }
+        assertSingleWarning()
+        assertSchemaPositions()
+    }
+
+    @Test
+    fun positionSec_NaN_DuringSeekWithTarget_UsesTarget() {
+        val content = playing()
+        content.playingProgress(5.0)
+        content.seekStart(6.0, targetSec = 40.0)
+
+        content.pause(Double.NaN, MediaPauseReason.USER_ACTION)
+
+        assertEquals(40.0, events.last().parameters["position_sec"])
+    }
+
+    @Test
+    fun positionSec_NaN_AdPausedContentKeepsItsOwnLastPosition() {
+        val content = playing()
+        content.playingProgress(12.0)
+        content.playingProgress(Double.NaN)
+
         val adStart = events.size
         lastSession!!.createMediaContent().playingStart(
             MediaPlayingStartParameters(
@@ -95,49 +199,7 @@ class MediaNonFiniteTest {
     }
 
     @Test
-    fun positionSec_Infinite_InEveryMethod_IsLeftOut() {
-        val content = playing()
-        val calls = listOf<Pair<String, () -> Unit>>(
-            "playingProgress" to { content.playingProgress(Double.POSITIVE_INFINITY) },
-            "seekStart" to { content.seekStart(Double.NEGATIVE_INFINITY) },
-            "seekEnd" to { content.seekEnd(Double.NaN) },
-            "mute" to { content.mute(Double.NaN) },
-            "unmute" to { content.unmute(Double.NaN) },
-            "outputChange" to { content.outputChange(Double.NaN, MediaAudioOutput.CAR) },
-            "visibilityChange" to { content.visibilityChange(Double.NaN, MediaVisibilityState.PIP) },
-            "error" to { content.error(Double.NaN, "E1", "boom") },
-            "pause" to { content.pause(Double.NaN, MediaPauseReason.USER_ACTION) },
-            "resume" to { content.resume(Double.NaN) },
-            "playingEnd" to { content.playingEnd(Double.NaN, MediaPlaybackEndReason.USER_STOPPED) }
-        )
-
-        calls.forEach { (method, call) ->
-            val before = events.size
-            warnings.clear()
-            call()
-            assertEquals("$method sends one event", before + 1, events.size)
-            assertFalse("$method leaves position out", events.last().parameters.containsKey("position_sec"))
-            assertEquals("$method warns once: $warnings", 1, warnings.size)
-            assertTrue(warnings[0].contains("$method: 'positionSec'"))
-        }
-        assertNoNonFinite()
-    }
-
-    @Test
-    fun positionSec_NaN_InPlayingStart_IsLeftOut() {
-        val content = session().createMediaContent()
-
-        content.playingStart(start(position = Double.NaN))
-
-        assertEquals("MEDIA_PLAYING_START", events.last().parameters["event_type"])
-        assertFalse(events.last().parameters.containsKey("position_sec"))
-        assertWarned("playingStart", "positionSec", Double.NaN)
-        assertSingleWarning()
-        assertNoNonFinite()
-    }
-
-    @Test
-    fun durationSec_NaN_DropsDurationFromThisAndLaterEvents() {
+    fun durationSec_NaN_IsZeroInThisAndLaterEvents() {
         val content = session().createMediaContent()
 
         content.playingStart(start(duration = Double.NaN))
@@ -145,10 +207,19 @@ class MediaNonFiniteTest {
 
         val sent = events.filter { it.parameters["event_type"] != "MEDIA_SESSION_START" }
         assertEquals(2, sent.size)
-        sent.forEach { assertFalse(it.parameters.containsKey("duration_sec")) }
+        sent.forEach { assertEquals(0.0, it.parameters["duration_sec"]) }
         assertWarned("playingStart", "durationSec", Double.NaN)
         assertSingleWarning()
         assertNoNonFinite()
+    }
+
+    @Test
+    fun durationSec_Infinite_IsZero() {
+        session().createMediaContent().playingStart(start(duration = Double.NEGATIVE_INFINITY))
+
+        assertEquals(0.0, events.last().parameters["duration_sec"])
+        assertWarned("playingStart", "durationSec", Double.NEGATIVE_INFINITY)
+        assertSingleWarning()
     }
 
     @Test

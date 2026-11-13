@@ -43,12 +43,21 @@ internal object MediaEventValidator {
         }
 
     /**
-     * Position to report: null when [value] is not finite, a negative finite value is reported with a warning.
+     * Returns [value], or [fallback] with a warning when it is NaN or infinite. JSON cannot carry such a number.
      */
-    fun position(method: String, value: Double): Double? {
-        val finite = finiteOrNull(method, "positionSec", value)
-        checkNotNegative(method, "positionSec", finite)
-        return finite
+    fun finiteOr(method: String, name: String, value: Double, fallback: Double): Double {
+        if (value.isFinite()) return value
+        warn(method, "'$name' must be a finite number, got $value")
+        return fallback
+    }
+
+    /**
+     * Position to report: [fallback] when [value] is not finite, a negative finite value is reported with a warning.
+     */
+    fun position(method: String, value: Double, fallback: Double): Double {
+        val position = finiteOr(method, "positionSec", value, fallback)
+        if (value.isFinite()) checkNotNegative(method, "positionSec", position)
+        return position
     }
 
     fun warn(method: String, message: String) = Logger.warn("$LOG_PREFIX $method: $message")
