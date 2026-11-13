@@ -144,7 +144,10 @@ class MediaSessionBehaviorTest {
         ad.playingEnd(5.0, MediaPlaybackEndReason.NATURAL_COMPLETION)
 
         assertEquals(
-            listOf("MEDIA_SESSION_START", "MEDIA_PLAYING_START", "MEDIA_PLAYING_PROGRESS", "MEDIA_PAUSE", "MEDIA_PLAYING_START", "MEDIA_PLAYING_END", "MEDIA_RESUME"),
+            listOf(
+                "MEDIA_SESSION_START", "MEDIA_PLAYING_START", "MEDIA_PLAYING_PROGRESS", "MEDIA_PAUSE",
+                "MEDIA_PLAYING_START", "MEDIA_PLAYING_END", "MEDIA_RESUME"
+            ),
             types()
         )
         val pause = events[3].parameters
@@ -170,7 +173,10 @@ class MediaSessionBehaviorTest {
         content.pause(11.0, MediaPauseReason.USER_ACTION)
         content.seekEnd(50.0)
 
-        assertEquals(listOf("MEDIA_SESSION_START", "MEDIA_PLAYING_START", "MEDIA_PAUSE", "MEDIA_SEEK_START", "MEDIA_SEEK_END"), types())
+        assertEquals(
+            listOf("MEDIA_SESSION_START", "MEDIA_PLAYING_START", "MEDIA_PAUSE", "MEDIA_SEEK_START", "MEDIA_SEEK_END"),
+            types()
+        )
         assertFalse(content.isSeeking)
     }
 
@@ -197,7 +203,12 @@ class MediaSessionBehaviorTest {
 
         session.end()
 
-        assertEquals(listOf("MEDIA_SESSION_START", "MEDIA_PLAYING_START", "MEDIA_SEEK_START", "MEDIA_SEEK_END", "MEDIA_SESSION_END"), types())
+        assertEquals(
+            listOf(
+                "MEDIA_SESSION_START", "MEDIA_PLAYING_START", "MEDIA_SEEK_START", "MEDIA_SEEK_END", "MEDIA_SESSION_END"
+            ),
+            types()
+        )
         assertEquals(70.0, events[3].parameters["position_sec"])
         assertEquals("m1", events.last().parameters["media_id"])
         assertFalse(session.isActive)
@@ -274,15 +285,24 @@ class MediaSessionBehaviorTest {
     fun enums_UseContractRawValues() {
         assertEquals(listOf("video", "audio", "tts"), MediaType.values().map { it.text })
         assertEquals(listOf("visible", "hidden", "background", "pip"), MediaVisibilityState.values().map { it.text })
-        assertEquals(listOf("speaker", "headphones", "bluetooth", "car", "chromecast", "external"), MediaAudioOutput.values().map { it.text })
+        assertEquals(
+            listOf("speaker", "headphones", "bluetooth", "car", "chromecast", "external"),
+            MediaAudioOutput.values().map { it.text }
+        )
         assertEquals(listOf("ad", "main", "teaser", "outro", "bumper"), MediaContentType.values().map { it.text })
         assertEquals(listOf("preroll", "midroll", "postroll"), MediaContentSubtype.values().map { it.text })
-        assertEquals(listOf("free", "ad", "transactional", "subscription"), MediaMonetizationType.values().map { it.text })
+        assertEquals(
+            listOf("free", "ad", "transactional", "subscription"),
+            MediaMonetizationType.values().map { it.text }
+        )
         assertEquals(listOf("free", "basic", "premium", "vip"), MediaSubscriptionTier.values().map { it.text })
         assertEquals(listOf("free", "basic", "premium", "exclusive"), MediaTier.values().map { it.text })
         assertEquals(listOf("autoplay", "user_initiated", "continuation"), MediaPlaybackIntent.values().map { it.text })
         assertEquals(listOf("muted_start", "normal_start"), MediaStartMode.values().map { it.text })
         assertEquals(listOf("user_action", "network", "programmatic", "ad"), MediaPauseReason.values().map { it.text })
-        assertEquals(listOf("natural_completion", "user_stopped", "error", "skipped"), MediaPlaybackEndReason.values().map { it.text })
+        assertEquals(
+            listOf("natural_completion", "user_stopped", "error", "skipped"),
+            MediaPlaybackEndReason.values().map { it.text }
+        )
     }
 }

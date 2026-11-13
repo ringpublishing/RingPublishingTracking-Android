@@ -5,13 +5,17 @@ import com.ringpublishing.tracking.internal.factory.MediaEventsFactory
 import com.ringpublishing.tracking.internal.media.MediaContentState
 import com.ringpublishing.tracking.internal.media.MediaEventDetails
 import com.ringpublishing.tracking.internal.media.MediaEventType
-import com.ringpublishing.tracking.internal.media.MediaEventValidator
+import com.ringpublishing.tracking.internal.media.MediaEventValidator.PLAYBACK_RATE_MAX
+import com.ringpublishing.tracking.internal.media.MediaEventValidator.VARIANT_MAX
+import com.ringpublishing.tracking.internal.media.MediaEventValidator.checkRange
+import com.ringpublishing.tracking.internal.media.MediaEventValidator.checkText
+import com.ringpublishing.tracking.internal.media.MediaEventValidator.ignored
 import com.ringpublishing.tracking.internal.media.MediaSessionState
 import java.util.UUID
 
 /**
- * Session of a player that reports MediaEvent. One session describes one player instance (video, audio or text to speech),
- * which can play many contents one after another.
+ * Session of a player that reports MediaEvent. One session describes one player instance (video, audio or text to
+ * speech), which can play many contents one after another.
  *
  * Create it with 'RingPublishingTracking.createMediaSession', then create a [MediaContent] for every played content.
  * The session owns 'media_session_id', 'event_ordinal' and the state carried by every event, so the host application
@@ -41,7 +45,7 @@ class MediaSession internal constructor(
     internal val isEnded: Boolean get() = ended
 
     init {
-        MediaEventValidator.checkText("createMediaSession", "playerVariant", playerVariant, 0, MediaEventValidator.VARIANT_MAX)
+        checkText("createMediaSession", "playerVariant", playerVariant, 0, VARIANT_MAX)
     }
 
     /**
@@ -91,15 +95,18 @@ class MediaSession internal constructor(
      * @see MediaContentConfiguration
      */
     @JvmOverloads
-    fun createMediaContent(configuration: MediaContentConfiguration = MediaContentConfiguration()): MediaContent = synchronized(lock) {
-        MediaEventValidator.checkRange("createMediaContent", "playbackRate", configuration.playbackRate, 0.0, MediaEventValidator.PLAYBACK_RATE_MAX)
+    fun createMediaContent(
+        configuration: MediaContentConfiguration = MediaContentConfiguration()
+    ): MediaContent = synchronized(lock) {
+        checkRange("createMediaContent", "playbackRate", configuration.playbackRate, 0.0, PLAYBACK_RATE_MAX)
 
         configuration.audioOutput?.let { state.audioOutput = it }
         configuration.muted?.let { state.muted = it }
         configuration.playbackRate?.let { state.playbackRate = it }
         configuration.visibilityState?.let { state.visibilityState = it }
 
-        val content = MediaContent(this, MediaContentState(configuration.monetizationType, configuration.subscriptionTier))
+        val contentState = MediaContentState(configuration.monetizationType, configuration.subscriptionTier)
+        val content = MediaContent(this, contentState)
         start(content)
         content
     }
@@ -111,11 +118,11 @@ class MediaSession internal constructor(
      */
     fun updatePlaybackRate(playbackRate: Double) = synchronized(lock) {
         if (ended) {
-            MediaEventValidator.ignored("updatePlaybackRate", "session has ended")
+            ignored("updatePlaybackRate", "session has ended")
             return@synchronized
         }
 
-        MediaEventValidator.checkRange("updatePlaybackRate", "playbackRate", playbackRate, 0.0, MediaEventValidator.PLAYBACK_RATE_MAX)
+        checkRange("updatePlaybackRate", "playbackRate", playbackRate, 0.0, PLAYBACK_RATE_MAX)
         state.playbackRate = playbackRate
     }
 
@@ -125,7 +132,7 @@ class MediaSession internal constructor(
      */
     fun end() = synchronized(lock) {
         if (ended) {
-            MediaEventValidator.ignored("end", "session has ended")
+            ignored("end", "session has ended")
             return@synchronized
         }
 

@@ -11,7 +11,9 @@ import com.ringpublishing.tracking.data.media.MediaType
  * ```
  * val session = RingPublishingTracking.createMediaSession(MediaType.AUDIO, playerVariant = "main")
  * val content = session.createMediaContent(MediaContentConfiguration(monetizationType = MediaMonetizationType.FREE))
- * content.playingStart(MediaPlayingStartParameters("episode-1", 1800.0, MediaContentType.MAIN, MediaPlaybackIntent.USER_INITIATED, 0.0))
+ * content.playingStart(
+ *     MediaPlayingStartParameters("episode-1", 1800.0, MediaContentType.MAIN, MediaPlaybackIntent.USER_INITIATED, 0.0)
+ * )
  * content.playingProgress(15.0)
  * content.playingEnd(1800.0, MediaPlaybackEndReason.NATURAL_COMPLETION)
  * session.end()

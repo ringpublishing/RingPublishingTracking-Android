@@ -86,7 +86,9 @@ class RingPublishingTrackingDeprecatedMediaTest {
     fun before() {
         mockkStatic(Base64::class)
         val bytes = slot<ByteArray>()
-        every { Base64.encodeToString(capture(bytes), Base64.NO_WRAP) } answers { java.util.Base64.getEncoder().encodeToString(bytes.captured) }
+        every { Base64.encodeToString(capture(bytes), Base64.NO_WRAP) } answers {
+            java.util.Base64.getEncoder().encodeToString(bytes.captured)
+        }
         mockkObject(RingPublishingTracking)
         every { RingPublishingTracking.reportEvent(capture(reported)) } returns Unit
     }
@@ -109,7 +111,8 @@ class RingPublishingTrackingDeprecatedMediaTest {
 
         assertEquals(1, reported.size)
         assertEquals("VidEvent", reported[0].parameters["RT"])
-        assertSameAsFactory(VideoEventsFactory(gson).createVideoEvent(VideoEvent.START, videoMetadata, videoState))
+        val expected = VideoEventsFactory(gson).createVideoEvent(VideoEvent.START, videoMetadata, videoState)
+        assertSameAsFactory(expected)
     }
 
     @Test
@@ -118,7 +121,8 @@ class RingPublishingTrackingDeprecatedMediaTest {
 
         assertEquals(1, reported.size)
         assertEquals("VidEvent", reported[0].parameters["RT"])
-        assertSameAsFactory(AudioEventsFactory(gson).createAudioEvent(AudioEvent.PLAYING_START, audioMetadata, audioState))
+        val expected = AudioEventsFactory(gson).createAudioEvent(AudioEvent.PLAYING_START, audioMetadata, audioState)
+        assertSameAsFactory(expected)
     }
 
     @Test

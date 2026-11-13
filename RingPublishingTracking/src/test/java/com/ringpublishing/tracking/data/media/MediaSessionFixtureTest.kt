@@ -11,6 +11,10 @@ import org.junit.Test
 
 class MediaSessionFixtureTest {
 
+    private companion object {
+        val UUID_V4 = Regex("[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")
+    }
+
     private val events = mutableListOf<Event>()
 
     private fun session(mediaType: MediaType, playerVariant: String? = null) =
@@ -45,12 +49,15 @@ class MediaSessionFixtureTest {
         assertEquals(false, session.isActive)
     }
 
+    private fun number(value: Any) = (value as Number).toDouble()
+
     private fun assertMatchesFixture(fileName: String, session: MediaSession) {
-        val text = javaClass.classLoader!!.getResourceAsStream("fixtures/$fileName")!!.bufferedReader().use { it.readText() }
+        val stream = javaClass.classLoader!!.getResourceAsStream("fixtures/$fileName")!!
+        val text = stream.bufferedReader().use { it.readText() }
         val expected = JsonParser().parse(text).asJsonArray
 
         assertEquals("event count", expected.size(), events.size)
-        assertTrue(session.sessionId.matches(Regex("[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")))
+        assertTrue(session.sessionId.matches(UUID_V4))
         assertEquals(36, session.sessionId.length)
 
         expected.forEachIndexed { index, element ->
@@ -76,7 +83,7 @@ class MediaSessionFixtureTest {
                     assertEquals("$label $key", sessionId, actualValue)
                 }
                 primitive.isBoolean -> assertEquals("$label $key", primitive.asBoolean, actualValue)
-                primitive.isNumber -> assertEquals("$label $key", primitive.asDouble, (actualValue as Number).toDouble(), 0.0)
+                primitive.isNumber -> assertEquals("$label $key", primitive.asDouble, number(actualValue), 0.0)
                 else -> assertEquals("$label $key", primitive.asString, actualValue)
             }
         }

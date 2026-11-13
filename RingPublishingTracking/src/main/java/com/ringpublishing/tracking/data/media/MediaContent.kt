@@ -3,10 +3,20 @@ package com.ringpublishing.tracking.data.media
 import com.ringpublishing.tracking.internal.media.MediaContentState
 import com.ringpublishing.tracking.internal.media.MediaEventDetails
 import com.ringpublishing.tracking.internal.media.MediaEventType
-import com.ringpublishing.tracking.internal.media.MediaEventValidator
+import com.ringpublishing.tracking.internal.media.MediaEventValidator.AD_ID_MAX
+import com.ringpublishing.tracking.internal.media.MediaEventValidator.AD_SLOT_MAX
+import com.ringpublishing.tracking.internal.media.MediaEventValidator.ERROR_CODE_MAX
+import com.ringpublishing.tracking.internal.media.MediaEventValidator.ERROR_MESSAGE_MAX
+import com.ringpublishing.tracking.internal.media.MediaEventValidator.MEDIA_ID_MAX
+import com.ringpublishing.tracking.internal.media.MediaEventValidator.VARIANT_MAX
+import com.ringpublishing.tracking.internal.media.MediaEventValidator.checkNotNegative
+import com.ringpublishing.tracking.internal.media.MediaEventValidator.checkText
+import com.ringpublishing.tracking.internal.media.MediaEventValidator.ignored
+import com.ringpublishing.tracking.internal.media.MediaEventValidator.warn
 
 /**
- * One content played by a [MediaSession], for example a video, an audio episode, an advertisement or a text to speech reading.
+ * One content played by a [MediaSession], for example a video, an audio episode, an advertisement or a text to speech
+ * reading.
  * Create it with [MediaSession.createMediaContent].
  *
  * Report what happens in the player with the methods of this class. A call that is not allowed in the current state of
@@ -16,6 +26,7 @@ import com.ringpublishing.tracking.internal.media.MediaEventValidator
  *
  * @see MediaSession
  */
+@Suppress("TooManyFunctions")
 class MediaContent internal constructor(
     private val session: MediaSession,
     internal val state: MediaContentState
@@ -70,7 +81,8 @@ class MediaContent internal constructor(
         session.addContent(this)
         session.activeContent = this
 
-        send(MediaEventType.PLAYING_START, MediaEventDetails(positionSec = parameters.positionSec, startMode = parameters.startMode))
+        val details = MediaEventDetails(positionSec = parameters.positionSec, startMode = parameters.startMode)
+        send(MediaEventType.PLAYING_START, details)
     }
 
     /**
@@ -83,7 +95,7 @@ class MediaContent internal constructor(
     fun playingProgress(positionSec: Double, userEngaged: Boolean? = null) = synchronized(session.lock) {
         if (!isIn(Mode.PLAYING)) return@synchronized ignored("playingProgress")
 
-        MediaEventValidator.checkNotNegative("playingProgress", "positionSec", positionSec)
+        checkNotNegative("playingProgress", "positionSec", positionSec)
         state.userEngaged = userEngaged ?: state.userEngaged
         send(MediaEventType.PLAYING_PROGRESS, MediaEventDetails(positionSec = positionSec))
     }
@@ -99,10 +111,14 @@ class MediaContent internal constructor(
      * @param [userEngaged]: Whether the user is engaged
      */
     @JvmOverloads
-    fun playingEnd(positionSec: Double, reason: MediaPlaybackEndReason, userEngaged: Boolean? = null) = synchronized(session.lock) {
+    fun playingEnd(
+        positionSec: Double,
+        reason: MediaPlaybackEndReason,
+        userEngaged: Boolean? = null
+    ) = synchronized(session.lock) {
         if (!isIn(Mode.PLAYING, Mode.PAUSED)) return@synchronized ignored("playingEnd")
 
-        MediaEventValidator.checkNotNegative("playingEnd", "positionSec", positionSec)
+        checkNotNegative("playingEnd", "positionSec", positionSec)
         closePendingSeek()
 
         mode = Mode.INITIALIZED
@@ -126,11 +142,15 @@ class MediaContent internal constructor(
      * @param [userEngaged]: Whether the user is engaged
      */
     @JvmOverloads
-    fun pause(positionSec: Double, reason: MediaPauseReason, userEngaged: Boolean? = null) = synchronized(session.lock) {
+    fun pause(
+        positionSec: Double,
+        reason: MediaPauseReason,
+        userEngaged: Boolean? = null
+    ) = synchronized(session.lock) {
         heldResume = null
         if (!isIn(Mode.PLAYING)) return@synchronized ignored("pause")
 
-        MediaEventValidator.checkNotNegative("pause", "positionSec", positionSec)
+        checkNotNegative("pause", "positionSec", positionSec)
         emitPause(positionSec, reason, userEngaged)
         Unit
     }
@@ -146,7 +166,7 @@ class MediaContent internal constructor(
     fun resume(positionSec: Double, userEngaged: Boolean? = null) = synchronized(session.lock) {
         if (!isIn(Mode.PAUSED)) return@synchronized ignored("resume")
 
-        MediaEventValidator.checkNotNegative("resume", "positionSec", positionSec)
+        checkNotNegative("resume", "positionSec", positionSec)
         if (seeking) {
             heldResume = HeldResume(userEngaged)
         } else {
@@ -158,15 +178,20 @@ class MediaContent internal constructor(
      * Reports 'MEDIA_SEEK_START'. Allowed while playing or paused, when no seek is open.
      *
      * @param [positionSec]: Position the seek starts from
-     * @param [targetSec]: Position the seek goes to. When the seek is closed without 'seekEnd', it is reported as the end position
+     * @param [targetSec]: Position the seek goes to. When the seek is closed without 'seekEnd', it is reported as the
+     * end position
      * @param [userEngaged]: Whether the user is engaged
      */
     @JvmOverloads
-    fun seekStart(positionSec: Double, targetSec: Double? = null, userEngaged: Boolean? = null) = synchronized(session.lock) {
+    fun seekStart(
+        positionSec: Double,
+        targetSec: Double? = null,
+        userEngaged: Boolean? = null
+    ) = synchronized(session.lock) {
         if (!isIn(Mode.PLAYING, Mode.PAUSED) || seeking) return@synchronized ignored("seekStart")
 
-        MediaEventValidator.checkNotNegative("seekStart", "positionSec", positionSec)
-        MediaEventValidator.checkNotNegative("seekStart", "targetSec", targetSec)
+        checkNotNegative("seekStart", "positionSec", positionSec)
+        checkNotNegative("seekStart", "targetSec", targetSec)
         seekTarget = targetSec
         seeking = true
         state.userEngaged = userEngaged ?: state.userEngaged
@@ -184,13 +209,13 @@ class MediaContent internal constructor(
     fun seekEnd(positionSec: Double, userEngaged: Boolean? = null) = synchronized(session.lock) {
         if (!isIn(Mode.PLAYING, Mode.PAUSED)) return@synchronized ignored("seekEnd")
 
-        MediaEventValidator.checkNotNegative("seekEnd", "positionSec", positionSec)
+        checkNotNegative("seekEnd", "positionSec", positionSec)
         endSeek(positionSec, userEngaged)
     }
 
     /**
-     * Reports 'MEDIA_MUTE' and mutes the session. Allowed while playing or paused. It is sent even when the player was already muted.
-     * 'userEngaged' is 'false' unless passed.
+     * Reports 'MEDIA_MUTE' and mutes the session. Allowed while playing or paused. It is sent even when the player
+     * was already muted. 'userEngaged' is 'false' unless passed.
      *
      * @param [positionSec]: Current position
      * @param [userEngaged]: Whether the user is engaged
@@ -199,8 +224,8 @@ class MediaContent internal constructor(
     fun mute(positionSec: Double, userEngaged: Boolean? = null) = setMuted(true, "mute", positionSec, userEngaged)
 
     /**
-     * Reports 'MEDIA_UNMUTE' and unmutes the session. Allowed while playing or paused. It is sent even when the player was not muted.
-     * 'userEngaged' is 'true' unless passed.
+     * Reports 'MEDIA_UNMUTE' and unmutes the session. Allowed while playing or paused. It is sent even when the player
+     * was not muted. 'userEngaged' is 'true' unless passed.
      *
      * @param [positionSec]: Current position
      * @param [userEngaged]: Whether the user is engaged
@@ -216,10 +241,14 @@ class MediaContent internal constructor(
      * @param [userEngaged]: Whether the user is engaged
      */
     @JvmOverloads
-    fun outputChange(positionSec: Double, audioOutput: MediaAudioOutput, userEngaged: Boolean? = null) = synchronized(session.lock) {
+    fun outputChange(
+        positionSec: Double,
+        audioOutput: MediaAudioOutput,
+        userEngaged: Boolean? = null
+    ) = synchronized(session.lock) {
         if (!isIn(Mode.PLAYING, Mode.PAUSED)) return@synchronized ignored("outputChange")
 
-        MediaEventValidator.checkNotNegative("outputChange", "positionSec", positionSec)
+        checkNotNegative("outputChange", "positionSec", positionSec)
         session.sessionState.audioOutput = audioOutput
         state.userEngaged = userEngaged ?: state.userEngaged
         send(MediaEventType.OUTPUT_CHANGE, MediaEventDetails(positionSec = positionSec))
@@ -233,17 +262,22 @@ class MediaContent internal constructor(
      * @param [userEngaged]: Whether the user is engaged
      */
     @JvmOverloads
-    fun visibilityChange(positionSec: Double, visibilityState: MediaVisibilityState, userEngaged: Boolean? = null) = synchronized(session.lock) {
+    fun visibilityChange(
+        positionSec: Double,
+        visibilityState: MediaVisibilityState,
+        userEngaged: Boolean? = null
+    ) = synchronized(session.lock) {
         if (!isIn(Mode.PLAYING, Mode.PAUSED)) return@synchronized ignored("visibilityChange")
 
-        MediaEventValidator.checkNotNegative("visibilityChange", "positionSec", positionSec)
+        checkNotNegative("visibilityChange", "positionSec", positionSec)
         session.sessionState.visibilityState = visibilityState
         state.userEngaged = userEngaged ?: state.userEngaged
         send(MediaEventType.VISIBILITY_CHANGE, MediaEventDetails(positionSec = positionSec))
     }
 
     /**
-     * Reports 'MEDIA_ERROR'. Allowed before the start, while playing and while paused. The state of the content does not change.
+     * Reports 'MEDIA_ERROR'. Allowed before the start, while playing and while paused. The state of the content does
+     * not change.
      *
      * @param [positionSec]: Current position
      * @param [code]: Error code, 1 to 8 characters
@@ -251,14 +285,20 @@ class MediaContent internal constructor(
      * @param [userEngaged]: Whether the user is engaged
      */
     @JvmOverloads
-    fun error(positionSec: Double, code: String, message: String, userEngaged: Boolean? = null) = synchronized(session.lock) {
+    fun error(
+        positionSec: Double,
+        code: String,
+        message: String,
+        userEngaged: Boolean? = null
+    ) = synchronized(session.lock) {
         if (!isIn(Mode.INITIALIZED, Mode.PLAYING, Mode.PAUSED)) return@synchronized ignored("error")
 
-        MediaEventValidator.checkNotNegative("error", "positionSec", positionSec)
-        MediaEventValidator.checkText("error", "code", code, 1, MediaEventValidator.ERROR_CODE_MAX)
-        MediaEventValidator.checkText("error", "message", message, 1, MediaEventValidator.ERROR_MESSAGE_MAX)
+        checkNotNegative("error", "positionSec", positionSec)
+        checkText("error", "code", code, 1, ERROR_CODE_MAX)
+        checkText("error", "message", message, 1, ERROR_MESSAGE_MAX)
         state.userEngaged = userEngaged ?: state.userEngaged
-        send(MediaEventType.ERROR, MediaEventDetails(positionSec = positionSec, errorCode = code, errorMessage = message))
+        val details = MediaEventDetails(positionSec = positionSec, errorCode = code, errorMessage = message)
+        send(MediaEventType.ERROR, details)
     }
 
     // Callers of the internal members below hold the lock of the session.
@@ -280,7 +320,7 @@ class MediaContent internal constructor(
 
     private fun contentPosition() = seekTarget ?: lastPosition
 
-    private fun ignored(method: String) = MediaEventValidator.ignored(method, "not allowed in state $mode")
+    private fun ignored(method: String) = ignored(method, "not allowed in state $mode")
 
     private fun send(eventType: MediaEventType, details: MediaEventDetails) {
         details.positionSec?.let { lastPosition = it }
@@ -320,10 +360,15 @@ class MediaContent internal constructor(
         emitResume(position, held.userEngaged)
     }
 
-    private fun setMuted(muted: Boolean, method: String, positionSec: Double, userEngaged: Boolean?) = synchronized(session.lock) {
+    private fun setMuted(
+        muted: Boolean,
+        method: String,
+        positionSec: Double,
+        userEngaged: Boolean?
+    ) = synchronized(session.lock) {
         if (!isIn(Mode.PLAYING, Mode.PAUSED)) return@synchronized ignored(method)
 
-        MediaEventValidator.checkNotNegative(method, "positionSec", positionSec)
+        checkNotNegative(method, "positionSec", positionSec)
         session.sessionState.muted = muted
         state.userEngaged = userEngaged ?: !muted
         send(if (muted) MediaEventType.MUTE else MediaEventType.UNMUTE, MediaEventDetails(positionSec = positionSec))
@@ -331,18 +376,20 @@ class MediaContent internal constructor(
 
     private fun validatePlayingStart(parameters: MediaPlayingStartParameters, relatedMediaId: String?, isAd: Boolean) {
         val method = "playingStart"
-        MediaEventValidator.checkText(method, "mediaId", parameters.mediaId, 1, MediaEventValidator.MEDIA_ID_MAX)
-        MediaEventValidator.checkText(method, "mediaVariant", parameters.mediaVariant, 0, MediaEventValidator.VARIANT_MAX)
-        MediaEventValidator.checkText(method, "adId", parameters.adId, 0, MediaEventValidator.AD_ID_MAX)
-        MediaEventValidator.checkText(method, "adCampaignId", parameters.adCampaignId, 0, MediaEventValidator.AD_ID_MAX)
-        MediaEventValidator.checkText(method, "adCreativeId", parameters.adCreativeId, 0, MediaEventValidator.AD_ID_MAX)
-        MediaEventValidator.checkText(method, "adSlot", parameters.adSlot, 0, MediaEventValidator.AD_SLOT_MAX)
-        MediaEventValidator.checkText(method, "relatedMediaId", relatedMediaId, 0, MediaEventValidator.AD_ID_MAX)
-        MediaEventValidator.checkNotNegative(method, "positionSec", parameters.positionSec)
-        MediaEventValidator.checkNotNegative(method, "durationSec", parameters.durationSec)
+        checkText(method, "mediaId", parameters.mediaId, 1, MEDIA_ID_MAX)
+        checkText(method, "mediaVariant", parameters.mediaVariant, 0, VARIANT_MAX)
+        checkText(method, "adId", parameters.adId, 0, AD_ID_MAX)
+        checkText(method, "adCampaignId", parameters.adCampaignId, 0, AD_ID_MAX)
+        checkText(method, "adCreativeId", parameters.adCreativeId, 0, AD_ID_MAX)
+        checkText(method, "adSlot", parameters.adSlot, 0, AD_SLOT_MAX)
+        checkText(method, "relatedMediaId", relatedMediaId, 0, AD_ID_MAX)
+        checkNotNegative(method, "positionSec", parameters.positionSec)
+        checkNotNegative(method, "durationSec", parameters.durationSec)
 
-        if (isAd && parameters.mediaContentSubtype == null) MediaEventValidator.warn(method, "'mediaContentSubtype' is expected for an ad")
-        if (isAd && relatedMediaId == null) MediaEventValidator.warn(method, "'relatedMediaId' is expected for an ad")
+        if (isAd && parameters.mediaContentSubtype == null) {
+            warn(method, "'mediaContentSubtype' is expected for an ad")
+        }
+        if (isAd && relatedMediaId == null) warn(method, "'relatedMediaId' is expected for an ad")
     }
 
     private fun applyPlayingStart(parameters: MediaPlayingStartParameters, relatedMediaId: String?) {
