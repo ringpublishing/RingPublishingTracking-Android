@@ -4,6 +4,7 @@ import com.ringpublishing.tracking.data.Event
 import com.ringpublishing.tracking.internal.constants.AnalyticsSystem
 import com.ringpublishing.tracking.internal.log.Logger
 import com.ringpublishing.tracking.listener.LogListener
+import io.mockk.unmockkObject
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -30,6 +31,8 @@ class MediaSessionBehaviorTest {
 
     @Before
     fun before() {
+        // RingPublishingTrackingTest leaves Logger mocked, which would swallow the warnings captured below.
+        unmockkObject(Logger)
         Logger.addLogListener(logListener)
     }
 
