@@ -4,6 +4,8 @@
  *
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.ringpublishing.tracking.demo.controller
 
 import com.ringpublishing.tracking.RingPublishingTracking
