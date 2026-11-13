@@ -9,6 +9,7 @@ import com.ringpublishing.tracking.internal.media.MediaEventValidator.PLAYBACK_R
 import com.ringpublishing.tracking.internal.media.MediaEventValidator.VARIANT_MAX
 import com.ringpublishing.tracking.internal.media.MediaEventValidator.checkRange
 import com.ringpublishing.tracking.internal.media.MediaEventValidator.checkText
+import com.ringpublishing.tracking.internal.media.MediaEventValidator.finiteOrNull
 import com.ringpublishing.tracking.internal.media.MediaEventValidator.ignored
 import com.ringpublishing.tracking.internal.media.MediaSessionState
 import java.util.UUID
@@ -103,11 +104,12 @@ class MediaSession internal constructor(
     fun createMediaContent(
         configuration: MediaContentConfiguration = MediaContentConfiguration()
     ): MediaContent = locked {
-        checkRange("createMediaContent", "playbackRate", configuration.playbackRate, 0.0, PLAYBACK_RATE_MAX)
+        val playbackRate = finiteOrNull("createMediaContent", "playbackRate", configuration.playbackRate)
+        checkRange("createMediaContent", "playbackRate", playbackRate, 0.0, PLAYBACK_RATE_MAX)
 
         configuration.audioOutput?.let { state.audioOutput = it }
         configuration.muted?.let { state.muted = it }
-        configuration.playbackRate?.let { state.playbackRate = it }
+        playbackRate?.let { state.playbackRate = it }
         configuration.visibilityState?.let { state.visibilityState = it }
 
         val contentState = MediaContentState(configuration.monetizationType, configuration.subscriptionTier)
@@ -127,8 +129,9 @@ class MediaSession internal constructor(
             return@locked
         }
 
-        checkRange("updatePlaybackRate", "playbackRate", playbackRate, 0.0, PLAYBACK_RATE_MAX)
-        state.playbackRate = playbackRate
+        val rate = finiteOrNull("updatePlaybackRate", "playbackRate", playbackRate) ?: return@locked
+        checkRange("updatePlaybackRate", "playbackRate", rate, 0.0, PLAYBACK_RATE_MAX)
+        state.playbackRate = rate
     }
 
     /**

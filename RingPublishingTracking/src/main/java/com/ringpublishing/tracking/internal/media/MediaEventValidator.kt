@@ -24,13 +24,34 @@ internal object MediaEventValidator {
     }
 
     fun checkNotNegative(method: String, name: String, value: Double?) {
-        if (value == null) return
+        if (value == null || !value.isFinite()) return
         if (!(value >= 0.0)) warn(method, "'$name' must not be negative, got $value")
     }
 
     fun checkRange(method: String, name: String, value: Double?, min: Double, max: Double) {
-        if (value == null) return
+        if (value == null || !value.isFinite()) return
         if (!(value in min..max)) warn(method, "'$name' must be in range $min to $max, got $value")
+    }
+
+    /**
+     * Returns [value], or null with a warning when it is NaN or infinite. JSON cannot carry such a number.
+     */
+    fun finiteOrNull(method: String, name: String, value: Double?): Double? {
+        if (value == null) return null
+        if (!value.isFinite()) {
+            warn(method, "'$name' must be a finite number, got $value")
+            return null
+        }
+        return value
+    }
+
+    /**
+     * Position to report: null when [value] is not finite, a negative finite value is reported with a warning.
+     */
+    fun position(method: String, value: Double): Double? {
+        val finite = finiteOrNull(method, "positionSec", value)
+        checkNotNegative(method, "positionSec", finite)
+        return finite
     }
 
     fun warn(method: String, message: String) = Logger.warn("$LOG_PREFIX $method: $message")
