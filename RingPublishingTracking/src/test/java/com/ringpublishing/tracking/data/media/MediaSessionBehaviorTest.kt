@@ -20,8 +20,11 @@ class MediaSessionBehaviorTest {
 
     private val events = mutableListOf<Event>()
     private val warnings = mutableListOf<String>()
+    private val debugs = mutableListOf<String>()
     private val logListener = object : LogListener {
-        override fun debug(message: String) = Unit
+        override fun debug(message: String) {
+            synchronized(debugs) { debugs.add(message) }
+        }
         override fun info(message: String) = Unit
         override fun warn(message: String) {
             synchronized(warnings) { warnings.add(message) }
@@ -228,6 +231,30 @@ class MediaSessionBehaviorTest {
         assertFalse(content.hasActiveContent)
         content.playingProgress(1.0)
         assertEquals(5, events.size)
+    }
+
+    @Test
+    fun callOnContentOfEndedSession_LogsSessionEndedAsReason() {
+        val session = session()
+        val content = session.createMediaContent()
+        session.end()
+
+        content.playingStart(start())
+        content.pause(1.0, MediaPauseReason.USER_ACTION)
+
+        assertTrue(debugs.toString(), debugs.any { it.endsWith("playingStart ignored: session has ended") })
+        assertTrue(debugs.toString(), debugs.any { it.endsWith("pause ignored: session has ended") })
+        assertTrue(debugs.toString(), debugs.none { it.contains("not allowed in state") })
+    }
+
+    @Test
+    fun callInWrongModeOfActiveSession_LogsModeAsReason() {
+        val content = session().createMediaContent()
+
+        content.playingProgress(1.0)
+
+        val reason = "playingProgress ignored: not allowed in state INITIALIZED"
+        assertTrue(debugs.toString(), debugs.any { it.endsWith(reason) })
     }
 
     @Test

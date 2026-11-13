@@ -327,7 +327,8 @@ class MediaContent internal constructor(
 
     private fun contentPosition() = seekTarget ?: lastPosition
 
-    private fun ignored(method: String) = ignored(method, "not allowed in state $mode")
+    private fun ignored(method: String) =
+        ignored(method, if (session.isEnded) "session has ended" else "not allowed in state $mode")
 
     private fun send(eventType: MediaEventType, details: MediaEventDetails) {
         details.positionSec?.let { lastPosition = it }
