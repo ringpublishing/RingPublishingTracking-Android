@@ -31,7 +31,9 @@ internal class PaidEventsFactory(private val gson: Gson) {
             this[PaidEventParam.PAYWALL_SUPPLIER.text] = offerData.supplierData.paywallSupplier
             this[PaidEventParam.PAYWALL_TEMPLATE_ID.text] = offerData.paywallTemplateId
             this[PaidEventParam.DISPLAY_MODE.text] = offerData.displayMode.text
-            this[PaidEventParam.SOURCE.text] = offerContextData.source
+            offerContextData.source?.let {
+                this[PaidEventParam.SOURCE.text] = it
+            }
 
             contentMetadata?.let {
                 this[PaidEventParam.SOURCE_DX.text] = it.buildToDX()
@@ -62,7 +64,9 @@ internal class PaidEventsFactory(private val gson: Gson) {
             this[PaidEventParam.PAYWALL_SUPPLIER.text] = offerData.supplierData.paywallSupplier
             this[PaidEventParam.PAYWALL_TEMPLATE_ID.text] = offerData.paywallTemplateId
             this[PaidEventParam.DISPLAY_MODE.text] = offerData.displayMode.text
-            this[PaidEventParam.SOURCE.text] = offerContextData.source
+            offerContextData.source?.let {
+                this[PaidEventParam.SOURCE.text] = it
+            }
 
             contentMetadata?.let {
                 this[PaidEventParam.SOURCE_DX.text] = it.buildToDX()
@@ -99,7 +103,9 @@ internal class PaidEventsFactory(private val gson: Gson) {
             this[PaidEventParam.PAYWALL_SUPPLIER.text] = offerData.supplierData.paywallSupplier
             this[PaidEventParam.PAYWALL_TEMPLATE_ID.text] = offerData.paywallTemplateId
             this[PaidEventParam.DISPLAY_MODE.text] = offerData.displayMode.text
-            this[PaidEventParam.SOURCE.text] = offerContextData.source
+            offerContextData.source?.let {
+                this[PaidEventParam.SOURCE.text] = it
+            }
             this[PaidEventParam.TERM_ID.text] = termId
 
             contentMetadata?.let {
@@ -137,7 +143,9 @@ internal class PaidEventsFactory(private val gson: Gson) {
             this[PaidEventParam.PAYWALL_SUPPLIER.text] = offerData.supplierData.paywallSupplier
             this[PaidEventParam.PAYWALL_TEMPLATE_ID.text] = offerData.paywallTemplateId
             this[PaidEventParam.DISPLAY_MODE.text] = offerData.displayMode.text
-            this[PaidEventParam.SOURCE.text] = offerContextData.source
+            offerContextData.source?.let {
+                this[PaidEventParam.SOURCE.text] = it
+            }
             this[PaidEventParam.TERM_ID.text] = termId
             this[PaidEventParam.TERM_CONVERSION_ID.text] = termConversionId
             this[PaidEventParam.PAYMENT_METHOD.text] = subscriptionPaymentData.paymentMethod.text
