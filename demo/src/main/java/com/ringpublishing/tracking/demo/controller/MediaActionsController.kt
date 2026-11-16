@@ -15,6 +15,7 @@ import com.ringpublishing.tracking.data.media.MediaStartMode
 import com.ringpublishing.tracking.data.media.MediaType
 import com.ringpublishing.tracking.data.media.MediaVisibilityState
 import com.ringpublishing.tracking.demo.data.ScreenTrackingData
+import com.ringpublishing.tracking.reportPageView
 
 class MediaActionsController : ScreenController() {
 
@@ -24,6 +25,7 @@ class MediaActionsController : ScreenController() {
 
     /**
      * Audio session with two contents, a held resume during a seek, an output change and an error.
+     * A page view after the first start stands for the user moving to another screen while the audio keeps playing.
      */
     fun runAudioScenario() {
         val session = RingPublishingTracking.createMediaSession(MediaType.AUDIO, "main")
@@ -48,6 +50,7 @@ class MediaActionsController : ScreenController() {
                 userEngaged = true
             )
         )
+        RingPublishingTracking.reportPageView(listOf("Home", "Player"), false)
         first.playingProgress(15.0)
         first.pause(42.0, MediaPauseReason.USER_ACTION)
         first.playingProgress(43.0)
