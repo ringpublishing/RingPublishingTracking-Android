@@ -30,6 +30,10 @@ import com.ringpublishing.tracking.internal.media.MediaEventValidator.warn
  * is NaN or infinite is reported as 0.0.
  * Every method can be called from any thread. Events reach the sink in ordinal order, outside the session lock.
  *
+ * Every event of the content carries the page identifiers ('IP' and 'IV') of the screen where its playback started,
+ * also after a page view reported on another screen. Starting the content again after [playingEnd] takes the
+ * identifiers current at that moment.
+ *
  * @see MediaSession
  */
 @Suppress("TooManyFunctions")

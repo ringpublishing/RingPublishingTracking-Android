@@ -11,6 +11,7 @@ Improvements to the 'RingPublishingTracking' module.
     - events are sent as 'MediaEvent' of the generic analytics system, the same way as 'PaidEvent'
     - all 14 'event_type' values of the MediaEvent schema are supported
     - new public models: 'MediaContentConfiguration', 'MediaPlayingStartParameters' and the 'Media*' enums in 'com.ringpublishing.tracking.data.media'
+    - events of an item keep the 'IP' and 'IV' of the screen where its playback started, so audio that plays on while the user moves between screens stays one playback, while 'MEDIA_SESSION_START' and page views carry the current ones
     - a call that is not allowed in the current state is ignored and logged at debug level, a value outside the allowed length or range is logged as a warning and still reported
 * Deprecated 'reportAudioEvent' and 'reportVideoEvent', use 'createMediaSession' instead
     - both still send the legacy 'VidEvent' and behave as before, their models are not deprecated

@@ -27,6 +27,9 @@ import java.util.UUID
  * delivered to the sink after the lock is released, in that order. When another thread is already delivering, the call
  * returns without waiting for it.
  *
+ * The events of a content carry the page identifiers ('IP' and 'IV') of the screen where its playback started, also
+ * after the user moves to another screen. 'MEDIA_SESSION_START' carries the current ones.
+ *
  * @see MediaContent
  */
 class MediaSession internal constructor(

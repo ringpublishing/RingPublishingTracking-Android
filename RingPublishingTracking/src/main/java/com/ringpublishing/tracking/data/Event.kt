@@ -6,6 +6,7 @@
 package com.ringpublishing.tracking.data
 
 import com.ringpublishing.tracking.internal.constants.Constants
+import com.ringpublishing.tracking.internal.decorator.IdentifierPin
 
 data class Event(
     val analyticsSystemName: String = Constants.eventDefaultAnalyticsSystemName,
@@ -13,6 +14,14 @@ data class Event(
     val parameters: MutableMap<String, Any> = mutableMapOf(),
 )
 {
+	/** Set only on media events. Transient, so it is never serialized with the event. */
+	@Transient
+	internal var identifierPin: IdentifierPin? = null
+
+	/** True when decoration captures the pin from this event instead of applying it */
+	@Transient
+	internal var pinsIdentifiers: Boolean = false
+
 	override fun toString(): String
 	{
 		val builder = StringBuilder()

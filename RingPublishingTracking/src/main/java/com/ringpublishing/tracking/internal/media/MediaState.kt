@@ -12,6 +12,7 @@ import com.ringpublishing.tracking.data.media.MediaSubscriptionTier
 import com.ringpublishing.tracking.data.media.MediaTier
 import com.ringpublishing.tracking.data.media.MediaType
 import com.ringpublishing.tracking.data.media.MediaVisibilityState
+import com.ringpublishing.tracking.internal.decorator.IdentifierPin
 
 /**
  * State shared by every content of a session. Guarded by the lock of the session.
@@ -35,6 +36,7 @@ internal class MediaContentState(
     val monetizationType: MediaMonetizationType?,
     val subscriptionTier: MediaSubscriptionTier?
 ) {
+    val identifierPin = IdentifierPin()
     var userEngaged: Boolean = false
     var durationSec: Double? = null
     var mediaContentType: MediaContentType? = null

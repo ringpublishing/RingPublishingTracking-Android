@@ -31,7 +31,10 @@ internal class MediaEventsFactory {
             analyticsSystemName = AnalyticsSystem.GENERIC.text,
             name = EventType.MEDIA.text,
             parameters = parameters
-        )
+        ).apply {
+            identifierPin = content?.identifierPin
+            pinsIdentifiers = eventType == MediaEventType.PLAYING_START
+        }
     }
 
     private fun MutableMap<String, Any>.addSessionParameters(session: MediaSessionState) {
