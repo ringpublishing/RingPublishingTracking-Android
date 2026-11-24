@@ -19,6 +19,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockkObject
+import io.mockk.unmockkObject
 import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
@@ -106,8 +107,14 @@ internal class RingPublishingTrackingTest
         mockkObject(Logger)
         every { Logger.warn(any()) } just Runs
 
-        RingPublishingTracking.reportEvent(eventsFactory.createClickEvent(""))
+        try
+        {
+            RingPublishingTracking.reportEvent(eventsFactory.createClickEvent(""))
 
-        verify { Logger.warn("RingPublishingTracking is not initialized.") }
+            verify { Logger.warn("RingPublishingTracking is not initialized.") }
+        } finally
+        {
+            unmockkObject(Logger)
+        }
     }
 }
