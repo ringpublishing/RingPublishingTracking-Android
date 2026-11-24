@@ -8,7 +8,7 @@ import com.ringpublishing.tracking.internal.media.MediaEventParam
 import com.ringpublishing.tracking.internal.media.MediaEventType
 import com.ringpublishing.tracking.internal.media.MediaSessionState
 
-internal class MediaEventsFactory {
+internal class MediaEventsFactory(private val isActiveSubscriber: () -> Boolean? = { null }) {
 
     fun createMediaEvent(
         eventType: MediaEventType,
@@ -23,6 +23,7 @@ internal class MediaEventsFactory {
             this[MediaEventParam.MEDIA_SESSION_ID.text] = session.sessionId
 
             addSessionParameters(session)
+            addUserParameters()
             addContentParameters(content)
             addDetailsParameters(details)
         }
@@ -44,6 +45,10 @@ internal class MediaEventsFactory {
         this[MediaEventParam.MUTED.text] = session.muted
         this[MediaEventParam.PLAYBACK_RATE.text] = session.playbackRate
         this[MediaEventParam.VISIBILITY_STATE.text] = session.visibilityState.text
+    }
+
+    private fun MutableMap<String, Any>.addUserParameters() {
+        put(MediaEventParam.USER_TYPE, if (isActiveSubscriber() == true) USER_TYPE_SUBSCRIBER else null)
     }
 
     private fun MutableMap<String, Any>.addContentParameters(content: MediaContentState?) {
@@ -74,6 +79,10 @@ internal class MediaEventsFactory {
         put(MediaEventParam.PLAYBACK_END_REASON, details.playbackEndReason?.text)
         put(MediaEventParam.ERROR_CODE, details.errorCode)
         put(MediaEventParam.ERROR_MESSAGE, details.errorMessage)
+    }
+
+    private companion object {
+        const val USER_TYPE_SUBSCRIBER = "subscriber"
     }
 
     private fun MutableMap<String, Any>.put(param: MediaEventParam, value: Any?) {

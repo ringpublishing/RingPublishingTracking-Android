@@ -27,6 +27,7 @@ internal enum class MediaEventParam(val text: String) {
     RELATED_MEDIA_ID("related_media_id"),
     SUBSCRIPTION_TIER("subscription_tier"),
     USER_ENGAGED("user_engaged"),
+    USER_TYPE("user_type"),
     POSITION_SEC("position_sec"),
     START_MODE("start_mode"),
     PAUSE_REASON("pause_reason"),

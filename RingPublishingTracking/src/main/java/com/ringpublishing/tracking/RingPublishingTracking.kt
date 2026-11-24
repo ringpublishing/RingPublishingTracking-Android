@@ -206,7 +206,7 @@ object RingPublishingTracking : KeepAliveDataSource {
     internal val videoEventsFactory = VideoEventsFactory(Component.provideGson())
     internal val audioEventsFactory = AudioEventsFactory(Component.provideGson())
     internal val paidEventsFactory = PaidEventsFactory(Component.provideGson())
-    internal val mediaEventsFactory = MediaEventsFactory()
+    internal val mediaEventsFactory = MediaEventsFactory { configurationManager.getUserData().isActiveSubscriber }
     internal val aureusEventFactory = AureusEventFactory(
         gson = Component.provideGson(),
         snakeCaseGson = Component.provideSnakeCaseGson(),

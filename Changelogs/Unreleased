@@ -9,6 +9,7 @@ Improvements to the 'RingPublishingTracking' module.
     - new 'createMediaSession(mediaType, playerVariant)' extension of 'RingPublishingTracking' returns a 'MediaSession', which creates a 'MediaContent' for every played item
     - the SDK owns 'media_session_id', 'event_ordinal', the state carried between events and the state machine, the application reports what happens in the player ('playingStart', 'playingProgress', 'pause', 'resume', 'seekStart', 'seekEnd', 'mute', 'unmute', 'outputChange', 'visibilityChange', 'error', 'playingEnd', 'end')
     - events are sent as 'MediaEvent' of the generic analytics system, the same way as 'PaidEvent'
+    - events carry 'user_type' = 'subscriber' while 'updateActiveSubscriber(true)' is in effect, read when each event is created, and no 'user_type' otherwise
     - all 14 'event_type' values of the MediaEvent schema are supported
     - new public models: 'MediaContentConfiguration', 'MediaPlayingStartParameters' and the 'Media*' enums in 'com.ringpublishing.tracking.data.media'
     - events of an item keep the 'IP' and 'IV' of the screen where its playback started, so audio that plays on while the user moves between screens stays one playback, while 'MEDIA_SESSION_START' and page views carry the current ones
