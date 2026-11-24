@@ -6,6 +6,7 @@
 
 package com.ringpublishing.tracking.internal
 
+import com.ringpublishing.tracking.data.ContentPageViewSource
 import com.ringpublishing.tracking.data.RingPublishingTrackingConfiguration
 import com.ringpublishing.tracking.internal.log.Logger
 import io.mockk.MockKAnnotations
@@ -15,6 +16,7 @@ import io.mockk.verify
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import java.net.URL
 
 class ConfigurationManagerTest
 {
@@ -300,6 +302,50 @@ class ConfigurationManagerTest
 		configurationManager.updateStructurePath(listOf("newPath"), partiallyReloaded = false)
 
 		Assert.assertEquals(listOf("newPath"), configurationManager.getStructurePath())
+	}
+
+	@Test
+	fun updateStructurePath_WhenPushSourceGiven_ThenContentUrlHasPushMedium()
+	{
+		val configurationManager = initializedForContentUrl()
+
+		configurationManager.updateStructurePath(
+			listOf("article"),
+			URL("https://example.com/article"),
+			ContentPageViewSource.PUSH_NOTIFICATION,
+			partiallyReloaded = false
+		)
+
+		Assert.assertEquals("https://example.com/article?utm_medium=push", configurationManager.currentContentUrl)
+	}
+
+	@Test
+	fun updateStructurePath_WhenNoSourceGivenAfterPushSource_ThenContentUrlHasNoMedium()
+	{
+		val configurationManager = initializedForContentUrl()
+		configurationManager.updateStructurePath(
+			listOf("article"),
+			URL("https://example.com/article"),
+			ContentPageViewSource.PUSH_NOTIFICATION,
+			partiallyReloaded = false
+		)
+
+		configurationManager.updateStructurePath(listOf("home"), partiallyReloaded = false)
+
+		Assert.assertEquals(ContentPageViewSource.DEFAULT, configurationManager.contentPageViewSource)
+		Assert.assertEquals("https://rootpath.app.android/home", configurationManager.currentContentUrl)
+	}
+
+	private fun initializedForContentUrl(): ConfigurationManager
+	{
+		every { ringPublishingConfiguration.applicationDefaultAdvertisementArea } returns ""
+		every { ringPublishingConfiguration.applicationDefaultStructurePath } returns listOf()
+		every { ringPublishingConfiguration.applicationRootPath } returns "rootPath"
+		every { ringPublishingConfiguration.applicationAdvertisementSite } returns null
+
+		val configurationManager = ConfigurationManager()
+		configurationManager.initializeConfiguration(ringPublishingConfiguration)
+		return configurationManager
 	}
 
 	@Test
