@@ -169,7 +169,7 @@ internal class ConfigurationManager
 			currentPublicationUrl = publicationUrl
 		}
 
-		contentPageViewSource?.let { this.contentPageViewSource = it }
+		this.contentPageViewSource = contentPageViewSource ?: ContentPageViewSource.DEFAULT
 
 		if (!partiallyReloaded)
 		{
