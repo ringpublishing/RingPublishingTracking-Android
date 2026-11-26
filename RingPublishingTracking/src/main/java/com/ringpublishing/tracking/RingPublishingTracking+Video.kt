@@ -10,6 +10,7 @@ import com.ringpublishing.tracking.data.video.VideoState
  * @param [videoMetadata]: Video metadata
  * @param [videoState]: Currently played video state
  */
+@Deprecated("Sends the legacy VidEvent. Use createMediaSession(mediaType, playerVariant) to report MediaEvent.")
 fun RingPublishingTracking.reportVideoEvent(
     videoEvent: VideoEvent,
     videoMetadata: VideoMetadata,

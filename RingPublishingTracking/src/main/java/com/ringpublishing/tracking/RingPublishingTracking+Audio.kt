@@ -10,6 +10,7 @@ import com.ringpublishing.tracking.data.audio.AudioState
  * @param [audioMetadata]: Audio metadata @see [AudioMetadata]
  * @param [audioState]: Currently played audio state @see [AudioState]
  */
+@Deprecated("Sends the legacy VidEvent. Use createMediaSession(mediaType, playerVariant) to report MediaEvent.")
 fun RingPublishingTracking.reportAudioEvent(
     audioEvent: AudioEvent,
     audioMetadata: AudioMetadata,

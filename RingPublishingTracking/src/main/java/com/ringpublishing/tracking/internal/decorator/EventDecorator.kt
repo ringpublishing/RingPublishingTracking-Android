@@ -52,10 +52,17 @@ internal class EventDecorator(
 
 	fun decorate(event: Event): Event
 	{
+		val pin = event.identifierPin
+
+		// Decorators never overwrite a parameter that is already set, so a pinned event keeps its IP and IV.
+		if (!event.pinsIdentifiers) pin?.applyTo(event)
+
 		decorators.forEach { decorator ->
 			decorator.decorate(event)
 			decorator.eventDecorated()
 		}
+
+		if (event.pinsIdentifiers) pin?.capture(event)
 		return event
 	}
 

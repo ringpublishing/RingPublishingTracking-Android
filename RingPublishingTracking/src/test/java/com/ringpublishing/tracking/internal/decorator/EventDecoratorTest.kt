@@ -335,6 +335,8 @@ internal class EventDecoratorTest
         every { sharedPreferences.getString(any(), any()) } returns "preference"
         every { event.name } returns "name"
         every { event.parameters } returns mutableMapOf()
+        every { event.identifierPin } returns null
+        every { event.pinsIdentifiers } returns false
     }
 
     private fun mockArtemisIdUser() = User(

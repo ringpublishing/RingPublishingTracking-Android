@@ -14,6 +14,7 @@ enum class EventType(val text: String) {
     VIDEO("VidEvent"),
     ERROR("ErrEvent"),
     PAID("PaidEvent"),
+    MEDIA("MediaEvent"),
     POLARIS("PolarisEvent"),
     AUREUS_IMPRESSION_EVENT("AureusImpressionEvent"),
     AUREUS_EVENT("AureusEvent"),

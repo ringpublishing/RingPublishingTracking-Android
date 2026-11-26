@@ -47,4 +47,8 @@
     <string name="button_playing_start">Playing start</string>
     <string name="button_start">Start</string>
 
+    <string name="button_media_run_audio_scenario">Run audio scenario</string>
+    <string name="button_media_run_video_scenario">Run video scenario</string>
+    <string name="media_run_audio_scenario">media_run_audio_scenario</string>
+    <string name="media_run_video_scenario">media_run_video_scenario</string>
 </resources>
